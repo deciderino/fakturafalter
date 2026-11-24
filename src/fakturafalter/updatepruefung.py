@@ -8,6 +8,7 @@ Kennung, keine Konfiguration, keine Cookies.  Kurzer Timeout, immer im Hintergru
 (nur ein Debug-Eintrag im Log).  Es wird nie etwas heruntergeladen oder installiert – bei einer neueren Version
 gibt es nur einen Hinweis mit Link zur Release-Seite.  Abschaltbar in den Einstellungen (``optionen.updatepruefung``).
 """
+
 from __future__ import annotations
 
 import json
@@ -36,7 +37,9 @@ class Neu:
 
 def version_tupel(v: str) -> tuple:
     """„v0.9.6“ -> (0, 9, 6, 1, 0); Vorversionen wie „0.9.6rc1“/„0.9.6-beta.2“ zählen vor 0.9.6."""
-    m = re.match(r"^\s*v?(\d+(?:\.\d+)*)(?:[-.]?(a|alpha|b|beta|rc|pre)\.?(\d*))?", str(v or ""), re.I)
+    m = re.match(
+        r"^\s*v?(\d+(?:\.\d+)*)(?:[-.]?(a|alpha|b|beta|rc|pre)\.?(\d*))?", str(v or ""), re.I
+    )
     if not m:
         return ()
     zahlen = [int(x) for x in m.group(1).split(".")]
@@ -80,7 +83,9 @@ def auswerten(releases: list, vorab: bool = False, aktuell: str = __version__) -
         t = version_tupel(tag)
         if t and t > beste_t:
             beste_t = t
-            beste = Neu(tag.lstrip("vV"), _sichere_url(rel.get("html_url")), bool(rel.get("prerelease")))
+            beste = Neu(
+                tag.lstrip("vV"), _sichere_url(rel.get("html_url")), bool(rel.get("prerelease"))
+            )
     return beste
 
 

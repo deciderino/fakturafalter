@@ -2,6 +2,7 @@
 # Copyright 2026 Fakturafalter-Mitwirkende
 """Dateihandling ab 0.9.6: Ausgang = reine Postbox (nur fertige, geprüfte Dateien, atomar, XML vor PDF),
 Protokoll im eigenen sichtbaren Ordner, fehlendes Protokoll nur Hinweis, XRechnung-Ablage einstellbar."""
+
 import errno
 import os
 import tempfile
@@ -37,7 +38,9 @@ def _validierung_falsch(monkeypatch, urteil, gesehen: list):
             gesehen.append(Path(p))
             assert Path(p).exists()
             ok = urteil(Path(p))
-            aus.append(validierung.Pruefergebnis(str(p), "KoSIT", ok, [] if ok else ["[BR-01] kaputt"]))
+            aus.append(
+                validierung.Pruefergebnis(str(p), "KoSIT", ok, [] if ok else ["[BR-01] kaputt"])
+            )
         return aus
 
     monkeypatch.setattr(validierung, "pruefen", pruefen)
@@ -59,8 +62,13 @@ def test_pruefung_ausserhalb_des_ausgangs_dann_atomar_xml_vor_pdf(konfig, eingan
     lauf = pipeline.verarbeiten(eingang(CSV), konfig)
     assert [e.status for e in lauf.ergebnisse] == ["ok", "ok", "ok"]
     assert all(e.pruefung == "gültig" for e in lauf.ergebnisse)
-    assert gesehen and all(konfig.ausgang not in p.parents for p in gesehen)  # nie im Ausgang geprüft
-    i_xml, i_pdf = reihenfolge.index("RE-2026-0102_xrechnung.xml"), reihenfolge.index("RE-2026-0102_zugferd.pdf")
+    assert gesehen and all(
+        konfig.ausgang not in p.parents for p in gesehen
+    )  # nie im Ausgang geprüft
+    i_xml, i_pdf = (
+        reihenfolge.index("RE-2026-0102_xrechnung.xml"),
+        reihenfolge.index("RE-2026-0102_zugferd.pdf"),
+    )
     assert i_xml < i_pdf
     assert _alles_im_ausgang(konfig) == [
         "RE-2026-0101_zugferd.pdf",
@@ -102,7 +110,13 @@ def test_protokoll_im_eigenen_ordner_sofort_je_rechnung(konfig, eingang, monkeyp
 
     monkeypatch.setattr(dateien, "ablegen", ablegen)
     pipeline.verarbeiten(eingang(CSV), konfig)
-    assert stand == [0, 1, 1, 2, 2]  # 0101 (PDF), 0102 (XML, PDF), 0103 (XML, PDF): Zeile je Rechnung sofort
+    assert stand == [
+        0,
+        1,
+        1,
+        2,
+        2,
+    ]  # 0101 (PDF), 0102 (XML, PDF), 0103 (XML, PDF): Zeile je Rechnung sofort
     assert konfig.protokoll == konfig.eingang.parent / "Protokoll"
     assert protokoll.pfad(konfig).exists() and not (konfig.ausgang / "protokoll.tsv").exists()
     assert protokoll.bekannte_nummern(konfig) == {"RE-2026-0101", "RE-2026-0102", "RE-2026-0103"}
@@ -119,7 +133,9 @@ def test_doppelt_erkannt_auch_wenn_ausgang_geleert(konfig, eingang):
 
 def test_fehlendes_protokoll_nur_hinweis_altes_im_ausgang_ignoriert(konfig, eingang):
     konfig.ausgang.mkdir(parents=True)
-    (konfig.ausgang / "protokoll.tsv").write_text("2026-01-01 10:00:00\tok\tRE-2026-0101\t\t\t\t\t\n", "utf-8")
+    (konfig.ausgang / "protokoll.tsv").write_text(
+        "2026-01-01 10:00:00\tok\tRE-2026-0101\t\t\t\t\t\n", "utf-8"
+    )
     lauf = pipeline.verarbeiten(eingang(CSV), konfig)
     assert [m[0] for m in lauf.meldungen] == [protokoll.FEHLT]  # Hinweis, kein Halt
     assert {e.status for e in lauf.ergebnisse} == {"ok"}  # altes Protokoll wird nicht gelesen
@@ -181,7 +197,10 @@ def test_kollision_im_selben_lauf_bleibt_erkannt(konfig, eingang):
     ("ablage", "erwartet"),
     [
         ("ausgang", ["RE-2026-0102_xrechnung.xml", "RE-2026-0102_zugferd.pdf"]),
-        ("unterordner", ["RE-2026-0102_zugferd.pdf", "XRechnung", "XRechnung/RE-2026-0102_xrechnung.xml"]),
+        (
+            "unterordner",
+            ["RE-2026-0102_zugferd.pdf", "XRechnung", "XRechnung/RE-2026-0102_xrechnung.xml"],
+        ),
         ("keine", ["RE-2026-0102_zugferd.pdf"]),
     ],
 )
@@ -210,10 +229,17 @@ def test_konfig_xrechnung_ablage_und_protokollordner(tmp_path):
         return lade_konfig(tmp_path / "k.yaml")
 
     k = laden({})
-    assert (k.xrechnung_ablage, k.xrechnung_zusatz, k.protokoll) == ("ausgang", True, tmp_path / "R" / "Protokoll")
+    assert (k.xrechnung_ablage, k.xrechnung_zusatz, k.protokoll) == (
+        "ausgang",
+        True,
+        tmp_path / "R" / "Protokoll",
+    )
     assert k.updatepruefung is True and k.updates_vorab is False
     k = laden({"optionen": {"xrechnung_ablage": "unterordner"}, "protokoll_ordner": "P"})
-    assert k.xrechnung_ordner == tmp_path / "R" / "Ausgang" / "XRechnung" and k.protokoll == tmp_path / "P"
+    assert (
+        k.xrechnung_ordner == tmp_path / "R" / "Ausgang" / "XRechnung"
+        and k.protokoll == tmp_path / "P"
+    )
     k = laden({"optionen": {"xrechnung_ablage": "keine"}})
     assert k.xrechnung_zusatz is False
     k = laden({"optionen": {"xrechnung_zusatz": False}})

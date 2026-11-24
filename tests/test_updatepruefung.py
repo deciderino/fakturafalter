@@ -1,6 +1,7 @@
 # SPDX-License-Identifier: Apache-2.0
 # Copyright 2026 Fakturafalter-Mitwirkende
 """Updateprüfung (ab 0.9.6): einziger Netzzugriff. Alle Tests mit gemocktem Netz – nie ein echter Aufruf."""
+
 import io
 import json
 import logging
@@ -12,13 +13,30 @@ import pytest
 from fakturafalter import __version__, updatepruefung
 
 REL = [
-    {"tag_name": "v9.0.0-rc1", "prerelease": True, "draft": False,
-     "html_url": "https://github.com/deciderino/fakturafalter/releases/tag/v9.0.0-rc1"},
-    {"tag_name": "v8.1.0", "prerelease": False, "draft": False,
-     "html_url": "https://github.com/deciderino/fakturafalter/releases/tag/v8.1.0"},
-    {"tag_name": "v99.0.0", "prerelease": False, "draft": True, "html_url": "https://example.invalid/x"},
-    {"tag_name": "v0.1.0", "prerelease": False, "draft": False,
-     "html_url": "https://github.com/deciderino/fakturafalter/releases/tag/v0.1.0"},
+    {
+        "tag_name": "v9.0.0-rc1",
+        "prerelease": True,
+        "draft": False,
+        "html_url": "https://github.com/deciderino/fakturafalter/releases/tag/v9.0.0-rc1",
+    },
+    {
+        "tag_name": "v8.1.0",
+        "prerelease": False,
+        "draft": False,
+        "html_url": "https://github.com/deciderino/fakturafalter/releases/tag/v8.1.0",
+    },
+    {
+        "tag_name": "v99.0.0",
+        "prerelease": False,
+        "draft": True,
+        "html_url": "https://example.invalid/x",
+    },
+    {
+        "tag_name": "v0.1.0",
+        "prerelease": False,
+        "draft": False,
+        "html_url": "https://github.com/deciderino/fakturafalter/releases/tag/v0.1.0",
+    },
 ]
 
 
@@ -57,14 +75,22 @@ def test_anfrage_nur_get_ohne_daten(monkeypatch):
             return False
 
     def urlopen(req, timeout=None):
-        gesehen.update(url=req.full_url, methode=req.get_method(), daten=req.data,
-                       kopf=dict(req.header_items()), timeout=timeout)
+        gesehen.update(
+            url=req.full_url,
+            methode=req.get_method(),
+            daten=req.data,
+            kopf=dict(req.header_items()),
+            timeout=timeout,
+        )
         return Antwort(json.dumps(REL).encode())
 
     monkeypatch.setattr(urllib.request, "urlopen", urlopen)
     erreichbar, neu = updatepruefung.jetzt(vorab=False)
     assert erreichbar and neu.version == "8.1.0"
-    assert gesehen["url"] == "https://api.github.com/repos/deciderino/fakturafalter/releases?per_page=30"
+    assert (
+        gesehen["url"]
+        == "https://api.github.com/repos/deciderino/fakturafalter/releases?per_page=30"
+    )
     assert gesehen["methode"] == "GET" and gesehen["daten"] is None
     assert set(gesehen["kopf"]) == {"User-agent", "Accept"}
     assert gesehen["kopf"]["User-agent"] == f"Fakturafalter/{__version__}"
@@ -99,12 +125,16 @@ def test_headless_nur_logzeile(monkeypatch, tmp_path, caplog):
     from fakturafalter import cli, ueberwachung
 
     aufrufe = []
-    monkeypatch.setattr(updatepruefung, "im_hintergrund", lambda vorab=False, rueckruf=None: aufrufe.append(vorab))
+    monkeypatch.setattr(
+        updatepruefung, "im_hintergrund", lambda vorab=False, rueckruf=None: aufrufe.append(vorab)
+    )
     monkeypatch.setattr(ueberwachung.Waechter, "starten", lambda self: None)
     (tmp_path / "k.yaml").write_text("arbeitsordner: R\n", encoding="utf-8")
     assert cli.main(["--config", str(tmp_path / "k.yaml"), "--headless"]) == 0
     assert aufrufe == [False]
-    (tmp_path / "k.yaml").write_text("arbeitsordner: R\noptionen: {updatepruefung: false}\n", encoding="utf-8")
+    (tmp_path / "k.yaml").write_text(
+        "arbeitsordner: R\noptionen: {updatepruefung: false}\n", encoding="utf-8"
+    )
     assert cli.main(["--config", str(tmp_path / "k.yaml"), "--headless"]) == 0
     assert aufrufe == [False]
 
@@ -123,7 +153,9 @@ def test_gui_start_und_einstellungen(qapp_gui, gui_konfig, monkeypatch, an):
     gui_konfig.write_text(yaml.safe_dump(d, allow_unicode=True), encoding="utf-8")
     aufrufe = []
     monkeypatch.setattr(
-        updatepruefung, "im_hintergrund", lambda vorab=False, rueckruf=None: aufrufe.append((vorab, rueckruf))
+        updatepruefung,
+        "im_hintergrund",
+        lambda vorab=False, rueckruf=None: aufrufe.append((vorab, rueckruf)),
     )
     monkeypatch.setattr("fakturafalter.gui.hauptfenster.QTimer.singleShot", lambda ms, f: f())
     texte.sprache_setzen("de")
@@ -131,7 +163,9 @@ def test_gui_start_und_einstellungen(qapp_gui, gui_konfig, monkeypatch, an):
     try:
         assert len(aufrufe) == (1 if an else 0)
         if an:
-            neu = updatepruefung.Neu("9.9.9", "https://github.com/deciderino/fakturafalter/releases/tag/v9.9.9")
+            neu = updatepruefung.Neu(
+                "9.9.9", "https://github.com/deciderino/fakturafalter/releases/tag/v9.9.9"
+            )
             w.update_ergebnis.emit(True, neu)
             qapp_gui.processEvents()
             titel = [x.text() for x in w.findChildren(QLabel)]
@@ -156,7 +190,10 @@ def test_gui_start_und_einstellungen(qapp_gui, gui_konfig, monkeypatch, an):
         dlg.xr.setCurrentIndex(dlg.xr.findData("unterordner"))
         dlg.protokoll_ordner.setText(str(gui_konfig.parent / "P"))
         roh = dlg.ergebnis()
-        assert roh["optionen"]["xrechnung_ablage"] == "unterordner" and roh["optionen"]["xrechnung_zusatz"]
+        assert (
+            roh["optionen"]["xrechnung_ablage"] == "unterordner"
+            and roh["optionen"]["xrechnung_zusatz"]
+        )
         assert roh["protokoll_ordner"] == str(gui_konfig.parent / "P")
         dlg.xr.setCurrentIndex(dlg.xr.findData("keine"))
         assert dlg.ergebnis()["optionen"]["xrechnung_zusatz"] is False
@@ -187,6 +224,8 @@ def gui_konfig(tmp_path, monkeypatch):
     cfg = tmp_path / "cfg"
     shutil.copytree(beispiele, cfg)
     d = yaml.safe_load((cfg / "konfiguration.yaml").read_text(encoding="utf-8"))
-    d["ordner"] = {n: str(tmp_path / n) for n in ("eingang", "ausgang", "erledigt", "fehler", "pruefen")}
+    d["ordner"] = {
+        n: str(tmp_path / n) for n in ("eingang", "ausgang", "erledigt", "fehler", "pruefen")
+    }
     (cfg / "konfiguration.yaml").write_text(yaml.safe_dump(d, allow_unicode=True), encoding="utf-8")
     return cfg / "konfiguration.yaml"

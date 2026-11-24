@@ -8,6 +8,7 @@ getrennt davon.  Zeilen werden je Rechnung sofort angehängt, nicht erst am Lauf
 gesperrt (z. B. in Excel geöffnet), landen die Zeilen in ``protokoll-nachtrag.tsv`` (im Protokollordner, sonst
 neben der Logdatei) und werden beim nächsten Lauf übernommen.  Ein altes protokoll.tsv im Ausgang wird nicht
 übernommen und nicht mehr gelesen."""
+
 from __future__ import annotations
 
 import logging
@@ -25,9 +26,7 @@ FEHLT = (
     "Kein Protokoll in {ordner} gefunden, obwohl schon Rechnungen erzeugt wurden. Ein neues Protokoll wird "
     "angelegt; die Doppelprüfung kennt Rechnungsnummern erst ab jetzt."
 )
-NICHT_BESCHREIBBAR = (
-    "Protokollordner {ordner} ist nicht beschreibbar – Protokollzeilen gehen ersatzweise in die Logdatei."
-)
+NICHT_BESCHREIBBAR = "Protokollordner {ordner} ist nicht beschreibbar – Protokollzeilen gehen ersatzweise in die Logdatei."
 ERSATZ = "Protokoll {datei} ist gerade gesperrt – Zeilen stehen vorerst in {ersatz} und werden nachgetragen."
 
 
