@@ -4,67 +4,123 @@
 
 <h1 align="center">Fakturafalter</h1>
 
-<p align="center">Erstellt lokal ZUGFeRD-Rechnungen (EN 16931, PDF/A-3 mit eingebettetem XML) aus CSV oder XML. Mit Layout-Editor und automatischer Prüfung – ohne Cloud.</p>
+<p align="center"><b>CSV / XML / PDF rein. ZUGFeRD raus. Lokal geprüft.</b><br>
+validiert nach EN 16931 und PDF/A-3</p>
 
-![Hauptfenster von Fakturafalter, Überwachung aktiv, heute 3 Rechnungen erstellt](docs/bilder/hauptfenster.png)
+<p align="center">
+  <img src="docs/bilder/ablauf.gif" width="800" alt="Schema: Eine Datei wandert aus dem Ordner Eingang zu Fakturafalter, wird geprüft, und eine ZUGFeRD-PDF wandert in den Ordner Ausgang">
+</p>
 
-Fakturafalter überwacht einen Ordner auf deinem Rechner, liest CSV- oder XML-Exporte deiner Warenwirtschaft und erzeugt daraus die E-Rechnung. Die Oberfläche ist auf Deutsch und Englisch, für Windows und Linux.
+Fakturafalter macht aus den Rechnungsexporten deiner Warenwirtschaft oder deines ERP gültige E-Rechnungen. Die
+Exporte kommen als CSV oder XML, heraus kommt ZUGFeRD: PDF/A-3 mit eingebetteter XML nach EN 16931. Es überwacht
+einen Eingangsordner, erzeugt und prüft jede Rechnung lokal und legt sie im Ausgang ab. Von dort übernimmt sie
+dein Archiv (z. B. ELO), ein anderes Programm oder du selbst.
 
-## Was es kann
+Gedacht für kleine Betriebe, deren Warenwirtschaft keine E-Rechnung kann. Fakturafalter läuft im Hintergrund auf
+einem Arbeitsplatz-PC oder ohne Oberfläche (`--headless`), z. B. auf einer VM. Die Rechnungsnummern vergibt
+weiterhin dein System.
 
-- **Eingabe:** CSV (Export aus der Warenwirtschaft) oder XML (ZUGFeRD / Factur-X oder XRechnung, CII oder UBL). Optional der Haken „Zusätzlich das PDF der Rechnung verwenden“, dann gilt der Original-Druck als Sichtseite.
-- **Ausgabe:** ZUGFeRD als PDF/A-3 (Profil EN 16931, eingebettete `factur-x.xml`) und optional zusätzlich eine XRechnung-CII
-- **Layout-Editor** für den sichtbaren Teil, wenn die Sichtseite aus den Daten neu gebaut wird (Einstellungen → Absender → „Layout gestalten…“)
-- **Automatische Prüfung** nach jeder Erstellung, lokal und offline: Mustang (mit veraPDF) für PDF/A-3 und den ZUGFeRD-Rahmen, KoSIT für die Rechnungsdaten nach EN 16931. Dazu Plausibilität und Pflichtangaben (Summen, fehlende Felder, Gutschrift ohne Rechnungsbezug). Unklares landet in „Zu prüfen“, Ungültiges in „Fehler“ – nichts geht still raus.
-- **Ordnerüberwachung** mit Fortschrittsanzeige, während verarbeitet wird
-- **Kundenbezeichnung 1–3** als eigene Zeilen im Adressblock, Artikel-, Zeichnungs- und Bestellangaben klein unter der Positionsbezeichnung
-- **Rechnungsnummer prüfen, Dateiname festlegen:** Die Nummer kommt immer aus dem ERP. Optional prüft Fakturafalter sie gegen ein Muster (z. B. `JJJJ######`) und meldet Lücken; Dateiname je Belegart mit Platzhaltern (Einstellungen → Ausgabe)
+## Warum Fakturafalter
 
-**Nur PDF** (Angaben allein aus dem Rechnungsdruck) wird weiterhin unterstützt, ist aber nicht der empfohlene Weg: Die Erkennung kann fehlgehen, Layouts müssen angelernt und Ergebnisse kontrolliert werden. Details im [Handbuch](docs/handbuch.md#nur-pdf-unterstutzt-aber-nicht-empfohlen).
+- **Lokal.** Rechnungsdaten verlassen den Rechner nicht, ohne Cloud und ohne Telemetrie.
+- **Geprüft, bevor etwas rausgeht.** Jede Rechnung wird nach der Erstellung lokal geprüft: mit Mustang (mit
+  veraPDF) für PDF/A-3 und ZUGFeRD, mit dem KoSIT-Validator für die Rechnungsdaten nach EN 16931. Dazu kommen
+  Pflichtangaben und Plausibilität (§ 14 Abs. 4 UStG, Summen, doppelte Nummern).
+  - Unklares landet in „Zu prüfen“, Ungültiges in „Fehler“ – nichts geht still raus.
+  - In den Ausgang kommt nur die fertige, geprüfte Datei. Archiv oder andere Programme dürfen ihn jederzeit
+    leeren; das Protokoll liegt getrennt im Ordner `Protokoll`.
+- **Kostenlos und offen.** Apache-2.0, für Windows und Linux. Java-Laufzeit und Prüfwerkzeuge sind im Paket
+  enthalten.
+- **Passt sich an.** CSV-Assistent für eigene Exporte, Layout-Editor für die Sichtseite. Optional Prüfmuster für
+  die Rechnungsnummer und eigene Dateinamen.
 
-![Layout-Editor mit Briefpapier und markiertem Rechnungskopf](docs/bilder/layouteditor.png)
+## In drei Schritten
 
-![Fortschrittsanzeige: Rechnung 3 von 12, Schritt Prüfen mit KoSIT](docs/bilder/fortschritt.png)
+1. **Herunterladen und starten.** Unter [Releases](https://github.com/deciderino/fakturafalter/releases):
+   - Linux: das AppImage ausführbar machen und starten.
+   - Windows: das ZIP entpacken und `Fakturafalter.exe` starten.
 
-![Einrichtungsassistent: Arbeitsordner festlegen](docs/bilder/einrichtung.png)
+   Ein kurzer Assistent fragt nach Arbeitsordner und Absender.
+2. **Eingang einrichten.** Einstellungen → Eingang & Vorlagen:
+   - **CSV**: „Neue CSV einrichten…“ mit einer echten Export-Datei, Spalten prüfen, Probe ansehen, speichern.
+   - **XML** (ZUGFeRD / XRechnung, CII oder UBL): Eine Zuordnung ist nicht nötig.
+3. **Überwachung einschalten.** Exporte in den Ordner `Eingang` legen. Die geprüfte ZUGFeRD-PDF liegt im
+   `Ausgang`, die Quelle wandert nach `Erledigt`.
 
-![Prüfdialog: Abweichung oder Hinweis zur Rechnung](docs/bilder/pruefen.png)
+Ausführlich: [Handbuch](docs/handbuch.md) · Schnellstart [CSV](docs/handbuch.md#3-schnellstart-csv) und
+[XML](docs/handbuch.md#4-schnellstart-xml).
+
+## So sieht es aus
 
 Die Screenshots zeigen ausschließlich erfundene Beispieldaten.
 
-## Schnellstart: CSV
+**Im Alltag:** Hauptfenster mit aktiver Überwachung und Fortschritt während der Verarbeitung.
 
-1. Fakturafalter starten. Beim ersten Mal führt ein kurzer Assistent durch Arbeitsordner und Absender.
-2. Einstellungen → **Eingang & Vorlagen** → Eingangsformat **CSV**.
-3. **Neue CSV einrichten…**: eine echte Export-Datei wählen, der Zuordnung einen Namen geben, Weiter. Format (Trennzeichen, Zeichensatz, Dezimalzeichen) ist erkannt und lässt sich umstellen; danach die Spalten prüfen, eine Probe ansehen und speichern.
-4. Den Haken **„Zusätzlich das PDF der Rechnung verwenden“** nur setzen, wenn der Original-Druck die Sichtseite bleiben soll. Ohne Haken (Standard für eine neue CSV-Einstellung) baut Fakturafalter die Sichtseite aus den Daten neu und wartet nicht auf ein PDF.
-5. Schalter **Überwachung** einschalten und die CSV in den Ordner `Eingang` legen.
+![Hauptfenster von Fakturafalter, Überwachung aktiv, heute 3 Rechnungen erstellt](docs/bilder/hauptfenster.png)
 
-Die fertige ZUGFeRD-PDF liegt im `Ausgang` und ist, wenn die mitgelieferten Prüfwerkzeuge da sind, bereits lokal geprüft.
+![Fortschrittsanzeige: Rechnung 3 von 12, Schritt Prüfen mit KoSIT](docs/bilder/fortschritt.png)
 
-## Schnellstart: XML
+**Wenn etwas unklar ist:** Die Prüfansicht zeigt, was fehlt oder abweicht.
 
-1. Einstellungen → **Eingang & Vorlagen** → **XML (ZUGFeRD / XRechnung)**. Eine Zuordnung ist nicht nötig: CII und UBL liest Fakturafalter fest.
-2. Optional **Probe mit einer XML…**, um eine Beispiel-Datei zu prüfen, ohne etwas zu erzeugen.
-3. Wie bei CSV: Haken nur, wenn ein Original-PDF die Sichtseite sein soll. Ohne Haken wird die Sichtseite neu gebaut.
-4. Überwachung an, XML in den `Eingang` legen. Fehlt der Verkäufer in der XML, gilt der Absender aus den Einstellungen.
+![Prüfdialog: Abweichung oder Hinweis zur Rechnung](docs/bilder/pruefen.png)
 
-Andere XML-Formate (zum Beispiel DATEV oder Lexware) werden nicht gelesen; die Datei kommt mit Begründung in den Fehlerordner.
+**Einrichten und gestalten:** Einrichtungsassistent und Layout-Editor für die Sichtseite.
 
-## Download und Start
+![Einrichtungsassistent: Arbeitsordner festlegen](docs/bilder/einrichtung.png)
 
-Unter [Releases](https://github.com/deciderino/fakturafalter/releases) liegen ein Linux-AppImage und ein portables Windows-ZIP. Beide bringen Java-Laufzeit und Prüfwerkzeuge mit.
+![Layout-Editor mit Briefpapier und markiertem Rechnungskopf](docs/bilder/layouteditor.png)
 
-- **Linux:** AppImage ausführbar machen und starten.
-- **Windows:** ZIP entpacken und `fakturafalter.exe` starten.
+## Eingangsformate
 
-## Offline und Lizenz
+| Eingang | Empfehlung | Hinweis |
+|---|---|---|
+| **CSV** (Export aus Warenwirtschaft/ERP) | empfohlen | Zuordnung einmal mit dem CSV-Assistenten; Format siehe [csv-format.md](docs/csv-format.md) |
+| **XML** (ZUGFeRD / Factur-X, XRechnung; CII oder UBL) | empfohlen | ohne Zuordnung; andere XML-Formate (z. B. DATEV, Lexware) werden nicht gelesen |
+| **CSV oder XML + Original-PDF** | optional | Haken „Zusätzlich das PDF der Rechnung verwenden“: der Original-Druck bleibt die Sichtseite |
+| **Nur PDF** | unterstützt, nicht empfohlen | siehe unten |
 
-Alles läuft offline, ohne Cloud und ohne Telemetrie. Lizenz: [Apache-2.0](LICENSE) (Drittkomponenten in [NOTICE](NOTICE)).
+**Ausgabe:** ZUGFeRD als PDF/A-3 (Profil EN 16931, eingebettete `factur-x.xml`), optional zusätzlich eine
+XRechnung (CII), wenn der Kundenstamm sie verlangt – neben der PDF, im Unterordner `XRechnung` oder gar nicht
+(Einstellungen → Ausgabe). Weitere Funktionen:
+- Kundenbezeichnung 1–3 als eigene Adresszeilen.
+- Artikel-, Zeichnungs- und Bestellangaben unter der Positionsbezeichnung.
+- Rabatte, Gutschriften und Lastschrift.
 
-Freie Open-Source-Software – ohne Gewährleistung und ohne Support. Die eingebaute Prüfung ersetzt keine eigene Kontrolle der Rechnungen vor dem Versand.
+**Nur PDF** (Angaben allein aus dem Rechnungsdruck) wird weiterhin unterstützt, ist aber nicht der empfohlene Weg:
+Die Erkennung kann fehlgehen, Layouts müssen angelernt und Ergebnisse kontrolliert werden.
+Ist Fakturafalter richtig eingerichtet und entspricht das Eingangs-PDF den Anforderungen (Text-PDF, angelernte
+Vorlage, gleichbleibendes Layout), lässt sich auch mit reinen PDFs ein sicherer Ablauf aufbauen – jede Rechnung
+durchläuft dieselben Pflicht- und Validierungsprüfungen und landet bei Unsicherheit in „Zu prüfen“.
+Details im [Handbuch](docs/handbuch.md#nur-pdf-unterstutzt-aber-nicht-empfohlen).
 
-## Entwickeln
+## Datenschutz und Netz
+
+- Alle Rechnungsdaten werden ausschließlich lokal verarbeitet. Einziger Netzzugriff ist die optionale
+  Updateprüfung, die nur die aktuelle Versionsnummer bei GitHub abfragt und keine Daten sendet; abschaltbar
+  (Einstellungen → Allgemein → Updates). Heruntergeladen wird nichts – bei einer neueren Version erscheint nur ein
+  Hinweis mit Link.
+- Die Prüfwerkzeuge (Java-Laufzeit, Mustang, KoSIT mit XRechnung-Konfiguration) sind im Paket enthalten. Zur
+  Laufzeit wird nichts nachgeladen, und es gibt keine Telemetrie.
+- Die Logdatei lässt sich anonymisieren (Einstellungen → Allgemein → „Logs anonymisieren“): Namen, Anschriften,
+  IBAN, USt-IdNr. und Beträge erscheinen dann als Platzhalter.
+
+## Lizenz und Haftung
+
+Freie Open-Source-Software unter [Apache-2.0](LICENSE), Drittkomponenten in [NOTICE](NOTICE). Ohne Gewährleistung
+und ohne Support. Die eingebaute Prüfung ersetzt nicht deine eigene Kontrolle der Rechnungen vor dem Versand.
+
+## Entstehung
+
+Konzept und Idee: deciderino. Code: geschrieben von der KI Grok Bot.
+
+## Mehr
+
+- [Handbuch](docs/handbuch.md) – Einrichtung und Alltag, Prüfungen, Gutschrift, häufige Probleme
+- [docs/details.md](docs/details.md) – Eingabevarianten, Prüfung, Layout-Editor, Rechnungsnummer und Dateiname,
+  Ordner und Protokoll, PDF-Erkennung
+- [docs/csv-format.md](docs/csv-format.md) – CSV-Spalten und Profile
+
+### Entwickeln
 
 ```bash
 python -m venv .venv && .venv/bin/pip install -e ".[gui,test]"
@@ -72,4 +128,4 @@ fakturafalter
 QT_QPA_PLATFORM=offscreen .venv/bin/pytest -q
 ```
 
-Die Anleitung für den Alltag steht im [Handbuch](docs/handbuch.md). Ausführlichere Hinweise zu Eingabevarianten, Prüfung, Layout-Editor und PDF-Erkennung stehen in [docs/details.md](docs/details.md). Zum CSV-Spaltenformat siehe [docs/csv-format.md](docs/csv-format.md).
+Das Schema-GIF oben entsteht mit `python tools/readme_gif.py` (Pillow, Schrift Liberation Sans aus dem Paket).

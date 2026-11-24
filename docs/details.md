@@ -20,11 +20,48 @@ Alle Beispieldaten in `beispiele/` sind erfunden.
 Ohne `--config` wird gesucht: `./konfiguration.yaml`, dann der portable Ordner neben
 dem Programm, dann der Benutzerordner (beim ersten Start mit Beispielwerten angelegt).
 
-Ein **Arbeitsordner**, die Unterordner legt Fakturafalter selbst an: `Eingang` → `Ausgang` (Ergebnis +
-`protokoll.tsv`), Quellen nach `Erledigt`, `Pruefen` (Abweichung CSV ↔ Druck-PDF, Freigabe/Verwerfen in der
-Oberfläche; `Pruefen/Anlernen` = PDFs, die auf den Anlern-Assistenten warten) oder `Fehler`.
+Ein **Arbeitsordner**, die Unterordner legt Fakturafalter selbst an: `Eingang` → `Ausgang` (nur fertige
+Ergebnisse), Quellen nach `Erledigt`, `Pruefen` (Abweichung CSV ↔ Druck-PDF, Freigabe/Verwerfen in der
+Oberfläche; `Pruefen/Anlernen` = PDFs, die auf den Anlern-Assistenten warten) oder `Fehler`, dazu `Protokoll`
+(`protokoll.tsv`, ab 0.9.6).
 Wer Ordner getrennt braucht (z. B. Ausgang auf einem Netzlaufwerk): Einstellungen → Ordner →
 „Ordner einzeln festlegen“. Ältere Konfigurationen mit einzelnen Ordnern laufen unverändert weiter.
+
+## Ausgang, Protokoll und Dateihandling (ab 0.9.6)
+
+Der Ausgang ist eine reine Postbox: Ein Archiv, das den Ordner überwacht (z. B. ELO), ein anderes Programm oder
+ein Mensch darf ihn jederzeit leeren.
+
+- **Erzeugen und Prüfen** geschehen in einem eigenen Ordner im System-Temp (`fakturafalter-…`), der danach sofort
+  gelöscht wird. Erst die fertige, geprüfte Datei kommt in den Ausgang – je Datei atomar (Umbenennen), die
+  XRechnung-XML vor der PDF. Liegt der Ausgang auf einem anderen Laufwerk als der Temp-Ordner, geht der
+  Zwischenschritt über den Ordner `Protokoll`; nur wenn auch das nicht auf dem Laufwerk des Ausgangs liegt, entsteht
+  für Sekundenbruchteile eine versteckte `.<name>.part` im Ausgang. Ungültige Rechnungen gehen direkt nach
+  `Fehler`. Fehlen die Prüfwerkzeuge, wird wie bisher „nicht geprüft“ ausgegeben.
+- **Protokoll:** `protokoll.tsv` liegt im sichtbaren Ordner `Protokoll` im Arbeitsordner (bei einzeln gewählten
+  Ordnern neben dem Eingang); ein anderer Ort lässt sich unter Einstellungen → Ordner → Protokollordner wählen
+  (`protokoll_ordner`). Es ist die Grundlage der Doppelprüfung und der Lückenwarnung. Jede abgelegte Rechnung
+  wird sofort eingetragen, nicht erst am Ende des Laufs. Vor dem Lauf prüft Fakturafalter, ob der Ordner
+  beschreibbar ist. Ist `protokoll.tsv` gerade gesperrt (z. B. in Excel geöffnet), gehen die Zeilen in
+  `protokoll-nachtrag.tsv` und werden beim nächsten Lauf übernommen; geht auch das nicht, stehen sie in der
+  Logdatei. Die Verarbeitung hält dafür nie an.
+- **Protokoll fehlt:** Gibt es offenbar frühere Läufe (Dateien in Ausgang/Erledigt), aber kein Protokoll, kommt
+  ein Hinweis in Oberfläche und Log; ein neues Protokoll wird angelegt. Es gibt keinen Halt.
+- Ein altes `protokoll.tsv` im Ausgang (bis 0.9.5) wird **nicht** übernommen und nicht mehr gelesen. Wer die
+  bisherigen Nummern für die Doppelprüfung behalten will, kopiert es von Hand in den Ordner `Protokoll`, bevor der
+  erste Lauf mit 0.9.6 startet.
+- **XRechnung-Zusatzdatei** (Einstellungen → Ausgabe, `optionen.xrechnung_ablage`): neben der PDF im Ausgang
+  (Standard, wie bisher), im Unterordner `Ausgang/XRechnung` oder keine (`optionen.xrechnung_zusatz: false`).
+
+## Updateprüfung (ab 0.9.6)
+
+Einziger Netzzugriff der App: ein GET auf `https://api.github.com/repos/deciderino/fakturafalter/releases`,
+gesendet wird nur der nötige User-Agent `Fakturafalter/<Version>` – keine Rechnungsdaten, keine Kennung. Kurzer
+Timeout (4 s), immer im Hintergrund; ohne Netz still (nur ein Debug-Eintrag im Log). Bei einer neueren Version
+erscheint ein Hinweis mit Link zur Release-Seite, heruntergeladen wird nichts. Einstellungen → Allgemein →
+Updates: „Beim Start nach Updates suchen“ (`optionen.updatepruefung`, Standard an), „Pre-Releases einbeziehen“
+(`optionen.updates_vorab`, Standard aus), Knopf „Jetzt prüfen“. Im Hintergrundmodus (`--headless`) gibt es nur
+eine Logzeile; `--einmal`/`--dateien` prüfen nicht.
 
 ## Eingabevarianten
 
@@ -76,13 +113,13 @@ in der Logdatei, nicht in der Oberfläche.
 
 ## Datenschutz und Logs
 
-Fakturafalter arbeitet vollständig offline. Die Logdatei liegt im Ordner `logs/` neben der Konfiguration
+Rechnungsdaten werden nur lokal verarbeitet; einziger Netzzugriff ist die abschaltbare Updateprüfung (siehe oben). Die Logdatei liegt im Ordner `logs/` neben der Konfiguration
 (1 MB × 5 Dateien). Einstellungen → Allgemein → Datenschutz → **„Logs anonymisieren“**
 (`optionen.logs_anonymisieren`, Standard aus) ersetzt in allen Log-Ausgaben Namen, Anschriften (Straße, PLZ Ort,
 Postfach), IBAN, USt-IdNr., E-Mail-Adressen und Beträge durch Platzhalter wie `[Name]`, `[IBAN]` oder `[Betrag]`.
 Die eigenen Stammdaten und die Käufer eines Laufs werden zusätzlich wörtlich maskiert. Das gilt ab dem Einschalten;
 ältere Zeilen bleiben, wie sie sind. Die Tabellen-Diagnose der Erkennung (nur Wortformen wie `Aaaa 99,99`) bleibt
-unverändert. `protokoll.tsv` im Ausgang ist keine Logdatei und bleibt vollständig.
+unverändert. `protokoll.tsv` im Ordner `Protokoll` ist keine Logdatei und bleibt vollständig.
 
 ## Einrichtung und Anlernen
 

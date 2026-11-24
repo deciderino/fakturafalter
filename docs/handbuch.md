@@ -32,9 +32,9 @@ Beim ersten Start führt ein kurzer Assistent durch Arbeitsordner und Absender.
 Der Assistent hat vier Schritte: **Ordner** → **Absender** → **Woher kommen deine Rechnungsdaten?** → **Fertig**.
 
 1. **Arbeitsordner.** Fakturafalter legt darin selbst die Unterordner an:
-   `Eingang` (neue Dateien), `Ausgang` (fertige E-Rechnungen und das Protokoll),
-   `Erledigt` (verarbeitete Quellen), `Pruefen` (Rechnungen, die du ansehen sollst)
-   und `Fehler`.
+   `Eingang` (neue Dateien), `Ausgang` (nur fertige E-Rechnungen),
+   `Erledigt` (verarbeitete Quellen), `Pruefen` (Rechnungen, die du ansehen sollst),
+   `Fehler` und `Protokoll` (`protokoll.tsv`, alle Vorgänge).
 2. **Absender.** Dein Unternehmen, das die Rechnungen ausstellt. Am schnellsten:
    „Aus einer Rechnung (PDF) übernehmen…“ oder „Aus Datei importieren…“.
    Prüfe danach, ob die Pflichtfelder vollständig sind (siehe Abschnitt 8).
@@ -120,9 +120,10 @@ Adressblock je in einer eigenen Zeile (siehe [csv-format.md](csv-format.md)).
 
 ## 6. Automatische Prüfungen
 
-Jede erzeugte E-Rechnung wird standardmäßig **lokal und offline** nachgeprüft
-(Einstellungen → Prüfung → „Nach Erstellung prüfen“). Es geht nichts ins
-Internet, und zur Laufzeit wird nichts nachgeladen.
+Jede erzeugte E-Rechnung wird standardmäßig **lokal** nachgeprüft
+(Einstellungen → Prüfung → „Nach Erstellung prüfen“), bevor sie in den Ausgang
+kommt. Rechnungsdaten gehen dabei nie ins Internet, und zur Laufzeit wird
+nichts nachgeladen.
 
 - **Mustang** (mit veraPDF) prüft den PDF/A-3-Aufbau und den ZUGFeRD-Rahmen.
   „Gültig“ nur, wenn veraPDF die Datei als konform meldet.
@@ -130,7 +131,9 @@ Internet, und zur Laufzeit wird nichts nachgeladen.
   nach EN 16931, also die eingebettete `factur-x.xml` und eine eventuelle
   zusätzliche XRechnung.
 
-**Gültig** bleibt im Ausgang. **Ungültig** wandert mit Begründung nach `Fehler`.
+Erzeugt und geprüft wird in einem eigenen Ordner im System-Temp, der danach
+gleich wieder gelöscht wird. **Gültig** kommt in den Ausgang. **Ungültig** geht
+mit Begründung direkt nach `Fehler` und erscheint nie im Ausgang.
 Kann die Prüfung technisch nicht laufen (Werkzeuge nicht gefunden), wird die
 Rechnung trotzdem erzeugt, der Status ist dann „nicht geprüft“.
 
@@ -161,7 +164,29 @@ Original-PDF. **Nur PDF** siehe Abschnitt 9.
 3. Fakturafalter liest, erzeugt die E-Rechnung, prüft sie lokal und
    legt sie ab.
 4. Fertige Dateien liegen im `Ausgang`, die Quellen wandern nach `Erledigt`.
-   Das Protokoll `protokoll.tsv` im Ausgang hält Nummer, Status und Prüfstand fest.
+   Das Protokoll `protokoll.tsv` im Ordner `Protokoll` hält Nummer, Status und
+   Prüfstand fest.
+
+**Ausgang als Postbox.** In den Ausgang kommt nur die fertige, geprüfte Datei,
+und zwar in einem Schritt (keine halben oder temporären Dateien). Gibt es eine
+XRechnung dazu, kommt sie vor der PDF. Ein Archiv, das den Ausgang überwacht,
+ein anderes Programm oder du selbst darf den Ausgang jederzeit leeren – auch
+`Erledigt`. Die Doppelprüfung stützt sich auf das Protokoll, nicht auf den
+Ausgang.
+
+**Protokoll.** `protokoll.tsv` liegt im Ordner `Protokoll` im Arbeitsordner;
+einen anderen Ort wählst du unter Einstellungen → Ordner → **Protokollordner**.
+Jede Rechnung wird sofort eingetragen. Ist die Datei gerade geöffnet (z. B. in
+Excel), merkt sich Fakturafalter die Zeilen in `protokoll-nachtrag.tsv` und
+trägt sie beim nächsten Lauf nach. Fehlt das Protokoll, obwohl es schon
+Rechnungen gab, erscheint nur ein Hinweis – die Verarbeitung läuft weiter.
+Ein altes `protokoll.tsv` im Ausgang (bis Version 0.9.5) wird nicht mehr
+gelesen; wer die alten Nummern für die Doppelprüfung behalten will, kopiert es
+vor dem ersten Lauf in den Ordner `Protokoll`.
+
+**XRechnung-Datei.** Unter Einstellungen → Ausgabe wählst du, wohin die
+zusätzliche XRechnung kommt: neben die PDF in den Ausgang (Standard), in den
+Unterordner `XRechnung` des Ausgangs oder gar nicht.
 
 Mit Haken startet die Verarbeitung, sobald PDF und CSV bzw. XML mit gleichem
 Namen im Eingang liegen. Bis dahin zeigt die Karte „Zu tun“, dass auf das
@@ -375,7 +400,7 @@ sobald „Automatisch, ohne Nachfrage“ eingeschaltet ist. Prüfe die erste
 automatisch erzeugte Gutschrift trotzdem in der Prüfansicht, bevor du sie
 verschickst.
 
-## 11. Logs und Anonymisieren
+## 11. Logs, Anonymisieren und Updateprüfung
 
 Die Logdatei liegt im Ordner `logs/` neben der Konfiguration
 (rotierend, typisch 1 MB × 5 Dateien). Dort stehen die technischen Details,
@@ -387,8 +412,21 @@ und Beträge als Platzhalter wie `[Name]` oder `[IBAN]`. Das gilt ab dem
 Einschalten; ältere Zeilen bleiben unverändert. Gut, bevor du ein Log
 weitergibst.
 
-Das Protokoll `protokoll.tsv` im Ausgang ist keine Logdatei und bleibt
-vollständig.
+Das Protokoll `protokoll.tsv` im Ordner `Protokoll` ist keine Logdatei und
+bleibt vollständig.
+
+### Updateprüfung
+
+Beim Start fragt Fakturafalter im Hintergrund bei GitHub nach, ob es eine
+neuere Version gibt. Das ist der einzige Netzzugriff der App: Abgefragt wird
+nur die aktuelle Versionsnummer, gesendet werden keine Daten. Ohne Netz bleibt
+es still. Gibt es eine neuere Version, erscheint ein Hinweis mit Link zur
+Release-Seite; heruntergeladen oder installiert wird nichts.
+
+Einstellungen → Allgemein → **Updates**: „Beim Start nach Updates suchen“
+(Standard an) abschalten, „Pre-Releases einbeziehen“ (Standard aus) oder
+„Jetzt prüfen“. Im Hintergrundmodus (`--headless`) steht ein Hinweis nur in der
+Logdatei.
 
 ## 12. Häufige Probleme
 
