@@ -95,6 +95,8 @@ class Konfig:
     nachpruefen: bool = True             # nach Erstellung lokal prüfen (Mustang + KoSIT, im Paket enthalten)
     modus: str = "csv"                   # nur_pdf | csv | xml (alt: pdf_csv / pdf_xml)
     pdf_verwenden: bool = True           # CSV/XML: Original-PDF als Sichtteil
+    # ab 0.9.5: je Belegart Prüfmuster, Lückenwarnung, Dateinamen-Muster (nummernkreis.Kreis); leer = wie bisher
+    nummernkreise: dict = field(default_factory=dict)
     roh: dict = field(default_factory=dict)
 
     def pfad(self, p: str | Path) -> Path:
@@ -257,6 +259,9 @@ def lade_konfig(pfad: str | Path) -> Konfig:
     k.nachpruefen = bool(opt.get("nach_erstellung_pruefen", k.nachpruefen))
     k.logs_anonym = bool(opt.get("logs_anonymisieren", k.logs_anonym))
     k.modus, k.pdf_verwenden = modus_und_pdf(d, opt)
+    from .nummernkreis import aus_optionen
+
+    k.nummernkreise = aus_optionen(opt)
     return k
 
 

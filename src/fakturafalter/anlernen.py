@@ -2207,9 +2207,15 @@ class Sitzung:
             kunde=r.kaeufer.name,
             brutto=str(r.summen.brutto) if r.summen.brutto else "",
         )
-        n_pdf, _ = pipeline.ausgabe_namen(r.nummer)
+        namen = pipeline.ausgabe_namen_oder_hinweis(r, self.k) if erg.status == "ok" else None
+        n_pdf = namen[0] if namen else ""
+        if namen is None and erg.status == "ok":
+            erg.status = r.status
         if erg.status == "ok" and (self.k.ausgang / n_pdf).exists():
-            if r.nummer in pflichtpruefung.bekannte_nummern(self.k.ausgang / "protokoll.tsv"):
+            eigener_name = n_pdf != pipeline.ausgabe_namen(r.nummer)[0]  # Dateinamen-Muster (ab 0.9.5)
+            if eigener_name or r.nummer in pflichtpruefung.bekannte_nummern(
+                self.k.ausgang / "protokoll.tsv"
+            ):
                 r.hinweis(
                     "pruefen",
                     f"Ausgabe {n_pdf} existiert bereits – Rechnung wurde schon erzeugt?",

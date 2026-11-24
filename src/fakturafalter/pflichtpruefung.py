@@ -37,6 +37,8 @@ Treffer = tuple[str, str]                      # (feld, text)
 class Kontext:
     heute: date = field(default_factory=date.today)
     bekannte_nummern: frozenset[str] = frozenset()     # BT-1 aus früheren Läufen (protokoll.tsv, Status ok)
+    nummernkreise: dict = field(default_factory=dict)  # ab 0.9.5: {kreis: nummernkreis.Kreis}
+    lauf_nummern: frozenset[str] = frozenset()         # BT-1 der Rechnungen im selben Lauf (Lückenwarnung)
     umfaenge: frozenset[str] = UMFAENGE_V1
 
 
@@ -149,6 +151,25 @@ def _partei_pruefen(p: Partei, verkaeufer: bool) -> Iterable[Treffer]:
 def _nummer(r: Rechnung, k: Kontext):
     if _leer(r.nummer):
         yield "BT-1", "Rechnungsnummer (BT-1) fehlt. Pflichtangabe nach § 14 Abs. 4 Nr. 4 UStG."
+
+
+@regel("nummer_muster", "alle", "Rechnungsnummer passt zum Prüfmuster der Belegart (Einstellungen → Ausgabe)")
+def _nummer_muster(r: Rechnung, k: Kontext):
+    from . import nummernkreis as nk
+
+    kreis = k.nummernkreise.get(nk.kreis_von(r.art))
+    if not kreis or not kreis.pruefmuster or _leer(r.nummer):
+        return
+    name = "Gutschrift" if nk.kreis_von(r.art) == "gutschrift" else "Rechnung"
+    try:
+        ok = nk.passt(r.nummer, kreis.pruefmuster)
+    except (nk.MusterFehler, re.error) as e:
+        yield "BT-1", f"Prüfmuster „{kreis.pruefmuster}“ ({name}) ist ungültig: {e}. Einstellungen → Ausgabe."
+        return
+    if not ok:
+        yield "BT-1", (f"Rechnungsnummer {r.nummer} passt nicht zum Prüfmuster „{kreis.pruefmuster}“ ({name}). "
+                       "Fakturafalter ändert die Nummer nicht – bitte im ERP bzw. unter Einstellungen → Ausgabe "
+                       "prüfen.")
 
 
 @regel("nummer_einmalig", "alle", "Rechnungsnummer über alle Läufe einmalig (protokoll.tsv)")
@@ -443,7 +464,29 @@ def pruefen(r: Rechnung, k: Kontext | None = None) -> list[Treffer]:
             r.hinweis(STUFE, text, feld)
             neu.append((feld, text))
     _gtin_warnungen(r)
+    _luecken_warnungen(r, k)
     return neu
+
+
+def _luecken_warnungen(r: Rechnung, k: Kontext) -> None:
+    """Lücke im Nummernkreis (ab 0.9.5, nur wenn eingeschaltet und ein Prüfmuster mit # gesetzt ist): nur eine
+    Warnung, die Rechnung läuft weiter. Lücken sind erlaubt (Abschn. 14.5 Abs. 10 UStAE)."""
+    from . import nummernkreis as nk
+
+    kreis = k.nummernkreise.get(nk.kreis_von(r.art))
+    if not kreis or not kreis.luecken_warnen or not kreis.pruefmuster or _leer(r.nummer):
+        return
+    try:
+        if not nk.hat_zaehler(kreis.pruefmuster):
+            return
+        l = nk.luecke(r.nummer, set(k.bekannte_nummern) | set(k.lauf_nummern), kreis.pruefmuster)
+    except (nk.MusterFehler, re.error):
+        return
+    if l:
+        vorher, fehlen = l
+        r.hinweis("warnung", (f"Lücke im Nummernkreis: vor {r.nummer} zuletzt {vorher}, "
+                              f"{fehlen} Nummer{'n' if fehlen != 1 else ''} dazwischen fehlt{'en' if fehlen != 1 else ''}. "
+                              "Lücken sind erlaubt (UStAE 14.5 Abs. 10) – nur zur Kontrolle."), "BT-1")
 
 
 def _gtin_warnungen(r: Rechnung) -> None:

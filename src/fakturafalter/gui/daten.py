@@ -182,6 +182,12 @@ def wartend(k: Konfig) -> int:
 
 
 def ausgabe_pdf(k: Konfig, nummer: str) -> Path | None:
+    """Erzeugte PDF zu einer Nummer: laut Protokoll (eigenes Dateinamen-Muster), sonst der Standardname."""
+    for e in protokoll(k):
+        if e.status == "ok" and e.nummer == nummer:
+            for d in e.dateien:
+                if d.lower().endswith(".pdf") and (k.ausgang / d).exists():
+                    return k.ausgang / d
     p = k.ausgang / ausgabe_namen(nummer)[0]
     return p if p.exists() else None
 

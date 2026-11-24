@@ -27,6 +27,7 @@ from . import (
     dateien,
     layout,
     logdatei,
+    nummernkreis,
     pdfa,
     pdferkennung,
     pflichtpruefung,
@@ -145,9 +146,33 @@ def _json_default(o):
     return str(o)
 
 
-def ausgabe_namen(nr: str) -> tuple[str, str]:
+def ausgabe_namen(nr: str, r: Rechnung | None = None, k: Konfig | None = None) -> tuple[str, str]:
+    """Dateinamen im Ausgang -> (ZUGFeRD-PDF, XRechnung-XML). Ohne Dateinamen-Muster in den Einstellungen
+    (``optionen.nummernkreise``) wie bisher ``<Nummer>_zugferd.pdf`` / ``<Nummer>_xrechnung.xml``.
+    Ein ungültiges Muster wirft ``nummernkreis.MusterFehler``."""
     n = sicherer_name(nr)
-    return f"{n}_zugferd.pdf", f"{n}_xrechnung.xml"
+    pdf, xml = f"{n}_zugferd.pdf", f"{n}_xrechnung.xml"
+    kreise = getattr(k, "nummernkreise", None) or {}
+    if r is None or not kreise:
+        return pdf, xml
+    eigen = kreise.get(nummernkreis.kreis_von(r.art))
+    rech = kreise.get("rechnung")
+    m_pdf = (eigen and eigen.dateiname) or (rech and rech.dateiname) or ""
+    m_xml = (eigen and eigen.dateiname_xrechnung) or (rech and rech.dateiname_xrechnung) or ""
+    if m_pdf:
+        pdf = nummernkreis.dateiname(m_pdf, r, ".pdf")
+    if m_xml:
+        xml = nummernkreis.dateiname(m_xml, r, ".xml")
+    return pdf, xml
+
+
+def ausgabe_namen_oder_hinweis(r: Rechnung, k: Konfig) -> tuple[str, str] | None:
+    """Wie ``ausgabe_namen``; bei ungültigem Muster Hinweis „prüfen“ an der Rechnung und None."""
+    try:
+        return ausgabe_namen(r.nummer, r, k)
+    except nummernkreis.MusterFehler as e:
+        r.hinweis("pruefen", f"Dateinamen-Muster ungültig ({e}) – Einstellungen → Ausgabe", "Dateiname")
+        return None
 
 
 # ---------------------------------------------------------------- Einlesen
@@ -373,7 +398,7 @@ def erzeugen(r: Rechnung, k: Konfig, ausgang: Path, bei_pdfa=None) -> list[Path]
     if pdf_bytes is None:
         pdf_bytes = _sichtteil_neu(r, k, xml, titel, beschr)
     ausgang.mkdir(parents=True, exist_ok=True)
-    n_pdf, n_xr = ausgabe_namen(r.nummer)
+    n_pdf, n_xr = ausgabe_namen(r.nummer, r, k)
     erzeugt = []
     _schreiben(ausgang / n_pdf, pdf_bytes)
     erzeugt.append(ausgang / n_pdf)
@@ -464,10 +489,13 @@ def _verschieben(datei: Path, ordner: Path) -> Path:
     return dateien.verschieben(datei, ziel)
 
 
-def pflicht_kontext(k: Konfig) -> pflichtpruefung.Kontext:
-    """Kontext der Pflichtprüfung: heute + alle bisher erzeugten Rechnungsnummern (protokoll.tsv)."""
+def pflicht_kontext(k: Konfig, lauf_nummern=()) -> pflichtpruefung.Kontext:
+    """Kontext der Pflichtprüfung: heute + alle bisher erzeugten Rechnungsnummern (protokoll.tsv), dazu die
+    Einstellungen zum Nummernkreis und die Nummern des laufenden Stapels (für die Lückenwarnung)."""
     return pflichtpruefung.Kontext(
-        bekannte_nummern=pflichtpruefung.bekannte_nummern(k.ausgang / "protokoll.tsv")
+        bekannte_nummern=pflichtpruefung.bekannte_nummern(k.ausgang / "protokoll.tsv"),
+        nummernkreise=dict(getattr(k, "nummernkreise", None) or {}),
+        lauf_nummern=frozenset(n for n in lauf_nummern if n),
     )
 
 
@@ -622,8 +650,8 @@ def verarbeiten(
     bad_files: set[str] = set(lauf.datei_fehler)
     pruef_files: set[str] = set()
     zu_pruefen: list[Rechnung] = []
-    ctx = pflicht_kontext(k)
     paare = paaren(eingelesen, k, lauf.datei_fehler, lauf.anlernen, lauf.schon_erzeugt)
+    ctx = pflicht_kontext(k, [r.nummer for r, _q in paare])
     _pdfs_ohne_haken(paare, ungenutzt_pdfs, lauf.datei_fehler)
     bad_files.update(lauf.datei_fehler)
     n_r = len(paare)
@@ -653,11 +681,13 @@ def verarbeiten(
             kunde=r.kaeufer.name,
             brutto=str(r.summen.brutto) if r.summen.brutto else "",
         )
-        n_pdf, _ = ausgabe_namen(r.nummer)
-        if erg.status == "ok" and (k.ausgang / n_pdf).exists():
+        namen = ausgabe_namen_oder_hinweis(r, k) if erg.status == "ok" else None
+        if namen is None:
+            erg.status = r.status
+        elif (k.ausgang / namen[0]).exists():
             r.hinweis(
                 "pruefen",
-                f"Ausgabe {n_pdf} existiert bereits – Rechnung wurde schon erzeugt?",
+                f"Ausgabe {namen[0]} existiert bereits – Rechnung wurde schon erzeugt?",
                 "BT-1",
             )
             erg.status = r.status
@@ -889,9 +919,9 @@ def prueffall_freigeben(json_pfad: Path, k: Konfig) -> Ergebnis:
     r.sicht_pdf = None
     r.hinweis("info", "Freigegeben in der Prüfansicht: Daten aus der Quelle, Sichtbild neu gesetzt")
     erg.kunde, erg.brutto = r.kaeufer.name, str(r.summen.brutto)
-    n_pdf, _ = ausgabe_namen(nr)
-    if (k.ausgang / n_pdf).exists():
-        r.hinweis("pruefen", f"Ausgabe {n_pdf} existiert bereits", "BT-1")
+    namen = ausgabe_namen_oder_hinweis(r, k)
+    if namen and (k.ausgang / namen[0]).exists():
+        r.hinweis("pruefen", f"Ausgabe {namen[0]} existiert bereits", "BT-1")
     erg.status = r.status
     if erg.status == "ok":
         erg.dateien = erzeugen(r, k, k.ausgang)

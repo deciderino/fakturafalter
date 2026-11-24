@@ -28,7 +28,7 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
-from .. import anlernen, csv_einrichtung, pdferkennung, validierung
+from .. import anlernen, csv_einrichtung, nummernkreis, pdferkennung, validierung
 from ..konfig import UNTERORDNER, gemeinsamer_ordner
 from . import aktionen, autostart, daten
 from .absender_form import AbsenderFormular, aus_roh, in_roh
@@ -50,6 +50,9 @@ def bereich(name: str) -> int:
     """Index eines Bereichs nach Namen (Aufrufer hängen nicht an der Reihenfolge)."""
     return BEREICHE.index(name)
 
+
+# Fehlertexte aus nummernkreis, die übersetzt angezeigt werden (Rest enthält Werte)
+_UEBERSETZBAR = ("Prüfmuster ist leer", "Klammern { } passen nicht zusammen")
 
 SCHMAL = 640  # darunter (logische Pixel) wird die Navigation zur Auswahl oben
 
@@ -816,8 +819,149 @@ class Einstellungen(QDialog):
         self.sicht.addItem(_("Immer neu erzeugen"), "neu")
         self.sicht.setCurrentIndex(0 if opt.get("sichtteil", "original") == "original" else 1)
         v.addWidget(self.sicht)
+        self._teil_dateiname(v, opt)
         v.addStretch(1)
         return w
+
+    def _teil_dateiname(self, v: QVBoxLayout, opt: dict) -> None:
+        """Dateiname und Prüfung der Rechnungsnummer je Belegart (ab 0.9.5). Leere Felder = wie bisher."""
+        _abschnitt(
+            v,
+            _("Dateiname und Rechnungsnummer"),
+            _(
+                "Die Rechnungsnummer kommt immer aus der CSV bzw. XML (dem ERP). Fakturafalter vergibt "
+                "keine Nummern und ändert sie nie, es prüft sie nur. Leere Felder: wie bisher."
+            ),
+        )
+        kreise = nummernkreis.aus_optionen(opt)
+        self.kreis_felder: dict[str, dict] = {}
+        for kreis, titel in (("rechnung", "Rechnungen"), ("gutschrift", "Gutschriften")):
+            k = kreise.get(kreis) or nummernkreis.Kreis()
+            box, b = karte()
+            b.addWidget(lbl(_(titel), "titel"))
+            b.addWidget(lbl(_("Dateiname der ZUGFeRD-PDF"), umbruch=True))
+            pdf = QLineEdit(k.dateiname)
+            pdf.setObjectName(f"dateiname_{kreis}")
+            pdf.setAccessibleName(_("Dateiname der ZUGFeRD-PDF"))
+            pdf.setPlaceholderText(
+                "{rechnungsnummer}_zugferd.pdf" if kreis == "rechnung" else _("wie bei Rechnungen")
+            )
+            b.addWidget(pdf)
+            b.addWidget(lbl(_("Dateiname der XRechnung-XML (falls erzeugt)"), umbruch=True))
+            xml = QLineEdit(k.dateiname_xrechnung)
+            xml.setObjectName(f"dateiname_xrechnung_{kreis}")
+            xml.setAccessibleName(_("Dateiname der XRechnung-XML (falls erzeugt)"))
+            xml.setPlaceholderText(
+                "{rechnungsnummer}_xrechnung.xml" if kreis == "rechnung" else _("wie bei Rechnungen")
+            )
+            b.addWidget(xml)
+            b.addWidget(lbl(_("Prüfmuster der Rechnungsnummer (optional)"), umbruch=True))
+            muster = QLineEdit(k.pruefmuster)
+            muster.setObjectName(f"pruefmuster_{kreis}")
+            muster.setAccessibleName(_("Prüfmuster der Rechnungsnummer (optional)"))
+            muster.setPlaceholderText(_("z. B. JJJJ###### oder RE-JJJJ-####"))
+            b.addWidget(muster)
+            luecken = QCheckBox(_("Lücken im Nummernkreis melden (nur Warnung)"))
+            luecken.setObjectName(f"luecken_{kreis}")
+            luecken.setChecked(k.luecken_warnen)
+            b.addWidget(luecken)
+            vorschau = lbl("", "hinweis", umbruch=True)
+            vorschau.setAccessibleName(_("Vorschau des Dateinamens"))
+            b.addWidget(vorschau)
+            v.addWidget(box)
+            self.kreis_felder[kreis] = {
+                "pdf": pdf,
+                "xml": xml,
+                "muster": muster,
+                "luecken": luecken,
+                "vorschau": vorschau,
+            }
+            for ed in (pdf, xml, muster):
+                ed.textChanged.connect(lambda _t: self._dateiname_vorschau())
+        v.addWidget(
+            lbl(
+                _(
+                    "Platzhalter im Dateinamen: {rechnungsnummer} {jahr} {monat} {tag} {datum} "
+                    "{kundennummer} {kunde} {belegart} {belegart_kurz}. Umlaute und Sonderzeichen werden "
+                    "für Windows und Linux ersetzt. Gibt es die Datei schon, wird nichts überschrieben: "
+                    "die Rechnung geht nach „Zu prüfen“."
+                ),
+                "hinweis",
+                umbruch=True,
+            )
+        )
+        v.addWidget(
+            lbl(
+                _(
+                    "Prüfmuster: JJJJ = Jahr, JJ = Jahr zweistellig, MM = Monat, # = eine Ziffer, "
+                    "* = beliebige Zeichen, alles andere wörtlich. Passt eine Nummer nicht, geht die Rechnung "
+                    "nach „Zu prüfen“. Lücken (der letzte #-Block zählt) sind erlaubt und werden nur gemeldet. "
+                    "Doppelte Nummern hält Fakturafalter immer an."
+                ),
+                "hinweis",
+                umbruch=True,
+            )
+        )
+        self._dateiname_vorschau()
+
+    def _kreise_aus_feldern(self) -> dict:
+        aus = {}
+        for kreis, f in self.kreis_felder.items():
+            aus[kreis] = nummernkreis.Kreis(
+                f["muster"].text().strip(),
+                f["luecken"].isChecked(),
+                f["pdf"].text().strip(),
+                f["xml"].text().strip(),
+            )
+        return aus
+
+    def _kreis_fehler(self) -> str:
+        """Erster Fehler in den Mustern (leer = alles in Ordnung)."""
+        for kreis, k in self._kreise_aus_feldern().items():
+            name = _("Rechnungen") if kreis == "rechnung" else _("Gutschriften")
+            for text in (
+                nummernkreis.dateiname_pruefen(k.dateiname),
+                nummernkreis.dateiname_pruefen(k.dateiname_xrechnung),
+                nummernkreis.muster_pruefen(k.pruefmuster),
+            ):
+                if text:
+                    return f"{name}: {_(text) if text in _UEBERSETZBAR else text}"
+        return ""
+
+    def _dateiname_vorschau(self) -> None:
+        kreise = self._kreise_aus_feldern()
+        rech = kreise["rechnung"]
+        for kreis, f in self.kreis_felder.items():
+            k = kreise[kreis]
+            m_pdf = k.dateiname or rech.dateiname or nummernkreis.STANDARD_PDF
+            m_xml = k.dateiname_xrechnung or rech.dateiname_xrechnung or nummernkreis.STANDARD_XML
+            hat_zaehler = bool(k.pruefmuster) and nummernkreis.hat_zaehler(k.pruefmuster)
+            f["luecken"].setEnabled(hat_zaehler)
+            f["luecken"].setToolTip(
+                ""
+                if hat_zaehler
+                else _("Braucht ein Prüfmuster mit # (Zähler), z. B. JJJJ######.")
+            )
+            fehler = (
+                nummernkreis.muster_pruefen(k.pruefmuster)
+                or nummernkreis.dateiname_pruefen(m_pdf)
+                or nummernkreis.dateiname_pruefen(m_xml)
+            )
+            if fehler:
+                f["vorschau"].setObjectName("warn")
+                f["vorschau"].setText(_(fehler) if fehler in _UEBERSETZBAR else fehler)
+            else:
+                r = nummernkreis.beispiel(kreis, k.pruefmuster)
+                f["vorschau"].setObjectName("hinweis")
+                f["vorschau"].setText(
+                    _("Vorschau mit Nummer {nr}: {pdf} · {xml}").format(
+                        nr=r.nummer,
+                        pdf=nummernkreis.dateiname(m_pdf, r, ".pdf"),
+                        xml=nummernkreis.dateiname(m_xml, r, ".xml"),
+                    )
+                )
+            f["vorschau"].style().unpolish(f["vorschau"])
+            f["vorschau"].style().polish(f["vorschau"])
 
     # ======================================================================== Allgemein
     def _seite_allgemein(self) -> QWidget:
@@ -910,6 +1054,9 @@ class Einstellungen(QDialog):
                 return self._fehler(_("Die fünf Ordner müssen verschieden sein."))
         elif not self.arbeitsordner.text().strip():
             return self._fehler(_("Bitte einen Arbeitsordner angeben."))
+        fehler = self._kreis_fehler()
+        if fehler:
+            return self._fehler(fehler, "Ausgabe")
         self.accept()
 
     def autostart_gewuenscht(self) -> bool | None:
@@ -958,6 +1105,11 @@ class Einstellungen(QDialog):
             o["gegenstueck_minuten"] = self.gegenstueck.value()
         o["xrechnung_zusatz"] = self.xr.isChecked()
         o["sichtteil"] = self.sicht.currentData()
+        kreise = nummernkreis.in_optionen(self._kreise_aus_feldern())
+        if kreise:
+            o["nummernkreise"] = kreise
+        else:
+            o.pop("nummernkreise", None)  # nichts eingestellt: Datei bleibt wie bisher
         o["polling"] = self.polling.isChecked()
         o["logs_anonymisieren"] = self.anonym.isChecked()
         if self.nachpruefen.isEnabled():
