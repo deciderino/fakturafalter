@@ -44,7 +44,10 @@ python packaging/smoke.py --wine --headless-sekunden 120 -- wine dist/win/Faktur
 Schickt `beispiele/` (Varianten a, b, c) mit `--einmal` durch, prüft Ausgänge und Fehlerordner und testet
 `--headless` (Datei nachlegen, Protokoll muss wachsen). Arbeitsordner: `/tmp/Fakturafalter-Beispiel-smoke`.
 Das Programm prüft dabei mit seiner eigenen Java-Laufzeit: erwartet wird „gültig“ in Spalte 8 von
-`protokoll.tsv`, dazu ein `--pruefe`-Aufruf. `FAKTURAFALTER_*` wird vorher aus der Umgebung entfernt.
+`Protokoll/protokoll.tsv`, dazu ein `--pruefe`-Aufruf. Ab 0.9.6 außerdem: Ausgang ohne Temp-/Zwischendateien
+und ohne `protokoll.tsv`, kein `fakturafalter-…`-Rest im System-Temp, XRechnung im Unterordner (Variante b) und
+`--headless` ohne Netz (`unshare -rn`) mit stiller Updateprüfung. `FAKTURAFALTER_*` wird vorher aus der Umgebung
+entfernt.
 Paket ohne Werkzeuge: `--ohne-werkzeuge`.
 Im Container ohne FUSE: `APPIMAGE_EXTRACT_AND_RUN=1`.
 

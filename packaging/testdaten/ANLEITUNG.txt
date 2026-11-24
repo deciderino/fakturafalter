@@ -1,4 +1,4 @@
-Fakturafalter 0.9.5 – Testdaten
+Fakturafalter 0.9.6 – Testdaten
 ===============================
 
 Alle Firmen, Personen, Rechnungen und Kontonummern sind erfunden.
@@ -95,9 +95,9 @@ Test 7 mit variante-a_positionen_utf8.csv statt variante-d laufen lassen.
 
 Test 7: Rabatt, Gutschrift, Lastschrift (CSV und XML)
 -----------------------------------------------------
-Linux:    ./Fakturafalter-0.9.5-x86_64.AppImage -c beispiele/konfiguration.yaml \
+Linux:    ./Fakturafalter-0.9.6-x86_64.AppImage -c beispiele/konfiguration.yaml \
               --dateien beispiele/variante-d_rabatt_gutschrift_lastschrift.csv
-          ./Fakturafalter-0.9.5-x86_64.AppImage -c beispiele/xml/konfiguration-pdf-xml.yaml \
+          ./Fakturafalter-0.9.6-x86_64.AppImage -c beispiele/xml/konfiguration-pdf-xml.yaml \
               --dateien beispiele/xml-eingang/*.xml
 Windows:  fakturafalter-cli.exe mit denselben Angaben (Pfade mit \).
 Erwartet: 6 × „OK“ und „[gültig]“. In den PDFs stehen Rabatt- und Zuschlagszeilen, „Gutschrift“ mit
@@ -131,7 +131,7 @@ Test 9: Fortschritt der Verarbeitung
 
 Test 10: Nur PDF mit Anlern-Assistent (unterstützt, nicht empfohlen)
 -------------------------------------------------------------------
-Linux:    ./Fakturafalter-0.9.5-x86_64.AppImage -c beispiele/industrie/konfiguration-nur-pdf.yaml
+Linux:    ./Fakturafalter-0.9.6-x86_64.AppImage -c beispiele/industrie/konfiguration-nur-pdf.yaml
 Windows:  Fakturafalter.exe -c beispiele\industrie\konfiguration-nur-pdf.yaml
 
 1. Schalter oben links auf „Überwachung an“. Nur die PDFs aus beispiele/industrie/eingang/ nach
@@ -184,6 +184,21 @@ Test 13: Kundenbezeichnung 1–3, Positions-Unterzeilen, Dateiname (neu in 0.9.5
    wiederholen: die PDFs heißen z. B. 2026_2026000101_Feinmechanik_Beispiel_GmbH_Werk_Sued_War.pdf.
 3. Prüfmuster auf RE-JJJJ-#### ändern: die beiden Rechnungen gehen nach „Zu prüfen“ (Nummer passt nicht),
    die Gutschrift läuft durch. Fakturafalter ändert oder vergibt nie eine Rechnungsnummer.
+
+
+Test 14: Ausgang als Postbox, Protokollordner, XRechnung-Ablage, Updateprüfung (neu in 0.9.6)
+---------------------------------------------------------------------------------------------
+1. Wie Test 7 (--dateien beispiele/variante-b_wawi_cp1252.csv). Im Ausgang liegen nur die fertigen Dateien,
+   keine .tmp-Dateien und kein protokoll.tsv mehr. Das Protokoll steht jetzt in laufzeit/Protokoll/protokoll.tsv.
+2. Ausgang leeren (wie es ein Archiv täte) und Schritt 1 wiederholen: die Rechnungen gehen trotzdem nach
+   „Zu prüfen“ (Nummer schon erzeugt) – die Doppelprüfung hängt am Protokoll, nicht am Ausgang.
+3. laufzeit/Protokoll löschen und eine neue Rechnung durchschicken: Hinweis „Kein Protokoll … gefunden“ in
+   Oberfläche bzw. Konsole, die Verarbeitung läuft weiter.
+4. Einstellungen → Ausgabe → „XRechnung (XML) zusätzlich …“ auf „Im Unterordner „XRechnung“ des Ausgangs“:
+   die XRechnung-Dateien (RE-2026-0102, RE-2026-0103) landen in Ausgang/XRechnung, „Keine XRechnung-Datei“
+   lässt sie weg.
+5. Einstellungen → Allgemein → Updates: „Jetzt prüfen“. Ohne Netz: „Keine Verbindung“, sonst „ist aktuell“
+   bzw. ein Hinweis mit Link. Es wird nichts heruntergeladen; abschaltbar mit „Beim Start nach Updates suchen“.
 
 
 Was zurückmelden

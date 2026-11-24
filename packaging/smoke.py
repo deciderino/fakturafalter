@@ -2,7 +2,7 @@
 # Copyright 2026 Fakturafalter-Mitwirkende
 """Rauchtest für ein gebautes Programm: beispiele/ einmal durchschicken (--einmal), Ausgaben prüfen.
 
-    python packaging/smoke.py -- dist/Fakturafalter-0.9.5-x86_64.AppImage
+    python packaging/smoke.py -- dist/Fakturafalter-0.9.6-x86_64.AppImage
     python packaging/smoke.py --wine -- wine dist/win/Fakturafalter/fakturafalter-cli.exe
 
 Je Beispielvariante (a/b/c/d: CSV/Text, x: PDF + XML, e: nur XML – UBL/CII mit Rabatt, Gutschrift, Lastschrift,
@@ -14,6 +14,10 @@ ZUGFeRD-PDFs im Ausgang und nichts im Fehlerordner. Das gebaute Programm prüft 
 mitgelieferten Werkzeugen (eigene Java-Laufzeit, Mustang, KoSIT): erwartet wird „gültig“ in der
 Prüfspalte von protokoll.tsv für jede Rechnung, dazu ein „--pruefe“-Aufruf auf eine Ausgabe aus a und alle
 Ausgaben aus d, e, l und k.
+Ab 0.9.6 zusätzlich: der Ausgang enthält nur fertige Dateien (keine .tmp/.part, kein protokoll.tsv), das Protokoll
+liegt im Ordner „Protokoll“, im System-Temp bleibt kein „fakturafalter-…“-Ordner zurück, Variante b legt die
+XRechnung-Zusatzdateien in den Unterordner „XRechnung“. Mit --headless-sekunden läuft die Überwachung ohne Netz
+(``unshare -rn``): die Updateprüfung muss still bleiben (keine Meldung auf der Konsole, nur Debug im Log).
 FAKTURAFALTER_* aus der Umgebung werden entfernt, damit wirklich das Paket prüft.
 Mit --ohne-werkzeuge (Paket ohne Prüfwerkzeuge) wird stattdessen „nicht geprüft“ erwartet.
 Keine Online-Dienste.
@@ -51,6 +55,7 @@ NUMMERNKREISE = {
 NAMEN_K = ["2026_2026000101_Feinmechanik_Beispiel_GmbH_Werk_Sued_War.pdf",
            "2026_2026000102_Hofladen_Beispiel_Inh._Erika_Musterfrau.pdf", "Gutschrift_GS-2026-0011.pdf"]
 MODUS = {"x": "pdf_xml", "e": "pdf_xml"}
+XRECHNUNG_B = ["RE-2026-0102_xrechnung.xml", "RE-2026-0103_xrechnung.xml"]   # Variante b: Unterordner XRechnung
 ALLE_PRUEFEN = ("d", "e", "l", "k")
 
 
@@ -60,6 +65,26 @@ def winpfad(p: Path) -> str:
 
 def leer_oder_fehlt(p: Path) -> list[str]:
     return sorted(x.name for x in p.iterdir()) if p.exists() else []
+
+
+def temp_ordner(wine: bool) -> list[Path]:
+    """System-Temp des Programms (unter Wine der Temp-Ordner im Präfix)."""
+    orte = [Path(os.environ.get("TMPDIR") or "/tmp")]
+    if wine:
+        pre = Path(os.environ.get("WINEPREFIX") or Path.home() / ".wine")
+        orte += list(pre.glob("drive_c/users/*/AppData/Local/Temp")) + list(pre.glob("drive_c/users/*/Temp"))
+        orte += [pre / "drive_c" / "windows" / "temp"]
+    return orte
+
+
+def temp_reste(wine: bool) -> set[str]:
+    return {str(p) for t in temp_ordner(wine) if t.exists() for p in t.glob("fakturafalter-*")}
+
+
+def ausgang_sauber(ausgang: Path) -> list[str]:
+    """Unerwartetes im Ausgang: Temp-/Zwischendateien, versteckte Dateien, ein protokoll.tsv."""
+    return sorted(str(x.relative_to(ausgang)) for x in ausgang.rglob("*")
+                  if x.name.startswith((".", "~")) or x.suffix in (".tmp", ".part") or x.name == "protokoll.tsv")
 
 
 def main() -> int:
@@ -76,6 +101,7 @@ def main() -> int:
     env = {n: w for n, w in os.environ.items() if not n.startswith("FAKTURAFALTER_")}
     env["QT_QPA_PLATFORM"] = "offscreen"
     erwartet = "nicht geprüft" if a.ohne_werkzeuge else "gültig"
+    temp_vorher = temp_reste(a.wine)
     ok = True
     pdfs = []
     zu_pruefen = []
@@ -93,6 +119,8 @@ def main() -> int:
             d["layout"] = yaml.safe_load((BSP / "layout" / "layout-beispiel.yaml").read_text(encoding="utf-8"))["layout"]
         if v == "k":
             d.setdefault("optionen", {})["nummernkreise"] = NUMMERNKREISE
+        if v == "b":
+            d.setdefault("optionen", {})["xrechnung_ablage"] = "unterordner"
         d["ordner"] = {n: pf(b / n) for n in ("eingang", "ausgang", "erledigt", "fehler", "pruefen")}
         (b / "cfg" / "konfiguration.yaml").write_text(yaml.safe_dump(d, allow_unicode=True), encoding="utf-8")
         (b / "eingang").mkdir()
@@ -102,17 +130,21 @@ def main() -> int:
         r = subprocess.run(cmd, env=env, capture_output=True, text=True, errors="replace", timeout=600)
         neu = sorted((b / "ausgang").glob("*.pdf"))           # Variante k: eigene Dateinamen
         fehler = leer_oder_fehlt(b / "fehler")
-        prot = b / "ausgang" / "protokoll.tsv"
+        prot = b / "Protokoll" / "protokoll.tsv"                # ab 0.9.6: eigener Ordner neben dem Eingang
+        schmutz = ausgang_sauber(b / "ausgang")
         pruef = [(z.split("\t") + [""] * 8)[7] for z in prot.read_text(encoding="utf-8").splitlines()] \
             if prot.exists() else []
         gut = (r.returncode == 0 and bool(neu) and not fehler and not leer_oder_fehlt(b / "eingang")
-               and bool(pruef) and set(pruef) == {erwartet})
+               and bool(pruef) and set(pruef) == {erwartet} and not schmutz)
+        if v == "b":
+            gut &= leer_oder_fehlt(b / "ausgang" / "XRechnung") == XRECHNUNG_B
         if v == "l":                                          # Logo/Bildfeld (Image) und Briefpapier (Form) drin
             gut &= all(b"/Image" in x.read_bytes() and b"/Form" in x.read_bytes() for x in neu)
         if v == "k":
             gut &= [x.name for x in neu] == NAMEN_K
         print(f"Variante {v}: exit {r.returncode}, {len(neu)} PDF(s), Prüfung {sorted(set(pruef))}, "
-              f"Fehlerordner {fehler or 'leer'} -> {'OK' if gut else 'FEHLER'}")
+              f"Fehlerordner {fehler or 'leer'}, Ausgang {schmutz or 'sauber'}, Protokoll "
+              f"{'ja' if prot.exists() else 'FEHLT'} -> {'OK' if gut else 'FEHLER'}")
         if not gut:
             print(r.stdout[-3000:], r.stderr[-3000:], sep="\n")
         ok &= gut
@@ -126,7 +158,7 @@ def main() -> int:
         d.setdefault("optionen", {})["gegenstueck_minuten"] = 0
         cfg.write_text(yaml.safe_dump(d, allow_unicode=True), encoding="utf-8")
         vorher = len(leer_oder_fehlt(b / "fehler"))
-        prot = b / "ausgang" / "protokoll.tsv"
+        prot = b / "Protokoll" / "protokoll.tsv"
         zeilen = len(prot.read_text(encoding="utf-8").splitlines())
 
         def fertig():
@@ -134,7 +166,8 @@ def main() -> int:
                     len(prot.read_text(encoding="utf-8").splitlines()) > zeilen)
         logf = BASIS / "headless.log"
         with open(logf, "w") as lf:                         # eigene Prozessgruppe: AppImage/Wine starten Kinder
-            p = subprocess.Popen(a.programm + ["--config", pf(b / "cfg" / "konfiguration.yaml"), "--headless"],
+            ohne_netz = ["unshare", "-rn"]                  # Updateprüfung ohne Netz: muss still bleiben
+            p = subprocess.Popen(ohne_netz + a.programm + ["--config", pf(b / "cfg" / "konfiguration.yaml"), "--headless"],
                                  env=env, stdout=lf, stderr=subprocess.STDOUT, start_new_session=True)
             time.sleep(min(10, a.headless_sekunden / 2))    # Wächter starten lassen, dann Datei einwerfen
             shutil.copy(BSP / "variante-a_positionen_utf8.csv", b / "eingang" / "nochmal.csv")
@@ -152,6 +185,10 @@ def main() -> int:
                 except subprocess.TimeoutExpired:
                     pass
         out = logf.read_text(errors="replace")
+        applog = "\n".join(x.read_text(errors="replace") for x in (b / "cfg" / "logs").glob("*.log*"))
+        still = "Update" not in out and "Traceback" not in out and "Updateprüfung nicht möglich" in applog
+        print(f"--headless ohne Netz: Updateprüfung still (nur Debug im Log) -> {'OK' if still else 'FEHLER'}")
+        ok &= still
         gut = fertig()
         neu = prot.read_text(encoding="utf-8").splitlines()[zeilen:]
         print(f"--headless: Datei abgeholt und verarbeitet ({len(neu)} Protokollzeile(n), Fehlerordner "
@@ -159,6 +196,11 @@ def main() -> int:
         if not gut:
             print((out or "")[-3000:])
         ok &= gut
+
+    rest = temp_reste(a.wine) - temp_vorher
+    print(f"System-Temp: {'aufgeräumt' if not rest else 'RESTE ' + ', '.join(sorted(rest))} -> "
+          f"{'OK' if not rest else 'FEHLER'}")
+    ok &= not rest
 
     if zu_pruefen and not a.ohne_werkzeuge:              # Prüfung von Hand mit der mitgelieferten Java-Laufzeit
         r = subprocess.run(a.programm + ["--pruefe", *map(pf, zu_pruefen)], env=env, capture_output=True, text=True,
