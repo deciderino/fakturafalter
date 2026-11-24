@@ -26,6 +26,8 @@ from . import layout as lay
 from . import zahlungsziel
 from .modell import Rechnung
 from .sicht import (
+    GRAU,
+    UNTERZEILE_PT,
     _schriften,
     _za_text,
     datum,
@@ -39,6 +41,7 @@ from .sicht import (
     satz,
     titel,
     umbrechen,
+    unterzeilen_umbrochen,
 )
 
 W, H = A4
@@ -162,7 +165,7 @@ def _empfaenger(r: Rechnung) -> list[Zeile]:
         + [
             Zeile(t)
             for t in (
-                k.name,
+                *k.namenszeilen(),  # Kundenbezeichnung 1–3 je eine Zeile (sonst der Name)
                 k.kontakt_name,
                 k.anschrift.zusatz,
                 k.anschrift.zeile3,
@@ -370,8 +373,7 @@ def _fusszeile(r: Rechnung, mit_bank: bool) -> list[Zeile]:
 # Spalten als Anteil der Tabellenbreite (Standardbreite 170 mm wie im festen Layout)
 _SP = {
     "pos": 0,
-    "art": 10,
-    "bez": 30,
+    "bez": 10,  # bis 0.9.4: 30 (davor die Spalte Art.-Nr., jetzt Unterzeile)
     "menge": 105,
     "einh": 107,
     "preis": 140,
@@ -384,7 +386,7 @@ _SP = {
 class _Zeile:
     pos: object
     bez: list[str]
-    extra: list[str]
+    extra: list[tuple[str, bool]]  # Unterzeilen (Text, grau), schon umbrochen
     preis: list[str]
     pg: float
     hoehe: float  # in pt-Einheiten der Zeichenfläche
@@ -397,7 +399,7 @@ def _spalten(e: lay.Element) -> dict[str, float]:
 def _zeilen_bauen(r: Rechnung, e: lay.Element, sprache) -> list[_Zeile]:
     g = e.schrift
     f = e.breite / 170
-    bez_b, preis_b = 56 * mm * f, 25 * mm * f
+    bez_b, preis_b = 76 * mm * f, 25 * mm * f  # bis 0.9.4: 56 mm (Art.-Nr.-Spalte)
     lh = g * 0.44 * mm
     out = []
     for p in r.positionen:
@@ -410,14 +412,7 @@ def _zeilen_bauen(r: Rechnung, e: lay.Element, sprache) -> list[_Zeile]:
             preis_b,
             MIN_PT,
         )
-        extra = []  # BT-147/148, BG-27/28
-        if p.preisrabatt:
-            extra.append(
-                f"Listenpreis {eur(p.bruttopreis)}, Nachlass {eur(p.preisrabatt)} je Einheit"
-                if p.bruttopreis is not None
-                else f"Preisnachlass {eur(p.preisrabatt)} je Einheit"
-            )
-        extra += [f"{a}: {b}" for a, b in map(_za_text, p.zu_abschlaege)]
+        extra = unterzeilen_umbrochen(_Breite, p, sprache, F, g * UNTERZEILE_PT / 9, bez_b)
         n = max(len(bez) + len(extra), len(preis))
         out.append(_Zeile(p, bez, extra, preis, pg, lh * n + 1 * mm))
     return out
@@ -472,7 +467,6 @@ def _tabelle(
     c.setFont(FB, g)
     for k, t, r_ in (
         ("pos", "Pos", False),
-        ("art", "Art.-Nr.", False),
         ("bez", "Bezeichnung", False),
         ("menge", "Menge", True),
         ("einh", "Einh.", False),
@@ -494,19 +488,14 @@ def _tabelle(
         p = z.pos
         c.setFont(F, g)
         c.drawString(sp["pos"], y, p.nr)
-        ag, al = einpassen(
-            _Breite, [p.artikelnummer or ""], F, g, 19 * mm * f, MIN_PT, max_zeilen=1
-        )
-        c.setFont(F, ag)
-        c.drawString(sp["art"], y, al[0])
-        c.setFont(F, g)
         for i, t in enumerate(z.bez):
             c.drawString(sp["bez"], y - i * lh, t)
-        if z.extra:
-            for i, t in enumerate(z.extra, len(z.bez)):
-                gg, zs = einpassen(_Breite, [t], F, g * 7.5 / 9, 76 * mm * f, MIN_PT, max_zeilen=1)
-                c.setFont(F, gg)
-                c.drawString(sp["bez"], y - i * lh, zs[0])
+        if z.extra:  # Unterzeilen (Art.-Nr., Zeichnung, Beschreibung, …, Rabatt)
+            c.setFont(F, g * UNTERZEILE_PT / 9)
+            for i, (t, grau) in enumerate(z.extra, len(z.bez)):
+                c.setFillColorRGB(*(GRAU if grau else (0, 0, 0)))
+                c.drawString(sp["bez"], y - i * lh, t)
+            c.setFillColorRGB(0, 0, 0)
             c.setFont(F, g)
         c.drawRightString(sp["menge"], y, menge(p.menge))
         c.drawString(sp["einh"], y, einheit_text(p.einheit, sprache))

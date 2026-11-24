@@ -59,6 +59,16 @@ class Partei:
     kennung: str = ""  # interne Kundennummer (BT-46 Buyer identifier)
     handelsname: str = ""  # BT-28 / BT-45
     rechtliches: str = ""  # BT-33 weitere rechtliche Angaben (nur Verkäufer)
+    # Käufer aus der CSV (ab 0.9.5): Kundenbezeichnung 1–3 als eigene Zeilen im Adressblock der Sichtseite.
+    # ``name`` (BT-44) ist dann die Verbindung dieser Zeilen mit je einem Leerzeichen. Leer = eine Zeile ``name``.
+    name_zeilen: list[str] = field(default_factory=list)
+
+    def namenszeilen(self) -> list[str]:
+        """Namenszeilen für den Adressblock. Passen die gespeicherten Zeilen nicht mehr zu ``name`` (z. B. Name
+        in der Prüfansicht geändert), gilt ``name`` als eine Zeile – so steht in PDF und XML derselbe Name."""
+        if self.name_zeilen and " ".join(self.name_zeilen) == self.name:
+            return list(self.name_zeilen)
+        return [self.name] if self.name else []
 
 
 @dataclass

@@ -1,0 +1,63 @@
+# CSV-Zuordnungsprofil – passt zu variante-k_kundenbezeichnung_erp.csv (erfundene Daten, ab 0.9.5)
+# Zeigt: Kundenbezeichnung 1–3 (je eine Zeile im Adressblock, in der XML ein Name BT-44), Unterzeilen der
+# Positionen (Art.-Nr., Ihre Art.-Nr., Zeichnungs-Nr. mit Index, GTIN, Langtext, Ursprungsland, Bestellposition,
+# Kostenstelle, Leistungszeitraum, Hinweis, Rabatt) und eine Gutschrift mit eigenem Nummernkreis.
+profil: kundenbezeichnung-unterzeilen
+version: 1
+beschreibung: "Eine Zeile je Position, UTF-8, Semikolon, Dezimalkomma; Kundenbezeichnung 1–3, Zeichnung/Index"
+
+datei:
+  muster: "*.csv"
+  kodierung: auto
+  trennzeichen: ";"
+  textbegrenzer: '"'
+  kopfzeile: true
+
+zahlen:  {dezimal: ",", tausender: "."}
+datum:   {format: "%d.%m.%Y"}
+
+aufbau:
+  art: zeile_je_position
+  rechnung_schluessel: Rechnungsnummer
+  kopf_muss_gleich_sein: [Rechnungsdatum, Kundennummer, Belegart]
+
+felder:
+  kopf:
+    BT-1:            {spalte: Rechnungsnummer}
+    belegart:        {spalte: Belegart, optional: true}           # Rechnung / Gutschrift -> BT-3
+    BT-2:            {spalte: Rechnungsdatum, typ: datum}
+    BT-72:           {spalte: Leistungsdatum, typ: datum, optional: true}
+    BT-25:           {spalte: "Bezug auf", optional: true}        # Rechnungsbezug der Gutschrift (BG-3)
+    kundennummer:    {spalte: Kundennummer, optional: true}
+    BT-44:           {spalte: "Kundenbezeichnung 1"}              # Pflicht: Zeile 1 des Käufernamens
+    kaeufer_name_2:  {spalte: "Kundenbezeichnung 2", optional: true}
+    kaeufer_name_3:  {spalte: "Kundenbezeichnung 3", optional: true}
+    BT-50:           {spalte: Strasse}
+    BT-53:           {spalte: PLZ}
+    BT-52:           {spalte: Ort}
+    BT-3:            {fest: "380"}
+    BT-5:            {fest: EUR}
+  position:
+    BT-126:          {spalte: Pos}
+    BT-155:          {spalte: Artikelnummer, optional: true}
+    zeichnungsnummer: {spalte: Zeichnungsnummer, optional: true}  # -> Artikelmerkmal „Zeichnungsnummer“
+    index:           {spalte: Index, optional: true}              # -> Artikelmerkmal „Index“
+    BT-153:          {spalte: Bezeichnung}
+    BT-154:          {spalte: Langtext, optional: true}
+    BT-129:          {spalte: Menge, typ: zahl}
+    BT-130:          {spalte: Einheit, mapping: einheiten}
+    BT-146:          {spalte: Einzelpreis, typ: zahl}
+    steuer:          {spalte: USt-Satz, mapping: steuer}
+    BT-156:          {spalte: "Ihre Artikelnummer", optional: true}
+    BT-157:          {spalte: GTIN, optional: true}
+    BT-159:          {spalte: Ursprungsland, optional: true}
+    BT-132:          {spalte: Bestellposition, optional: true}
+    BT-133:          {spalte: Kostenstelle, optional: true}
+    BT-134:          {spalte: "Leistung von", typ: datum, optional: true}
+    BT-135:          {spalte: "Leistung bis", typ: datum, optional: true}
+    BT-127:          {spalte: Positionstext, optional: true}
+    BT-138:          {spalte: "Rabatt %", typ: prozent, optional: true}
+
+mappings:
+  einheiten: {"Stk": H87, "Std": HUR, unbekannt: allgemein}
+  steuer: {unbekannt: satz}

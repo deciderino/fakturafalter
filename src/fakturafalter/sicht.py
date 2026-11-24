@@ -306,15 +306,195 @@ def satz(schluessel: str, r: Rechnung, sprache: str | None = None) -> str:
     return _SATZ[sp][schluessel].format(titel=t)
 
 
-def _za_text(za, vorzeichen: bool = True) -> tuple[str, str]:
-    """Zu-/Abschlag als („Rabatt 10 % – Grund“, „−12,34“)."""
-    art = "Zuschlag" if za.zuschlag else "Rabatt"
-    grund = "" if za.grund.strip().lower() in ("rabatt", "zuschlag", art.lower()) else za.grund
+def _za_text(za, vorzeichen: bool = True, sprache: str | None = None) -> tuple[str, str]:
+    """Zu-/Abschlag als („Rabatt 10 % – Grund“, „−12,34“). ``sprache="en"``: „Discount“/„Charge“ (nur die
+    Unterzeilen der Positionen; ohne ``sprache`` wie bisher deutsch)."""
+    en = sprache == "en"
+    art = ("Charge" if en else "Zuschlag") if za.zuschlag else ("Discount" if en else "Rabatt")
+    allgemein = ("rabatt", "zuschlag", "discount", "charge", art.lower())
+    grund = "" if za.grund.strip().lower() in allgemein else za.grund
     teile = [art + (f" {menge(za.prozent)} %" if za.prozent is not None else ""), grund]
     betrag = eur(za.ist_betrag)
     return " – ".join(t for t in teile if t), (
         ("+" if za.zuschlag else "−") + betrag
     ) if vorzeichen else betrag
+
+
+# Unterzeilen einer Position (ab 0.9.5): Präfixe je Sprache
+_UZ = {
+    "de": {
+        "art": "Art.-Nr.",
+        "kunde_art": "Ihre Art.-Nr.",
+        "zeichnung": "Zeichnungs-Nr.",
+        "index": "Index",
+        "gtin": "GTIN",
+        "std": "Standard-ID",
+        "beschreibung": "Beschreibung:",
+        "ursprung": "Ursprungsland:",
+        "bestellpos": "Bestellpos.",
+        "kostenstelle": "Kostenstelle:",
+        "objekt": "Objekt:",
+        "zeitraum": "Leistungszeitraum:",
+        "ab": "ab",
+        "bis": "bis",
+        "hinweis": "Hinweis:",
+        "listenpreis": "Listenpreis {liste}, Nachlass {nachlass} je Einheit",
+        "nachlass": "Preisnachlass {nachlass} je Einheit",
+    },
+    "en": {
+        "art": "Item no.",
+        "kunde_art": "Your item no.",
+        "zeichnung": "Drawing no.",
+        "index": "revision",
+        "gtin": "GTIN",
+        "std": "Standard ID",
+        "beschreibung": "Description:",
+        "ursprung": "Country of origin:",
+        "bestellpos": "Order line",
+        "kostenstelle": "Cost centre:",
+        "objekt": "Object:",
+        "zeitraum": "Service period:",
+        "ab": "from",
+        "bis": "until",
+        "hinweis": "Note:",
+        "listenpreis": "List price {liste}, discount {nachlass} per unit",
+        "nachlass": "Price discount {nachlass} per unit",
+    },
+}
+# Merkmale (BT-160) mit eigener Zeile in der Identifikation statt „Name: Wert“
+MERKMAL_ZEICHNUNG = "zeichnungsnummer"
+MERKMAL_INDEX = "index"
+UNTERZEILE_PT = 7.5  # Schriftgröße der Unterzeilen bei 9 pt Tabellenschrift
+GRAU = (0.4, 0.4, 0.4)
+
+
+def _ein(t) -> str:
+    return " ".join(str(t or "").split())
+
+
+def unterzeilen(p, sprache: str | None = None) -> list[tuple[str, bool]]:
+    """Belegte Zusatzangaben einer Position als Unterzeilen unter der Bezeichnung -> [(Text, grau)].
+
+    Reihenfolge: (a) Identifikation (grau): Art.-Nr. BT-155, Ihre Art.-Nr. BT-156, Zeichnungs-Nr. mit Index
+    (Merkmale „Zeichnungsnummer“/„Index“), GTIN bzw. Standard-ID BT-157; (b) Beschreibung BT-154, übrige Merkmale
+    BT-160/161, Ursprungsland BT-159; (c) Bestellpos. BT-132, Kostenstelle BT-133, Objekt BT-128,
+    Leistungszeitraum BT-134/135; (d) Hinweis BT-127; (e) Listenpreis/Nachlass BT-147/148, Rabatt/Zuschlag
+    BG-27/28. Leere Angaben ergeben keine Zeile. Die Hauptzeile (Spalten) ändert sich dadurch nie."""
+    sp = "en" if _sprache(sprache) == "en" else "de"
+    t = _UZ[sp]
+    aus: list[tuple[str, bool]] = []
+
+    def dazu(text: str, grau: bool = False) -> None:
+        if text:
+            aus.append((text, grau))
+
+    zeichnung = index = ""
+    merkmale = []
+    for m in p.merkmale or []:
+        name, wert = _ein(m.name), _ein(m.wert)
+        if name.casefold() == MERKMAL_ZEICHNUNG and not zeichnung:
+            zeichnung = wert
+        elif name.casefold() == MERKMAL_INDEX and not index:
+            index = wert
+        elif wert:
+            merkmale.append(f"{name}: {wert}" if name else wert)
+    # (a) Identifikation
+    if _ein(p.artikelnummer):
+        dazu(f"{t['art']} {_ein(p.artikelnummer)}", True)
+    if _ein(p.kaeufer_artikelnummer):
+        dazu(f"{t['kunde_art']} {_ein(p.kaeufer_artikelnummer)}", True)
+    if zeichnung and index:
+        dazu(f"{t['zeichnung']} {zeichnung}, {t['index']} {index}", True)
+    elif zeichnung:
+        dazu(f"{t['zeichnung']} {zeichnung}", True)
+    elif index:
+        dazu(f"{t['index'][:1].upper()}{t['index'][1:]} {index}", True)
+    if _ein(p.standard_id):
+        art = t["gtin"] if (p.standard_schema or "0160").strip() in ("", "0160") else t["std"]
+        dazu(f"{art} {_ein(p.standard_id)}", True)
+    # (b) Beschreibung, Merkmale, Ursprung
+    beschr = _ein(p.beschreibung)
+    if beschr and beschr != _ein(p.bezeichnung):
+        dazu(f"{t['beschreibung']} {beschr}")
+    for m in merkmale:
+        dazu(m)
+    if _ein(p.ursprungsland):
+        dazu(f"{t['ursprung']} {_ein(p.ursprungsland)}")
+    # (c) Zuordnung beim Kunden
+    if _ein(p.bestellposition):
+        dazu(f"{t['bestellpos']} {_ein(p.bestellposition)}")
+    if _ein(p.buchungsreferenz):
+        dazu(f"{t['kostenstelle']} {_ein(p.buchungsreferenz)}")
+    if _ein(p.objektkennung):
+        dazu(f"{t['objekt']} {_ein(p.objektkennung)}")
+    von, bis = p.leistung_von, p.leistung_bis
+    if von and bis:
+        dazu(f"{t['zeitraum']} {datum(von)} – {datum(bis)}")
+    elif von:
+        dazu(f"{t['zeitraum']} {t['ab']} {datum(von)}")
+    elif bis:
+        dazu(f"{t['zeitraum']} {t['bis']} {datum(bis)}")
+    # (d) Hinweis
+    if _ein(p.notiz):
+        dazu(f"{t['hinweis']} {_ein(p.notiz)}")
+    # (e) Preis: Listenpreis/Nachlass, Rabatt/Zuschlag
+    if p.preisrabatt:
+        dazu(
+            t["listenpreis"].format(liste=eur(p.bruttopreis), nachlass=eur(p.preisrabatt))
+            if p.bruttopreis is not None
+            else t["nachlass"].format(nachlass=eur(p.preisrabatt))
+        )
+    for a, b in (_za_text(za, sprache=sp) for za in p.zu_abschlaege):
+        dazu(f"{a}: {b}")
+    return aus
+
+
+def _umbrechen_fuellend(c, text: str, font: str, groesse: float, breite: float) -> list[str]:
+    """Wie ``umbrechen``, aber ein Wort, das auch allein nicht in eine Zeile passt (lange Artikelnummer), beginnt
+    direkt hinter dem Präfix und wird hart umbrochen – „Art.-Nr.“ steht so nie allein in einer Zeile."""
+    zeilen: list[str] = []
+    akt = ""
+    for wort in (text or "").split():
+        probe = f"{akt} {wort}".strip()
+        if c.stringWidth(probe, font, groesse) <= breite:
+            akt = probe
+            continue
+        if c.stringWidth(wort, font, groesse) <= breite:
+            zeilen.append(akt)
+            akt = wort
+            continue
+        rest = wort
+        while rest:
+            vor = f"{akt} " if akt else ""
+            n = len(rest)
+            while n > 1 and c.stringWidth(vor + rest[:n], font, groesse) > breite:
+                n -= 1
+            if c.stringWidth(vor + rest[:n], font, groesse) > breite and akt:
+                zeilen.append(akt)  # nicht einmal ein Zeichen passt noch dahinter
+                akt = ""
+                continue
+            if n < len(rest):  # lieber hinter einem Bindestrich/Schrägstrich trennen, wenn das nicht zu früh ist
+                k = max(rest.rfind("-", 0, n), rest.rfind("/", 0, n), rest.rfind(".", 0, n)) + 1
+                n = k if k > n // 2 else n
+            akt = vor + rest[:n]
+            rest = rest[n:]
+            if rest:
+                zeilen.append(akt)
+                akt = ""
+    if akt:
+        zeilen.append(akt)
+    return zeilen or [""]
+
+
+def unterzeilen_umbrochen(
+    c, p, sprache: str | None, font: str, groesse: float, breite: float
+) -> list[tuple[str, bool]]:
+    """Unterzeilen auf die Breite der Bezeichnung umbrechen (ohne Zeichenverlust) -> [(Zeile, grau)]."""
+    return [
+        (z, grau)
+        for text, grau in unterzeilen(p, sprache)
+        for z in _umbrechen_fuellend(c, text, font, groesse, breite)
+    ]
 
 
 def erzeugen(
@@ -387,7 +567,7 @@ def _erzeugen_standard(r: Rechnung, sprache: str | None = None) -> bytes:
                 [
                     t
                     for t in (
-                        k.name,
+                        *k.namenszeilen(),  # Kundenbezeichnung 1–3 je eine Zeile (sonst der Name)
                         k.kontakt_name,
                         k.anschrift.zusatz,
                         k.anschrift.zeile3,
@@ -498,8 +678,7 @@ def _erzeugen_standard(r: Rechnung, sprache: str | None = None) -> bytes:
         c.setFont("ER-Sans-Bold", 9)
         for x, t, rechts in [
             (L, "Pos", False),
-            (L + 10 * mm, "Art.-Nr.", False),
-            (L + 30 * mm, "Bezeichnung", False),
+            (L + 10 * mm, "Bezeichnung", False),
             (L + 105 * mm, "Menge", True),
             (L + 107 * mm, "Einh.", False),
             (L + 140 * mm, "Einzelpreis", True),
@@ -514,7 +693,8 @@ def _erzeugen_standard(r: Rechnung, sprache: str | None = None) -> bytes:
     c.setFont("ER-Sans-Bold", 13)
     c.drawString(L, y, titel(r))
     y = tabellenkopf(y - 9 * mm)
-    BEZ_BREITE = 56 * mm  # Bezeichnung: L+30 mm bis vor die Mengenspalte
+    BEZ_X = L + 10 * mm  # Bezeichnung ab L+10 mm (ab 0.9.5 keine eigene Art.-Nr.-Spalte mehr)
+    BEZ_BREITE = 76 * mm  # bis vor die Mengenspalte (rechter Rand unverändert)
     PREIS_BREITE = 25 * mm  # Einzelpreis rechtsbündig bis L+140 mm, links bis hinter „Einh.“
     for p in r.positionen:
         bez = umbrechen(c, p.bezeichnung, "ER-Sans", 9, BEZ_BREITE)
@@ -526,29 +706,22 @@ def _erzeugen_standard(r: Rechnung, sprache: str | None = None) -> bytes:
             PREIS_BREITE,
             7,
         )
-        extra = []  # BT-147/148, BG-27/28
-        if p.preisrabatt:
-            extra.append(
-                f"Listenpreis {eur(p.bruttopreis)}, Nachlass {eur(p.preisrabatt)} je Einheit"
-                if p.bruttopreis is not None
-                else f"Preisnachlass {eur(p.preisrabatt)} je Einheit"
-            )
-        extra += [f"{a}: {b}" for a, b in map(_za_text, p.zu_abschlaege)]
+        # Unterzeilen (Art.-Nr., Zeichnung, Beschreibung, …, Rabatt), umbrochen, nie abgeschnitten
+        extra = unterzeilen_umbrochen(c, p, sprache, "ER-Sans", UNTERZEILE_PT, BEZ_BREITE)
         hoehe = max(len(bez) + len(extra), len(preis))
         if y - (hoehe - 1) * 4 * mm < 45 * mm:
             c.showPage()
             y = tabellenkopf(kopf())
         c.setFont("ER-Sans", 9)
         c.drawString(L, y, p.nr)
-        c.drawString(L + 10 * mm, y, p.artikelnummer)
         for i, z in enumerate(bez):
-            c.drawString(L + 30 * mm, y - i * 4 * mm, z)
+            c.drawString(BEZ_X, y - i * 4 * mm, z)
         if extra:
-            c.setFont("ER-Sans", 7.5)
-            for i, z in enumerate(extra, len(bez)):
-                g, zs = einpassen(c, [z], "ER-Sans", 7.5, BEZ_BREITE + 20 * mm, 6, max_zeilen=1)
-                c.setFont("ER-Sans", g)
-                c.drawString(L + 30 * mm, y - i * 4 * mm, zs[0])
+            c.setFont("ER-Sans", UNTERZEILE_PT)
+            for i, (z, grau) in enumerate(extra, len(bez)):
+                c.setFillColorRGB(*(GRAU if grau else (0, 0, 0)))
+                c.drawString(BEZ_X, y - i * 4 * mm, z)
+            c.setFillColorRGB(0, 0, 0)
             c.setFont("ER-Sans", 9)
         c.drawRightString(L + 105 * mm, y, menge(p.menge))
         c.drawString(L + 107 * mm, y, einheit_text(p.einheit, sprache))

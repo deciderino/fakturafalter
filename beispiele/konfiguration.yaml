@@ -27,7 +27,7 @@ ordner:                     # relativ zu dieser Datei
   fehler: ../laufzeit/fehler
   pruefen: ../laufzeit/pruefen
 
-csv_profile: [profil-variante-a.json, profil-variante-b.yaml, profil-variante-c.yaml, profil-variante-d.yaml]
+csv_profile: [profil-variante-a.json, profil-variante-b.yaml, profil-variante-c.yaml, profil-variante-d.yaml, profil-variante-k.yaml]
 pdf_vorlagen: [vorlage-wawi-druck.yaml]
 
 optionen:
@@ -37,3 +37,14 @@ optionen:
   paarung_sekunden: 5
   schwelle: 0.9
   nach_erstellung_pruefen: true   # lokal prüfen (Mustang + KoSIT, im Paket enthalten); ungültig -> fehler/
+  # Ab 0.9.5, alles optional (fehlt der Block, bleibt es bei <Nummer>_zugferd.pdf und ohne Formatprüfung).
+  # Die Rechnungsnummer kommt immer aus der CSV/XML; Fakturafalter prüft sie nur (Einstellungen → Ausgabe).
+  # nummernkreise:
+  #   rechnung:
+  #     pruefmuster: "JJJJ######"        # JJJJ Jahr, JJ, MM Monat, # Ziffer, * beliebig; sonst wörtlich
+  #     luecken_warnen: true             # nur Warnung, die Rechnung läuft durch
+  #     dateiname: "{jahr}_{rechnungsnummer}_{kunde}.pdf"
+  #     dateiname_xrechnung: "{jahr}_{rechnungsnummer}_{kunde}.xml"
+  #   gutschrift:
+  #     pruefmuster: "GS-JJJJ-####"
+  #     dateiname: "{belegart}_{rechnungsnummer}.pdf"   # leer = wie bei Rechnungen

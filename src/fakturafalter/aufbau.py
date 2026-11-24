@@ -391,6 +391,7 @@ def rechnung_bauen(
     aus_quelle = [f for f in KAEUFER_FELDER if wert(f) is not None]
     for f in aus_quelle:
         _setzen(r.kaeufer, KAEUFER_FELDER[f], str(wert(f)).strip())
+    _namenszeilen(r, wert)
     if aus_quelle and not r.kaeufer.kennung:
         r.kaeufer.kennung = r.kundennummer  # BT-46
     if wert("BT-10") is not None:
@@ -408,7 +409,10 @@ def rechnung_bauen(
         r.herkunft["BT-20"] = Herkunft("profil", 1.0)  # Standardtext des Profils
     if wert("zahlungsziel_tage") is not None:
         r.zahlung.ziel_tage = int(Decimal(str(wert("zahlungsziel_tage"))))
-    if not eintrag and not r.kaeufer.name:
+    bt44_offen = any(h.feld == "BT-44" for h in r.hinweise)  # z. B. Kundenbezeichnung 1 fehlt
+    if bt44_offen:
+        pass
+    elif not eintrag and not r.kaeufer.name:
         r.hinweis(
             definition.get("kundenstamm", {}).get("fehlt", "pruefen")
             if definition.get("kundenstamm")
@@ -460,6 +464,39 @@ def rechnung_bauen(
     return r
 
 
+def _zelle(v) -> str:
+    """Zelle für eine Namenszeile: Rand-Leerraum weg, innere Leerräume und Umbrüche -> ein Leerzeichen."""
+    return " ".join(str(v or "").split())
+
+
+def _namenszeilen(r: Rechnung, wert) -> None:
+    """Kundenbezeichnung 1–3 (ab 0.9.5): BT-44 ist Zeile 1 (auch die bisherige Einzelspalte „Kunde“),
+    ``kaeufer_name_2``/``_3`` sind optional. In der XML steht in BT-44 alles mit je einem Leerzeichen verbunden,
+    die Sichtseite zeigt jede belegte Zeile einzeln. Ohne Zeile 2/3 bleibt alles wie bisher.
+    Zeile 2/3 ohne Zeile 1 rückt nicht nach oben: Hinweis „prüfen“ (BT-44)."""
+    z2, z3 = _zelle(wert("kaeufer_name_2")), _zelle(wert("kaeufer_name_3"))
+    if not (z2 or z3):
+        return
+    z1 = _zelle(wert("BT-44"))
+    if not z1:
+        r.hinweis(
+            "pruefen",
+            "Kundenbezeichnung 1 fehlt, obwohl Kundenbezeichnung 2 oder 3 belegt ist "
+            "(Zeile 1 ist Pflicht; Zeile 2/3 rückt nicht nach oben)",
+            "BT-44",
+        )
+        r.kaeufer.name, r.kaeufer.name_zeilen = "", []
+        return
+    zeilen = [z for z in (z1, z2, z3) if z]
+    r.kaeufer.name_zeilen = zeilen
+    r.kaeufer.name = " ".join(zeilen)
+
+
+# Artikelmerkmale (BG-32) mit fester Bedeutung aus eigenen CSV-Spalten (ab 0.9.5)
+MERKMAL_ZEICHNUNG = "Zeichnungsnummer"
+MERKMAL_INDEX = "Index"
+
+
 def _position_ergaenzen(pos: Position, g) -> None:
     """Freiwillige Positionsfelder (BT-127 … BT-161, BG-27/28) aus der Quelle."""
     pos.notiz = str(g("BT-127", "") or "")
@@ -481,6 +518,10 @@ def _position_ergaenzen(pos: Position, g) -> None:
         )
     if g("BT-161"):
         pos.merkmale.append(Merkmal(str(g("BT-160", "Merkmal")), str(g("BT-161"))))
+    for feld, name in (("zeichnungsnummer", MERKMAL_ZEICHNUNG), ("index", MERKMAL_INDEX)):
+        w = " ".join(str(g(feld, "") or "").split())
+        if w:  # optional: leer = kein Merkmal, keine Zeile
+            pos.merkmale.append(Merkmal(name, w))
     if g("BT-148") is not None:
         pos.bruttopreis = Decimal(str(g("BT-148")))
     if g("BT-147") is not None:
@@ -495,10 +536,15 @@ def _position_ergaenzen(pos: Position, g) -> None:
                 grund_code="95",
             )
         )
-    zb = _dez(g("BT-141"))
-    if zb:
+    zb, zp = _dez(g("BT-141")), _dez(g("BT-143"))
+    if zb or zp:
         pos.zu_abschlaege.append(
-            ZuAbschlag(zuschlag=True, betrag=abs(zb), grund=str(g("BT-144", "") or "Zuschlag"))
+            ZuAbschlag(
+                zuschlag=True,
+                betrag=abs(zb) if zb else None,
+                prozent=abs(zp) if zp and not zb else None,
+                grund=str(g("BT-144", "") or "Zuschlag"),
+            )
         )
 
 

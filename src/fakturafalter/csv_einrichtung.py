@@ -24,7 +24,9 @@ FELDER: list[tuple[str, str, str, str, bool]] = [
     ("BT-2", "Rechnungsdatum", "kopf", "datum", True),
     ("BT-72", "Leistungsdatum", "kopf", "datum", False),
     ("kundennummer", "Kundennummer", "kopf", "text", False),
-    ("BT-44", "Kunde – Name", "kopf", "text", False),
+    ("BT-44", "Kunde – Name (Zeile 1)", "kopf", "text", False),
+    ("kaeufer_name_2", "Kunde – Name (Zeile 2)", "kopf", "text", False),
+    ("kaeufer_name_3", "Kunde – Name (Zeile 3)", "kopf", "text", False),
     ("BT-50", "Kunde – Straße", "kopf", "text", False),
     ("BT-53", "Kunde – PLZ", "kopf", "text", False),
     ("BT-52", "Kunde – Ort", "kopf", "text", False),
@@ -95,6 +97,12 @@ FELDER: list[tuple[str, str, str, str, bool]] = [
     ("BT-133", "Buchungsreferenz (Position)", "position", "text", False),
     ("BT-134", "Leistung von (Position)", "position", "datum", False),
     ("BT-135", "Leistung bis (Position)", "position", "datum", False),
+    # ab 0.9.5: Zeichnung (als Artikelmerkmale BT-160/161), Objekt und Zuschlag der Position
+    ("zeichnungsnummer", "Zeichnungsnummer", "position", "text", False),
+    ("index", "Index (Zeichnung)", "position", "text", False),
+    ("BT-128", "Objektkennung (Position)", "position", "text", False),
+    ("BT-143", "Zuschlag % (Position)", "position", "prozent", False),
+    ("BT-144", "Zuschlaggrund (Position)", "position", "text", False),
 ]
 FELD = {f[0]: f for f in FELDER}
 # Freiwillige Felder ab 0.6.0 nur bei genauem Spaltennamen vorschlagen (kein Wortanfang: „Versanddatum“ ≠ Fracht)
@@ -105,7 +113,10 @@ _SYNONYME = {
     "BT-2": "rechnungsdatum belegdatum rgdatum redatum datum invoicedate issuedate date",
     "BT-72": "leistungsdatum lieferdatum deliverydate leistung",
     "kundennummer": "kundennummer kundennr kdnr kdnummer kundenid customerid customerno debitor debitornr",
-    "BT-44": "kundenname kunde name firma empfaenger empfänger customername customer",
+    "BT-44": "kundenbezeichnung1 kundenbezeichnung kundename1 name1 "
+    "kundenname kunde name firma empfaenger empfänger customername customer",
+    "kaeufer_name_2": "kundenbezeichnung2 kundename2 kunde2 name2 firma2",
+    "kaeufer_name_3": "kundenbezeichnung3 kundename3 kunde3 name3 firma3",
     "BT-50": "strasse straße street anschrift adresse",
     "BT-53": "plz postleitzahl zip postcode",
     "BT-52": "ort stadt city",
@@ -168,6 +179,11 @@ _SYNONYME = {
     "BT-157": "gtin ean",
     "BT-159": "ursprungsland herkunftsland",
     "BT-132": "bestellposition",
+    "zeichnungsnummer": "zeichnungsnummer zeichnungsnr zeichnnr zeichnung drawingnumber drawingno drawing",
+    "index": "index zeichnungsindex indexstand aenderungsindex änderungsindex revision",
+    "BT-128": "objektkennungposition positionsobjekt",
+    "BT-143": "zuschlagprozent zuschlagsatz",
+    "BT-144": "zuschlaggrundposition",
 }
 DATUMSFORMATE = ("%d.%m.%Y", "%Y-%m-%d", "%d.%m.%y", "%d/%m/%Y", "%Y%m%d")
 SAETZE = (19, 7, 0, 16, 5)
