@@ -88,7 +88,7 @@ class Pruefansicht(QWidget):
         ph = QHBoxLayout()
         ph.addWidget(
             lbl(
-                _("Quelle: protokoll.tsv im Ausgang · Technische Details in der Logdatei"),
+                _("Quelle: protokoll.tsv im Ordner „Protokoll“ · Technische Details in der Logdatei"),
                 "hinweis",
                 umbruch=True,
             ),

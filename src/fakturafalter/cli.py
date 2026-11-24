@@ -64,6 +64,7 @@ def main(argv: list[str] | None = None) -> int:
     if not (a.einmal or a.headless or a.dateien):
         try:
             import PySide6  # noqa: F401
+
             from .gui.app import starten
         except ImportError as e:
             if a.gui:
@@ -108,6 +109,8 @@ def main(argv: list[str] | None = None) -> int:
             print(f"ERLEDIGT {Path(d).name}: {SCHON_ERZEUGT.format(nr=nr)}")
         for d, grund in lauf.datei_fehler.items():
             print(f"FEHLER   {Path(d).name}: {grund}")
+        for vorlage, werte in lauf.meldungen:
+            print(f"HINWEIS  {vorlage.format(**werte)}")
 
     if a.dateien or a.einmal:
         if a.dateien:
@@ -122,6 +125,10 @@ def main(argv: list[str] | None = None) -> int:
         bericht(lauf)
         return 0 if lauf.ok else 1
 
+    if k.updatepruefung:  # Hintergrundmodus: nur eine Logzeile, wenn es eine neuere Version gibt
+        from . import updatepruefung
+
+        updatepruefung.im_hintergrund(k.updates_vorab)
     w = Waechter(k, polling=a.polling, bei_lauf=bericht)
     signal.signal(signal.SIGINT, lambda *_: w.anhalten())
     if hasattr(signal, "SIGTERM"):

@@ -21,7 +21,7 @@ from datetime import date
 from decimal import Decimal, InvalidOperation
 from pathlib import Path
 
-from . import adapter_pdf, dateien, pdferkennung, pflichtpruefung, rechnen, zahlungsziel
+from . import adapter_pdf, dateien, pdferkennung, pflichtpruefung, protokoll, rechnen, zahlungsziel
 from .absender import Absender, erkennen_aus_zeilen
 from .anschrift import _STRASSE, PLZ_ORT
 from .aufbau import rechnung_bauen
@@ -2213,9 +2213,7 @@ class Sitzung:
             erg.status = r.status
         if erg.status == "ok" and (self.k.ausgang / n_pdf).exists():
             eigener_name = n_pdf != pipeline.ausgabe_namen(r.nummer)[0]  # Dateinamen-Muster (ab 0.9.5)
-            if eigener_name or r.nummer in pflichtpruefung.bekannte_nummern(
-                self.k.ausgang / "protokoll.tsv"
-            ):
+            if eigener_name or r.nummer in protokoll.bekannte_nummern(self.k):
                 r.hinweis(
                     "pruefen",
                     f"Ausgabe {n_pdf} existiert bereits – Rechnung wurde schon erzeugt?",
@@ -2234,18 +2232,24 @@ class Sitzung:
                 log.info("Anlernen %s: %s", self.pfad.name, hw)
             return erg, None
         # Erst prüfen, ob überall geschrieben werden kann – dann entsteht nichts Halbes
-        dateien.beschreibbar_pruefen(self.k.ausgang, self.k.ausgang / "protokoll.tsv")
+        dateien.beschreibbar_pruefen(self.k.ausgang)
+        dateien.beschreibbar_pruefen(self.k.protokoll, protokoll.pfad(self.k))
         dateien.beschreibbar_pruefen(
             pdferkennung.ablage(self.profil) if self.profil else self.k.basis / "angelernt"
         )
         dateien.beschreibbar_pruefen(self.k.basis)
-        erg.dateien = pipeline.erzeugen(r, self.k, self.k.ausgang)
+        ent = pipeline.entwurf_erzeugen(r, self.k)  # im System-Temp; in den Ausgang erst nach der Prüfung
+        erg.dateien = ent.dateien
         try:
-            if self.k.nachpruefen and pipeline.nachpruefen([erg], self.k):
-                for hw in erg.hinweise:
-                    log.warning("Anlernen %s: %s", self.pfad.name, hw)
-                erg.status = "fehler"
-                raise _Verworfen
+            try:
+                if self.k.nachpruefen and pipeline.nachpruefen([erg], self.k):
+                    for hw in erg.hinweise:
+                        log.warning("Anlernen %s: %s", self.pfad.name, hw)
+                    erg.status = "fehler"
+                    raise _Verworfen
+                erg.dateien = pipeline.ablegen(ent, self.k)
+            finally:
+                ent.verwerfen()
             prof = self.profil
             if prof is None:
                 prof = profil_anlegen(

@@ -584,7 +584,8 @@ def test_hotfix2_fehlertoast_zeigt_den_grund_nicht_die_info(qapp, fenster, monke
         d._passt(f)
     k.ausgang.mkdir(parents=True, exist_ok=True)
     nr = d.s.rechnung().nummer
-    (k.ausgang / "protokoll.tsv").write_text(
+    k.protokoll.mkdir(parents=True, exist_ok=True)
+    (k.protokoll / "protokoll.tsv").write_text(
         f"2026-11-01 10:00:00\tok\t{nr}\t\t\t\t\t\n", encoding="utf-8"
     )
     (k.ausgang / pipeline.ausgabe_namen(nr)[0]).write_bytes(b"%PDF")

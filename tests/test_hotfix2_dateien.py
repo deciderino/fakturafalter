@@ -158,7 +158,7 @@ def test_pdf_gesperrt_rechnung_und_vorlage_trotzdem_gespeichert(k, monkeypatch):
     assert erg.status == "ok" and v is not None
     assert isinstance(s.nicht_verschoben, dateien.DateiNichtSchreibbar)
     assert s.pfad.exists() and not list(k.erledigt.glob("*.pdf"))  # PDF bleibt, keine Doppelte
-    assert erg.nummer in (k.ausgang / "protokoll.tsv").read_text(encoding="utf-8")
+    assert erg.nummer in (k.protokoll / "protokoll.tsv").read_text(encoding="utf-8")
     assert list((k.basis / "angelernt").glob("*.yaml"))
 
 
@@ -185,7 +185,8 @@ def test_vorlage_gesperrt_nichts_halbes_und_zweiter_versuch_klappt(k, monkeypatc
 
 def test_protokoll_gesperrt_vorab_erkannt(k, monkeypatch):
     s = sitzung(k)
-    (k.ausgang / "protokoll.tsv").write_text("", encoding="utf-8")
+    k.protokoll.mkdir(parents=True, exist_ok=True)
+    (k.protokoll / "protokoll.tsv").write_text("", encoding="utf-8")
     echt = dateien.beschreibbar_pruefen
 
     def pruefen(ordner, datei=None):

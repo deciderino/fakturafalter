@@ -21,8 +21,9 @@ def test_arbeitsordner_mit_unterordnern(tmp_path):
     assert k.anlernen == tmp_path / "Rechnungen" / "Pruefen" / "Anlernen"
     assert k.arbeitsordner == tmp_path / "Rechnungen"
     k.ordner_anlegen()
+    assert k.protokoll == tmp_path / "Rechnungen" / "Protokoll"   # ab 0.9.6, sichtbar, nicht im Ausgang
     assert sorted(p.name for p in (tmp_path / "Rechnungen").iterdir()) == \
-        ["Ausgang", "Eingang", "Erledigt", "Fehler", "Pruefen"]
+        ["Ausgang", "Eingang", "Erledigt", "Fehler", "Protokoll", "Pruefen"]
 
 
 def test_alte_einzelordner_bleiben_gueltig(tmp_path):

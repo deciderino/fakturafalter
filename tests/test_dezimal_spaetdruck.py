@@ -51,5 +51,5 @@ def test_druck_nach_csv_landet_nicht_im_fehlerordner(konfig, eingang, tmp_path):
     assert lauf.schon_erzeugt == {str(spaet): "RE-2026-0102"}
     assert (konfig.erledigt / "spaeter-druck.pdf").exists()
     assert not (konfig.fehler / "spaeter-druck.pdf").exists()
-    prot = (konfig.ausgang / "protokoll.tsv").read_text(encoding="utf-8")
+    prot = (konfig.protokoll / "protokoll.tsv").read_text(encoding="utf-8")
     assert "\terledigt\tRE-2026-0102\tspaeter-druck.pdf\tschon erzeugt" in prot

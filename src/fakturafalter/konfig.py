@@ -97,6 +97,11 @@ class Konfig:
     pdf_verwenden: bool = True           # CSV/XML: Original-PDF als Sichtteil
     # ab 0.9.5: je Belegart Prüfmuster, Lückenwarnung, Dateinamen-Muster (nummernkreis.Kreis); leer = wie bisher
     nummernkreise: dict = field(default_factory=dict)
+    # ab 0.9.6: eigener Ordner für protokoll.tsv (None = „Protokoll“ neben Eingang, also im Arbeitsordner)
+    protokoll_ordner: Path | None = None
+    xrechnung_ablage: str = "ausgang"     # ausgang (neben der PDF) | unterordner (Ausgang/XRechnung)
+    updatepruefung: bool = True           # beim Start nach neuer Version fragen (einziger Netzzugriff)
+    updates_vorab: bool = False           # Pre-Releases einbeziehen
     roh: dict = field(default_factory=dict)
 
     def pfad(self, p: str | Path) -> Path:
@@ -113,8 +118,19 @@ class Konfig:
         """PDFs, die der Anlern-Assistent noch zeigen soll (Unterordner von „Pruefen“)."""
         return self.pruefen / "Anlernen"
 
+    @property
+    def protokoll(self) -> Path:
+        """Ordner für protokoll.tsv (ab 0.9.6 nicht mehr im Ausgang): eingestellt oder „Protokoll“ im
+        Arbeitsordner (bei einzeln gewählten Ordnern neben dem Eingang)."""
+        return self.protokoll_ordner or self.eingang.parent / PROTOKOLL_ORDNER
+
+    @property
+    def xrechnung_ordner(self) -> Path:
+        """Ziel der XRechnung-Zusatzdatei (neben der PDF oder im Unterordner „XRechnung“ des Ausgangs)."""
+        return self.ausgang / XRECHNUNG_ORDNER if self.xrechnung_ablage == "unterordner" else self.ausgang
+
     def ordner_anlegen(self) -> None:
-        for p in (self.eingang, self.ausgang, self.pruefen, self.fehler, self.erledigt):
+        for p in (self.eingang, self.ausgang, self.pruefen, self.fehler, self.erledigt, self.protokoll):
             p.mkdir(parents=True, exist_ok=True)
 
     def ist_csv(self) -> bool:
@@ -133,6 +149,10 @@ class Konfig:
             return True
         return self.ist_daten() and bool(self.pdf_verwenden)
 
+
+PROTOKOLL_ORDNER = "Protokoll"
+XRECHNUNG_ORDNER = "XRechnung"
+XRECHNUNG_ABLAGEN = ("ausgang", "unterordner", "keine")
 
 # Ein Arbeitsordner, darin automatisch diese Unterordner (Schlüssel in der Konfiguration -> Ordnername)
 UNTERORDNER = (("eingang", "Eingang"), ("ausgang", "Ausgang"), ("pruefen", "Pruefen"),
@@ -238,6 +258,9 @@ def lade_konfig(pfad: str | Path) -> Konfig:
     o = ordner_aufloesen(d, basis)
     k = Konfig(basis=basis, absender=absender, zahlung=zahlung, bemerkungen=bem, roh=d, **o)
     k.arbeitsordner = gemeinsamer_ordner(o)
+    prot = d.get("protokoll_ordner") or (d.get("ordner") or {}).get("protokoll")
+    if prot:
+        k.protokoll_ordner = _abs(basis, prot)
     for p in d.get("csv_profile") or []:
         k.csv_profile.append(_profil_laden(k, d, p))
     for p in d.get("pdf_profile") or []:
@@ -252,6 +275,12 @@ def lade_konfig(pfad: str | Path) -> Konfig:
     opt = d.get("optionen", {})
     k.sichtteil = opt.get("sichtteil", k.sichtteil)
     k.xrechnung_zusatz = opt.get("xrechnung_zusatz", k.xrechnung_zusatz)
+    ablage = str(opt.get("xrechnung_ablage") or "ausgang")
+    if ablage == "keine":
+        k.xrechnung_zusatz = False
+    k.xrechnung_ablage = ablage if ablage in ("ausgang", "unterordner") else "ausgang"
+    k.updatepruefung = bool(opt.get("updatepruefung", k.updatepruefung))
+    k.updates_vorab = bool(opt.get("updates_vorab", k.updates_vorab))
     k.stabil_sekunden = float(opt.get("stabil_sekunden", k.stabil_sekunden))
     k.paarung_sekunden = float(opt.get("paarung_sekunden", k.paarung_sekunden))
     k.gegenstueck_minuten = float(opt.get("gegenstueck_minuten", k.gegenstueck_minuten))

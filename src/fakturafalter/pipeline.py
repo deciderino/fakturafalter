@@ -14,6 +14,8 @@ import dataclasses
 import json
 import logging
 import re
+import shutil
+import tempfile
 from dataclasses import dataclass, field
 from datetime import datetime
 from decimal import Decimal
@@ -31,12 +33,14 @@ from . import (
     pdfa,
     pdferkennung,
     pflichtpruefung,
+    protokoll,
     rechnen,
     sicht,
     validierung,
     zahlungsziel,
 )
-from .konfig import Konfig
+from . import dateien as dateien_mod
+from .konfig import XRECHNUNG_ORDNER, Konfig
 from .logdatei import NUR_DATEI
 from .modell import Rechnung
 
@@ -49,6 +53,22 @@ SCHON_ERZEUGT = (
 
 
 @dataclass
+class Entwurf:
+    """Erzeugte, noch nicht abgelegte Ausgaben im System-Temp-Ordner (ab 0.9.6): erst nach der Prüfung kommen
+    sie – XML vor PDF, je atomar – in den Ausgang; der Ausgang sieht nie Halbes oder Ungeprüftes."""
+
+    ordner: Path
+    teile: list[tuple[Path, Path]] = field(default_factory=list)  # (Temp-Datei, Ziel); PDF zuerst
+
+    @property
+    def dateien(self) -> list[Path]:
+        return [t for t, _z in self.teile]
+
+    def verwerfen(self) -> None:
+        shutil.rmtree(self.ordner, ignore_errors=True)
+
+
+@dataclass
 class Ergebnis:
     nummer: str
     status: str  # ok | pruefen | fehler
@@ -58,6 +78,7 @@ class Ergebnis:
     kunde: str = ""
     brutto: str = ""  # Dezimalzahl als Text, z.B. "175.55"
     pruefung: str = ""  # gültig | ungültig | nicht geprüft | "" (Prüfung aus / nichts erzeugt)
+    entwurf: Entwurf | None = field(default=None, repr=False)  # erzeugt, noch nicht im Ausgang (ab 0.9.6)
 
 
 @dataclass
@@ -74,6 +95,9 @@ class Lauf:
     @property
     def ok(self) -> bool:
         return not self.datei_fehler and all(e.status == "ok" for e in self.ergebnisse)
+
+    # ab 0.9.6: allgemeine Hinweise zum Lauf (z. B. Protokoll fehlt) als (Vorlage, Werte) – Oberfläche + Log
+    meldungen: list[tuple[str, dict]] = field(default_factory=list)
 
 
 # ---------------------------------------------------------------- Fortschritt
@@ -266,7 +290,7 @@ def _schon_erzeugt(zeilen: list, k: Konfig) -> str:
     """Rechnungsnummer, falls der Druck genau eine schon erzeugte Rechnung (protokoll.tsv) trägt, sonst ""."""
     treffer = [
         nr
-        for nr in pflichtpruefung.bekannte_nummern(k.ausgang / "protokoll.tsv")
+        for nr in protokoll.bekannte_nummern(k)
         if _nummer_im_text(nr, zeilen)
     ]
     return treffer[0] if len(treffer) == 1 else ""
@@ -375,7 +399,14 @@ def paaren(
 
 # ---------------------------------------------------------------- Erzeugen
 def erzeugen(r: Rechnung, k: Konfig, ausgang: Path, bei_pdfa=None) -> list[Path]:
-    """``bei_pdfa``: optionaler Rückruf, sobald die XML steht und PDF/A beginnt (Fortschrittsanzeige)."""
+    """Erzeugen und sofort (ungeprüft) in ``ausgang`` ablegen. -> [PDF, ggf. XRechnung]."""
+    return ablegen(entwurf_erzeugen(r, k, ausgang, bei_pdfa), k)
+
+
+def entwurf_erzeugen(r: Rechnung, k: Konfig, ausgang: Path | None = None, bei_pdfa=None) -> Entwurf:
+    """ZUGFeRD-PDF (+ XRechnung) erzeugen – in einen eigenen Ordner im System-Temp, nicht in den Ausgang.
+    ``bei_pdfa``: optionaler Rückruf, sobald die XML steht und PDF/A beginnt (Fortschrittsanzeige)."""
+    ausgang = Path(ausgang) if ausgang is not None else k.ausgang
     xml = cii.erzeugen(r, "EN16931")
     if bei_pdfa is not None:
         bei_pdfa()
@@ -397,11 +428,23 @@ def erzeugen(r: Rechnung, k: Konfig, ausgang: Path, bei_pdfa=None) -> list[Path]
             r.hinweis("info", f"Druckseiten nicht PDF/A-tauglich ({e}) – Sichtteil neu aufgebaut")
     if pdf_bytes is None:
         pdf_bytes = _sichtteil_neu(r, k, xml, titel, beschr)
-    ausgang.mkdir(parents=True, exist_ok=True)
     n_pdf, n_xr = ausgabe_namen(r.nummer, r, k)
-    erzeugt = []
-    _schreiben(ausgang / n_pdf, pdf_bytes)
-    erzeugt.append(ausgang / n_pdf)
+    ent = Entwurf(Path(tempfile.mkdtemp(prefix="fakturafalter-")))
+    try:
+        (ent.ordner / n_pdf).write_bytes(pdf_bytes)
+        ent.teile.append((ent.ordner / n_pdf, ausgang / n_pdf))
+        xr = _xrechnung(r, k)
+        if xr is not None:
+            xr_ordner = ausgang / XRECHNUNG_ORDNER if k.xrechnung_ablage == "unterordner" else ausgang
+            (ent.ordner / n_xr).write_bytes(xr)
+            ent.teile.append((ent.ordner / n_xr, xr_ordner / n_xr))
+    except BaseException:
+        ent.verwerfen()
+        raise
+    return ent
+
+
+def _xrechnung(r: Rechnung, k: Konfig) -> bytes | None:
     if k.xrechnung_zusatz and r.ausgabeformat.startswith("XRECHNUNG"):
         if r.ausgabeformat == "XRECHNUNG_UBL":
             r.hinweis(
@@ -412,9 +455,27 @@ def erzeugen(r: Rechnung, k: Konfig, ausgang: Path, bei_pdfa=None) -> list[Path]
                 "info",
                 f"Keine Leitweg-ID im Kundenstamm – Käuferreferenz (BT-10) = Kundennummer {r.kundennummer}",
             )
-        _schreiben(ausgang / n_xr, cii.erzeugen(r, "XRECHNUNG"))
-        erzeugt.append(ausgang / n_xr)
-    return erzeugt
+        return cii.erzeugen(r, "XRECHNUNG")
+    return None
+
+
+def ablegen(ent: Entwurf, k: Konfig) -> list[Path]:
+    """Geprüfte Ausgaben atomar in den Ausgang: XML vor PDF (wer auf die PDF wartet, findet die XML schon
+    vor). Scheitert eine Datei, werden schon abgelegte wieder entfernt. Der Temp-Ordner wird immer gelöscht.
+    -> Zielpfade in der Reihenfolge des Entwurfs (PDF zuerst)."""
+    abgelegt: list[Path] = []
+    zwischen = (k.protokoll,)
+    try:
+        for tmp, ziel in sorted(ent.teile, key=lambda t: t[1].suffix.lower() == ".pdf"):
+            dateien.ablegen(tmp, ziel, zwischen)
+            abgelegt.append(ziel)
+    except BaseException:
+        for z in abgelegt:
+            Path(z).unlink(missing_ok=True)
+        raise
+    finally:
+        ent.verwerfen()
+    return [z for _t, z in ent.teile]
 
 
 def vorlage_fuer(r: Rechnung, k: Konfig):
@@ -493,7 +554,7 @@ def pflicht_kontext(k: Konfig, lauf_nummern=()) -> pflichtpruefung.Kontext:
     """Kontext der Pflichtprüfung: heute + alle bisher erzeugten Rechnungsnummern (protokoll.tsv), dazu die
     Einstellungen zum Nummernkreis und die Nummern des laufenden Stapels (für die Lückenwarnung)."""
     return pflichtpruefung.Kontext(
-        bekannte_nummern=pflichtpruefung.bekannte_nummern(k.ausgang / "protokoll.tsv"),
+        bekannte_nummern=protokoll.bekannte_nummern(k),
         nummernkreise=dict(getattr(k, "nummernkreise", None) or {}),
         lauf_nummern=frozenset(n for n in lauf_nummern if n),
     )
@@ -608,8 +669,22 @@ def _pdfs_ohne_haken(
 def verarbeiten(
     dateien: list[Path], k: Konfig, *, verschieben: bool = True, fortschritt=None
 ) -> Lauf:
-    """``fortschritt``: optionaler Rückruf mit einem ``Stand`` je Schritt (aus dem Arbeitsthread)."""
+    """``fortschritt``: optionaler Rückruf mit einem ``Stand`` je Schritt (aus dem Arbeitsthread).
+
+    Ab 0.9.6 entstehen die Ausgaben im System-Temp, werden dort geprüft und erst danach einzeln und atomar in
+    den Ausgang gelegt; jede abgelegte Rechnung kommt sofort ins Protokoll."""
     lauf = Lauf()
+    lauf.meldungen += protokoll.vorbereiten(k)
+    try:
+        return _verarbeiten(lauf, dateien, k, verschieben=verschieben, fortschritt=fortschritt)
+    finally:
+        for e in lauf.ergebnisse:
+            if e.entwurf is not None:
+                e.entwurf.verwerfen()
+                e.entwurf = None
+
+
+def _verarbeiten(lauf: Lauf, dateien: list[Path], k: Konfig, *, verschieben: bool, fortschritt) -> Lauf:
     eingelesen = []
     melden = _Melder(fortschritt)
     sortiert = sorted(dateien)
@@ -655,6 +730,7 @@ def verarbeiten(
     _pdfs_ohne_haken(paare, ungenutzt_pdfs, lauf.datei_fehler)
     bad_files.update(lauf.datei_fehler)
     n_r = len(paare)
+    vergeben: set[str] = set()  # Ausgabenamen dieses Laufs (Ausgaben liegen bis nach der Prüfung im Temp)
     for r, _q in paare:  # „Logs anonymisieren“: diese Angaben auch wörtlich maskieren
         logdatei.ANONYM.merken(
             r.kaeufer.name,
@@ -684,7 +760,7 @@ def verarbeiten(
         namen = ausgabe_namen_oder_hinweis(r, k) if erg.status == "ok" else None
         if namen is None:
             erg.status = r.status
-        elif (k.ausgang / namen[0]).exists():
+        elif (k.ausgang / namen[0]).exists() or namen[0] in vergeben:  # auch im selben Lauf vergeben
             r.hinweis(
                 "pruefen",
                 f"Ausgabe {namen[0]} existiert bereits – Rechnung wurde schon erzeugt?",
@@ -692,14 +768,14 @@ def verarbeiten(
             )
             erg.status = r.status
         if erg.status == "ok":
+            vergeben.add(namen[0])
             try:
                 if fortschritt is None:
-                    erg.dateien = erzeugen(r, k, k.ausgang)
+                    erg.entwurf = entwurf_erzeugen(r, k)
                 else:
-                    erg.dateien = erzeugen(
+                    erg.entwurf = entwurf_erzeugen(
                         r,
                         k,
-                        k.ausgang,
                         bei_pdfa=lambda j=j, name=name, art=art: melden(
                             3,
                             j + 1,
@@ -710,6 +786,7 @@ def verarbeiten(
                             eingabe=art,
                         ),
                     )
+                erg.dateien = erg.entwurf.dateien
             except Exception as e:  # noqa: BLE001
                 log.exception("Erzeugen fehlgeschlagen: %s", r.nummer)
                 r.hinweis("fehler", f"Erzeugen fehlgeschlagen: {type(e).__name__}: {e}")
@@ -757,6 +834,27 @@ def verarbeiten(
                 4, nr_p, n_r, 1.0, datei=datei_p, werkzeug="KoSIT", fehler=Path(e.quellen[0]).name
             )
 
+    # Geprüfte (bzw. ungeprüfte, wenn Prüfung aus/Werkzeuge fehlen) Ausgaben in den Ausgang, je sofort ins Protokoll
+    protokolliert: set[int] = set()
+    for e in lauf.ergebnisse:
+        if e.entwurf is None:
+            continue
+        if e.status == "ok":
+            try:
+                e.dateien = ablegen(e.entwurf, k)
+            except Exception as ex:  # noqa: BLE001 – eine Rechnung darf einzeln scheitern
+                log.exception("Ablegen im Ausgang fehlgeschlagen: %s", e.nummer)
+                e.status = "fehler"
+                e.dateien = []
+                grund = ex.kurz() if isinstance(ex, dateien_mod.DateiNichtSchreibbar) else ex
+                e.hinweise.append(f"FEHLER: Ablegen im Ausgang fehlgeschlagen: {grund}")
+                bad_files.update(e.quellen)
+            else:
+                _protokoll(Lauf(ergebnisse=[e]), k, lauf)
+                protokolliert.add(id(e))
+        e.entwurf.verwerfen()
+        e.entwurf = None
+
     # Fehlerberichte + Eingangsdateien wegräumen
     for e in lauf.ergebnisse:
         if e.status == "fehler":
@@ -799,7 +897,12 @@ def verarbeiten(
         (k.pruefen / f"{sicherer_name(r.nummer)}.json").write_text(
             json.dumps(d, default=_json_default, ensure_ascii=False, indent=2), encoding="utf-8"
         )
-    _protokoll(lauf, k)
+    rest = Lauf(
+        ergebnisse=[e for e in lauf.ergebnisse if id(e) not in protokolliert],
+        datei_fehler=lauf.datei_fehler,
+        schon_erzeugt=lauf.schon_erzeugt,
+    )
+    _protokoll(rest, k, lauf)
     _log_details(lauf, verschoben)
     melden(5, 0, n_r, 1.0)
     return lauf
@@ -834,9 +937,9 @@ def _tsv(s: str) -> str:
     return str(s).replace("\t", " ").replace("\n", " ")
 
 
-def _protokoll(lauf: Lauf, k: Konfig) -> None:
-    """protokoll.tsv: Zeit, Status, Nummer, Dateien, Hinweise, Kunde, Brutto (ab v0.2), Prüfung (ab v0.4)."""
-    k.ausgang.mkdir(parents=True, exist_ok=True)
+def _protokoll(lauf: Lauf, k: Konfig, ziel_lauf: Lauf | None = None) -> None:
+    """protokoll.tsv (ab 0.9.6 im Ordner „Protokoll“): Zeit, Status, Nummer, Dateien, Hinweise, Kunde,
+    Brutto (ab v0.2), Prüfung (ab v0.4). Meldungen eines Ersatzwegs gehen an ``ziel_lauf`` (sonst ``lauf``)."""
     zeilen = []
     jetzt = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     for e in lauf.ergebnisse:
@@ -876,7 +979,11 @@ def _protokoll(lauf: Lauf, k: Konfig) -> None:
         zeilen.append(
             "\t".join(_tsv(x) for x in (jetzt, "fehler", Path(d).name, "", grund, "", "", ""))
         )
-    dateien.anhaengen(k.ausgang / "protokoll.tsv", "\n".join(zeilen) + ("\n" if zeilen else ""))
+    meldung = protokoll.schreiben(k, zeilen)
+    if meldung is not None:
+        ziel = ziel_lauf if ziel_lauf is not None else lauf
+        if meldung not in ziel.meldungen:
+            ziel.meldungen.append(meldung)
 
 
 # ---------------------------------------------------------------- Prüffälle (Oberfläche)
@@ -924,11 +1031,16 @@ def prueffall_freigeben(json_pfad: Path, k: Konfig) -> Ergebnis:
         r.hinweis("pruefen", f"Ausgabe {namen[0]} existiert bereits", "BT-1")
     erg.status = r.status
     if erg.status == "ok":
-        erg.dateien = erzeugen(r, k, k.ausgang)
+        ent = entwurf_erzeugen(r, k)
+        erg.dateien = ent.dateien
         erg.hinweise = _hinweise(r)
-        if k.nachpruefen and nachpruefen(
-            [erg], k
-        ):  # ungültig: Prüffall bleibt, Bericht im Fehlerordner
+        try:
+            ungueltig = k.nachpruefen and nachpruefen([erg], k)
+            if not ungueltig:
+                erg.dateien = ablegen(ent, k)
+        finally:
+            ent.verwerfen()
+        if ungueltig:  # ungültig: Prüffall bleibt, Bericht im Fehlerordner
             k.fehler.mkdir(parents=True, exist_ok=True)
             (k.fehler / f"{sicherer_name(nr)}_fehler.txt").write_text(
                 f"Rechnung {nr}\nQuellen: {', '.join(erg.quellen)}\n\n"

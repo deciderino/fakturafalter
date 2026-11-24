@@ -8,7 +8,7 @@ import logging
 from datetime import date
 from pathlib import Path
 
-from PySide6.QtCore import QTimer
+from PySide6.QtCore import QTimer, Signal
 from PySide6.QtGui import QAction, QKeySequence, QShortcut
 from PySide6.QtWidgets import (
     QApplication,
@@ -24,7 +24,7 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
-from .. import __version__, anlernen, logdatei
+from .. import __version__, anlernen, logdatei, updatepruefung
 from ..konfig import lade_konfig
 from . import aktionen, daten, orte, thema
 from .arbeiter import Arbeiter
@@ -36,6 +36,7 @@ log = logging.getLogger("fakturafalter")
 
 
 class Hauptfenster(QMainWindow):
+    update_ergebnis = Signal(bool, object)  # (erreichbar, updatepruefung.Neu | None) aus dem Hintergrund
     def __init__(self, konfig_pfad: Path, tray_erlaubt: bool = True, auto_start: bool = True):
         super().__init__()
         self.konfig_pfad = Path(konfig_pfad)
@@ -86,6 +87,28 @@ class Hauptfenster(QMainWindow):
         else:
             self._zustand("einrichten" if self.einrichtung_fehlt() else "pausiert")
         self.aktualisieren()
+        self.update_ergebnis.connect(self._bei_update)
+        self._update_still = True  # Start-Prüfung: nur melden, wenn es etwas Neues gibt
+        if self.k.updatepruefung:
+            QTimer.singleShot(3000, self.update_pruefen)
+
+    # ======================================================================== Updateprüfung
+    def update_pruefen(self, still: bool = True) -> None:
+        """Im Hintergrund nach einer neueren Version fragen (einziger Netzzugriff, blockiert nie)."""
+        self._update_still = still
+        updatepruefung.im_hintergrund(self.k.updates_vorab, self.update_ergebnis.emit)
+
+    def _bei_update(self, erreichbar: bool, neu) -> None:
+        if neu is None:
+            return
+        self.toast(
+            "info",
+            _("Neue Version verfügbar: Fakturafalter {v}").format(v=neu.version),
+            _("Download auf der Release-Seite (kein automatischer Download)."),
+            _("Release-Seite öffnen"),
+            lambda: aktionen.link_oeffnen(neu.url),
+            schluessel="update",
+        )
 
     # ======================================================================== Aufbau
     def einrichtung_fehlt(self) -> list[str]:
@@ -581,6 +604,8 @@ class Hauptfenster(QMainWindow):
             self.aktualisieren()
             self.l_status.setText(_("Eingang ist leer – keine lesbaren CSV-, XML- oder PDF-Dateien."))
             return
+        for vorlage, werte in getattr(lauf, "meldungen", []):  # z. B. Protokoll fehlt (kein Halt)
+            self.toast("info", _("Hinweis zum Protokoll"), _(vorlage).format(**werte), schluessel="protokoll")
         neu_pr = any(e.status == "pruefen" for e in lauf.ergebnisse)
         neu_fe = bool(lauf.datei_fehler) or any(e.status == "fehler" for e in lauf.ergebnisse)
         self.aktualisieren()

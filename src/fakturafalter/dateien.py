@@ -198,3 +198,69 @@ def verschieben(datei: Path, ziel: Path) -> Path:
         ziel.unlink(missing_ok=True)
         raise
     return ziel
+
+
+def _anderes_laufwerk(e: OSError) -> bool:
+    """os.replace/os.rename über Laufwerks- bzw. Dateisystemgrenzen (EXDEV, WinError 17)."""
+    return getattr(e, "errno", None) == _errno.EXDEV or getattr(e, "winerror", None) == 17
+
+
+def _verstecken(p: Path) -> None:
+    """Windows: Datei als versteckt markieren (Zwischenstand im Zielordner, nur im Notfall)."""
+    if os.name != "nt":
+        return
+    try:
+        import ctypes
+
+        ctypes.windll.kernel32.SetFileAttributesW(str(p), 0x2)  # FILE_ATTRIBUTE_HIDDEN
+    except Exception:  # noqa: BLE001 – rein kosmetisch
+        pass
+
+
+def ablegen(quelle: Path, ziel: Path, zwischen: tuple[Path, ...] = ()) -> Path:
+    """Fertige Datei ``quelle`` (z. B. im System-Temp-Ordner) atomar als ``ziel`` ablegen – ohne Temp-Datei im
+    Zielordner, wo immer es geht (ab 0.9.6: der Ausgang enthält nur fertige Dateien).
+
+    1. gleiches Laufwerk: ``os.replace`` direkt;
+    2. sonst Kopie in einen der ``zwischen``-Ordner auf dem Ziellaufwerk (z. B. „Protokoll“), dann ``os.replace``;
+    3. nur im Notfall (Ausgang auf eigenem Laufwerk/Netzlaufwerk): Kopie als versteckte ``.<name>.part`` im
+       Zielordner, dann ``os.replace`` – sie existiert nur Sekundenbruchteile.
+    Die Quelle wird danach gelöscht. ``ziel`` wird ersetzt, falls vorhanden (die Kollisionsprüfung liegt davor)."""
+    quelle, ziel = Path(quelle), Path(ziel)
+    ziel.parent.mkdir(parents=True, exist_ok=True)
+    try:
+        wiederholen(lambda: os.replace(quelle, ziel), ziel, "ablegen")
+        return ziel
+    except OSError as e:
+        if isinstance(e, PermissionError) or not _anderes_laufwerk(e):
+            raise
+    orte = [Path(z) for z in zwischen if z and Path(z).resolve() != ziel.parent.resolve()] + [ziel.parent]
+    for ordner in orte:
+        notfall = ordner == ziel.parent
+        try:
+            ordner.mkdir(parents=True, exist_ok=True)
+            fd, name = tempfile.mkstemp(
+                dir=ordner, prefix=f".{ziel.name}." if notfall else f"~{ziel.name}.", suffix=".part"
+            )
+        except OSError:
+            if notfall:
+                raise
+            continue
+        tmp = Path(name)
+        try:
+            with os.fdopen(fd, "wb") as f, open(quelle, "rb") as q:
+                shutil.copyfileobj(q, f)
+                f.flush()
+                os.fsync(f.fileno())
+            if notfall:
+                _verstecken(tmp)
+                log.info("Ablegen %s: Zwischenstand im Zielordner (anderes Laufwerk)", ziel.name)
+            ersetzen(tmp, ziel)
+        except OSError as e:
+            tmp.unlink(missing_ok=True)
+            if not notfall and _anderes_laufwerk(e):
+                continue
+            raise
+        Path(quelle).unlink(missing_ok=True)
+        return ziel
+    raise OSError(_errno.EXDEV, "Ablegen nicht möglich", str(ziel))  # pragma: no cover – Notfall wirft vorher

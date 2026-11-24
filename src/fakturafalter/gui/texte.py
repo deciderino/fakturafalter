@@ -50,7 +50,7 @@ EN: dict[str, str] = {
     "Neue Dateien im Eingang bleiben liegen, bis du fortsetzt.": "New files stay in the input folder until you resume.",
     "Nichts zu tun.": "Nothing to do.",
     "Noch nichts erstellt heute.": "Nothing created yet today.",
-    "Quelle: protokoll.tsv im Ausgang · Technische Details in der Logdatei": "Source: protokoll.tsv in the output folder · technical details in the log file",
+    "Quelle: protokoll.tsv im Ordner „Protokoll“ · Technische Details in der Logdatei": "Source: protokoll.tsv in the “Protokoll” folder · technical details in the log file",
     "Startet, sobald die Einstellungen vollständig sind.": "Starts as soon as the settings are complete.",
     "Zu tun": "To do",
     "Zuletzt: {nr}, {zeit}": "Latest: {nr}, {zeit}",
@@ -106,7 +106,6 @@ EN: dict[str, str] = {
     "Einstellungen öffnen": "Open settings",
     "Ergebnis": "Result",
     "Erzeugte Rechnung öffnen": "Open generated invoice",
-    "Fakturafalter arbeitet vollständig offline: keine Telemetrie, keine Updates im Hintergrund, keine Daten verlassen diesen Rechner. Freie Software (Apache-2.0), ohne Gewähr, kein Support.": "Fakturafalter works completely offline: no telemetry, no background updates, no data leaves this computer. Free software (Apache-2.0), no warranty, no support.",
     "Fakturafalter – Prüfen und Protokoll": "Fakturafalter – Review and log",
     "Farbschema": "Colour scheme",
     "Fehler": "Errors",
@@ -176,7 +175,7 @@ EN: dict[str, str] = {
     "Prüfen / Protokoll": "Review / Log",
     "Prüfung": "Validation",
     "Quelle nach „Erledigt“ verschoben": "Source moved to “Done”",
-    "Quelle: protokoll.tsv im Ausgang": "Source: protokoll.tsv in the output folder",
+    "Quelle: protokoll.tsv im Ordner „Protokoll“": "Source: protokoll.tsv in the “Protokoll” folder",
     "Rechnung": "Invoice",
     "Rückgängig": "Undo",
     "Sichtbild": "Visual",
@@ -196,7 +195,6 @@ EN: dict[str, str] = {
     "heute {uhr}": "today {uhr}",
     "leer": "empty",
     "zu prüfen": "to review",
-    "zusätzlich XRechnung (XML), wenn der Kundenstamm es verlangt": "additionally XRechnung (XML) if the customer master data requires it",
     "{datei}: nicht verarbeitet": "{datei}: not processed",
     "{name} öffnen": "Open {name}",
     "{nr} erstellt": "{nr} created",
@@ -291,7 +289,7 @@ EN.update(
         "Bruttobetrag": "Gross amount",
         "CSV-Dateien (*.csv *.txt)": "CSV files (*.csv *.txt)",
         "Darin entstehen automatisch:": "Created inside automatically:",
-        "Darin liegen Eingang, Ausgang, Pruefen, Fehler und Erledigt. Fakturafalter legt sie selbst an.": "Contains Eingang, Ausgang, Pruefen, Fehler and Erledigt. Fakturafalter creates them itself.",
+        "Darin liegen Eingang, Ausgang, Pruefen, Fehler, Erledigt und Protokoll. Fakturafalter legt sie selbst an.": "Contains Eingang, Ausgang, Pruefen, Fehler, Erledigt and Protokoll. Fakturafalter creates them itself.",
         "Datei fehlt oder ist leer": "File missing or empty",
         "Datei nicht lesbar": "File not readable",
         "Dein Unternehmen als Absender. Am schnellsten: aus einer deiner Rechnungen übernehmen. Bei „Nur PDF“ kann jede Vorlage später einen eigenen Absender haben.": "Your company as sender. Quickest: take it from one of your invoices. With “PDF only”, each template can later have its own sender.",
@@ -891,6 +889,33 @@ EN.update(
     }
 )
 EN.update({"Eingang & Vorlagen": "Input & templates", "+ Neuer Absender": "+ New sender"})
+# ab 0.9.6: Protokollordner, XRechnung-Ablage, Updateprüfung
+EN.update(
+    {
+        "Alle Rechnungsdaten werden ausschließlich lokal verarbeitet: keine Telemetrie, keine Daten verlassen diesen Rechner. Einziger Netzzugriff ist die optionale Updateprüfung (unten). Freie Software (Apache-2.0), ohne Gewähr, kein Support.": "All invoice data is processed locally only: no telemetry, no data leaves this computer. The only network access is the optional update check (below). Free software (Apache-2.0), no warranty, no support.",
+        "Protokollordner": "Record folder",
+        "protokoll.tsv (alle Vorgänge, Grundlage der Doppelprüfung) liegt getrennt vom Ausgang, damit Archiv oder andere Programme den Ausgang leeren dürfen. Leer = Ordner „Protokoll“ im Arbeitsordner.": "protokoll.tsv (all operations, basis of the duplicate check) is kept separate from the output folder, so an archive or other programs may empty the output folder. Empty = folder “Protokoll” in the working folder.",
+        "XRechnung (XML) zusätzlich, wenn der Kundenstamm es verlangt": "Additional XRechnung (XML) if the customer master data requires it",
+        "Neben der PDF im Ausgang": "Next to the PDF in the output folder",
+        "Im Unterordner „{n}“ des Ausgangs": "In the subfolder “{n}” of the output folder",
+        "Keine XRechnung-Datei": "No XRechnung file",
+        "Updates": "Updates",
+        "Fragt nur die aktuelle Versionsnummer bei GitHub ab und sendet keine Daten. Gibt es eine neuere Version, erscheint ein Hinweis mit Link – heruntergeladen wird nichts.": "Only asks GitHub for the current version number and sends no data. If there is a newer version, a notice with a link appears – nothing is downloaded.",
+        "Beim Start nach Updates suchen": "Check for updates at startup",
+        "Pre-Releases einbeziehen": "Include pre-releases",
+        "Jetzt prüfen": "Check now",
+        "Prüfe …": "Checking …",
+        "Neue Version verfügbar: Fakturafalter {v}": "New version available: Fakturafalter {v}",
+        "Release-Seite öffnen": "Open release page",
+        "Download auf der Release-Seite (kein automatischer Download).": "Download from the release page (no automatic download).",
+        "Fakturafalter {v} ist aktuell.": "Fakturafalter {v} is up to date.",
+        "Keine Verbindung – später erneut versuchen.": "No connection – try again later.",
+        "Hinweis zum Protokoll": "Note about the record",
+        "Kein Protokoll in {ordner} gefunden, obwohl schon Rechnungen erzeugt wurden. Ein neues Protokoll wird angelegt; die Doppelprüfung kennt Rechnungsnummern erst ab jetzt.": "No record found in {ordner}, although invoices were created before. A new record is started; the duplicate check only knows invoice numbers from now on.",
+        "Protokollordner {ordner} ist nicht beschreibbar – Protokollzeilen gehen ersatzweise in die Logdatei.": "Record folder {ordner} is not writable – record lines go to the log file instead.",
+        "Protokoll {datei} ist gerade gesperrt – Zeilen stehen vorerst in {ersatz} und werden nachgetragen.": "Record {datei} is locked right now – lines are kept in {ersatz} for now and will be added later.",
+    }
+)
 DYNAMISCH += ("Eingang & Vorlagen", "Ausgabe", "+ Neuer Absender")
 _ASSISTENT = {
     "Semikolon ;": "Semicolon ;",

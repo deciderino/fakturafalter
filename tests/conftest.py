@@ -40,3 +40,14 @@ def ohne_nachpruefung(request, monkeypatch):
     Sonst gelten die Werkzeuge als nicht vorhanden (Ausgaben: „nicht geprüft“)."""
     if "validierung" not in request.keywords:
         monkeypatch.setattr(validierung, "bereit", lambda: False)
+
+
+@pytest.fixture(autouse=True)
+def ohne_netz(monkeypatch):
+    """Tests rufen nie das Netz auf: die Updateprüfung bekommt „kein Netz“ (eigene Tests mocken die Antwort)."""
+    from fakturafalter import updatepruefung
+
+    def kein_netz(*a, **kw):
+        raise OSError("kein Netz in Tests")
+
+    monkeypatch.setattr(updatepruefung, "_abrufen", kein_netz)

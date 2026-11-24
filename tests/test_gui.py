@@ -132,7 +132,7 @@ def test_jetzt_einlesen_verarbeitet_im_thread(fenster, qapp):
     fenster.arbeiter.lauf_fertig.connect(lambda l: ergebnisse.append(l))
     fenster.jetzt_einlesen()
     assert warten(
-        qapp, lambda: (k.ausgang / "protokoll.tsv").exists() and daten.heute_erstellt(k) >= 1, 60
+        qapp, lambda: (k.protokoll / "protokoll.tsv").exists() and daten.heute_erstellt(k) >= 1, 60
     )
     assert warten(qapp, lambda: bool(ergebnisse))
     qapp.processEvents()
@@ -360,7 +360,8 @@ def test_betrag_und_protokoll_alt(konfig_datei):
     assert daten.betrag("1249.5", "en") == "€1,249.50"
     k = lade_konfig(konfig_datei)
     k.ausgang.mkdir(parents=True)
-    (k.ausgang / "protokoll.tsv").write_text(
+    k.protokoll.mkdir(parents=True, exist_ok=True)
+    (k.protokoll / "protokoll.tsv").write_text(
         "2026-10-30T10:00:00\tok\tRE-1\ta.pdf\t\n"
         "2026-10-31T10:00:00\tok\tRE-2\tb.pdf\t\tMuster GmbH\t10.00\n",
         encoding="utf-8",

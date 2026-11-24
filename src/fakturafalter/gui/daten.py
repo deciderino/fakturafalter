@@ -11,6 +11,7 @@ from datetime import date, datetime
 from decimal import Decimal, InvalidOperation
 from pathlib import Path
 
+from .. import protokoll as protokoll_mod
 from ..konfig import Konfig, kundenstamm_fuer, partei_aus
 from ..pipeline import ausgabe_namen
 from ..ueberwachung import relevant
@@ -53,11 +54,8 @@ class Fehlerbericht:
 
 def protokoll(k: Konfig, anzahl: int | None = None) -> list[Eintrag]:
     """Neueste zuerst."""
-    p = k.ausgang / "protokoll.tsv"
-    if not p.exists():
-        return []
     aus = []
-    for z in p.read_text(encoding="utf-8", errors="replace").splitlines():
+    for z in protokoll_mod.zeilen(k):  # ab 0.9.6: Ordner „Protokoll“ (+ Nachträge)
         t = z.split("\t")
         if len(t) < 3:
             continue
@@ -78,6 +76,7 @@ def protokoll(k: Konfig, anzahl: int | None = None) -> list[Eintrag]:
                 t[7],
             )
         )
+    aus.sort(key=lambda e: e.zeit or datetime.min)  # Nachträge an die richtige Stelle
     aus.reverse()
     return aus[:anzahl] if anzahl else aus
 

@@ -21,3 +21,13 @@ def oeffnen(pfad: Path) -> bool:
     if pfad.suffix == "" and not pfad.exists():
         pfad.mkdir(parents=True, exist_ok=True)
     return QDesktopServices.openUrl(QUrl.fromLocalFile(str(pfad)))
+
+
+def link_oeffnen(url: str) -> bool:
+    """Webseite im Standardbrowser (nur https, z. B. die Release-Seite nach der Updateprüfung)."""
+    from PySide6.QtCore import QUrl
+    from PySide6.QtGui import QDesktopServices
+
+    if not str(url).startswith("https://"):
+        return False
+    return QDesktopServices.openUrl(QUrl(str(url)))

@@ -106,11 +106,11 @@ def test_gueltiger_stapel(konfig, eingang):
 @braucht_werkzeuge
 def test_ungueltige_ausgabe_in_fehlerordner(konfig, eingang, monkeypatch):
     """Absichtlich kaputte Ausgabe: Gesamtbetrag in der eingebetteten XML verfälscht."""
-    echt = pipeline.erzeugen
+    echt = pipeline.entwurf_erzeugen  # ab 0.9.6: erzeugt im System-Temp, geprüft vor dem Ausgang
 
-    def kaputt(r, k, ziel):
-        dateien = echt(r, k, ziel)
-        for d in dateien:
+    def kaputt(r, k, ziel=None, bei_pdfa=None):
+        ent = echt(r, k, ziel, bei_pdfa)
+        for d in ent.dateien:
             if d.suffix == ".pdf":
                 with pikepdf.open(d, allow_overwriting_input=True) as pdf:
                     name, fs = next(iter(pdf.attachments.items()))
@@ -121,9 +121,9 @@ def test_ungueltige_ausgabe_in_fehlerordner(konfig, eingang, monkeypatch):
                         pdf, xml, mime_type="text/xml", relationship=pikepdf.Name.Alternative
                     )
                     pdf.save(d)
-        return dateien
+        return ent
 
-    monkeypatch.setattr(pipeline, "erzeugen", kaputt)
+    monkeypatch.setattr(pipeline, "entwurf_erzeugen", kaputt)
     eingang("variante-a_positionen_utf8.csv")
     lauf = pipeline.verarbeiten(sorted(konfig.eingang.iterdir()), konfig)
     schlecht = [e for e in lauf.ergebnisse if e.pruefung == "ungültig"]

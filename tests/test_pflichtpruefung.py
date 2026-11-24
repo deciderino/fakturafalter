@@ -340,7 +340,7 @@ def test_pipeline_angehaltene_rechnung_nach_pruefen(konfig, eingang):
     j = json.loads((konfig.pruefen / "RE-2026-0101.json").read_text(encoding="utf-8"))
     assert any(h["feld"] == "BT-72" and h["stufe"] == "pruefen" for h in j["hinweise"])
     assert not (konfig.ausgang / "RE-2026-0101_zugferd.pdf").exists()
-    prot = (konfig.ausgang / "protokoll.tsv").read_text(encoding="utf-8")
+    prot = (konfig.protokoll / "protokoll.tsv").read_text(encoding="utf-8")
     assert "RE-2026-0101" in prot and "Leistungsdatum (BT-72)" in prot
     fall = next(f for f in daten.prueffaelle(konfig) if f.nummer == "RE-2026-0101")
     assert any("Leistungsdatum (BT-72)" in s for s in fall.sonstige)

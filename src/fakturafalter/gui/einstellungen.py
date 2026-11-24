@@ -9,6 +9,7 @@ from __future__ import annotations
 import copy
 from pathlib import Path
 
+from PySide6.QtCore import Signal
 from PySide6.QtWidgets import (
     QButtonGroup,
     QCheckBox,
@@ -28,8 +29,16 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
-from .. import anlernen, csv_einrichtung, nummernkreis, pdferkennung, validierung
-from ..konfig import UNTERORDNER, gemeinsamer_ordner
+from .. import (
+    __version__,
+    anlernen,
+    csv_einrichtung,
+    nummernkreis,
+    pdferkennung,
+    updatepruefung,
+    validierung,
+)
+from ..konfig import PROTOKOLL_ORDNER, UNTERORDNER, XRECHNUNG_ORDNER, gemeinsamer_ordner
 from . import aktionen, autostart, daten
 from .absender_form import AbsenderFormular, aus_roh, in_roh
 from .bausteine import Segmente, ToastStapel, fussleiste, karte, knopf, lbl, rollen, trenner
@@ -87,6 +96,8 @@ def _pruefen_text(n: int, ab: int, sicher: bool, an: bool) -> str:
 
 
 class Einstellungen(QDialog):
+    update_ergebnis = Signal(bool, object)  # „Jetzt prüfen“: (erreichbar, Neu | None) aus dem Hintergrund
+
     def __init__(self, haupt, bereich: int = 0):
         super().__init__(haupt)
         self.haupt = haupt
@@ -193,7 +204,7 @@ class Einstellungen(QDialog):
             v,
             _("Arbeitsordner"),
             _(
-                "Darin liegen Eingang, Ausgang, Pruefen, Fehler und Erledigt. "
+                "Darin liegen Eingang, Ausgang, Pruefen, Fehler, Erledigt und Protokoll. "
                 "Fakturafalter legt sie selbst an."
             ),
             erste=True,
@@ -249,6 +260,29 @@ class Einstellungen(QDialog):
         self.arbeitsordner.textChanged.connect(self._unterordner_nachziehen)
         self._einzeln_umschalten(einzeln)
 
+        _abschnitt(
+            v,
+            _("Protokollordner"),
+            _(
+                "protokoll.tsv (alle Vorgänge, Grundlage der Doppelprüfung) liegt getrennt vom Ausgang, "
+                "damit Archiv oder andere Programme den Ausgang leeren dürfen. Leer = Ordner „Protokoll“ "
+                "im Arbeitsordner."
+            ),
+        )
+        h = QHBoxLayout()
+        h.setSpacing(8)
+        prot = self.roh.get("protokoll_ordner") or (self.roh.get("ordner") or {}).get("protokoll") or ""
+        self.protokoll_ordner = QLineEdit(str(prot))
+        self.protokoll_ordner.setObjectName("protokoll_ordner")
+        self.protokoll_ordner.setAccessibleName(_("Protokollordner"))
+        self._protokoll_platzhalter()
+        h.addWidget(self.protokoll_ordner, 1)
+        h.addWidget(knopf(_("Wählen…"), klick=lambda: self._waehlen(self.protokoll_ordner, "Protokollordner")))
+        v.addLayout(h)
+        self.arbeitsordner.textChanged.connect(self._protokoll_platzhalter)
+        self.einzeln.toggled.connect(self._protokoll_platzhalter)
+        self.ordner["eingang"].textChanged.connect(self._protokoll_platzhalter)
+
         opt = self.roh.get("optionen") or {}
         _abschnitt(v, _("Eingang überwachen"))
         self.polling = QCheckBox(_("Eingang liegt auf Netzlaufwerk (langsamer, aber zuverlässig)"))
@@ -256,6 +290,14 @@ class Einstellungen(QDialog):
         v.addWidget(self.polling)
         v.addStretch(1)
         return w
+
+    def _protokoll_platzhalter(self, *_a) -> None:
+        """Platzhalter zeigt den Standardort (Arbeitsordner bzw. neben dem Eingang)."""
+        if self.einzeln.isChecked():
+            basis = Path(self.ordner["eingang"].text().strip() or ".").expanduser().parent
+        else:
+            basis = Path(self.arbeitsordner.text().strip() or ".").expanduser()
+        self.protokoll_ordner.setPlaceholderText(str(basis / PROTOKOLL_ORDNER))
 
     def _einzeln_umschalten(self, an: bool) -> None:
         for x in [*self.ordner.values(), *self._ordner_lbl, *self._ordner_knopf]:
@@ -810,8 +852,17 @@ class Einstellungen(QDialog):
             ),
             erste=True,
         )
-        self.xr = QCheckBox(_("zusätzlich XRechnung (XML), wenn der Kundenstamm es verlangt"))
-        self.xr.setChecked(bool(opt.get("xrechnung_zusatz", True)))
+        v.addWidget(lbl(_("XRechnung (XML) zusätzlich, wenn der Kundenstamm es verlangt"), umbruch=True))
+        self.xr = QComboBox()
+        self.xr.setObjectName("xrechnung_ablage")
+        self.xr.setAccessibleName(_("XRechnung (XML) zusätzlich, wenn der Kundenstamm es verlangt"))
+        self.xr.addItem(_("Neben der PDF im Ausgang"), "ausgang")
+        self.xr.addItem(_("Im Unterordner „{n}“ des Ausgangs").format(n=XRECHNUNG_ORDNER), "unterordner")
+        self.xr.addItem(_("Keine XRechnung-Datei"), "keine")
+        ablage = str(opt.get("xrechnung_ablage") or "ausgang")
+        if not opt.get("xrechnung_zusatz", True) or ablage == "keine":
+            ablage = "keine"
+        self.xr.setCurrentIndex(max(0, self.xr.findData(ablage)))
         v.addWidget(self.xr)
         v.addWidget(lbl(_("Sichtbild"), umbruch=True))
         self.sicht = QComboBox()
@@ -1013,9 +1064,9 @@ class Einstellungen(QDialog):
             v,
             _("Datenschutz"),
             _(
-                "Fakturafalter arbeitet vollständig offline: keine Telemetrie, keine "
-                "Updates im Hintergrund, keine Daten verlassen diesen Rechner. Freie "
-                "Software (Apache-2.0), ohne Gewähr, kein Support."
+                "Alle Rechnungsdaten werden ausschließlich lokal verarbeitet: keine Telemetrie, "
+                "keine Daten verlassen diesen Rechner. Einziger Netzzugriff ist die optionale "
+                "Updateprüfung (unten). Freie Software (Apache-2.0), ohne Gewähr, kein Support."
             ),
         )
         self.anonym = QCheckBox(_("Logs anonymisieren"))
@@ -1035,8 +1086,58 @@ class Einstellungen(QDialog):
                 umbruch=True,
             )
         )
+        self._teil_updates(v)
         v.addStretch(1)
         return w
+
+    def _teil_updates(self, v: QVBoxLayout) -> None:
+        """Updateprüfung (ab 0.9.6): einziger Netzzugriff, nur Hinweis mit Link, kein Download."""
+        opt = self.roh.get("optionen") or {}
+        _abschnitt(
+            v,
+            _("Updates"),
+            _(
+                "Fragt nur die aktuelle Versionsnummer bei GitHub ab und sendet keine Daten. "
+                "Gibt es eine neuere Version, erscheint ein Hinweis mit Link – heruntergeladen "
+                "wird nichts."
+            ),
+        )
+        self.updates = QCheckBox(_("Beim Start nach Updates suchen"))
+        self.updates.setObjectName("updatepruefung")
+        self.updates.setChecked(bool(opt.get("updatepruefung", True)))
+        v.addWidget(self.updates)
+        self.updates_vorab = QCheckBox(_("Pre-Releases einbeziehen"))
+        self.updates_vorab.setObjectName("updates_vorab")
+        self.updates_vorab.setChecked(bool(opt.get("updates_vorab", False)))
+        v.addWidget(self.updates_vorab)
+        h = QHBoxLayout()
+        h.setSpacing(8)
+        self.b_update = knopf(_("Jetzt prüfen"), klick=self._update_jetzt)
+        self.b_update.setObjectName("update_jetzt")
+        h.addWidget(self.b_update)
+        self.update_info = lbl("", "hinweis", umbruch=True)
+        self.update_info.setObjectName("update_info")
+        self.update_info.setOpenExternalLinks(True)
+        h.addWidget(self.update_info, 1)
+        v.addLayout(h)
+        self.update_ergebnis.connect(self._update_fertig)
+
+    def _update_jetzt(self) -> None:
+        self.b_update.setEnabled(False)
+        self.update_info.setText(_("Prüfe …"))
+        updatepruefung.im_hintergrund(self.updates_vorab.isChecked(), self.update_ergebnis.emit)
+
+    def _update_fertig(self, erreichbar: bool, neu) -> None:
+        self.b_update.setEnabled(True)
+        if neu is not None:
+            self.update_info.setText(
+                _("Neue Version verfügbar: Fakturafalter {v}").format(v=neu.version)
+                + f' – <a href="{neu.url}">{_("Release-Seite öffnen")}</a>'
+            )
+        elif erreichbar:
+            self.update_info.setText(_("Fakturafalter {v} ist aktuell.").format(v=__version__))
+        else:
+            self.update_info.setText(_("Keine Verbindung – später erneut versuchen."))
 
     # ======================================================================== Speichern
     def _fehler(self, text: str, wo: str = "Ordner") -> None:
@@ -1079,6 +1180,13 @@ class Einstellungen(QDialog):
             alt = r.get("arbeitsordner")
             r["arbeitsordner"] = alt if alt and (basis / alt).resolve() == p.resolve() else str(p)
             r.pop("ordner", None)
+        prot = self.protokoll_ordner.text().strip()
+        if prot:
+            alt = r.get("protokoll_ordner")
+            p = Path(prot).expanduser()
+            r["protokoll_ordner"] = alt if alt and (basis / alt).resolve() == p.resolve() else str(p)
+        else:
+            r.pop("protokoll_ordner", None)
         self._absender_merken()
         slots = [
             sl
@@ -1103,7 +1211,14 @@ class Einstellungen(QDialog):
         o["pdf_verwenden"] = self.modus() in ("csv", "xml") and self.pdf_verwenden.isChecked()
         if (self.modus() in ("csv", "xml") and self.pdf_verwenden.isChecked()) or "gegenstueck_minuten" in o:
             o["gegenstueck_minuten"] = self.gegenstueck.value()
-        o["xrechnung_zusatz"] = self.xr.isChecked()
+        ablage = self.xr.currentData()
+        o["xrechnung_zusatz"] = ablage != "keine"
+        if ablage == "unterordner" or "xrechnung_ablage" in o:
+            o["xrechnung_ablage"] = ablage if ablage != "keine" else o.get("xrechnung_ablage", "ausgang")
+        if self.updates.isChecked() is not True or "updatepruefung" in o:
+            o["updatepruefung"] = self.updates.isChecked()
+        if self.updates_vorab.isChecked() or "updates_vorab" in o:
+            o["updates_vorab"] = self.updates_vorab.isChecked()
         o["sichtteil"] = self.sicht.currentData()
         kreise = nummernkreis.in_optionen(self._kreise_aus_feldern())
         if kreise:
