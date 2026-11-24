@@ -108,6 +108,16 @@ und die Reihenfolge der Ebenen ändern.
 Ohne eigene Vorlage gilt das Standardlayout. Die strukturierten Rechnungsdaten
 (XML) ändern sich durch das Layout nicht.
 
+**Positionstabelle (ab 0.9.5).** Die Hauptzeile hat die Spalten Pos,
+Bezeichnung, Menge, Einheit, Einzelpreis, Gesamt und USt; eine eigene Spalte
+Art.-Nr. gibt es nicht mehr. Artikelnummer, Ihre Artikelnummer,
+Zeichnungsnummer mit Index und GTIN stehen klein und grau unter der
+Bezeichnung, darunter Beschreibung, Merkmale, Ursprungsland, Bestellposition,
+Kostenstelle, Objekt, Leistungszeitraum, Hinweis sowie Rabatt und Zuschlag der
+Position – jeweils nur, wenn ein Wert da ist. Lange Werte brechen um, nichts
+wird abgeschnitten. **Kundenbezeichnung 1–3** aus der CSV stehen im
+Adressblock je in einer eigenen Zeile (siehe [csv-format.md](csv-format.md)).
+
 ## 6. Automatische Prüfungen
 
 Jede erzeugte E-Rechnung wird standardmäßig **lokal und offline** nachgeprüft
@@ -182,6 +192,38 @@ Prüfansicht, oder der Ordner `logs/` neben der Konfiguration).
 In der Prüfansicht kannst du die Rechnung ansehen, verwerfen (Dateien nach
 `Fehler`) oder – je nach Fall – mit einem neuen Sichtbild erstellen lassen.
 Die Pflichtprüfung läuft dabei erneut.
+
+### Dateiname und Rechnungsnummer (ab 0.9.5)
+
+Die Rechnungsnummer kommt **immer aus der CSV bzw. XML**, also aus deiner
+Warenwirtschaft. Fakturafalter vergibt keine Nummern und ändert sie nie. Unter
+**Einstellungen → Ausgabe → „Dateiname und Rechnungsnummer“** stellst du je
+Belegart (Rechnungen, Gutschriften) ein:
+
+- **Dateiname der ZUGFeRD-PDF** und der XRechnung-XML mit Platzhaltern:
+  `{rechnungsnummer}`, `{jahr}`, `{monat}`, `{tag}`, `{datum}` (JJJJ-MM-TT),
+  `{kundennummer}`, `{kunde}` (Name, gekürzt auf 40 Zeichen), `{belegart}`
+  (Rechnung, Gutschrift …), `{belegart_kurz}` (RE, GS …). Beispiel:
+  `{jahr}_{rechnungsnummer}_{kunde}` → `2026_2026000101_Feinmechanik_Beispiel_GmbH.pdf`.
+  Umlaute werden umschrieben (ä → ae), Zeichen, die Windows oder Linux nicht
+  mögen, durch `_` ersetzt. Die Vorschau unter den Feldern zeigt das Ergebnis
+  beim Tippen. Leer = wie bisher (`<Nummer>_zugferd.pdf`); bei Gutschriften
+  heißt leer „wie bei Rechnungen“.
+- **Prüfmuster** (optional): `JJJJ` = Jahr, `JJ` = Jahr zweistellig,
+  `MM` = Monat, `#` = eine Ziffer, `*` = beliebige Zeichen, alles andere wörtlich
+  (Groß-/Kleinschreibung egal). Beispiele: `JJJJ######` für `2026000101`,
+  `RE-JJJJ-####` für `RE-2026-0042`, `GS-JJJJ-####` für Gutschriften. Passt
+  eine Nummer nicht, geht die Rechnung nach **Zu prüfen**.
+- **Lücken melden** (nur mit Prüfmuster mit `#`): Fehlen Nummern zwischen der
+  letzten bekannten und der neuen (der letzte `#`-Block zählt, Jahr bzw.
+  Präfix bilden den Kreis), erscheint eine **Warnung**. Die Rechnung läuft
+  trotzdem durch – Lücken sind erlaubt.
+
+Doppelte Rechnungsnummern hält Fakturafalter wie bisher immer an. Gibt es eine
+Datei mit dem gebildeten Namen schon im Ausgang, wird nichts überschrieben: die
+Rechnung geht nach „Zu prüfen“. In der `konfiguration.yaml` steht das unter
+`optionen.nummernkreise` (Beispiel als Kommentar in `beispiele/konfiguration.yaml`);
+ohne diesen Block bleibt alles wie bisher.
 
 ## 8. Absenderprofil
 

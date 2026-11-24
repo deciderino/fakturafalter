@@ -168,11 +168,33 @@ wenn der Sichtteil neu aufgebaut wird: CSV/XML ohne Druck oder Einstellungen →
   Ergebnis als Hinweis, Details im Log.
 - Lange Werte im Rechnungskopf (z. B. eine lange Bestellnummer) brechen um, statt abgeschnitten zu werden; das
   gilt auch für das Standardlayout ohne eigene Vorlage.
+- Positionstabelle (ab 0.9.5, Standardlayout und Layouteditor gleich): Pos, Bezeichnung (ab L + 10 mm, 76 mm breit),
+  Menge, Einh., Einzelpreis, Gesamt, USt. Unterzeilen in 7,5 pt unter der Bezeichnung, nur wenn gefüllt:
+  (a) grau Art.-Nr. BT-155, Ihre Art.-Nr. BT-156, „Zeichnungs-Nr. X, Index Y“ (Merkmale BT-160/161 „Zeichnungsnummer“/
+  „Index“), GTIN BT-157; (b) Beschreibung BT-154, übrige Merkmale „Name: Wert“, Ursprungsland BT-159; (c) Bestellpos.
+  BT-132, Kostenstelle BT-133, Objekt BT-128, Leistungszeitraum BT-134/135; (d) Hinweis BT-127; (e) Listenpreis/
+  Nachlass, Rabatt/Zuschlag. Beschriftungen DE/EN nach Rechnungssprache. Zeilenhöhe = Bezeichnung + Unterzeilen,
+  der Seitenumbruch rechnet damit. BT-158, BT-151 und BT-121 nur im XML. Die Preiseinheit bleibt in der Preiszelle.
 - Die Positionstabelle bricht auf Folgeseiten um (Tabellenkopf wiederholt, Übertrag unten und oben), Folgeseiten
   haben ein eigenes Layout. Die Vorschau nutzt denselben Renderer wie die Ausgabe, mit fiktiven Beispieldaten.
 - Gespeichert wird als Block `layout:` in der Konfiguration (beim aktiven Absender oben, bei gemerkten Absendern
   in `absender_profile`), Bilder und Briefpapier liegen im Ordner `layout/` daneben. Ohne Block gilt das bisherige
   Layout unverändert; „Zurücksetzen auf Standard“ entfernt den Block. Beispiel: [beispiele/layout/](../beispiele/layout/).
+
+## Rechnungsnummer und Dateiname (ab 0.9.5)
+
+`optionen.nummernkreise.{rechnung,gutschrift}` mit `pruefmuster`, `luecken_warnen`, `dateiname`,
+`dateiname_xrechnung` (alles optional; Oberfläche: Einstellungen → Ausgabe). Belegart 381 nutzt den Kreis
+`gutschrift`, alle anderen `rechnung`. Ohne Block: `<Nummer>_zugferd.pdf` / `<Nummer>_xrechnung.xml`, keine
+Formatprüfung – wie bisher.
+
+- Prüfmuster → Pflichtregel `nummer_muster` (Stufe „prüfen“ an BT-1). Ungültiges Muster ebenfalls „prüfen“.
+- Lückenwarnung (Stufe „warnung“): Vorgänger = größte bekannte Nummer desselben Kreises aus `protokoll.tsv` und
+  dem laufenden Stapel; der letzte `#`-Block ist der Zähler, alles andere (Jahr, Präfix) der Kreis.
+- Dateiname: Platzhalterwerte werden bereinigt (Umlaute umschreiben, nur `A–Z a–z 0–9 . _ -`), wörtliche Teile
+  dürfen `\ / : * ? " < > | , ;` nicht enthalten, reservierte Windows-Namen (CON, NUL …) bekommen ein `_`
+  vorangestellt, Stamm höchstens 180 Zeichen. Existiert die Datei im Ausgang schon: „Zu prüfen“, nichts wird
+  überschrieben.
 
 ## PDF-Erkennung
 

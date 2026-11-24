@@ -39,7 +39,7 @@ Die Rechnungsbeträge rechnet Fakturafalter selbst aus.
 | Rechnungsnr | fortlaufende, einmalige Rechnungsnummer | BT-1 | `SK-2026-0412` |
 | Datum | Rechnungsdatum | BT-2 | `02.10.2026` |
 | Lieferdatum | Tag der Lieferung/Leistung – **oder** stattdessen zwei Spalten Leistung von/bis (BT-73/BT-74) **oder** eine Spalte Leistungsmonat (`10/2026`, § 31 Abs. 4 UStDV) | BT-72 | `01.10.2026` |
-| Kunde | Name des Käufers | BT-44 | `Café Morgenrot` |
+| Kundenbezeichnung 1 (oder Kunde) | Name des Käufers, Zeile 1 (Zeilen 2 und 3 optional, siehe unten) | BT-44 | `Café Morgenrot` |
 | Strasse | Straße und Hausnummer des Käufers | BT-50 | `Lindenplatz 2` |
 | PLZ | Postleitzahl des Käufers | BT-53 | `31134` |
 | Ort | Ort des Käufers | BT-52 | `Hildesheim` |
@@ -49,7 +49,7 @@ Die Rechnungsbeträge rechnet Fakturafalter selbst aus.
 | Einzelpreis | Einzelpreis netto | BT-146 | `0,55` |
 | USt-Satz | Steuersatz oder Steuerschlüssel (im Profil übersetzt in Kategorie und Satz; bei Befreiung mit Grund) | BT-151/BT-152 | `7` |
 
-Kunde, Strasse, PLZ und Ort können entfallen, wenn stattdessen eine **Kundennummer** geliefert wird
+Kundenbezeichnung 1, Strasse, PLZ und Ort können entfallen, wenn stattdessen eine **Kundennummer** geliefert wird
 und das Profil einen Kundenstamm (eigene CSV) nennt.
 
 ## Optionale Spalten
@@ -82,12 +82,13 @@ Der CSV-Assistent schlägt diese Felder nur vor, wenn der Spaltenname genau pass
 | `BT-92`/`BT-94`, `BT-97` | Rabatt auf die ganze Rechnung: Betrag oder %, Grund | `15,00` / `2` |
 | `BT-99`/`BT-101`, `BT-104` | Zuschlag auf die ganze Rechnung (z. B. Fracht): Betrag oder %, Grund | `8,50`, `Versandkosten` |
 | `BT-138` (`typ: prozent`), `BT-136`, `BT-139` | Rabatt je Position: % oder Betrag, Grund | `10`, `10 %` |
-| `BT-141`, `BT-144` | Zuschlag je Position: Betrag, Grund | `5,00` |
+| `BT-141`/`BT-143` (`typ: prozent`), `BT-144` | Zuschlag je Position: Betrag oder %, Grund | `5,00` |
 | `BT-148`, `BT-147` | Listenpreis und Preisnachlass je Einheit (Einzelpreis = Listenpreis − Nachlass) | `85,00`, `5,00` |
 | `zeilenart` | Position oder Rabatt-/Zuschlagszeile | leer/`Position`, `Rabatt`, `Zuschlag`, `Fracht`, `Versand` |
 | `BT-11` … `BT-19` | Projekt, Vertrag, Auftrag, Wareneingang, Lieferschein, Vergabe, Objekt, Kostenstelle | |
 | `BT-70`, `BT-75` … `BT-80` | Lieferanschrift | |
 | `BT-22`, `BT-83`, `BT-124`, `BT-59` | Bemerkung, Verwendungszweck, Link auf Unterlage, abweichender Zahlungsempfänger | |
+| `BT-128` | Objektkennung je Position | `OBJ-7` |
 | `BT-127`, `BT-154` … `BT-161`, `BT-132`, `BT-133`, `BT-134`/`BT-135` | Positionsnotiz, Beschreibung, Kunden-Artikelnr., GTIN, Klassifizierung, Ursprungsland, Merkmal, Bestellposition, Kostenstelle, Leistungszeitraum je Position | |
 
 - **Rabatt- und Zuschlagszeilen.** Ist die Spalte `zeilenart` auf `Rabatt` oder `Zuschlag` gesetzt, wird
@@ -102,6 +103,40 @@ Der CSV-Assistent schlägt diese Felder nur vor, wenn der Spaltenname genau pass
   Eine Mandatsreferenz ohne Zahlungsart-Spalte bedeutet Lastschrift.
 
 Beispiel: `beispiele/variante-d_rabatt_gutschrift_lastschrift.csv` mit `beispiele/profil-variante-d.yaml`.
+
+## Kundenbezeichnung 1–3 und Angaben unter der Positionsbezeichnung (ab 0.9.5)
+
+Auch hier ist alles freiwillig bis auf eine Ausnahme: die **Kundenbezeichnung 1** ersetzt die bisherige
+Pflichtspalte Kunde. Alte CSVs mit einer Spalte `Kunde` (oder Kundenname, Firma …) laufen unverändert, diese
+Spalte gilt als Zeile 1.
+
+| Feld im Profil | Spalte (Beispiel) | Wirkung |
+|---|---|---|
+| `BT-44` | `Kundenbezeichnung 1` | Pflicht (sofern kein Kundenstamm den Namen liefert) |
+| `kaeufer_name_2`, `kaeufer_name_3` | `Kundenbezeichnung 2`, `Kundenbezeichnung 3` | optional; leer = keine Zeile |
+| `zeichnungsnummer`, `index` | `Zeichnungsnummer`, `Index` | optional; im XML Artikelmerkmal (BT-160/BT-161) „Zeichnungsnummer“ bzw. „Index“ |
+
+- **Im PDF** steht jede gefüllte Kundenbezeichnung in einer eigenen Zeile des Adressblocks, leere Zeilen
+  entfallen (keine Lücke). **Im XML** gibt es nur einen Käufernamen: BT-44 = die gefüllten Zeilen mit je einem
+  Leerzeichen verbunden (`Feinmechanik Beispiel GmbH Werk Süd Wareneingang Tor 3`). Adresszusatz (BT-51) und
+  Ansprechpartner (BT-56) bleiben eigene Felder.
+- Fehlt Zeile 1, aber Zeile 2 oder 3 ist gefüllt, rückt nichts nach: die Rechnung geht nach „Zu prüfen“.
+- **Positionstabelle.** Die Spalte Art.-Nr. gibt es nicht mehr, die Bezeichnung ist breiter. Alles Weitere
+  steht klein unter der Bezeichnung – nur, wenn es gefüllt ist, in dieser Reihenfolge:
+  1. grau: Art.-Nr. (BT-155), Ihre Art.-Nr. (BT-156), „Zeichnungs-Nr. X, Index Y“ (eine Zeile), GTIN (BT-157)
+  2. Beschreibung (BT-154), weitere Merkmale „Name: Wert“ (BT-160/BT-161), Ursprungsland (BT-159)
+  3. Bestellposition (BT-132), Kostenstelle (BT-133), Objekt (BT-128), Leistungszeitraum (BT-134/BT-135)
+  4. Hinweis (BT-127)
+  5. Listenpreis/Nachlass, Rabatt und Zuschlag der Position
+
+  Lange Werte (z. B. sehr lange Artikelnummern) werden umbrochen, nie gekürzt. Die Beschriftungen folgen der
+  Sprache der Rechnung (Deutsch/Englisch). Klassifizierung (BT-158), Steuer-Kategorie (BT-151) und
+  Kostenkonto (BT-121) stehen nur im XML.
+- Der CSV-Assistent schlägt `Kundenbezeichnung 1/2/3` von selbst vor, Zeichnungsnummer und Index nur bei genau
+  passendem Spaltennamen.
+
+Beispiel: `beispiele/variante-k_kundenbezeichnung_erp.csv` mit `beispiele/profil-variante-k.yaml`.
+Rechnungsnummer prüfen und Dateinamen festlegen: siehe [Handbuch](handbuch.md#dateiname-und-rechnungsnummer-ab-095).
 
 ## XML-Eingang (XRechnung/ZUGFeRD, CII und UBL)
 

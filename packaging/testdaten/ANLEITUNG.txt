@@ -1,4 +1,4 @@
-Fakturafalter 0.9.4 – Testdaten
+Fakturafalter 0.9.5 – Testdaten
 ===============================
 
 Alle Firmen, Personen, Rechnungen und Kontonummern sind erfunden.
@@ -19,7 +19,7 @@ beispiele/pdf-erkennung/   Sechs Handwerksbetriebe mit unterschiedlichen Layouts
 beispiele/xml-eingang/     XRechnungen (UBL/CII) mit Rabatt, Zuschlag, Gutschrift, Lastschrift, Anzahlung
 beispiele/layout/          Layouteditor: Beispiel-Vorlage, Fantasie-Logo, Briefpapier für Seite 1 und Folgeseiten
 beispiele/                 Weitere CSV-/Text-Varianten aus Alt-Warenwirtschaften (Variante D: Rabatt,
-                           Gutschrift, Lastschrift)
+                           Gutschrift, Lastschrift; Variante K: Kundenbezeichnung 1–3, Zeichnungs-Nr./Index)
 
 Arbeitsordner der Test-Konfigurationen: laufzeit/ in diesem Ordner (wird beim Start angelegt).
 
@@ -95,9 +95,9 @@ Test 7 mit variante-a_positionen_utf8.csv statt variante-d laufen lassen.
 
 Test 7: Rabatt, Gutschrift, Lastschrift (CSV und XML)
 -----------------------------------------------------
-Linux:    ./Fakturafalter-0.9.4-x86_64.AppImage -c beispiele/konfiguration.yaml \
+Linux:    ./Fakturafalter-0.9.5-x86_64.AppImage -c beispiele/konfiguration.yaml \
               --dateien beispiele/variante-d_rabatt_gutschrift_lastschrift.csv
-          ./Fakturafalter-0.9.4-x86_64.AppImage -c beispiele/xml/konfiguration-pdf-xml.yaml \
+          ./Fakturafalter-0.9.5-x86_64.AppImage -c beispiele/xml/konfiguration-pdf-xml.yaml \
               --dateien beispiele/xml-eingang/*.xml
 Windows:  fakturafalter-cli.exe mit denselben Angaben (Pfade mit \).
 Erwartet: 6 × „OK“ und „[gültig]“. In den PDFs stehen Rabatt- und Zuschlagszeilen, „Gutschrift“ mit
@@ -131,7 +131,7 @@ Test 9: Fortschritt der Verarbeitung
 
 Test 10: Nur PDF mit Anlern-Assistent (unterstützt, nicht empfohlen)
 -------------------------------------------------------------------
-Linux:    ./Fakturafalter-0.9.4-x86_64.AppImage -c beispiele/industrie/konfiguration-nur-pdf.yaml
+Linux:    ./Fakturafalter-0.9.5-x86_64.AppImage -c beispiele/industrie/konfiguration-nur-pdf.yaml
 Windows:  Fakturafalter.exe -c beispiele\industrie\konfiguration-nur-pdf.yaml
 
 1. Schalter oben links auf „Überwachung an“. Nur die PDFs aus beispiele/industrie/eingang/ nach
@@ -168,6 +168,22 @@ Test 12: Starthinweis
 ---------------------
 Beim Start steht oben „Ohne Gewährleistung und ohne Support“. „Schließen“ → beim nächsten Start wieder da.
 „Nicht mehr anzeigen“ → kommt nicht mehr (Eintrag starthinweis_aus in der Konfiguration).
+
+
+Test 13: Kundenbezeichnung 1–3, Positions-Unterzeilen, Dateiname (neu in 0.9.5)
+--------------------------------------------------------------------------------
+1. Wie Test 7, aber mit --dateien beispiele/variante-k_kundenbezeichnung_erp.csv.
+   Erwartet: 3 × „OK“ und „[gültig]“. Im Adressblock steht jede Kundenbezeichnung in einer eigenen Zeile
+   („Feinmechanik Beispiel GmbH“ / „Werk Süd“ / „Wareneingang Tor 3“; bei 2026000102 ohne Leerzeile).
+   Die Tabelle hat keine Spalte Art.-Nr. mehr: Art.-Nr. (auch die sehr lange, umbrochen, nie gekürzt),
+   Ihre Art.-Nr., „Zeichnungs-Nr. 4711-0815-22, Index C“ und GTIN stehen klein und grau unter der
+   Bezeichnung, darunter Beschreibung, Ursprungsland, Bestellpos., Kostenstelle, Hinweis und Rabatt.
+2. Einstellungen → Ausgabe → „Dateiname und Rechnungsnummer“: bei Rechnungen Dateiname
+   {jahr}_{rechnungsnummer}_{kunde} und Prüfmuster JJJJ######, bei Gutschriften Prüfmuster GS-JJJJ-####
+   eintragen. Die Vorschau darunter ändert sich beim Tippen. Speichern, Schritt 1 mit leerem Ausgang
+   wiederholen: die PDFs heißen z. B. 2026_2026000101_Feinmechanik_Beispiel_GmbH_Werk_Sued_War.pdf.
+3. Prüfmuster auf RE-JJJJ-#### ändern: die beiden Rechnungen gehen nach „Zu prüfen“ (Nummer passt nicht),
+   die Gutschrift läuft durch. Fakturafalter ändert oder vergibt nie eine Rechnungsnummer.
 
 
 Was zurückmelden

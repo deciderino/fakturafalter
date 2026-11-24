@@ -2,16 +2,18 @@
 # Copyright 2026 Fakturafalter-Mitwirkende
 """Rauchtest für ein gebautes Programm: beispiele/ einmal durchschicken (--einmal), Ausgaben prüfen.
 
-    python packaging/smoke.py -- dist/Fakturafalter-0.9.4-x86_64.AppImage
+    python packaging/smoke.py -- dist/Fakturafalter-0.9.5-x86_64.AppImage
     python packaging/smoke.py --wine -- wine dist/win/Fakturafalter/fakturafalter-cli.exe
 
 Je Beispielvariante (a/b/c/d: CSV/Text, x: PDF + XML, e: nur XML – UBL/CII mit Rabatt, Gutschrift, Lastschrift,
-l: CSV mit eigener Layout-Vorlage aus dem Layouteditor – Logo, Briefpapier-PDF, eigene Felder) ein eigener Arbeitsordner unter /tmp/Fakturafalter-Beispiel-smoke/ (sonst
+l: CSV mit eigener Layout-Vorlage aus dem Layouteditor – Logo, Briefpapier-PDF, eigene Felder, k: Kundenbezeichnung
+1–3, Positions-Unterzeilen mit sehr langer Art.-Nr. und Zeichnungs-Nr./Index, Prüfmuster und eigenes
+Dateinamen-Muster je Belegart) ein eigener Arbeitsordner unter /tmp/Fakturafalter-Beispiel-smoke/ (sonst
 meldet Fakturafalter die gleichen Rechnungsnummern zu Recht als doppelt). Erwartet je Variante
 ZUGFeRD-PDFs im Ausgang und nichts im Fehlerordner. Das gebaute Programm prüft dabei selbst mit den
 mitgelieferten Werkzeugen (eigene Java-Laufzeit, Mustang, KoSIT): erwartet wird „gültig“ in der
 Prüfspalte von protokoll.tsv für jede Rechnung, dazu ein „--pruefe“-Aufruf auf eine Ausgabe aus a und alle
-Ausgaben aus d und e.
+Ausgaben aus d, e, l und k.
 FAKTURAFALTER_* aus der Umgebung werden entfernt, damit wirklich das Paket prüft.
 Mit --ohne-werkzeuge (Paket ohne Prüfwerkzeuge) wird stattdessen „nicht geprüft“ erwartet.
 Keine Online-Dienste.
@@ -39,9 +41,17 @@ VARIANTEN = {
     "e": ["xml-eingang/XR-2026-0301_ubl_rabatt_lastschrift.xml", "xml-eingang/GS-2026-0008_cii_gutschrift.xml",
           "xml-eingang/GS-2026-0009_ubl_gutschrift.xml"],         # nur XML (UBL/CII), ohne PDF
     "l": ["variante-a_positionen_utf8.csv"],                    # eigene Layout-Vorlage (beispiele/layout/)
+    "k": ["variante-k_kundenbezeichnung_erp.csv"],               # Kundenbezeichnung 1–3, Unterzeilen, Dateiname
 }
+# Variante k: Rechnungsnummer prüfen und Dateiname je Belegart (Einstellungen → Ausgabe, ab 0.9.5)
+NUMMERNKREISE = {
+    "rechnung": {"pruefmuster": "JJJJ######", "luecken_warnen": True, "dateiname": "{jahr}_{rechnungsnummer}_{kunde}"},
+    "gutschrift": {"pruefmuster": "GS-JJJJ-####", "dateiname": "{belegart}_{rechnungsnummer}"},
+}
+NAMEN_K = ["2026_2026000101_Feinmechanik_Beispiel_GmbH_Werk_Sued_War.pdf",
+           "2026_2026000102_Hofladen_Beispiel_Inh._Erika_Musterfrau.pdf", "Gutschrift_GS-2026-0011.pdf"]
 MODUS = {"x": "pdf_xml", "e": "pdf_xml"}
-ALLE_PRUEFEN = ("d", "e", "l")
+ALLE_PRUEFEN = ("d", "e", "l", "k")
 
 
 def winpfad(p: Path) -> str:
@@ -81,6 +91,8 @@ def main() -> int:
         if v == "l":                                          # Layouteditor: Vorlage + Bilder/Briefpapier
             shutil.copytree(BSP / "layout", b / "cfg" / "layout")
             d["layout"] = yaml.safe_load((BSP / "layout" / "layout-beispiel.yaml").read_text(encoding="utf-8"))["layout"]
+        if v == "k":
+            d.setdefault("optionen", {})["nummernkreise"] = NUMMERNKREISE
         d["ordner"] = {n: pf(b / n) for n in ("eingang", "ausgang", "erledigt", "fehler", "pruefen")}
         (b / "cfg" / "konfiguration.yaml").write_text(yaml.safe_dump(d, allow_unicode=True), encoding="utf-8")
         (b / "eingang").mkdir()
@@ -88,7 +100,7 @@ def main() -> int:
             shutil.copy(BSP / f, b / "eingang")
         cmd = a.programm + ["--config", pf(b / "cfg" / "konfiguration.yaml"), "--einmal"]
         r = subprocess.run(cmd, env=env, capture_output=True, text=True, errors="replace", timeout=600)
-        neu = sorted((b / "ausgang").glob("*_zugferd.pdf"))
+        neu = sorted((b / "ausgang").glob("*.pdf"))           # Variante k: eigene Dateinamen
         fehler = leer_oder_fehlt(b / "fehler")
         prot = b / "ausgang" / "protokoll.tsv"
         pruef = [(z.split("\t") + [""] * 8)[7] for z in prot.read_text(encoding="utf-8").splitlines()] \
@@ -97,6 +109,8 @@ def main() -> int:
                and bool(pruef) and set(pruef) == {erwartet})
         if v == "l":                                          # Logo/Bildfeld (Image) und Briefpapier (Form) drin
             gut &= all(b"/Image" in x.read_bytes() and b"/Form" in x.read_bytes() for x in neu)
+        if v == "k":
+            gut &= [x.name for x in neu] == NAMEN_K
         print(f"Variante {v}: exit {r.returncode}, {len(neu)} PDF(s), Prüfung {sorted(set(pruef))}, "
               f"Fehlerordner {fehler or 'leer'} -> {'OK' if gut else 'FEHLER'}")
         if not gut:

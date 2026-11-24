@@ -17,6 +17,8 @@ Fakturafalter überwacht einen Ordner auf deinem Rechner, liest CSV- oder XML-Ex
 - **Layout-Editor** für den sichtbaren Teil, wenn die Sichtseite aus den Daten neu gebaut wird (Einstellungen → Absender → „Layout gestalten…“)
 - **Automatische Prüfung** nach jeder Erstellung, lokal und offline: Mustang (mit veraPDF) für PDF/A-3 und den ZUGFeRD-Rahmen, KoSIT für die Rechnungsdaten nach EN 16931. Dazu Plausibilität und Pflichtangaben (Summen, fehlende Felder, Gutschrift ohne Rechnungsbezug). Unklares landet in „Zu prüfen“, Ungültiges in „Fehler“ – nichts geht still raus.
 - **Ordnerüberwachung** mit Fortschrittsanzeige, während verarbeitet wird
+- **Kundenbezeichnung 1–3** als eigene Zeilen im Adressblock, Artikel-, Zeichnungs- und Bestellangaben klein unter der Positionsbezeichnung
+- **Rechnungsnummer prüfen, Dateiname festlegen:** Die Nummer kommt immer aus dem ERP. Optional prüft Fakturafalter sie gegen ein Muster (z. B. `JJJJ######`) und meldet Lücken; Dateiname je Belegart mit Platzhaltern (Einstellungen → Ausgabe)
 
 **Nur PDF** (Angaben allein aus dem Rechnungsdruck) wird weiterhin unterstützt, ist aber nicht der empfohlene Weg: Die Erkennung kann fehlgehen, Layouts müssen angelernt und Ergebnisse kontrolliert werden. Details im [Handbuch](docs/handbuch.md#nur-pdf-unterstutzt-aber-nicht-empfohlen).
 
