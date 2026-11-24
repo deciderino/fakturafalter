@@ -1,0 +1,161 @@
+{
+  "datei": "Rechnung_005_2026-0444.pdf",
+  "format": "PDF 1.4 (reportlab), A4, Schrift Times-Roman (Standard-14, nicht eingebettet)",
+  "familie": "f02_briefkopf",
+  "quelle": "Q2",
+  "holdout": true,
+  "split": "holdout",
+  "seller": {
+    "name": "Ingenieurbüro Brandauer GmbH",
+    "street": "Am Klosterhof 9",
+    "postal_code": "37073",
+    "city": "Göttingen",
+    "ust_id": "DE315590279",
+    "iban": "DE96 0000 0000 0270 7300 91",
+    "bic": "BRANDEX1GOE",
+    "bank": "Beispiel-Volksbank Göttingen",
+    "email": "info@ib-brandauer.example",
+    "register": "Amtsgericht Göttingen HRB 00000",
+    "ceo": "Dipl.-Ing. Jakob Brandauer"
+  },
+  "buyer": {
+    "name_lines": [
+      "Gemeinde Obertal",
+      "Bauamt"
+    ],
+    "street": "Rathausplatz 1",
+    "postal_code": "79874",
+    "city": "Breitnau",
+    "customer_number": "50012"
+  },
+  "invoice": {
+    "number": "2026-0444",
+    "date": "29.10.2026",
+    "service_date": "29.10.2026",
+    "order_number": "",
+    "shipping": "",
+    "date_printed": "29. Oktober 2026"
+  },
+  "druck": {
+    "datum_format": "ausgeschrieben („3. November 2026“)",
+    "schrift": "Times-Roman",
+    "seitenformat": "A4"
+  },
+  "BT-72": "29.10.2026",
+  "BT-119": "19.00",
+  "positions": [
+    {
+      "qty": "1",
+      "unit": "Stk.",
+      "description": [
+        "Erstellung Brandschutznachweis, für das Bauvorhaben",
+        "Erweiterung Lagerhalle, Abschnitt B"
+      ],
+      "article_number": "",
+      "unit_price": "881.00",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "881.00"
+    },
+    {
+      "qty": "2",
+      "unit": "Stk.",
+      "description": [
+        "Fahrtkosten Pauschale"
+      ],
+      "article_number": "",
+      "unit_price": "35.75",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "71.50"
+    },
+    {
+      "qty": "1",
+      "unit": "Stk.",
+      "description": [
+        "Statische Vorbemessung Deckendurchbruch"
+      ],
+      "article_number": "",
+      "unit_price": "897.50",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "897.50"
+    },
+    {
+      "qty": "12",
+      "unit": "Std.",
+      "description": [
+        "Planungsleistung Technische Gebäudeausrüstung"
+      ],
+      "article_number": "",
+      "unit_price": "90.50",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "1086.00"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": "3.00",
+  "discount_days": 10,
+  "payment_days": 30,
+  "totals": {
+    "net": "2936.00",
+    "vat": "557.84",
+    "gross": "3493.84"
+  },
+  "totals_printed": {
+    "net": "2936.00",
+    "vat": "557.84",
+    "gross": "3494.84"
+  },
+  "payment": {
+    "discount_date": "08.11.2026",
+    "due_date": "28.11.2026",
+    "discount_amount": "104.85",
+    "discount_base": "gross"
+  },
+  "payment_terms_text": [
+    "Zahlung innerhalb von 10 Tagen ab Rechnungseingang mit 3 % Skonto, innerhalb",
+    "von 30 Tagen ohne Abzüge an die unten angegebene Bankverbindung."
+  ],
+  "page_count": 1,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "transfer": null,
+      "carry_forward": null,
+      "summary_present": true
+    }
+  ],
+  "erwarteter_status": "prüfen",
+  "erwartete_hinweise": [
+    "PRUEFEN [BT-112] Kontrollwert der Quelle ≠ berechnet (gedrucktes Brutto 1,00 € über Netto + USt)"
+  ],
+  "kosit": null,
+  "verapdf": null,
+  "validierung_hinweis": "lokal nicht validierbar / spätere Phase (KoSIT/veraPDF prüfen die App-Ausgabe, nicht diese PDFs)",
+  "korrekturen": null,
+  "korrekturen_hinweis": "erst beim echten Anlernen messbar",
+  "test_flags": {
+    "address_name_lines": 2,
+    "po_box": false,
+    "multi_line_positions": 1,
+    "shipping_position": false,
+    "page_format": "A4",
+    "payment": "skonto",
+    "pruefen": "brutto",
+    "missing_order_number": true,
+    "note": "Hold-out PRÜFEN: gedruckter Gesamtbetrag 1,00 € über Netto + USt"
+  },
+  "sha256": "b26cce5bb87fc053b856b4e5bd862cc09751da85a70b17406ea1c6a5e1573be7"
+}

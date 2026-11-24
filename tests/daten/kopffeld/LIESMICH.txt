@@ -1,0 +1,6 @@
+Kopffeld-Testset (alle Inhalte erfunden), erzeugt mit tools/kopffeld_set.py.
+<id>.pdf: Beleg mit abweichender Käuferanschrift; <id>-vorlage.pdf: gleicher Briefbogen, einfacher
+Inlandskunde (zum Anlernen). soll.json: Sollwerte, Layout (Anschriftzone nach DIN 5008), holdout.
+Hold-out (jede dritte der ersten 55 Varianten und alle h*-Varianten) nicht zum Abstimmen von Regeln
+verwenden.
+Messung: python tools/kopffeld_messung.py --md kopffeld.md --json kopffeld.json

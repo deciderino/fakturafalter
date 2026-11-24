@@ -1,0 +1,112 @@
+{
+  "datei": "Rechnung_001_RE-2026-00125.pdf",
+  "format": "PDF/A-2b",
+  "seller": {
+    "name": "Alberon Industriekomponenten GmbH",
+    "street": "Prüfwerkstraße 18",
+    "postal_code": "09111",
+    "city": "Chemnitz",
+    "ust_id": "DE123456789",
+    "iban": "DE89 3704 0044 0532 0130 00",
+    "bic": "COBADEFFXXX",
+    "bank": "Commerzbank AG",
+    "email": "rechnung@alberon.example",
+    "register": "Amtsgericht Chemnitz, HRB 999999",
+    "ceo": "Markus Seidel"
+  },
+  "buyer": {
+    "name_lines": [
+      "Rabenfels Industriebedarf GmbH",
+      "Abteilung Vorrichtungsbau",
+      "Werk Süd"
+    ],
+    "street": "Gewerbestraße 24",
+    "postal_code": "09130",
+    "city": "Chemnitz",
+    "customer_number": "0012547"
+  },
+  "invoice": {
+    "number": "RE-2026-00125",
+    "date": "03.08.2026",
+    "service_date": "13.07.2026",
+    "order_number": "",
+    "shipping": "UPS"
+  },
+  "positions": [
+    {
+      "qty": 75,
+      "unit": "Stk.",
+      "description": [
+        "Passstift 435779"
+      ],
+      "unit_price": "7.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "562.50"
+    },
+    {
+      "qty": 40,
+      "unit": "Std.",
+      "description": [
+        "Montagearbeit 982962"
+      ],
+      "unit_price": "12.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "500.00"
+    },
+    {
+      "qty": 250,
+      "unit": "Stk.",
+      "description": [
+        "Führungsbuchse 835354"
+      ],
+      "unit_price": "180.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "45125.00"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": null,
+  "discount_days": null,
+  "payment_days": 30,
+  "totals": {
+    "net": "46187.50",
+    "vat": "8775.63",
+    "gross": "54963.13"
+  },
+  "payment": {
+    "discount_date": null,
+    "due_date": "02.09.2026",
+    "discount_amount": null
+  },
+  "page_count": 1,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3
+      ],
+      "line_count": 3,
+      "transfer": null,
+      "summary_present": true,
+      "payment_block_present": true
+    }
+  ],
+  "test_flags": {
+    "address_name_lines": 3,
+    "missing_order_number": true,
+    "shipping_empty": false,
+    "discount_applied": false,
+    "blank_unit_flat_rate": false,
+    "without_price_count": 0,
+    "flat_rate_count": 0,
+    "two_three_line_positions": 0,
+    "four_five_line_positions": 0,
+    "has_qty_thousands": false
+  },
+  "sha256": "4ad958f04e1f4f63f9917aed7703d078849b1404ccf4c13675343aec10a55b76"
+}

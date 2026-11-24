@@ -1,0 +1,203 @@
+{
+  "datei": "Rechnung_006_FA-26-10343.pdf",
+  "format": "PDF 1.4 (reportlab, Schriften eingebettet)",
+  "holdout": false,
+  "seller": {
+    "name": "Fiktiva Antriebstechnik GmbH",
+    "street": "Musterring 12",
+    "postal_code": "04179",
+    "city": "Leipzig",
+    "ust_id": "DE314159262",
+    "iban": "DE71 0000 0000 0047 1108 15",
+    "bic": "FIKTDEX1XXX",
+    "bank": "Beispielbank Leipzig",
+    "email": "rechnung@fiktiva.example",
+    "register": "Amtsgericht Leipzig, HRB 000000",
+    "ceo": "Jana Mustermann"
+  },
+  "buyer": {
+    "name_lines": [
+      "Pumpenwerk Ahrens AG",
+      "z. Hd. Frau Brandt"
+    ],
+    "street": "Wehrstraße 5",
+    "postal_code": "57439",
+    "city": "Attendorn",
+    "customer_number": "40118"
+  },
+  "invoice": {
+    "number": "FA-26-10343",
+    "date": "12.10.2026",
+    "service_date": "12.10.2026",
+    "order_number": "4700898186",
+    "shipping": "DHL"
+  },
+  "positions": [
+    {
+      "qty": 25,
+      "unit": "",
+      "description": [
+        "Spannstift ISO 8752 4x20 14-5322"
+      ],
+      "unit_price": null,
+      "kind": "without_price",
+      "price_unit": null,
+      "price_unit_qty": null,
+      "min_order": true,
+      "total": null
+    },
+    {
+      "qty": 50,
+      "unit": "",
+      "description": [
+        "Blindniet 4x10 Alu 49-4350"
+      ],
+      "unit_price": null,
+      "kind": "without_price",
+      "price_unit": null,
+      "price_unit_qty": null,
+      "min_order": true,
+      "total": null
+    },
+    {
+      "qty": 10,
+      "unit": "",
+      "description": [
+        "Gummipuffer 20x15 M6 87-3676"
+      ],
+      "unit_price": null,
+      "kind": "without_price",
+      "price_unit": null,
+      "price_unit_qty": null,
+      "min_order": true,
+      "total": null
+    },
+    {
+      "qty": 100,
+      "unit": "",
+      "description": [
+        "Passscheibe 10x16x0,5 55-7301"
+      ],
+      "unit_price": null,
+      "kind": "without_price",
+      "price_unit": null,
+      "price_unit_qty": null,
+      "min_order": true,
+      "total": null
+    },
+    {
+      "qty": 200,
+      "unit": "",
+      "description": [
+        "Stellring 12 mm verzinkt 12-8904"
+      ],
+      "unit_price": null,
+      "kind": "without_price",
+      "price_unit": null,
+      "price_unit_qty": null,
+      "min_order": true,
+      "total": null
+    },
+    {
+      "qty": 25,
+      "unit": "",
+      "description": [
+        "Passscheibe 10x16x0,5 28-7431"
+      ],
+      "unit_price": null,
+      "kind": "without_price",
+      "price_unit": null,
+      "price_unit_qty": null,
+      "min_order": true,
+      "total": null
+    },
+    {
+      "qty": 20,
+      "unit": "",
+      "description": [
+        "Federring DIN 127 B6 23-9840"
+      ],
+      "unit_price": null,
+      "kind": "without_price",
+      "price_unit": null,
+      "price_unit_qty": null,
+      "min_order": true,
+      "total": null
+    },
+    {
+      "qty": 1,
+      "unit": "",
+      "description": [
+        "Mindestauftragswert"
+      ],
+      "unit_price": "150.00",
+      "kind": "flat_rate",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": true,
+      "total": "150.00"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": "2.00",
+  "discount_days": 14,
+  "payment_days": 30,
+  "totals": {
+    "net": "150.00",
+    "vat": "28.50",
+    "gross": "178.50"
+  },
+  "payment": {
+    "discount_date": "26.10.2026",
+    "due_date": "11.11.2026",
+    "discount_amount": "3.57",
+    "discount_base": "gross"
+  },
+  "payment_terms_text": [
+    "zahlbar bis 26.10.26 bei 2 % Skonto (3,57 €)",
+    "bis 11.11.2026 ohne Abzug"
+  ],
+  "page_count": 1,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "line_count": 8,
+      "transfer": null,
+      "carry_forward": null,
+      "summary_present": true,
+      "payment_block_present": true
+    }
+  ],
+  "test_flags": {
+    "address_name_lines": 2,
+    "address_blank_lines": 1,
+    "address_attention_line": true,
+    "address_department_line": false,
+    "two_line_company_name": false,
+    "missing_order_number": false,
+    "shipping_empty": false,
+    "discount_applied": true,
+    "blank_unit_flat_rate": true,
+    "without_price_count": 7,
+    "flat_rate_count": 1,
+    "min_order": "rein",
+    "price_unit_100_count": 0,
+    "two_three_line_positions": 0,
+    "four_five_line_positions": 0,
+    "has_qty_thousands": false,
+    "carry_forward": false,
+    "last_table_row_index": 10,
+    "note": "reiner Mindestauftrag"
+  },
+  "sha256": "32ab6780ed5b5a264510b4f901163eb049775c46ed9f1669b7da365f8803cd1b"
+}

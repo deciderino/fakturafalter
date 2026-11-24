@@ -1,0 +1,147 @@
+{
+  "datei": "Rechnung_004_FA-26-10329.pdf",
+  "format": "PDF 1.4 (reportlab, Schriften eingebettet)",
+  "holdout": false,
+  "seller": {
+    "name": "Fiktiva Antriebstechnik GmbH",
+    "street": "Musterring 12",
+    "postal_code": "04179",
+    "city": "Leipzig",
+    "ust_id": "DE314159262",
+    "iban": "DE71 0000 0000 0047 1108 15",
+    "bic": "FIKTDEX1XXX",
+    "bank": "Beispielbank Leipzig",
+    "email": "rechnung@fiktiva.example",
+    "register": "Amtsgericht Leipzig, HRB 000000",
+    "ceo": "Jana Mustermann"
+  },
+  "buyer": {
+    "name_lines": [
+      "Oderbruch Fördertechnik GmbH",
+      "Abteilung Einkauf"
+    ],
+    "street": "Gewerbepark 12",
+    "postal_code": "15344",
+    "city": "Strausberg",
+    "customer_number": "31002"
+  },
+  "invoice": {
+    "number": "FA-26-10329",
+    "date": "07.10.2026",
+    "service_date": "07.10.2026",
+    "order_number": "4700987335",
+    "shipping": "Lieferung frei Haus"
+  },
+  "positions": [
+    {
+      "qty": 150,
+      "unit": "Stk.",
+      "description": [
+        "Zylinderschraube ISO 4762 M6x20 8.8 verzinkt 49-9059"
+      ],
+      "unit_price": "7.51",
+      "kind": "regular",
+      "price_unit": "/100",
+      "price_unit_qty": 100,
+      "min_order": false,
+      "total": "11.27"
+    },
+    {
+      "qty": 400,
+      "unit": "Stk.",
+      "description": [
+        "Sicherungsring DIN 471 20x1,2 39-7427"
+      ],
+      "unit_price": "14.16",
+      "kind": "regular",
+      "price_unit": "/100",
+      "price_unit_qty": 100,
+      "min_order": false,
+      "total": "56.64"
+    },
+    {
+      "qty": 750,
+      "unit": "Stk.",
+      "description": [
+        "Passfeder DIN 6885 A 8x7x40 54-8766"
+      ],
+      "unit_price": "35.25",
+      "kind": "regular",
+      "price_unit": "/100",
+      "price_unit_qty": 100,
+      "min_order": false,
+      "total": "264.38"
+    },
+    {
+      "qty": 750,
+      "unit": "Stk.",
+      "description": [
+        "Passfeder DIN 6885 A 8x7x40 47-5539"
+      ],
+      "unit_price": "35.00",
+      "kind": "regular",
+      "price_unit": "/100",
+      "price_unit_qty": 100,
+      "min_order": false,
+      "total": "262.50"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": "3.00",
+  "discount_days": 10,
+  "payment_days": 30,
+  "totals": {
+    "net": "594.79",
+    "vat": "113.01",
+    "gross": "707.80"
+  },
+  "payment": {
+    "discount_date": "17.10.2026",
+    "due_date": "06.11.2026",
+    "discount_amount": "21.23",
+    "discount_base": "gross"
+  },
+  "payment_terms_text": [
+    "zahlbar bis 17.10.26 bei 3 % Skonto (21,23 €)",
+    "bis 06.11.2026 ohne Abzug"
+  ],
+  "page_count": 1,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "line_count": 4,
+      "transfer": null,
+      "carry_forward": null,
+      "summary_present": true,
+      "payment_block_present": true
+    }
+  ],
+  "test_flags": {
+    "address_name_lines": 2,
+    "address_blank_lines": 1,
+    "address_attention_line": false,
+    "address_department_line": true,
+    "two_line_company_name": false,
+    "missing_order_number": false,
+    "shipping_empty": false,
+    "discount_applied": true,
+    "blank_unit_flat_rate": false,
+    "without_price_count": 0,
+    "flat_rate_count": 0,
+    "min_order": null,
+    "price_unit_100_count": 4,
+    "two_three_line_positions": 0,
+    "four_five_line_positions": 0,
+    "has_qty_thousands": false,
+    "carry_forward": false,
+    "last_table_row_index": 6,
+    "note": "Preiseinheit /100"
+  },
+  "sha256": "5948def033ca135aadeb7d0627bf1bbb28bf165ca98cf55898e707de6d56ecdf"
+}

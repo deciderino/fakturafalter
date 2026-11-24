@@ -1,0 +1,160 @@
+{
+  "datei": "Rechnung_002_2026-0426.pdf",
+  "format": "PDF 1.4 (reportlab), A4, Schrift Times-Roman (Standard-14, nicht eingebettet)",
+  "familie": "f02_briefkopf",
+  "quelle": "Q2",
+  "holdout": false,
+  "split": "training",
+  "seller": {
+    "name": "Ingenieurbüro Brandauer GmbH",
+    "street": "Am Klosterhof 9",
+    "postal_code": "37073",
+    "city": "Göttingen",
+    "ust_id": "DE315590279",
+    "iban": "DE96 0000 0000 0270 7300 91",
+    "bic": "BRANDEX1GOE",
+    "bank": "Beispiel-Volksbank Göttingen",
+    "email": "info@ib-brandauer.example",
+    "register": "Amtsgericht Göttingen HRB 00000",
+    "ceo": "Dipl.-Ing. Jakob Brandauer"
+  },
+  "buyer": {
+    "name_lines": [
+      "Hotel Seeblick Inh. M. Grüner",
+      "Verwaltung"
+    ],
+    "street": "Uferpromenade 12",
+    "postal_code": "88131",
+    "city": "Lindau (Bodensee)",
+    "customer_number": "2026-121"
+  },
+  "invoice": {
+    "number": "2026-0426",
+    "date": "15.10.2026",
+    "service_date": "15.10.2026",
+    "order_number": "",
+    "shipping": "",
+    "date_printed": "15. Oktober 2026"
+  },
+  "druck": {
+    "datum_format": "ausgeschrieben („3. November 2026“)",
+    "schrift": "Times-Roman",
+    "seitenformat": "A4"
+  },
+  "BT-72": "15.10.2026",
+  "BT-119": "19.00",
+  "positions": [
+    {
+      "qty": "1",
+      "unit": "Stk.",
+      "description": [
+        "Fahrtkosten Pauschale"
+      ],
+      "article_number": "",
+      "unit_price": "59.00",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "59.00"
+    },
+    {
+      "qty": "1.5",
+      "unit": "Std.",
+      "description": [
+        "Besprechung mit Bauherr und Fachplanern, für das",
+        "Bauvorhaben Erweiterung Lagerhalle, Abschnitt B"
+      ],
+      "article_number": "",
+      "unit_price": "103.50",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "155.25"
+    },
+    {
+      "qty": "1",
+      "unit": "Stk.",
+      "description": [
+        "Erstellung Brandschutznachweis, für das Bauvorhaben",
+        "Erweiterung Lagerhalle, Abschnitt B"
+      ],
+      "article_number": "",
+      "unit_price": "1198.00",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "1198.00"
+    },
+    {
+      "qty": "4",
+      "unit": "Std.",
+      "description": [
+        "Planungsleistung Technische Gebäudeausrüstung"
+      ],
+      "article_number": "",
+      "unit_price": "105.75",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "423.00"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": "2.00",
+  "discount_days": 7,
+  "payment_days": 30,
+  "totals": {
+    "net": "1835.25",
+    "vat": "348.70",
+    "gross": "2183.95"
+  },
+  "totals_printed": {
+    "net": "1835.25",
+    "vat": "348.70",
+    "gross": "2183.95"
+  },
+  "payment": {
+    "discount_date": "22.10.2026",
+    "due_date": "14.11.2026",
+    "discount_amount": "43.68",
+    "discount_base": "gross"
+  },
+  "payment_terms_text": [
+    "Zahlung innerhalb von 7 Tagen ab Rechnungseingang mit 2 % Skonto, innerhalb",
+    "von 30 Tagen ohne Abzüge an die unten angegebene Bankverbindung."
+  ],
+  "page_count": 1,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "transfer": null,
+      "carry_forward": null,
+      "summary_present": true
+    }
+  ],
+  "erwarteter_status": "ok",
+  "erwartete_hinweise": [],
+  "kosit": null,
+  "verapdf": null,
+  "validierung_hinweis": "lokal nicht validierbar / spätere Phase (KoSIT/veraPDF prüfen die App-Ausgabe, nicht diese PDFs)",
+  "korrekturen": null,
+  "korrekturen_hinweis": "erst beim echten Anlernen messbar",
+  "test_flags": {
+    "address_name_lines": 2,
+    "po_box": false,
+    "multi_line_positions": 2,
+    "shipping_position": false,
+    "page_format": "A4",
+    "payment": "skonto",
+    "pruefen": null,
+    "missing_order_number": true,
+    "note": "Firmenname zweizeilig, Skonto in Tagen"
+  },
+  "sha256": "255505aac4f1f643dfbd562d53b356dc91b9113d40baa40386f333b3b6b3d729"
+}

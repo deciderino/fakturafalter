@@ -1,0 +1,590 @@
+{
+  "datei": "Rechnung_003_103603.pdf",
+  "format": "PDF 1.4 (reportlab), A4, Schrift Times (Standard-14, nicht eingebettet)",
+  "familie": "f08_bildkopf",
+  "quelle": "Q10",
+  "holdout": true,
+  "split": "holdout",
+  "seller": {
+    "name": "Weserblick Elektrotechnik GmbH",
+    "street": "Am Speicher XI 7",
+    "postal_code": "28217",
+    "city": "Bremen",
+    "ust_id": "DE314775200",
+    "iban": "DE81 0000 0000 0045 1200 98",
+    "bic": "WESBDEX1BRE",
+    "bank": "Beispielbank Bremen",
+    "email": "rechnungen@weserblick-elektro.example",
+    "register": "Amtsgericht Bremen HRB 00000 HB",
+    "ceo": "Gesa Thormählen"
+  },
+  "buyer": {
+    "name_lines": [
+      "Kunsthandwerk Ilse Marbach"
+    ],
+    "street": "Kirchgasse 9",
+    "postal_code": "07743",
+    "city": "Jena",
+    "customer_number": "30240"
+  },
+  "invoice": {
+    "number": "103603",
+    "date": "19.10.2026",
+    "service_date": "19.10.2026",
+    "order_number": "",
+    "shipping": ""
+  },
+  "druck": {
+    "datum_format": "TT.MM.JJJJ",
+    "schrift": "Times",
+    "seitenformat": "A4"
+  },
+  "BT-72": "19.10.2026",
+  "BT-119": "19.00",
+  "positions": [
+    {
+      "qty": "20",
+      "unit": "Stk.",
+      "description": [
+        "Abzweigdose IP65 mit Klemmen, laut",
+        "Leistungsverzeichnis Pos. 3.2, Abnahme durch",
+        "Bauleitung"
+      ],
+      "article_number": "1929-S",
+      "unit_price": "4.08",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "81.60"
+    },
+    {
+      "qty": "2",
+      "unit": "Stk.",
+      "description": [
+        "Installationskabel NYM-J 3×1,5, Ring 50 m"
+      ],
+      "article_number": "1920-S",
+      "unit_price": "50.75",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "101.50"
+    },
+    {
+      "qty": "2",
+      "unit": "Stk.",
+      "description": [
+        "Unterverteilung 3-reihig, Aufputz"
+      ],
+      "article_number": "1925-W",
+      "unit_price": "172.00",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "344.00"
+    },
+    {
+      "qty": "1",
+      "unit": "Stk.",
+      "description": [
+        "Anfahrtspauschale Stadtgebiet"
+      ],
+      "article_number": "ANFAHRT",
+      "unit_price": "30.75",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "30.75"
+    },
+    {
+      "qty": "10",
+      "unit": "Stk.",
+      "description": [
+        "Steckdose Schuko Aufputz, grau"
+      ],
+      "article_number": "1928-S",
+      "unit_price": "8.46",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "84.60"
+    },
+    {
+      "qty": "8",
+      "unit": "Std.",
+      "description": [
+        "Montage Elektrofachkraft"
+      ],
+      "article_number": "MONTAGE",
+      "unit_price": "68.00",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "544.00"
+    },
+    {
+      "qty": "10",
+      "unit": "Stk.",
+      "description": [
+        "Kabelkanal 40 × 60, 2 m"
+      ],
+      "article_number": "1960-S",
+      "unit_price": "9.27",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "92.70"
+    },
+    {
+      "qty": "4",
+      "unit": "Stk.",
+      "description": [
+        "Kabeltrommel 25 m, IP44, inklusive Prüfung und",
+        "Dokumentation nach DIN VDE 0100-600"
+      ],
+      "article_number": "1896-S",
+      "unit_price": "44.00",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "176.00"
+    },
+    {
+      "qty": "1",
+      "unit": "Stk.",
+      "description": [
+        "Notleuchte Rettungszeichen"
+      ],
+      "article_number": "1936-S",
+      "unit_price": "96.75",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "96.75"
+    },
+    {
+      "qty": "3",
+      "unit": "Stk.",
+      "description": [
+        "Fehlerstromschutzschalter 40 A"
+      ],
+      "article_number": "1908-S",
+      "unit_price": "46.50",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "139.50"
+    },
+    {
+      "qty": "1",
+      "unit": "Stk.",
+      "description": [
+        "Messprotokoll DGUV V3 je Anlage"
+      ],
+      "article_number": "1964-W",
+      "unit_price": "65.25",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "65.25"
+    },
+    {
+      "qty": "4",
+      "unit": "Std.",
+      "description": [
+        "Montagehelfer"
+      ],
+      "article_number": "HELFER",
+      "unit_price": "46.00",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "184.00"
+    },
+    {
+      "qty": "2",
+      "unit": "Stk.",
+      "description": [
+        "Wallbox 11 kW inkl. Montagematerial"
+      ],
+      "article_number": "1968-S",
+      "unit_price": "607.00",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "1214.00"
+    },
+    {
+      "qty": "8",
+      "unit": "Stk.",
+      "description": [
+        "Bewegungsmelder Decke 360°"
+      ],
+      "article_number": "1906-S",
+      "unit_price": "28.25",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "226.00"
+    },
+    {
+      "qty": "2",
+      "unit": "Stk.",
+      "description": [
+        "LED-Hallenleuchte 150 W"
+      ],
+      "article_number": "1900-S",
+      "unit_price": "105.00",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "210.00"
+    },
+    {
+      "qty": "10",
+      "unit": "Stk.",
+      "description": [
+        "Abzweigdose IP65 mit Klemmen"
+      ],
+      "article_number": "1929-S",
+      "unit_price": "4.08",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "40.80"
+    },
+    {
+      "qty": "1",
+      "unit": "Stk.",
+      "description": [
+        "Installationskabel NYM-J 3×1,5, Ring 50 m"
+      ],
+      "article_number": "1920-S",
+      "unit_price": "50.75",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "50.75"
+    },
+    {
+      "qty": "2",
+      "unit": "Stk.",
+      "description": [
+        "Unterverteilung 3-reihig, Aufputz"
+      ],
+      "article_number": "1925-W",
+      "unit_price": "172.00",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "344.00"
+    },
+    {
+      "qty": "1",
+      "unit": "Stk.",
+      "description": [
+        "Anfahrtspauschale Stadtgebiet"
+      ],
+      "article_number": "ANFAHRT",
+      "unit_price": "30.75",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "30.75"
+    },
+    {
+      "qty": "30",
+      "unit": "Stk.",
+      "description": [
+        "Steckdose Schuko Aufputz, grau"
+      ],
+      "article_number": "1928-S",
+      "unit_price": "8.46",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "253.80"
+    },
+    {
+      "qty": "6",
+      "unit": "Std.",
+      "description": [
+        "Montage Elektrofachkraft"
+      ],
+      "article_number": "MONTAGE",
+      "unit_price": "68.00",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "408.00"
+    },
+    {
+      "qty": "10",
+      "unit": "Stk.",
+      "description": [
+        "Kabelkanal 40 × 60, 2 m"
+      ],
+      "article_number": "1960-S",
+      "unit_price": "9.27",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "92.70"
+    },
+    {
+      "qty": "2",
+      "unit": "Stk.",
+      "description": [
+        "Kabeltrommel 25 m, IP44"
+      ],
+      "article_number": "1896-S",
+      "unit_price": "44.00",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "88.00"
+    },
+    {
+      "qty": "1",
+      "unit": "Stk.",
+      "description": [
+        "Notleuchte Rettungszeichen"
+      ],
+      "article_number": "1936-S",
+      "unit_price": "96.75",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "96.75"
+    },
+    {
+      "qty": "3",
+      "unit": "Stk.",
+      "description": [
+        "Fehlerstromschutzschalter 40 A"
+      ],
+      "article_number": "1908-S",
+      "unit_price": "46.50",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "139.50"
+    },
+    {
+      "qty": "3",
+      "unit": "Stk.",
+      "description": [
+        "Messprotokoll DGUV V3 je Anlage"
+      ],
+      "article_number": "1964-W",
+      "unit_price": "65.25",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "195.75"
+    },
+    {
+      "qty": "8",
+      "unit": "Std.",
+      "description": [
+        "Montagehelfer, Lieferung auf Baustelle, Entsorgung",
+        "der Verpackung"
+      ],
+      "article_number": "HELFER",
+      "unit_price": "46.00",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "368.00"
+    },
+    {
+      "qty": "2",
+      "unit": "Stk.",
+      "description": [
+        "Wallbox 11 kW inkl. Montagematerial, Lieferung auf",
+        "Baustelle, Entsorgung der Verpackung"
+      ],
+      "article_number": "1968-S",
+      "unit_price": "607.00",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "1214.00"
+    },
+    {
+      "qty": "8",
+      "unit": "Stk.",
+      "description": [
+        "Bewegungsmelder Decke 360°"
+      ],
+      "article_number": "1906-S",
+      "unit_price": "28.25",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "226.00"
+    },
+    {
+      "qty": "6",
+      "unit": "Stk.",
+      "description": [
+        "LED-Hallenleuchte 150 W"
+      ],
+      "article_number": "1900-S",
+      "unit_price": "105.00",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "630.00"
+    },
+    {
+      "qty": "20",
+      "unit": "Stk.",
+      "description": [
+        "Abzweigdose IP65 mit Klemmen"
+      ],
+      "article_number": "1929-S",
+      "unit_price": "4.08",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "81.60"
+    },
+    {
+      "qty": "2",
+      "unit": "Stk.",
+      "description": [
+        "Installationskabel NYM-J 3×1,5, Ring 50 m"
+      ],
+      "article_number": "1920-S",
+      "unit_price": "50.75",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "101.50"
+    },
+    {
+      "qty": "1",
+      "unit": "Stk.",
+      "description": [
+        "Unterverteilung 3-reihig, Aufputz"
+      ],
+      "article_number": "1925-W",
+      "unit_price": "172.00",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "172.00"
+    },
+    {
+      "qty": "1",
+      "unit": "Stk.",
+      "description": [
+        "Anfahrtspauschale Stadtgebiet"
+      ],
+      "article_number": "ANFAHRT",
+      "unit_price": "30.75",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "30.75"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": null,
+  "discount_days": null,
+  "payment_days": 30,
+  "totals": {
+    "net": "8155.30",
+    "vat": "1549.51",
+    "gross": "9704.81"
+  },
+  "totals_printed": {
+    "net": "8155.30",
+    "vat": "1549.51",
+    "gross": "9704.81"
+  },
+  "payment": {
+    "discount_date": null,
+    "due_date": "18.11.2026",
+    "discount_amount": null,
+    "discount_base": null
+  },
+  "payment_terms_text": [
+    "30 Tage netto"
+  ],
+  "page_count": 2,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25
+      ],
+      "transfer": "5135.70",
+      "carry_forward": null,
+      "summary_present": false
+    },
+    {
+      "page": 2,
+      "position_indices": [
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34
+      ],
+      "transfer": null,
+      "carry_forward": null,
+      "summary_present": true
+    }
+  ],
+  "erwarteter_status": "ok",
+  "erwartete_hinweise": [],
+  "kosit": null,
+  "verapdf": null,
+  "validierung_hinweis": "lokal nicht validierbar / spätere Phase (KoSIT/veraPDF prüfen die App-Ausgabe, nicht diese PDFs)",
+  "korrekturen": null,
+  "korrekturen_hinweis": "erst beim echten Anlernen messbar",
+  "test_flags": {
+    "address_name_lines": 1,
+    "po_box": false,
+    "multi_line_positions": 4,
+    "shipping_position": false,
+    "page_format": "A4",
+    "payment": "netto",
+    "pruefen": null,
+    "missing_order_number": true,
+    "note": "Hold-out: 2 Seiten, kein Übertrag gedruckt",
+    "uebertrag_gedruckt": false,
+    "kopf_fuss_als_bild": true
+  },
+  "sha256": "3fab1dabb26576516aa0d2256b14fabe8c33883c6c9fc7dd72d14e9628ec0bfd"
+}

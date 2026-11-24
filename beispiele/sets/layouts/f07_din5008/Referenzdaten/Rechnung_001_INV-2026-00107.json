@@ -1,0 +1,144 @@
+{
+  "datei": "Rechnung_001_INV-2026-00107.pdf",
+  "format": "PDF 1.4 (reportlab), A4, Schrift Helvetica (Standard-14, nicht eingebettet)",
+  "familie": "f07_din5008",
+  "quelle": "Q9",
+  "holdout": false,
+  "split": "training",
+  "seller": {
+    "name": "Nordlicht Software GmbH",
+    "street": "Holtenauer Straße 88",
+    "postal_code": "24105",
+    "city": "Kiel",
+    "ust_id": "DE298110463",
+    "iban": "DE10 0000 0000 0090 1177 36",
+    "bic": "NORLDEX1KIE",
+    "bank": "Beispielbank Kiel",
+    "email": "buchhaltung@nordlicht-software.example",
+    "register": "HRB 00000 KI",
+    "ceo": "Henrike Jansen"
+  },
+  "buyer": {
+    "name_lines": [
+      "Zahnarztpraxis Dr. Okafor",
+      "z. Hd. Praxismanagement"
+    ],
+    "street": "Marktstraße 8",
+    "postal_code": "33602",
+    "city": "Bielefeld",
+    "customer_number": ""
+  },
+  "invoice": {
+    "number": "INV/2026/00107",
+    "date": "12.10.2026",
+    "service_date": "12.10.2026",
+    "order_number": "BE-2026183",
+    "shipping": ""
+  },
+  "druck": {
+    "datum_format": "TT.MM.JJJJ",
+    "schrift": "Helvetica",
+    "seitenformat": "A4"
+  },
+  "BT-72": "12.10.2026",
+  "BT-119": "19.00",
+  "positions": [
+    {
+      "qty": "5",
+      "unit": "Stk.",
+      "description": [
+        "Zusatzmodul Online-Buchung, inklusive",
+        "Dokumentation der Einstellungen"
+      ],
+      "article_number": "NL-LIZ-03",
+      "unit_price": "13.62",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "68.10"
+    },
+    {
+      "qty": "3.5",
+      "unit": "Std.",
+      "description": [
+        "Anpassung Druckvorlagen"
+      ],
+      "article_number": "NL-DL-03",
+      "unit_price": "109.00",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "381.50"
+    },
+    {
+      "qty": "2",
+      "unit": "Std.",
+      "description": [
+        "Schulung Anwender (online)"
+      ],
+      "article_number": "NL-DL-02",
+      "unit_price": "81.50",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "163.00"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": null,
+  "discount_days": null,
+  "payment_days": 14,
+  "totals": {
+    "net": "612.60",
+    "vat": "116.39",
+    "gross": "728.99"
+  },
+  "totals_printed": {
+    "net": "612.60",
+    "vat": "116.39",
+    "gross": "728.99"
+  },
+  "payment": {
+    "discount_date": null,
+    "due_date": "26.10.2026",
+    "discount_amount": null,
+    "discount_base": null
+  },
+  "payment_terms_text": [
+    "Zahlungsbedingungen: 14 Tage"
+  ],
+  "page_count": 1,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3
+      ],
+      "transfer": null,
+      "carry_forward": null,
+      "summary_present": true
+    }
+  ],
+  "erwarteter_status": "ok",
+  "erwartete_hinweise": [],
+  "kosit": null,
+  "verapdf": null,
+  "validierung_hinweis": "lokal nicht validierbar / spätere Phase (KoSIT/veraPDF prüfen die App-Ausgabe, nicht diese PDFs)",
+  "korrekturen": null,
+  "korrekturen_hinweis": "erst beim echten Anlernen messbar",
+  "test_flags": {
+    "address_name_lines": 2,
+    "po_box": false,
+    "multi_line_positions": 1,
+    "shipping_position": false,
+    "page_format": "A4",
+    "payment": "netto",
+    "pruefen": null,
+    "missing_order_number": false,
+    "note": "Lizenzen und Std., Kundenreferenz als „Referenz“",
+    "quelle": "S00896"
+  },
+  "sha256": "67c4b7ae38a162cb2f176d4c3ff70880d74d917ca466c051e8208ace75683194"
+}

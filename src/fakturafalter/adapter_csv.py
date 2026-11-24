@@ -1,0 +1,273 @@
+# SPDX-License-Identifier: Apache-2.0
+# Copyright 2026 Fakturafalter-Mitwirkende
+"""Adapter CSV / Festbreite: Datei + Profil -> Rechnungen."""
+
+from __future__ import annotations
+
+import fnmatch
+import re
+from collections import OrderedDict
+from pathlib import Path
+
+from .aufbau import Roh, rechnung_bauen
+from .konfig import Konfig
+from .modell import Herkunft, Rechnung
+from .werte import WertFehler, csv_lesen, datum, dekodieren, trennzeichen_erkennen, zahl
+
+
+class ProfilFehler(Exception):
+    pass
+
+
+class Zweifel(WertFehler):
+    """Wert lesbar, aber nicht eindeutig (z. B. „2.5“ in einem Profil mit Dezimalkomma) -> „prüfen“."""
+
+
+class Pruefen(str):
+    """Hinweistext der Stufe „prüfen“ (statt „fehler“) in der Fehlerliste einer Rechnung."""
+
+
+def _trennzeichen_zweifel(roh: str, dezimal: str, tausender: str) -> bool:
+    """Steht das „andere“ Trennzeichen im Wert, ohne dass es eine gültige Tausendergruppe bildet?
+    Beispiel Profil „,“/„.“: „1.234,50“ ist eindeutig, „2.5“ nicht (2,5 oder 25?)."""
+    if dezimal not in (",", "."):
+        return False
+    andere = "." if dezimal == "," else ","
+    if andere not in roh:
+        return False
+    if andere != tausender:
+        return True
+    t, d = re.escape(tausender), re.escape(dezimal)
+    return not re.fullmatch(rf"[+-]?\d{{1,3}}(?:{t}\d{{3}})+(?:{d}\d+)?-?", roh.replace(" ", ""))
+
+
+def _typisieren(roh: str, d: dict, profil: dict):
+    typ = d.get("typ", "text")
+    zs = profil.get("zahlen", {})
+    if d.get("trim", True):
+        roh = roh.strip()
+    if roh == "":
+        return None
+    if typ == "prozent":  # „10“, „10 %“, „10,5%“
+        roh, typ = roh.replace("%", "").strip(), "zahl"
+        if roh == "":
+            return None
+    if typ == "zahl":
+        dez, tau = zs.get("dezimal", ","), zs.get("tausender", ".")
+        implizit = int(d.get("implizite_nachkommastellen", 0))
+        if not implizit and _trennzeichen_zweifel(roh, dez, tau):
+            raise Zweifel(
+                f"„{roh}“ passt nicht zum Dezimalzeichen „{dez}“ des Profils – Wert nicht übernommen, "
+                "bitte prüfen"
+            )
+        return zahl(roh, dez, tau, implizit)
+    if typ == "ganzzahl":
+        try:
+            return str(int(roh))
+        except ValueError:
+            raise WertFehler(f"„{roh}“ ist keine ganze Zahl") from None
+    if typ == "datum":
+        return datum(roh, d.get("format") or profil.get("datum", {}).get("format", "%d.%m.%Y"))
+    return roh
+
+
+def profil_passt(pfad: Path, profil: dict) -> bool:
+    muster = profil.get("datei", {}).get("muster", "*.csv")
+    if not fnmatch.fnmatch(pfad.name.lower(), muster.lower()):
+        return False
+    art = profil.get("aufbau", {}).get("art")
+    if art == "feste_breite":
+        return _feste_breite_passt(pfad, profil)
+    # Kopfzeile muss alle benötigten Spalten enthalten
+    try:
+        text, _ = dekodieren(pfad.read_bytes(), profil.get("datei", {}).get("kodierung", "auto"))
+    except UnicodeDecodeError:
+        return False
+    trenn = profil.get("datei", {}).get("trennzeichen", "auto")
+    trenn = trennzeichen_erkennen(text) if trenn in (None, "auto") else trenn
+    kopf = [c.strip() for c in (csv_lesen(text.splitlines()[0] if text else "", trenn) or [[]])[0]]
+    noetig = {
+        d["spalte"]
+        for teil in ("kopf", "position")
+        for d in profil.get("felder", {}).get(teil, {}).values()
+        if "spalte" in d and not d.get("optional")
+    }
+    return noetig.issubset(kopf)
+
+
+def _feste_breite_passt(pfad: Path, profil: dict) -> bool:
+    """Das Dateimuster allein (z. B. „*.txt“) passt auch auf Textdrucke. Deshalb muss die erste belegte Zeile
+    ein Kopfsatz des Profils sein und jede belegte Zeile eine bekannte Satzart tragen."""
+    try:
+        text, _ = dekodieren(pfad.read_bytes(), profil.get("datei", {}).get("kodierung", "auto"))
+    except (OSError, UnicodeDecodeError):
+        return False
+    aufbau = profil.get("aufbau", {})
+    sa_def = aufbau.get("satzart", {"von": 1, "bis": 1})
+    saetze = profil.get("saetze", {})
+    zeilen = [z for z in text.replace("\f", "\n").splitlines() if z.strip()]
+    if not zeilen:
+        return False
+    arten = [z[sa_def["von"] - 1 : sa_def["bis"]] for z in zeilen]
+    return arten[0] == aufbau.get("kopf", "K") and all(a in saetze for a in arten)
+
+
+def lesen(pfad: Path, profil: dict, konfig: Konfig) -> list[Rechnung]:
+    raw = pfad.read_bytes()
+    dat = profil.get("datei", {})
+    text, kod = dekodieren(raw, dat.get("kodierung", "auto"))
+    art = profil.get("aufbau", {}).get("art", "zeile_je_position")
+    if art == "feste_breite":
+        gruppen = _feste_breite(text, profil, pfad)
+    else:
+        gruppen = _csv(text, profil, pfad)
+    rechnungen = []
+    for nr, (kopf, pos, fehler) in gruppen.items():
+        r = rechnung_bauen(kopf, pos, profil, konfig, quelle=str(pfad))
+        for f in fehler:
+            r.hinweis("pruefen" if isinstance(f, Pruefen) else "fehler", f)
+        r.herkunft.setdefault("_kodierung", Herkunft(f"erkannt: {kod}", 1.0))
+        r.profil = str(
+            profil.get("profil") or profil.get("name") or Path(profil.get("_datei", "profil")).stem
+        )
+        rechnungen.append(r)
+    return rechnungen
+
+
+def _csv(text: str, profil: dict, pfad: Path):
+    dat = profil.get("datei", {})
+    trenn = dat.get("trennzeichen", "auto")
+    trenn = trennzeichen_erkennen(text) if trenn in (None, "auto") else trenn
+    zeilen = csv_lesen(text, trenn, dat.get("textbegrenzer", '"'))
+    zeilen = zeilen[int(dat.get("zeilen_ueberspringen", 0)) :]
+    if not zeilen:
+        raise ProfilFehler("Datei ist leer")
+    kopfzeile = [c.strip() for c in zeilen[0]]
+    daten = zeilen[1:] if dat.get("kopfzeile", True) else zeilen
+    start = 2 if dat.get("kopfzeile", True) else 1
+    aufbau = profil.get("aufbau", {})
+    felder = profil.get("felder", {})
+    schl = aufbau.get("rechnung_schluessel")
+    gruppen: OrderedDict = OrderedDict()
+
+    def feldsatz(row: dict, defs: dict, zeile: int, fehler: list) -> Roh:
+        roh: Roh = {}
+        for feld, d in defs.items():
+            h = Herkunft(f"csv:{pfad.name} Zeile {zeile} Spalte {d.get('spalte', 'fest')}", 1.0)
+            if "fest" in d:
+                roh[feld] = (str(d["fest"]), Herkunft("profil:fest", 1.0))
+                continue
+            if d.get("spalte") not in row:
+                if not d.get("optional"):
+                    fehler.append(f"Spalte „{d.get('spalte')}“ fehlt")
+                continue
+            try:
+                roh[feld] = (_typisieren(row[d["spalte"]], d, profil), h)
+            except Zweifel as e:
+                fehler.append(Pruefen(f"Zeile {zeile}, {feld}: {e}"))
+            except WertFehler as e:
+                fehler.append(f"Zeile {zeile}, {feld}: {e}")
+        return roh
+
+    for i, werte in enumerate(daten):
+        zeile = start + i
+        if not any(w.strip() for w in werte):
+            continue
+        row = dict(zip(kopfzeile, werte))
+        key = (row.get(schl) or "").strip()
+        g = gruppen.setdefault(key, [None, [], []])
+        if aufbau.get("art") == "satzart":
+            sa = (row.get(aufbau.get("satzart_spalte", "Satzart")) or "").strip()
+            if sa == aufbau.get("kopf", "K"):
+                g[0] = feldsatz(row, felder.get("kopf", {}), zeile, g[2])
+            elif sa == aufbau.get("position", "P"):
+                g[1].append(feldsatz(row, felder.get("position", {}), zeile, g[2]))
+            elif sa in (
+                aufbau.get("rabatt", "R"),
+                aufbau.get("zuschlag", "Z"),
+            ):  # Rabatt-/Zuschlagszeile (BG-20/21)
+                roh = feldsatz(
+                    row,
+                    {**felder.get("position", {}), **felder.get("zu_abschlag", {})},
+                    zeile,
+                    g[2],
+                )
+                roh["zeilenart"] = (
+                    "rabatt" if sa == aufbau.get("rabatt", "R") else "zuschlag",
+                    Herkunft(f"csv:{pfad.name} Zeile {zeile} Satzart {sa}", 1.0),
+                )
+                g[1].append(roh)
+            else:
+                g[2].append(f"Zeile {zeile}: unbekannte Satzart „{sa}“")
+        else:  # zeile_je_position
+            k = feldsatz(row, felder.get("kopf", {}), zeile, g[2])
+            if g[0] is None:
+                g[0] = k
+            else:
+                for f in aufbau.get("kopf_muss_gleich_sein", []):
+                    if row.get(f) != g[0].get("_roh_" + f, (row.get(f),))[0]:
+                        g[2].append(
+                            f"Zeile {zeile}: Kopfwert „{f}“ weicht innerhalb der Rechnung ab"
+                        )
+            for f in aufbau.get("kopf_muss_gleich_sein", []):
+                g[0].setdefault("_roh_" + f, (row.get(f), None))
+            g[1].append(feldsatz(row, felder.get("position", {}), zeile, g[2]))
+    out = OrderedDict()
+    for key, (kopf, pos, fehler) in gruppen.items():
+        if kopf is None:
+            kopf = {}
+            fehler.append("Kopfsatz fehlt")
+        kopf = {k: v for k, v in kopf.items() if not k.startswith("_roh_")}
+        out[key] = (kopf, pos, fehler)
+    return out
+
+
+def _feste_breite(text: str, profil: dict, pfad: Path):
+    aufbau = profil["aufbau"]
+    sa_def = aufbau.get("satzart", {"von": 1, "bis": 1})
+    saetze = profil.get("saetze", {})
+    fest = profil.get("fest", {})
+    gruppen: OrderedDict = OrderedDict()
+    for i, line in enumerate(text.splitlines(), 1):
+        if not line.strip():
+            continue
+        sa = line[sa_def["von"] - 1 : sa_def["bis"]]
+        defs = saetze.get(sa)
+        if defs is None:
+            continue
+        roh: Roh = {}
+        fehler = []
+        for feld, d in defs.items():
+            stueck = line[d["von"] - 1 : d["bis"]]
+            h = Herkunft(f"fest:{pfad.name} Zeile {i} Spalten {d['von']}-{d['bis']}", 1.0)
+            try:
+                v = _typisieren(stueck, d, profil)
+            except Zweifel as e:
+                fehler.append(Pruefen(f"Zeile {i}, {feld}: {e}"))
+                continue
+            except WertFehler as e:
+                if not d.get("optional"):
+                    fehler.append(f"Zeile {i}, {feld}: {e}")
+                continue
+            roh[feld] = (v, h)
+        key = str(roh.get("BT-1", ("",))[0])
+        g = gruppen.setdefault(key, [None, [], []])
+        g[2].extend(fehler)
+        if sa == aufbau.get("kopf", "K"):
+            for f, v in fest.items():
+                roh[f] = (str(v), Herkunft("profil:fest", 1.0))
+            g[0] = roh
+        else:
+            if sa in (
+                aufbau.get("rabatt"),
+                aufbau.get("zuschlag"),
+            ):  # Rabatt-/Zuschlagssatz (BG-20/21)
+                roh["zeilenart"] = (
+                    "rabatt" if sa == aufbau.get("rabatt") else "zuschlag",
+                    Herkunft(f"fest:{pfad.name} Zeile {i} Satzart {sa}", 1.0),
+                )
+            g[1].append(roh)
+    return OrderedDict(
+        (k, (v[0] or {}, v[1], v[2] + ([] if v[0] else ["Kopfsatz fehlt"])))
+        for k, v in gruppen.items()
+    )

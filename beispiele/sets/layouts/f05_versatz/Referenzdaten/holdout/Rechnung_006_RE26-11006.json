@@ -1,0 +1,217 @@
+{
+  "datei": "Rechnung_006_RE26-11006.pdf",
+  "format": "PDF 1.4 (reportlab), A4, Schrift Helvetica (Standard-14, nicht eingebettet)",
+  "familie": "f05_versatz",
+  "quelle": "Q5",
+  "holdout": true,
+  "split": "holdout",
+  "seller": {
+    "name": "Kerber Bürobedarf GmbH",
+    "street": "Stadtgraben 17",
+    "postal_code": "94315",
+    "city": "Straubing",
+    "ust_id": "DE139055215",
+    "iban": "DE87 0000 0000 0752 0099 15",
+    "bic": "KERBDEX1STR",
+    "bank": "Beispielbank Niederbayern",
+    "email": "service@kerber-buero.example",
+    "register": "Amtsgericht Straubing HRB 0000",
+    "ceo": "Thomas Kerber"
+  },
+  "buyer": {
+    "name_lines": [
+      "Landratsamt Musterhausen",
+      "Sachgebiet IT"
+    ],
+    "street": "Bahnhofplatz 2",
+    "postal_code": "84028",
+    "city": "Landshut",
+    "customer_number": "4802"
+  },
+  "invoice": {
+    "number": "RE26-11006",
+    "date": "",
+    "service_date": "31.10.2026",
+    "order_number": "",
+    "shipping": ""
+  },
+  "druck": {
+    "datum_format": "TT.MM.JJJJ",
+    "schrift": "Helvetica",
+    "seitenformat": "A4"
+  },
+  "BT-72": "31.10.2026",
+  "BT-119": "19.00",
+  "positions": [
+    {
+      "qty": "10",
+      "unit": "Stk.",
+      "description": [
+        "Textmarker 4er-Set"
+      ],
+      "article_number": "120020",
+      "unit_price": "3.99",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "39.90"
+    },
+    {
+      "qty": "2",
+      "unit": "Stk.",
+      "description": [
+        "Moderationskarten 250 Stück"
+      ],
+      "article_number": "180010",
+      "unit_price": "9.12",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "18.24"
+    },
+    {
+      "qty": "10",
+      "unit": "Stk.",
+      "description": [
+        "Recyclingpapier A4 80 g, 500 Blatt"
+      ],
+      "article_number": "100251",
+      "unit_price": "4.92",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "49.20"
+    },
+    {
+      "qty": "10",
+      "unit": "Stk.",
+      "description": [
+        "Trennblätter A4, 100 Stück"
+      ],
+      "article_number": "110520",
+      "unit_price": "4.80",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "48.00"
+    },
+    {
+      "qty": "48",
+      "unit": "Stk.",
+      "description": [
+        "Bleistift HB mit Radierer"
+      ],
+      "article_number": "120031",
+      "unit_price": "0.29",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "13.92"
+    },
+    {
+      "qty": "2",
+      "unit": "Stk.",
+      "description": [
+        "Versandtaschen C4, 250 Stück, FSC-zertifiziert, chlorfrei",
+        "gebleicht"
+      ],
+      "article_number": "130140",
+      "unit_price": "21.50",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "43.00"
+    },
+    {
+      "qty": "1",
+      "unit": "Stk.",
+      "description": [
+        "Versandkosten Paket"
+      ],
+      "article_number": "900001",
+      "unit_price": "6.90",
+      "kind": "shipping",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "6.90"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": null,
+  "discount_days": null,
+  "payment_days": 14,
+  "totals": {
+    "net": "219.16",
+    "vat": "41.64",
+    "gross": "260.80"
+  },
+  "totals_printed": {
+    "net": "219.16",
+    "vat": "41.64",
+    "gross": "260.80"
+  },
+  "payment": {
+    "discount_date": null,
+    "due_date": "16.11.2026",
+    "discount_amount": null,
+    "discount_base": null
+  },
+  "payment_terms_text": [
+    "Zahlungsziel: 14 Tage"
+  ],
+  "page_count": 1,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "transfer": null,
+      "carry_forward": null,
+      "summary_present": true
+    }
+  ],
+  "erwarteter_status": "fehler",
+  "erwartete_hinweise": [
+    "FEHLER [BT-2] Rechnungsdatum (BT-2) fehlt. Pflichtangabe nach § 14 Abs. 4 Nr. 3 UStG."
+  ],
+  "kosit": null,
+  "verapdf": null,
+  "validierung_hinweis": "lokal nicht validierbar / spätere Phase (KoSIT/veraPDF prüfen die App-Ausgabe, nicht diese PDFs)",
+  "korrekturen": null,
+  "korrekturen_hinweis": "erst beim echten Anlernen messbar",
+  "test_flags": {
+    "address_name_lines": 2,
+    "po_box": false,
+    "multi_line_positions": 1,
+    "shipping_position": true,
+    "page_format": "A4",
+    "payment": "netto",
+    "pruefen": null,
+    "missing_order_number": true,
+    "note": "Hold-out FEHLER: Rechnungsdatum nicht gedruckt (Lieferdatum steht da)",
+    "auftragsnummer": "AU102078"
+  },
+  "rolle": "holdout-fehler",
+  "moegliche_folgehinweise": [],
+  "fehlerart": "rechnungsdatum_fehlt",
+  "fehler_beschreibung": "Rechnungsdatum nicht gedruckt (Feld leer, Lieferdatum vorhanden); sonst alles richtig",
+  "falle": null,
+  "falle_beschreibung": null,
+  "fehler_detail": {
+    "nicht_gedruckt": "02.11.2026",
+    "hinweis": "Zahl- und Skontodaten im Soll aus dem nicht gedruckten Datum berechnet"
+  },
+  "totals_berechnet": {
+    "net": "219.16",
+    "vat": "41.64",
+    "gross": "260.80"
+  },
+  "sha256": "8f10438f5a6583a7638ff1f1b18d2fa696bdc647e23e99793f90fcf6a3bfbdaf"
+}

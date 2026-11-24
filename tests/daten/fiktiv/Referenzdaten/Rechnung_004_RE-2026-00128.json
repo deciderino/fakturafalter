@@ -1,0 +1,122 @@
+{
+  "datei": "Rechnung_004_RE-2026-00128.pdf",
+  "format": "PDF/A-2b",
+  "seller": {
+    "name": "Alberon Industriekomponenten GmbH",
+    "street": "Prüfwerkstraße 18",
+    "postal_code": "09111",
+    "city": "Chemnitz",
+    "ust_id": "DE123456789",
+    "iban": "DE89 3704 0044 0532 0130 00",
+    "bic": "COBADEFFXXX",
+    "bank": "Commerzbank AG",
+    "email": "rechnung@alberon.example",
+    "register": "Amtsgericht Chemnitz, HRB 999999",
+    "ceo": "Markus Seidel"
+  },
+  "buyer": {
+    "name_lines": [
+      "Lichtbogen Gerätebau AG"
+    ],
+    "street": "Feldrain 12",
+    "postal_code": "01067",
+    "city": "Dresden",
+    "customer_number": "81036"
+  },
+  "invoice": {
+    "number": "RE-2026-00128",
+    "date": "09.08.2026",
+    "service_date": "09.08.2026",
+    "order_number": "2026_3136-A",
+    "shipping": "Lieferung"
+  },
+  "positions": [
+    {
+      "qty": 20,
+      "unit": "Stk.",
+      "description": [
+        "Spannhülse 527897"
+      ],
+      "unit_price": "180.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "3610.00"
+    },
+    {
+      "qty": 3,
+      "unit": "Stk.",
+      "description": [
+        "Passstift 638707"
+      ],
+      "unit_price": "2.35",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "7.05"
+    },
+    {
+      "qty": 4,
+      "unit": "Std.",
+      "description": [
+        "Montagewinkel 351865"
+      ],
+      "unit_price": "7.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "30.00"
+    },
+    {
+      "qty": 5000,
+      "unit": "Stk.",
+      "description": [
+        "Montagewinkel 757334"
+      ],
+      "unit_price": "2.35",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "11750.00"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": null,
+  "discount_days": null,
+  "payment_days": 30,
+  "totals": {
+    "net": "15397.05",
+    "vat": "2925.44",
+    "gross": "18322.49"
+  },
+  "payment": {
+    "discount_date": null,
+    "due_date": "08.09.2026",
+    "discount_amount": null
+  },
+  "page_count": 1,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "line_count": 4,
+      "transfer": null,
+      "summary_present": true,
+      "payment_block_present": true
+    }
+  ],
+  "test_flags": {
+    "address_name_lines": 1,
+    "missing_order_number": false,
+    "shipping_empty": false,
+    "discount_applied": false,
+    "blank_unit_flat_rate": false,
+    "without_price_count": 0,
+    "flat_rate_count": 0,
+    "two_three_line_positions": 0,
+    "four_five_line_positions": 0,
+    "has_qty_thousands": true
+  },
+  "sha256": "618851754ead4b88f1cce334a657f44fd1febe822a39d4311a5376bfb8ac02c2"
+}

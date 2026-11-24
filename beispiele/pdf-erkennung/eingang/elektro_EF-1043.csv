@@ -1,0 +1,33 @@
+belegnr,belegdatum,leistungsdatum,kunde,strasse,plz,ort,menge,einheit,bezeichnung,preis,ust
+EF-1043,11.10.2026,09.10.2026,Wohnbau Nordring GmbH,Nordring 14,44787,Bochum,4.5,h,Arbeitszeit Elektromeister Raum 1,68.00,19
+EF-1043,11.10.2026,09.10.2026,Wohnbau Nordring GmbH,Nordring 14,44787,Bochum,1,h,Arbeitszeit Geselle Raum 1,54.50,19
+EF-1043,11.10.2026,09.10.2026,Wohnbau Nordring GmbH,Nordring 14,44787,Bochum,40,m,"Mantelleitung NYM-J 3x1,5 mm² grau, Ring 50 m, verlegt auf Putz inklusive Schellen Raum 1",1.85,19
+EF-1043,11.10.2026,09.10.2026,Wohnbau Nordring GmbH,Nordring 14,44787,Bochum,4,Stk,Schalterprogramm reinweiß Wechselschalter mit Rahmen einfach Raum 1,12.40,19
+EF-1043,11.10.2026,09.10.2026,Wohnbau Nordring GmbH,Nordring 14,44787,Bochum,1,Stk,Steckdose Schuko mit Klappdeckel für Feuchtraum IP44 Raum 1,9.90,19
+EF-1043,11.10.2026,09.10.2026,Wohnbau Nordring GmbH,Nordring 14,44787,Bochum,7,Stk,"LED-Panel 60x60 cm neutralweiß 4000 K, Einbau in Rasterdecke Raum 1",79.00,19
+EF-1043,11.10.2026,09.10.2026,Wohnbau Nordring GmbH,Nordring 14,44787,Bochum,8,Stk,Fehlerstromschutzschalter 40 A 30 mA vierpolig Raum 1,64.80,19
+EF-1043,11.10.2026,09.10.2026,Wohnbau Nordring GmbH,Nordring 14,44787,Bochum,4.5,m,Kabelkanal 40x60 mm Raum 1,7.20,19
+EF-1043,11.10.2026,09.10.2026,Wohnbau Nordring GmbH,Nordring 14,44787,Bochum,4,Stk,Anfahrt Stadtgebiet Raum 1,29.00,19
+EF-1043,11.10.2026,09.10.2026,Wohnbau Nordring GmbH,Nordring 14,44787,Bochum,3,h,Arbeitszeit Elektromeister Raum 2,68.00,19
+EF-1043,11.10.2026,09.10.2026,Wohnbau Nordring GmbH,Nordring 14,44787,Bochum,25,h,Arbeitszeit Geselle Raum 2,54.50,19
+EF-1043,11.10.2026,09.10.2026,Wohnbau Nordring GmbH,Nordring 14,44787,Bochum,4.5,m,"Mantelleitung NYM-J 3x1,5 mm² grau, Ring 50 m, verlegt auf Putz inklusive Schellen Raum 2",1.85,19
+EF-1043,11.10.2026,09.10.2026,Wohnbau Nordring GmbH,Nordring 14,44787,Bochum,8,Stk,Schalterprogramm reinweiß Wechselschalter mit Rahmen einfach Raum 2,12.40,19
+EF-1043,11.10.2026,09.10.2026,Wohnbau Nordring GmbH,Nordring 14,44787,Bochum,7,Stk,Steckdose Schuko mit Klappdeckel für Feuchtraum IP44 Raum 2,9.90,19
+EF-1043,11.10.2026,09.10.2026,Wohnbau Nordring GmbH,Nordring 14,44787,Bochum,4,Stk,"LED-Panel 60x60 cm neutralweiß 4000 K, Einbau in Rasterdecke Raum 2",79.00,19
+EF-1043,11.10.2026,09.10.2026,Wohnbau Nordring GmbH,Nordring 14,44787,Bochum,7,Stk,Fehlerstromschutzschalter 40 A 30 mA vierpolig Raum 2,64.80,19
+EF-1043,11.10.2026,09.10.2026,Wohnbau Nordring GmbH,Nordring 14,44787,Bochum,1,m,Kabelkanal 40x60 mm Raum 2,7.20,19
+EF-1043,11.10.2026,09.10.2026,Wohnbau Nordring GmbH,Nordring 14,44787,Bochum,4,Stk,Anfahrt Stadtgebiet Raum 2,29.00,19
+EF-1043,11.10.2026,09.10.2026,Wohnbau Nordring GmbH,Nordring 14,44787,Bochum,6,h,Arbeitszeit Elektromeister Raum 3,68.00,19
+EF-1043,11.10.2026,09.10.2026,Wohnbau Nordring GmbH,Nordring 14,44787,Bochum,2,h,Arbeitszeit Geselle Raum 3,54.50,19
+EF-1043,11.10.2026,09.10.2026,Wohnbau Nordring GmbH,Nordring 14,44787,Bochum,2,m,"Mantelleitung NYM-J 3x1,5 mm² grau, Ring 50 m, verlegt auf Putz inklusive Schellen Raum 3",1.85,19
+EF-1043,11.10.2026,09.10.2026,Wohnbau Nordring GmbH,Nordring 14,44787,Bochum,4,Stk,Schalterprogramm reinweiß Wechselschalter mit Rahmen einfach Raum 3,12.40,19
+EF-1043,11.10.2026,09.10.2026,Wohnbau Nordring GmbH,Nordring 14,44787,Bochum,7,Stk,Steckdose Schuko mit Klappdeckel für Feuchtraum IP44 Raum 3,9.90,19
+EF-1043,11.10.2026,09.10.2026,Wohnbau Nordring GmbH,Nordring 14,44787,Bochum,8,Stk,"LED-Panel 60x60 cm neutralweiß 4000 K, Einbau in Rasterdecke Raum 3",79.00,19
+EF-1043,11.10.2026,09.10.2026,Wohnbau Nordring GmbH,Nordring 14,44787,Bochum,4,Stk,Fehlerstromschutzschalter 40 A 30 mA vierpolig Raum 3,64.80,19
+EF-1043,11.10.2026,09.10.2026,Wohnbau Nordring GmbH,Nordring 14,44787,Bochum,3,m,Kabelkanal 40x60 mm Raum 3,7.20,19
+EF-1043,11.10.2026,09.10.2026,Wohnbau Nordring GmbH,Nordring 14,44787,Bochum,4,Stk,Anfahrt Stadtgebiet Raum 3,29.00,19
+EF-1043,11.10.2026,09.10.2026,Wohnbau Nordring GmbH,Nordring 14,44787,Bochum,25,h,Arbeitszeit Elektromeister Raum 4,68.00,19
+EF-1043,11.10.2026,09.10.2026,Wohnbau Nordring GmbH,Nordring 14,44787,Bochum,6,h,Arbeitszeit Geselle Raum 4,54.50,19
+EF-1043,11.10.2026,09.10.2026,Wohnbau Nordring GmbH,Nordring 14,44787,Bochum,3,m,"Mantelleitung NYM-J 3x1,5 mm² grau, Ring 50 m, verlegt auf Putz inklusive Schellen Raum 4",1.85,19
+EF-1043,11.10.2026,09.10.2026,Wohnbau Nordring GmbH,Nordring 14,44787,Bochum,3,Stk,Schalterprogramm reinweiß Wechselschalter mit Rahmen einfach Raum 4,12.40,19
+EF-1043,11.10.2026,09.10.2026,Wohnbau Nordring GmbH,Nordring 14,44787,Bochum,3,Stk,Steckdose Schuko mit Klappdeckel für Feuchtraum IP44 Raum 4,9.90,19

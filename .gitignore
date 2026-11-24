@@ -1,0 +1,14 @@
+.venv/
+laufzeit/
+__pycache__/
+*.egg-info/
+.pytest_cache/
+/werkzeuge/
+logs/
+dist/
+build/
+*.spec.bak
+angelernt/
+
+# Lokale Planung, nicht im Repo
+TODO.md

@@ -1,0 +1,185 @@
+{
+  "datei": "Rechnung_001_RE26-76001.pdf",
+  "format": "PDF 1.4 (reportlab), A4, Schrift Helvetica (Standard-14, nicht eingebettet)",
+  "familie": "f05_versatz",
+  "quelle": "Q5",
+  "holdout": false,
+  "split": "training",
+  "seller": {
+    "name": "Kerber Bürobedarf GmbH",
+    "street": "Stadtgraben 17",
+    "postal_code": "94315",
+    "city": "Straubing",
+    "ust_id": "DE139055215",
+    "iban": "DE87 0000 0000 0752 0099 15",
+    "bic": "KERBDEX1STR",
+    "bank": "Beispielbank Niederbayern",
+    "email": "service@kerber-buero.example",
+    "register": "Amtsgericht Straubing HRB 0000",
+    "ceo": "Thomas Kerber"
+  },
+  "buyer": {
+    "name_lines": [
+      "Copyshop Altstadt OHG"
+    ],
+    "street": "Pfarrgasse 4",
+    "postal_code": "93047",
+    "city": "Regensburg",
+    "customer_number": "4711"
+  },
+  "invoice": {
+    "number": "RE26-76001",
+    "date": "07.10.2026",
+    "service_date": "05.10.2026",
+    "order_number": "",
+    "shipping": ""
+  },
+  "druck": {
+    "datum_format": "TT.MM.JJJJ",
+    "schrift": "Helvetica",
+    "seitenformat": "A4"
+  },
+  "BT-72": "05.10.2026",
+  "BT-119": "19.00",
+  "positions": [
+    {
+      "qty": "20",
+      "unit": "Stk.",
+      "description": [
+        "Ordner A4 breit 8 cm, blau"
+      ],
+      "article_number": "110410",
+      "unit_price": "3.05",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "61.00"
+    },
+    {
+      "qty": "5",
+      "unit": "Stk.",
+      "description": [
+        "Whiteboard-Marker 4er-Set"
+      ],
+      "article_number": "180001",
+      "unit_price": "5.78",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "28.90"
+    },
+    {
+      "qty": "2",
+      "unit": "Stk.",
+      "description": [
+        "Tonerkartusche schwarz, kompatibel, FSC-zertifiziert,",
+        "chlorfrei gebleicht"
+      ],
+      "article_number": "140001",
+      "unit_price": "49.25",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "98.50"
+    },
+    {
+      "qty": "2",
+      "unit": "Stk.",
+      "description": [
+        "Tintenpatronen Multipack 4-farbig"
+      ],
+      "article_number": "140002",
+      "unit_price": "34.75",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "69.50"
+    },
+    {
+      "qty": "50",
+      "unit": "Stk.",
+      "description": [
+        "Kugelschreiber blau, Druckmechanik"
+      ],
+      "article_number": "120013",
+      "unit_price": "0.65",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "32.50"
+    },
+    {
+      "qty": "1",
+      "unit": "Stk.",
+      "description": [
+        "Versandkosten Paket"
+      ],
+      "article_number": "900001",
+      "unit_price": "6.90",
+      "kind": "shipping",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "6.90"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": null,
+  "discount_days": null,
+  "payment_days": 10,
+  "totals": {
+    "net": "297.30",
+    "vat": "56.49",
+    "gross": "353.79"
+  },
+  "totals_printed": {
+    "net": "297.30",
+    "vat": "56.49",
+    "gross": "353.79"
+  },
+  "payment": {
+    "discount_date": null,
+    "due_date": "17.10.2026",
+    "discount_amount": null,
+    "discount_base": null
+  },
+  "payment_terms_text": [
+    "Zahlungsziel: 10 Tage"
+  ],
+  "page_count": 1,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "transfer": null,
+      "carry_forward": null,
+      "summary_present": true
+    }
+  ],
+  "erwarteter_status": "ok",
+  "erwartete_hinweise": [],
+  "kosit": null,
+  "verapdf": null,
+  "validierung_hinweis": "lokal nicht validierbar / spätere Phase (KoSIT/veraPDF prüfen die App-Ausgabe, nicht diese PDFs)",
+  "korrekturen": null,
+  "korrekturen_hinweis": "erst beim echten Anlernen messbar",
+  "test_flags": {
+    "address_name_lines": 1,
+    "po_box": false,
+    "multi_line_positions": 1,
+    "shipping_position": true,
+    "page_format": "A4",
+    "payment": "netto",
+    "pruefen": null,
+    "missing_order_number": true,
+    "note": "einfach, Versandkosten als Position",
+    "auftragsnummer": "AU185030"
+  },
+  "sha256": "9a65c64f12248a904fd21a61c58bf63dd1c5f9fab156a1828e6b365f8ab597f5"
+}

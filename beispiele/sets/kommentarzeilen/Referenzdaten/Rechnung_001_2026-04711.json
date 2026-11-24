@@ -1,0 +1,169 @@
+{
+  "datei": "Rechnung_001_2026-04711.pdf",
+  "format": "PDF 1.4 (reportlab, Schriften eingebettet)",
+  "rolle": "anlernen",
+  "holdout": false,
+  "seller": {
+    "name": "Testoria Zerspanungstechnik GmbH",
+    "street": "Beispielallee 5",
+    "postal_code": "34117",
+    "city": "Kassel",
+    "ust_id": "DE271828180",
+    "iban": "DE70 0000 0000 0002 6047 11",
+    "bic": "TESTDEX1XXX",
+    "bank": "Musterbank Kassel",
+    "email": "buchhaltung@testoria.example",
+    "register": "Amtsgericht Kassel, HRB 000000",
+    "ceo": "Max Beispiel"
+  },
+  "buyer": {
+    "name_lines": [
+      "Hagedorn Fördersysteme GmbH",
+      "Abteilung Einkauf"
+    ],
+    "street": "Kanalstraße 18",
+    "postal_code": "30165",
+    "city": "Hannover",
+    "customer_number": "20318"
+  },
+  "invoice": {
+    "number": "2026-04711",
+    "date": "14.10.2026",
+    "service_date": "14.10.2026",
+    "order_number": "4500817263",
+    "shipping": "Spedition"
+  },
+  "positions": [
+    {
+      "qty": 10,
+      "unit": "Stk.",
+      "description": [
+        "Lagerbock LB-40 Stahl verzinkt 31-2208"
+      ],
+      "unit_price": "51.75",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "517.50",
+      "comment_lines": []
+    },
+    {
+      "qty": 40,
+      "unit": "Stk.",
+      "description": [
+        "Antriebswelle Ø 25 nach Zeichnung 26-0731",
+        "davon mit Härtung 12 Stück"
+      ],
+      "unit_price": "102.75",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "4110.00",
+      "comment_lines": [
+        "davon mit Härtung 12 Stück"
+      ]
+    },
+    {
+      "qty": 500,
+      "unit": "Stk.",
+      "description": [
+        "Zylinderschraube ISO 4762 M6x20 8.8 verzinkt"
+      ],
+      "unit_price": "13.33",
+      "kind": "regular",
+      "price_unit": "/100",
+      "price_unit_qty": 100,
+      "min_order": false,
+      "total": "66.65",
+      "comment_lines": []
+    },
+    {
+      "qty": 25,
+      "unit": "Stk.",
+      "description": [
+        "Zahnriemenscheibe T10 Z=32 44-1907",
+        "davon Restmenge folgt"
+      ],
+      "unit_price": "75.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "1887.50",
+      "comment_lines": [
+        "davon Restmenge folgt"
+      ]
+    },
+    {
+      "qty": 6,
+      "unit": "Std.",
+      "description": [
+        "Montagearbeit vor Ort"
+      ],
+      "unit_price": "64.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "387.00",
+      "comment_lines": []
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": "2.00",
+  "discount_days": 10,
+  "payment_days": 30,
+  "totals": {
+    "net": "6968.65",
+    "vat": "1324.04",
+    "gross": "8292.69"
+  },
+  "payment": {
+    "discount_date": "24.10.2026",
+    "due_date": "13.11.2026",
+    "discount_amount": "165.85",
+    "discount_base": "gross"
+  },
+  "payment_terms_text": [
+    "zahlbar bis 24.10.26 bei 2 % Skonto (165,85 €)",
+    "bis 13.11.2026 ohne Abzug"
+  ],
+  "page_count": 1,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "line_count": 7,
+      "transfer": null,
+      "carry_forward": null,
+      "summary_present": true,
+      "payment_block_present": true
+    }
+  ],
+  "test_flags": {
+    "address_name_lines": 2,
+    "address_blank_lines": 1,
+    "missing_order_number": false,
+    "discount_applied": true,
+    "price_unit_100_count": 1,
+    "comment_line_count": 2,
+    "comment_line_positions": [
+      2,
+      4
+    ],
+    "comment_starts_at_unit_column": true,
+    "invoice_number_outside_header_block": true,
+    "invoice_number_label": "Rechnung Nr. 2026-04711",
+    "last_table_row_index": 9,
+    "note": "Kommentarzeilen + Rechnungsnummer oben links; Rolle: anlernen"
+  },
+  "sha256": "ebc24f98ebe90e7567358913c45205c3feb8a143c6002db8bc8e26a32c1191e3"
+}

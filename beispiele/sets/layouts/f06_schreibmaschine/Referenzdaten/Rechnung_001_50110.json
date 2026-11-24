@@ -1,0 +1,157 @@
+{
+  "datei": "Rechnung_001_50110.pdf",
+  "format": "PDF 1.4 (reportlab), A4, Schrift Courier (Standard-14, nicht eingebettet)",
+  "familie": "f06_schreibmaschine",
+  "quelle": "Q6",
+  "holdout": false,
+  "split": "training",
+  "seller": {
+    "name": "Holzwerkstatt Brenneisen GmbH",
+    "street": "Am Sägewerk 4",
+    "postal_code": "79822",
+    "city": "Titisee-Neustadt",
+    "ust_id": "DE142906131",
+    "iban": "DE75 0000 0000 0004 4182 30",
+    "bic": "BRENDEX1TNS",
+    "bank": "Beispielsparkasse Hochschwarzwald",
+    "email": "buero@brenneisen-holz.example",
+    "register": "Amtsgericht Freiburg i. Br. HRB 000000",
+    "ceo": "Markus Brenneisen"
+  },
+  "buyer": {
+    "name_lines": [
+      "Hofladen Brinkmann"
+    ],
+    "street": "Dorfstraße 23",
+    "postal_code": "48291",
+    "city": "Telgte",
+    "customer_number": "D-20031"
+  },
+  "invoice": {
+    "number": "50110",
+    "date": "12.10.2026",
+    "service_date": "10.10.2026",
+    "order_number": "",
+    "shipping": ""
+  },
+  "druck": {
+    "datum_format": "TT.MM.JJJJ",
+    "schrift": "Courier",
+    "seitenformat": "A4"
+  },
+  "BT-72": "10.10.2026",
+  "BT-119": "19.00",
+  "positions": [
+    {
+      "qty": "4",
+      "unit": "Std.",
+      "description": [
+        "Aufmaß und Planung, nach Aufmaß vom",
+        "Kundentermin, Kanten gefast"
+      ],
+      "article_number": "TS-2002",
+      "unit_price": "60.50",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "242.00"
+    },
+    {
+      "qty": "6",
+      "unit": "Stk.",
+      "description": [
+        "Regalboden Buche 25 mm, 80 cm"
+      ],
+      "article_number": "TS-1010",
+      "unit_price": "43.25",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "259.50"
+    },
+    {
+      "qty": "6",
+      "unit": "Std.",
+      "description": [
+        "Montage vor Ort"
+      ],
+      "article_number": "TS-2001",
+      "unit_price": "57.75",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "346.50"
+    },
+    {
+      "qty": "1",
+      "unit": "Stk.",
+      "description": [
+        "Thekenfront Multiplex, lackiert"
+      ],
+      "article_number": "TS-1002",
+      "unit_price": "513.50",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "513.50"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": "2.00",
+  "discount_days": 30,
+  "payment_days": 60,
+  "totals": {
+    "net": "1361.50",
+    "vat": "258.69",
+    "gross": "1620.19"
+  },
+  "totals_printed": {
+    "net": "1361.50",
+    "vat": "258.69",
+    "gross": "1620.19"
+  },
+  "payment": {
+    "discount_date": "11.11.2026",
+    "due_date": "11.12.2026",
+    "discount_amount": "32.40",
+    "discount_base": "gross"
+  },
+  "payment_terms_text": [
+    "Zahlung: 30 Tage 2,0%; 60 Tage netto"
+  ],
+  "page_count": 1,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "transfer": null,
+      "carry_forward": null,
+      "summary_present": true
+    }
+  ],
+  "erwarteter_status": "ok",
+  "erwartete_hinweise": [],
+  "kosit": null,
+  "verapdf": null,
+  "validierung_hinweis": "lokal nicht validierbar / spätere Phase (KoSIT/veraPDF prüfen die App-Ausgabe, nicht diese PDFs)",
+  "korrekturen": null,
+  "korrekturen_hinweis": "erst beim echten Anlernen messbar",
+  "test_flags": {
+    "address_name_lines": 1,
+    "po_box": false,
+    "multi_line_positions": 1,
+    "shipping_position": false,
+    "page_format": "A4",
+    "payment": "skonto",
+    "pruefen": null,
+    "missing_order_number": true,
+    "note": "Zahlung wie im Muster: 30 Tage 2,0%; 60 Tage netto",
+    "auftragsnummer": "11334"
+  },
+  "sha256": "9a2321a1a4b875f169690a5b762e2e7a8061ef1e1baecd76a5b6a66ea3cc6453"
+}

@@ -1,0 +1,161 @@
+{
+  "datei": "Rechnung_003_K261658.pdf",
+  "format": "PDF 1.4 (reportlab), A4, Schrift Helvetica (Standard-14, nicht eingebettet)",
+  "familie": "f01_infozeilen",
+  "quelle": "Q1",
+  "holdout": false,
+  "split": "training",
+  "seller": {
+    "name": "Kaltwasser Armaturen GmbH",
+    "street": "Lindenallee 4",
+    "postal_code": "34117",
+    "city": "Kassel",
+    "ust_id": "DE271831041",
+    "iban": "DE30 0000 0000 0041 1700 12",
+    "bic": "KALTDEX1XXX",
+    "bank": "Beispielbank Kassel",
+    "email": "info@kaltwasser.example",
+    "register": "Amtsgericht Kassel HRB 00000",
+    "ceo": "Henrike Kaltwasser"
+  },
+  "buyer": {
+    "name_lines": [
+      "Klinikum am Ziegelberg gGmbH",
+      "Technischer Einkauf",
+      "z. Hd. Frau Yilmaz"
+    ],
+    "street": "Ziegelbergweg 60",
+    "postal_code": "97074",
+    "city": "Würzburg",
+    "customer_number": "30088"
+  },
+  "invoice": {
+    "number": "K261658",
+    "date": "14.10.2026",
+    "service_date": "08.10.2026",
+    "order_number": "",
+    "shipping": "",
+    "date_printed": "14.10.26"
+  },
+  "druck": {
+    "datum_format": "TT.MM.JJ",
+    "schrift": "Helvetica",
+    "seitenformat": "A4"
+  },
+  "BT-72": "08.10.2026",
+  "BT-119": "19.00",
+  "positions": [
+    {
+      "qty": "1",
+      "unit": "Stk.",
+      "description": [
+        "Rückflussverhinderer DN20 Rotguss"
+      ],
+      "article_number": "RV-2020-RG",
+      "unit_price": "41.25",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "41.25"
+    },
+    {
+      "qty": "12",
+      "unit": "Stk.",
+      "description": [
+        "Druckminderer 1/2\" mit Manometer"
+      ],
+      "article_number": "DM-3010-ED",
+      "unit_price": "82.25",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "987.00"
+    },
+    {
+      "qty": "4",
+      "unit": "Std.",
+      "description": [
+        "Montage Armaturengruppe vor Ort"
+      ],
+      "article_number": "MS-9001",
+      "unit_price": "59.25",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "237.00"
+    },
+    {
+      "qty": "1",
+      "unit": "Stk.",
+      "description": [
+        "Versand und Verpackung"
+      ],
+      "article_number": "V-13KG",
+      "unit_price": "11.90",
+      "kind": "shipping",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "11.90"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": null,
+  "discount_days": null,
+  "payment_days": 21,
+  "totals": {
+    "net": "1277.15",
+    "vat": "242.66",
+    "gross": "1519.81"
+  },
+  "totals_printed": {
+    "net": "1277.15",
+    "vat": "242.66",
+    "gross": "1519.81"
+  },
+  "payment": {
+    "discount_date": null,
+    "due_date": "04.11.2026",
+    "discount_amount": null,
+    "discount_base": null
+  },
+  "payment_terms_text": [
+    "Zahlbar bis 04.11.26 ohne Abzug"
+  ],
+  "page_count": 1,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "transfer": null,
+      "carry_forward": null,
+      "summary_present": true
+    }
+  ],
+  "erwarteter_status": "ok",
+  "erwartete_hinweise": [],
+  "kosit": null,
+  "verapdf": null,
+  "validierung_hinweis": "lokal nicht validierbar / spätere Phase (KoSIT/veraPDF prüfen die App-Ausgabe, nicht diese PDFs)",
+  "korrekturen": null,
+  "korrekturen_hinweis": "erst beim echten Anlernen messbar",
+  "test_flags": {
+    "address_name_lines": 3,
+    "po_box": false,
+    "multi_line_positions": 0,
+    "shipping_position": true,
+    "page_format": "A4",
+    "payment": "fest",
+    "pruefen": null,
+    "missing_order_number": true,
+    "note": "3 Namenszeilen, festes Zahldatum TT.MM.JJ (nicht in der Vorlage), ohne Bestellnummer",
+    "bearbeiter": "Dorothea Schäfer",
+    "auftragsnummer": "O1813",
+    "komission": "Lager Nord"
+  },
+  "sha256": "716513072520f2d8a307c68d52b105a31d3110ffc085adc3c22623a5b86efa86"
+}

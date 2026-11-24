@@ -1,0 +1,157 @@
+{
+  "datei": "Rechnung_001_202610091.pdf",
+  "format": "PDF 1.4 (reportlab), A4, Schrift Helvetica (Standard-14, nicht eingebettet)",
+  "familie": "f04_kontaktblock",
+  "quelle": "Q3",
+  "holdout": false,
+  "split": "training",
+  "seller": {
+    "name": "Grünwerk Gartenplanung GmbH",
+    "street": "Wilhelmshöher Allee 210",
+    "postal_code": "34119",
+    "city": "Kassel",
+    "ust_id": "DE271044173",
+    "iban": "DE81 0000 0000 0310 0441 70",
+    "bic": "GRUEDEX1KSL",
+    "bank": "Beispielbank Nordhessen",
+    "email": "rechnung@gruenwerk.example",
+    "register": "Amtsgericht Kassel HRB 00000",
+    "ceo": "Lotte Grünewald"
+  },
+  "buyer": {
+    "name_lines": [
+      "Praxis für Physiotherapie",
+      "Annika Vogelsang"
+    ],
+    "street": "Am Stadtgraben 11",
+    "postal_code": "34117",
+    "city": "Kassel",
+    "customer_number": "K10045"
+  },
+  "invoice": {
+    "number": "202610091",
+    "date": "08.10.2026",
+    "service_date": "08.10.2026",
+    "order_number": "",
+    "shipping": ""
+  },
+  "druck": {
+    "datum_format": "TT.MM.JJJJ",
+    "schrift": "Helvetica",
+    "seitenformat": "A4"
+  },
+  "BT-72": "08.10.2026",
+  "BT-119": "19.00",
+  "positions": [
+    {
+      "qty": "2",
+      "unit": "Std.",
+      "description": [
+        "Aufmaß und Bestandsplan"
+      ],
+      "article_number": "GP-130",
+      "unit_price": "67.25",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "134.50"
+    },
+    {
+      "qty": "10",
+      "unit": "Stk.",
+      "description": [
+        "Rindenmulch 40 l Sack, Ausführung nach",
+        "Pflanzplan, Anwachsgarantie zwölf Monate"
+      ],
+      "article_number": "GP-320",
+      "unit_price": "4.40",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "44.00"
+    },
+    {
+      "qty": "1.5",
+      "unit": "Std.",
+      "description": [
+        "Pflanzplan mit Pflanzliste"
+      ],
+      "article_number": "GP-110",
+      "unit_price": "65.50",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "98.25"
+    },
+    {
+      "qty": "1",
+      "unit": "Stk.",
+      "description": [
+        "Anfahrtspauschale"
+      ],
+      "article_number": "GP-400",
+      "unit_price": "28.00",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "28.00"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": null,
+  "discount_days": null,
+  "payment_days": 14,
+  "totals": {
+    "net": "304.75",
+    "vat": "57.90",
+    "gross": "362.65"
+  },
+  "totals_printed": {
+    "net": "304.75",
+    "vat": "57.90",
+    "gross": "362.65"
+  },
+  "payment": {
+    "discount_date": null,
+    "due_date": "22.10.2026",
+    "discount_amount": null,
+    "discount_base": null
+  },
+  "payment_terms_text": [
+    "Bitte begleichen Sie den offenen Betrag bis zum 22.10.2026 an die unten aufgeführte Bankverbindung."
+  ],
+  "page_count": 1,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "transfer": null,
+      "carry_forward": null,
+      "summary_present": true
+    }
+  ],
+  "erwarteter_status": "ok",
+  "erwartete_hinweise": [],
+  "kosit": null,
+  "verapdf": null,
+  "validierung_hinweis": "lokal nicht validierbar / spätere Phase (KoSIT/veraPDF prüfen die App-Ausgabe, nicht diese PDFs)",
+  "korrekturen": null,
+  "korrekturen_hinweis": "erst beim echten Anlernen messbar",
+  "test_flags": {
+    "address_name_lines": 2,
+    "po_box": false,
+    "multi_line_positions": 1,
+    "shipping_position": false,
+    "page_format": "A4",
+    "payment": "fest",
+    "pruefen": null,
+    "missing_order_number": true,
+    "note": "Planungsleistung in Std., festes Zahldatum wie in der Vorlage"
+  },
+  "sha256": "79f6c2dcb5ce0971f4620cd28c21294cadab7e604bf62658d4adb6bf02cac9e9"
+}

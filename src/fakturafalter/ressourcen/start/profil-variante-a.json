@@ -1,0 +1,35 @@
+{
+  "profil": "export-utf8-komma",
+  "version": 1,
+  "beschreibung": "Eine Zeile je Position, Kopf wiederholt, UTF-8, Komma, Dezimalpunkt",
+  "datei": { "muster": "*.csv", "kodierung": "auto", "trennzeichen": ",", "textbegrenzer": "\"", "kopfzeile": true },
+  "zahlen": { "dezimal": ".", "tausender": "" },
+  "datum": { "format": "%Y-%m-%d" },
+  "aufbau": { "art": "zeile_je_position", "rechnung_schluessel": "rechnungsnummer",
+              "kopf_muss_gleich_sein": ["rechnungsdatum", "kundennummer"] },
+  "felder": {
+    "kopf": {
+      "BT-1": { "spalte": "rechnungsnummer" },
+      "BT-2": { "spalte": "rechnungsdatum", "typ": "datum" },
+      "BT-72": { "spalte": "leistungsdatum", "typ": "datum", "optional": true },
+      "BT-13": { "spalte": "bestellnummer", "optional": true },
+      "kundennummer": { "spalte": "kundennummer" },
+      "BT-3": { "fest": "380" },
+      "BT-5": { "fest": "EUR" }
+    },
+    "position": {
+      "BT-126": { "spalte": "pos" },
+      "BT-155": { "spalte": "artikelnummer", "optional": true },
+      "BT-153": { "spalte": "bezeichnung" },
+      "BT-129": { "spalte": "menge", "typ": "zahl" },
+      "BT-130": { "spalte": "einheit", "mapping": "einheiten" },
+      "BT-146": { "spalte": "einzelpreis_netto", "typ": "zahl" },
+      "steuer": { "spalte": "steuerschluessel", "mapping": "steuer" }
+    }
+  },
+  "mappings": {
+    "einheiten": { "Stk": "C62", "Std": "HUR", "m": "MTR", "pausch": "LS", "unbekannt": "pruefen" },
+    "steuer": { "1": { "BT-151": "S", "BT-152": 19 }, "2": { "BT-151": "S", "BT-152": 7 }, "unbekannt": "pruefen" }
+  },
+  "kundenstamm": { "datei": "kundenstamm.csv", "schluessel": "kundennummer", "fehlt": "pruefen" }
+}

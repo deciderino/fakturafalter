@@ -1,0 +1,170 @@
+{
+  "datei": "Rechnung_006_ohne-Nummer.pdf",
+  "format": "PDF 1.4 (reportlab), A4, Schrift Helvetica (Standard-14, nicht eingebettet)",
+  "familie": "f04_kontaktblock",
+  "quelle": "Q3",
+  "holdout": true,
+  "split": "holdout",
+  "seller": {
+    "name": "Grünwerk Gartenplanung GmbH",
+    "street": "Wilhelmshöher Allee 210",
+    "postal_code": "34119",
+    "city": "Kassel",
+    "ust_id": "DE271044173",
+    "iban": "DE81 0000 0000 0310 0441 70",
+    "bic": "GRUEDEX1KSL",
+    "bank": "Beispielbank Nordhessen",
+    "email": "rechnung@gruenwerk.example",
+    "register": "Amtsgericht Kassel HRB 00000",
+    "ceo": "Lotte Grünewald"
+  },
+  "buyer": {
+    "name_lines": [
+      "Weingut Hohenrain GbR"
+    ],
+    "street": "Rheinstraße 70",
+    "postal_code": "65375",
+    "city": "Oestrich-Winkel",
+    "customer_number": "K10077"
+  },
+  "invoice": {
+    "number": "",
+    "date": "26.10.2026",
+    "service_date": "26.10.2026",
+    "order_number": "",
+    "shipping": ""
+  },
+  "druck": {
+    "datum_format": "TT.MM.JJJJ",
+    "schrift": "Helvetica",
+    "seitenformat": "A4"
+  },
+  "BT-72": "26.10.2026",
+  "BT-119": "19.00",
+  "positions": [
+    {
+      "qty": "3",
+      "unit": "Std.",
+      "description": [
+        "Pflanzplan mit Pflanzliste"
+      ],
+      "article_number": "GP-110",
+      "unit_price": "76.25",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "228.75"
+    },
+    {
+      "qty": "12",
+      "unit": "Stk.",
+      "description": [
+        "Natursteinpflaster Granit, je m²"
+      ],
+      "article_number": "GP-330",
+      "unit_price": "49.00",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "588.00"
+    },
+    {
+      "qty": "2",
+      "unit": "Std.",
+      "description": [
+        "Aufmaß und Bestandsplan, Ausführung nach",
+        "Pflanzplan, Anwachsgarantie zwölf Monate"
+      ],
+      "article_number": "GP-130",
+      "unit_price": "70.00",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "140.00"
+    },
+    {
+      "qty": "6",
+      "unit": "Std.",
+      "description": [
+        "Pflanzarbeiten Gehölze"
+      ],
+      "article_number": "GP-200",
+      "unit_price": "52.00",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "312.00"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": null,
+  "discount_days": null,
+  "payment_days": 14,
+  "totals": {
+    "net": "1268.75",
+    "vat": "241.06",
+    "gross": "1509.81"
+  },
+  "totals_printed": {
+    "net": "1268.75",
+    "vat": "241.06",
+    "gross": "1509.81"
+  },
+  "payment": {
+    "discount_date": null,
+    "due_date": "09.11.2026",
+    "discount_amount": null,
+    "discount_base": null
+  },
+  "payment_terms_text": [
+    "Bitte begleichen Sie den offenen Betrag bis zum 09.11.2026 an die unten aufgeführte Bankverbindung."
+  ],
+  "page_count": 1,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "transfer": null,
+      "carry_forward": null,
+      "summary_present": true
+    }
+  ],
+  "erwarteter_status": "fehler",
+  "erwartete_hinweise": [
+    "FEHLER [BT-1] Rechnungsnummer (BT-1) fehlt. Pflichtangabe nach § 14 Abs. 4 Nr. 4 UStG."
+  ],
+  "kosit": null,
+  "verapdf": null,
+  "validierung_hinweis": "lokal nicht validierbar / spätere Phase (KoSIT/veraPDF prüfen die App-Ausgabe, nicht diese PDFs)",
+  "korrekturen": null,
+  "korrekturen_hinweis": "erst beim echten Anlernen messbar",
+  "test_flags": {
+    "address_name_lines": 1,
+    "po_box": false,
+    "multi_line_positions": 1,
+    "shipping_position": false,
+    "page_format": "A4",
+    "payment": "fest",
+    "pruefen": null,
+    "missing_order_number": true,
+    "note": "Hold-out FEHLER: Rechnungsnummer nicht gedruckt"
+  },
+  "rolle": "holdout-fehler",
+  "moegliche_folgehinweise": [],
+  "fehlerart": "rechnungsnummer_fehlt",
+  "fehler_beschreibung": "Rechnungsnummer nicht gedruckt (Feld leer); sonst alles richtig",
+  "falle": null,
+  "falle_beschreibung": null,
+  "fehler_detail": {},
+  "totals_berechnet": {
+    "net": "1268.75",
+    "vat": "241.06",
+    "gross": "1509.81"
+  },
+  "sha256": "fcf61ccc8a06ce60eec14ad9612dea8b3fb6c3d5e186bc608f32d4bf4c3d3dbd"
+}

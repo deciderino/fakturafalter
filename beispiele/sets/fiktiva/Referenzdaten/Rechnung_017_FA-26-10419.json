@@ -1,0 +1,159 @@
+{
+  "datei": "Rechnung_017_FA-26-10419.pdf",
+  "format": "PDF 1.4 (reportlab, Schriften eingebettet)",
+  "holdout": false,
+  "seller": {
+    "name": "Fiktiva Antriebstechnik GmbH",
+    "street": "Musterring 12",
+    "postal_code": "04179",
+    "city": "Leipzig",
+    "ust_id": "DE314159262",
+    "iban": "DE71 0000 0000 0047 1108 15",
+    "bic": "FIKTDEX1XXX",
+    "bank": "Beispielbank Leipzig",
+    "email": "rechnung@fiktiva.example",
+    "register": "Amtsgericht Leipzig, HRB 000000",
+    "ceo": "Jana Mustermann"
+  },
+  "buyer": {
+    "name_lines": [
+      "Kremer & Sohn Anlagenbau GmbH"
+    ],
+    "street": "Hafenstraße 88",
+    "postal_code": "28217",
+    "city": "Bremen",
+    "customer_number": "K-20977"
+  },
+  "invoice": {
+    "number": "FA-26-10419",
+    "date": "22.10.2026",
+    "service_date": "22.10.2026",
+    "order_number": "4700371555",
+    "shipping": "DHL"
+  },
+  "positions": [
+    {
+      "qty": 2000,
+      "unit": "Stk.",
+      "description": [
+        "Zylinderschraube ISO 4762 M6x20 8.8 verzinkt 89-4717"
+      ],
+      "unit_price": "5.44",
+      "kind": "regular",
+      "price_unit": "/100",
+      "price_unit_qty": 100,
+      "min_order": false,
+      "total": "108.80"
+    },
+    {
+      "qty": 400,
+      "unit": "Stk.",
+      "description": [
+        "Scheibe ISO 7089 8 verzinkt 13-3493"
+      ],
+      "unit_price": "2.55",
+      "kind": "regular",
+      "price_unit": "/100",
+      "price_unit_qty": 100,
+      "min_order": false,
+      "total": "10.20"
+    },
+    {
+      "qty": 400,
+      "unit": "Stk.",
+      "description": [
+        "Sicherungsring DIN 471 20x1,2 50-3040"
+      ],
+      "unit_price": "11.91",
+      "kind": "regular",
+      "price_unit": "/100",
+      "price_unit_qty": 100,
+      "min_order": false,
+      "total": "47.64"
+    },
+    {
+      "qty": 300,
+      "unit": "Stk.",
+      "description": [
+        "O-Ring 20x2 NBR 70 79-2732"
+      ],
+      "unit_price": "10.70",
+      "kind": "regular",
+      "price_unit": "/100",
+      "price_unit_qty": 100,
+      "min_order": false,
+      "total": "32.10"
+    },
+    {
+      "qty": 200,
+      "unit": "Stk.",
+      "description": [
+        "Zylinderschraube ISO 4762 M6x20 8.8 verzinkt 31-6983"
+      ],
+      "unit_price": "10.60",
+      "kind": "regular",
+      "price_unit": "/100",
+      "price_unit_qty": 100,
+      "min_order": false,
+      "total": "21.20"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": null,
+  "discount_days": null,
+  "payment_days": 30,
+  "totals": {
+    "net": "219.94",
+    "vat": "41.79",
+    "gross": "261.73"
+  },
+  "payment": {
+    "discount_date": null,
+    "due_date": "21.11.2026",
+    "discount_amount": null,
+    "discount_base": null
+  },
+  "payment_terms_text": [
+    "zahlbar bis 21.11.2026 ohne Abzug"
+  ],
+  "page_count": 1,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "line_count": 5,
+      "transfer": null,
+      "carry_forward": null,
+      "summary_present": true,
+      "payment_block_present": true
+    }
+  ],
+  "test_flags": {
+    "address_name_lines": 1,
+    "address_blank_lines": 1,
+    "address_attention_line": false,
+    "address_department_line": false,
+    "two_line_company_name": false,
+    "missing_order_number": false,
+    "shipping_empty": false,
+    "discount_applied": false,
+    "blank_unit_flat_rate": false,
+    "without_price_count": 0,
+    "flat_rate_count": 0,
+    "min_order": null,
+    "price_unit_100_count": 5,
+    "two_three_line_positions": 0,
+    "four_five_line_positions": 0,
+    "has_qty_thousands": true,
+    "carry_forward": false,
+    "last_table_row_index": 7,
+    "note": "/100 mit Mengen ≥ 1.000"
+  },
+  "sha256": "78c080689250d6b8881094cf24cce85fde32c37ac03c0809c3926805ce1be3f1"
+}

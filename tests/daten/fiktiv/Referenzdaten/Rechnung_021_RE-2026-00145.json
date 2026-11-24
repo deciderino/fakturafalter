@@ -1,0 +1,225 @@
+{
+  "datei": "Rechnung_021_RE-2026-00145.pdf",
+  "format": "PDF/A-2b",
+  "seller": {
+    "name": "Alberon Industriekomponenten GmbH",
+    "street": "Prüfwerkstraße 18",
+    "postal_code": "09111",
+    "city": "Chemnitz",
+    "ust_id": "DE123456789",
+    "iban": "DE89 3704 0044 0532 0130 00",
+    "bic": "COBADEFFXXX",
+    "bank": "Commerzbank AG",
+    "email": "rechnung@alberon.example",
+    "register": "Amtsgericht Chemnitz, HRB 999999",
+    "ceo": "Markus Seidel"
+  },
+  "buyer": {
+    "name_lines": [
+      "Rabenfels Industriebedarf GmbH",
+      "Abteilung Vorrichtungsbau",
+      "Werk Süd"
+    ],
+    "street": "Gewerbestraße 24",
+    "postal_code": "09130",
+    "city": "Chemnitz",
+    "customer_number": "0012547"
+  },
+  "invoice": {
+    "number": "RE-2026-00145",
+    "date": "09.09.2026",
+    "service_date": "03.09.2026",
+    "order_number": "",
+    "shipping": "EXW"
+  },
+  "positions": [
+    {
+      "qty": 1250,
+      "unit": "Stk.",
+      "description": [
+        "Distanzhülse 203344"
+      ],
+      "unit_price": null,
+      "kind": "without_price",
+      "price_unit": "/1",
+      "total": null
+    },
+    {
+      "qty": 1,
+      "unit": "Stk.",
+      "description": [
+        "Fixpreis Auftrag 2026-530"
+      ],
+      "unit_price": "300.00",
+      "kind": "flat_rate",
+      "price_unit": "/1",
+      "total": "300.00"
+    },
+    {
+      "qty": 1000,
+      "unit": "Stk.",
+      "description": [
+        "Nachbearbeitung 950559"
+      ],
+      "unit_price": "12.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "12500.00"
+    },
+    {
+      "qty": 30,
+      "unit": "Std.",
+      "description": [
+        "Montagearbeit 318982",
+        "Oberfläche nach Kundenstandard"
+      ],
+      "unit_price": "180.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "5415.00"
+    },
+    {
+      "qty": 8,
+      "unit": "Std.",
+      "description": [
+        "Maschinenbolzen 508994"
+      ],
+      "unit_price": "4.75",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "38.00"
+    },
+    {
+      "qty": 12,
+      "unit": "Stk.",
+      "description": [
+        "Gehäuseboden 764095",
+        "Werkstoff EN AW-5083",
+        "Sondermaß nach Zeichnung 2026-18"
+      ],
+      "unit_price": "2.35",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "28.20"
+    },
+    {
+      "qty": 75,
+      "unit": "Stk.",
+      "description": [
+        "CNC-Nacharbeit 712296"
+      ],
+      "unit_price": "7.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "562.50"
+    },
+    {
+      "qty": 25,
+      "unit": "Stk.",
+      "description": [
+        "Adapterplatte 901961",
+        "Werkstoff EN AW-5083"
+      ],
+      "unit_price": "89.90",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "2247.50"
+    },
+    {
+      "qty": 10,
+      "unit": "Stk.",
+      "description": [
+        "Nachbearbeitung 274610"
+      ],
+      "unit_price": "4.75",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "47.50"
+    },
+    {
+      "qty": 1250,
+      "unit": "Stk.",
+      "description": [
+        "Nachbearbeitung 232484"
+      ],
+      "unit_price": "2.35",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "2937.50"
+    },
+    {
+      "qty": 10000,
+      "unit": "Stk.",
+      "description": [
+        "Führungsbuchse 981375"
+      ],
+      "unit_price": "14.99",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "149900.00"
+    },
+    {
+      "qty": 250,
+      "unit": "Stk.",
+      "description": [
+        "Gehäusedeckel 638683",
+        "Bohrungen gegen Beschichtung schützen"
+      ],
+      "unit_price": "1799.99",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "449997.50"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": "2.00",
+  "discount_days": 10,
+  "payment_days": 30,
+  "totals": {
+    "net": "623973.70",
+    "vat": "118555.00",
+    "gross": "742528.70"
+  },
+  "payment": {
+    "discount_date": "19.09.2026",
+    "due_date": "09.10.2026",
+    "discount_amount": "14850.57"
+  },
+  "page_count": 1,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "line_count": 17,
+      "transfer": null,
+      "summary_present": true,
+      "payment_block_present": true
+    }
+  ],
+  "test_flags": {
+    "address_name_lines": 3,
+    "missing_order_number": true,
+    "shipping_empty": false,
+    "discount_applied": true,
+    "blank_unit_flat_rate": false,
+    "without_price_count": 1,
+    "flat_rate_count": 1,
+    "two_three_line_positions": 4,
+    "four_five_line_positions": 0,
+    "has_qty_thousands": true
+  },
+  "sha256": "cd5d3189d347744e9d2e7612a681704aacd75855874212f54239d2f8c8aaf761"
+}

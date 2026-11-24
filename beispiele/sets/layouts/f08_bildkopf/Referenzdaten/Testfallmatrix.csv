@@ -1,0 +1,7 @@
+﻿Datei;Split;Rechnungsnummer;Rechnungsdatum;Kundennummer;Namenszeilen;Seiten;Format;Positionen;Mehrzeilig;Versand;Zahlung;Skonto;Netto;USt;Brutto;Status;Notiz;SHA256
+Rechnung_001_103701.pdf;holdout;103701;07.10.2026;30227;2;1;A4;4;1;;netto;;539.00;102.41;641.41;ok;Hold-out: Kopf/Fuß als Bild, Ihre Referenz;8ea32472d7947f0923c9ea8963d002700deb125933b0d7c8406c6189f018bb60
+Rechnung_002_103602.pdf;holdout;103602;12.10.2026;30252;3;1;A4;6;2;;skonto;2;1272.65;241.80;1514.45;ok;Hold-out: 3 Namenszeilen, Skonto in Zahlungsbedingungen;c7624a7dfe5bda58ee88deb451cef31755621f7218c119891e0893f6074761df
+Rechnung_003_103603.pdf;holdout;103603;19.10.2026;30240;1;2;A4;34;4;;netto;;8155.30;1549.51;9704.81;ok;Hold-out: 2 Seiten, kein Übertrag gedruckt;3fab1dabb26576516aa0d2256b14fabe8c33883c6c9fc7dd72d14e9628ec0bfd
+Rechnung_004_103404.pdf;holdout;103404;26.10.2026;30215;1;1;A4;3;0;;netto;;354.30;67.32;421.62;ok;Hold-out: Postfach-Anschrift (einziger Postfach-Beleg der Familie);7cb83a0ad4a3c52b8cdc6f1bac23d8ad137c024e4da020968487093fd8f39648
+Rechnung_005_103905.pdf;holdout;103905;02.11.2026;D-20058;3;1;A4;7;3;;skonto;3;2354.10;447.28;2801.38;ok;Hold-out: ohne Referenz, mehrzeilige Bezeichnungen;478b83fc4ac39fa5a6070c5ef749c232aaab16b204cf10d8e885799e86f22640
+Rechnung_006_103006.pdf;holdout;103006;09.11.2026;30227;2;1;A4;5;1;;skonto;2;1898.30;360.68;2258.98;ok;Hold-out FALLE: Projektnr. im Format der Rechnungsnummer neben der Debitorennr.;925beec81e16bff5ce82946cd1e84e081cd650c1fa49b0c559a72593995a4020

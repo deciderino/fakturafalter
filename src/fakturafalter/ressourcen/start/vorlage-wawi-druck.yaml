@@ -1,0 +1,99 @@
+# Zonen-Vorlage für den Druck-Eingang (PDF mit Textebene)
+# Beispiel – passt zu druckauftrag-wawi.pdf (erfundene Daten, Muster GmbH)
+# Koordinaten: Punkt (1/72 Zoll), Ursprung OBEN LINKS (wie pdfplumber "top"), A4 = 595 x 842
+vorlage: wawi-alt-a4
+version: 1
+beschreibung: "Alte WaWi, Courier, Rechnungsdruck A4"
+
+# 1) Wann passt diese Vorlage? (alle Bedingungen müssen zutreffen)
+erkennung:
+  enthaelt_text: ["Muster GmbH", "Rechnungsnr.:", "R E C H N U N G"]
+  seitengroesse: A4
+
+# 2) Druckauftrag in Rechnungen zerlegen
+trennung:
+  neue_rechnung_wenn:
+    - feld_wechselt: BT-1            # andere Rechnungsnummer als auf voriger Seite
+    - text_muster: 'Seite:\s+1 von \d+'
+  pruefe_vollstaendig:              # „Seite n von m“ muss lückenlos sein
+    muster: 'Seite:\s+(?P<seite>\d+) von (?P<von>\d+)'
+  leere_seiten: ignorieren
+
+# 3) Kopffelder – Anker-Text + Wert rechts daneben (gleiche Zeile, Toleranz 3 pt)
+felder:
+  BT-1:
+    anker: "Rechnungsnr.:"
+    wert: rechts                    # rechts | darunter | bereich
+    max_abstand: 150
+    muster: 'RE-\d{4}-\d{4}'
+    alle_seiten_gleich: true        # Folgeseiten müssen dieselbe Nr. tragen
+  BT-2:
+    anker: "Datum:"
+    wert: rechts
+    typ: datum
+    format: "%d.%m.%Y"
+  kundennummer:                     # Schlüssel für den Kundenstamm (BT-44 ff., BT-49, BT-10)
+    anker: "Kunden-Nr.:"
+    wert: rechts
+    muster: 'K-\d{4}'
+  BT-72:
+    anker: "Lieferdatum:"
+    wert: rechts
+    typ: datum
+    format: "%d.%m.%Y"
+    optional: true
+  BT-13:
+    anker: "Ihre Bestellung:"
+    wert: rechts
+    optional: true
+  anschrift_kontrolle:              # nur Gegenprüfung mit Kundenstamm, kein Ausgabefeld
+    bereich: {seite: 1, x0: 45, top: 130, x1: 300, bottom: 185}
+    zweck: pruefung
+    vergleiche_mit: kundenstamm.name
+    zeilen_ignorieren: ['^Muster GmbH, ']   # Absenderzeile im Fenster
+
+# 4) Positionstabelle
+positionen:
+  start_nach_zeile: '^Pos\s+Art\.-Nr\.'    # Tabellenkopf (jede Seite)
+  ende_vor_zeile: ['Nettobetrag']           # letzte Seite
+  bereich_bis_top: 740                       # sonst endet die Tabelle vor der Fußzeile
+  zeilen_ignorieren: ['Übertrag', '^-{20,}'] # Trennlinien und Übertrag-Zeilen
+  # Spalten: Text-Spalten über linke Kante, Zahlen-Spalten über RECHTE Kante
+  # (rechtsbündig – lange Bezeichnungen dürfen in die Menge-Spalte ragen)
+  spalten:
+    BT-126:  {links_ab: 45,  bis: 75}
+    BT-155:  {links_ab: 76,  bis: 140}     # Artikelnummer Verkäufer
+    BT-153:  {links_ab: 141, rest_bis_naechste_spalte: true}
+    BT-129:  {rechte_kante: 395, toleranz: 3, typ: zahl}
+    BT-130:  {links_ab: 397, bis: 425, mapping: einheiten}
+    BT-146:  {rechte_kante: 480, toleranz: 3, typ: zahl}
+    gesamt_kontrolle: {rechte_kante: 545, toleranz: 3, typ: zahl, zweck: pruefung}
+    steuer:  {links_ab: 549, bis: 575, mapping: steuer}
+  neue_position_wenn: BT-126 gefuellt
+  folgezeile_ohne_pos: an_BT-153_anhaengen   # mehrzeilige Bezeichnung
+  ueber_seiten_fortsetzen: true
+
+# 5) Summen nur zur Gegenprüfung (das Tool rechnet selbst)
+kontrolle:
+  BT-109: {anker: "Nettobetrag", wert: rechts, typ: zahl}
+  BT-112: {anker: "Gesamtbetrag EUR", wert: rechts, typ: zahl}
+  toleranz: 0.01
+
+zahlen:
+  dezimal: ","
+  tausender: "."
+
+mappings:
+  einheiten: {Stk: C62, Std: HUR, m: MTR, kg: KGM, psch: LS, pausch: LS}
+  steuer:
+    A: {BT-151: S, BT-152: 19}
+    B: {BT-151: S, BT-152: 7}
+
+kundenstamm: {datei: kundenstamm.csv, schluessel: kundennummer}
+
+sicherheit:              # wann geht eine Rechnung in die Prüfansicht?
+  pflichtfeld_fehlt: pruefen
+  muster_passt_nicht: pruefen
+  summe_weicht_ab: pruefen
+  kunde_unbekannt: pruefen
+  anschrift_weicht_ab: warnen

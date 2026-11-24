@@ -1,0 +1,143 @@
+{
+  "datei": "Rechnung_004_103404.pdf",
+  "format": "PDF 1.4 (reportlab), A4, Schrift Times (Standard-14, nicht eingebettet)",
+  "familie": "f08_bildkopf",
+  "quelle": "Q10",
+  "holdout": true,
+  "split": "holdout",
+  "seller": {
+    "name": "Weserblick Elektrotechnik GmbH",
+    "street": "Am Speicher XI 7",
+    "postal_code": "28217",
+    "city": "Bremen",
+    "ust_id": "DE314775200",
+    "iban": "DE81 0000 0000 0045 1200 98",
+    "bic": "WESBDEX1BRE",
+    "bank": "Beispielbank Bremen",
+    "email": "rechnungen@weserblick-elektro.example",
+    "register": "Amtsgericht Bremen HRB 00000 HB",
+    "ceo": "Gesa Thormählen"
+  },
+  "buyer": {
+    "name_lines": [
+      "Spedition Albrecht GmbH"
+    ],
+    "street": "Postfach 12 34 56",
+    "postal_code": "28001",
+    "city": "Bremen",
+    "customer_number": "30215"
+  },
+  "invoice": {
+    "number": "103404",
+    "date": "26.10.2026",
+    "service_date": "24.10.2026",
+    "order_number": "4500098127",
+    "shipping": ""
+  },
+  "druck": {
+    "datum_format": "TT.MM.JJJJ",
+    "schrift": "Times",
+    "seitenformat": "A4"
+  },
+  "BT-72": "24.10.2026",
+  "BT-119": "19.00",
+  "positions": [
+    {
+      "qty": "2",
+      "unit": "Stk.",
+      "description": [
+        "Notleuchte Rettungszeichen"
+      ],
+      "article_number": "1936-S",
+      "unit_price": "93.25",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "186.50"
+    },
+    {
+      "qty": "40",
+      "unit": "Stk.",
+      "description": [
+        "Abzweigdose IP65 mit Klemmen"
+      ],
+      "article_number": "1929-S",
+      "unit_price": "3.37",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "134.80"
+    },
+    {
+      "qty": "1",
+      "unit": "Stk.",
+      "description": [
+        "Fehlerstromschutzschalter 40 A"
+      ],
+      "article_number": "1908-S",
+      "unit_price": "33.00",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "33.00"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": null,
+  "discount_days": null,
+  "payment_days": 14,
+  "totals": {
+    "net": "354.30",
+    "vat": "67.32",
+    "gross": "421.62"
+  },
+  "totals_printed": {
+    "net": "354.30",
+    "vat": "67.32",
+    "gross": "421.62"
+  },
+  "payment": {
+    "discount_date": null,
+    "due_date": "09.11.2026",
+    "discount_amount": null,
+    "discount_base": null
+  },
+  "payment_terms_text": [
+    "14 Tage netto"
+  ],
+  "page_count": 1,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3
+      ],
+      "transfer": null,
+      "carry_forward": null,
+      "summary_present": true
+    }
+  ],
+  "erwarteter_status": "ok",
+  "erwartete_hinweise": [],
+  "kosit": null,
+  "verapdf": null,
+  "validierung_hinweis": "lokal nicht validierbar / spätere Phase (KoSIT/veraPDF prüfen die App-Ausgabe, nicht diese PDFs)",
+  "korrekturen": null,
+  "korrekturen_hinweis": "erst beim echten Anlernen messbar",
+  "test_flags": {
+    "address_name_lines": 1,
+    "po_box": true,
+    "multi_line_positions": 0,
+    "shipping_position": false,
+    "page_format": "A4",
+    "payment": "netto",
+    "pruefen": null,
+    "missing_order_number": false,
+    "note": "Hold-out: Postfach-Anschrift (einziger Postfach-Beleg der Familie)",
+    "uebertrag_gedruckt": false,
+    "kopf_fuss_als_bild": true
+  },
+  "sha256": "7cb83a0ad4a3c52b8cdc6f1bac23d8ad137c024e4da020968487093fd8f39648"
+}

@@ -1,0 +1,9 @@
+# Test-Setup „Industrie“, Modus Nur PDF (ALLE Daten erfunden).
+# Noch kein Profil: Der Anlern-Assistent legt beim ersten PDF ein Profil für den Absender an
+# (Absender aus dem Druck erkannt oder aus absender-normteile.csv übernommen).
+arbeitsordner: ../../laufzeit/industrie-nur-pdf
+modus: nur_pdf
+pdf_profile: []
+optionen:
+  sichtteil: original
+  xrechnung_zusatz: false

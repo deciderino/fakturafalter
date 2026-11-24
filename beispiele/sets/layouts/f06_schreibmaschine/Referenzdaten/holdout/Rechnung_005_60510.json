@@ -1,0 +1,171 @@
+{
+  "datei": "Rechnung_005_60510.pdf",
+  "format": "PDF 1.4 (reportlab), A4, Schrift Courier (Standard-14, nicht eingebettet)",
+  "familie": "f06_schreibmaschine",
+  "quelle": "Q6",
+  "holdout": true,
+  "split": "holdout",
+  "seller": {
+    "name": "Holzwerkstatt Brenneisen GmbH",
+    "street": "Am Sägewerk 4",
+    "postal_code": "79822",
+    "city": "Titisee-Neustadt",
+    "ust_id": "DE142906131",
+    "iban": "DE75 0000 0000 0004 4182 30",
+    "bic": "BRENDEX1TNS",
+    "bank": "Beispielsparkasse Hochschwarzwald",
+    "email": "buero@brenneisen-holz.example",
+    "register": "Amtsgericht Freiburg i. Br. HRB 000000",
+    "ceo": "Markus Brenneisen"
+  },
+  "buyer": {
+    "name_lines": [
+      "Steuerkanzlei Rademacher",
+      "Partnerschaft mbB"
+    ],
+    "street": "Theaterstraße 15",
+    "postal_code": "30159",
+    "city": "Hannover",
+    "customer_number": "4788"
+  },
+  "invoice": {
+    "number": "60510",
+    "date": "28.10.2026",
+    "service_date": "26.10.2026",
+    "order_number": "",
+    "shipping": ""
+  },
+  "druck": {
+    "datum_format": "TT.MM.JJJJ",
+    "schrift": "Courier",
+    "seitenformat": "A4"
+  },
+  "BT-72": "26.10.2026",
+  "BT-119": "19.00",
+  "positions": [
+    {
+      "qty": "24",
+      "unit": "Stk.",
+      "description": [
+        "Möbelgriff Edelstahl 128 mm"
+      ],
+      "article_number": "TS-1030",
+      "unit_price": "7.54",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "180.96"
+    },
+    {
+      "qty": "1",
+      "unit": "Stk.",
+      "description": [
+        "Anfahrt Montagefahrzeug"
+      ],
+      "article_number": "TS-2010",
+      "unit_price": "53.50",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "53.50"
+    },
+    {
+      "qty": "8",
+      "unit": "Stk.",
+      "description": [
+        "Schubkastenführung Vollauszug"
+      ],
+      "article_number": "TS-1020",
+      "unit_price": "35.50",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "284.00"
+    },
+    {
+      "qty": "1",
+      "unit": "Stk.",
+      "description": [
+        "Wandregal Lärche geölt, 120 cm"
+      ],
+      "article_number": "TS-1011",
+      "unit_price": "130.00",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "130.00"
+    },
+    {
+      "qty": "3",
+      "unit": "Stk.",
+      "description": [
+        "Hartwachsöl 0,75 l"
+      ],
+      "article_number": "TS-1050",
+      "unit_price": "26.25",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "78.75"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": "2.00",
+  "discount_days": 14,
+  "payment_days": 30,
+  "totals": {
+    "net": "727.21",
+    "vat": "138.17",
+    "gross": "865.38"
+  },
+  "totals_printed": {
+    "net": "727.21",
+    "vat": "138.17",
+    "gross": "865.38"
+  },
+  "payment": {
+    "discount_date": "11.11.2026",
+    "due_date": "27.11.2026",
+    "discount_amount": "17.31",
+    "discount_base": "gross"
+  },
+  "payment_terms_text": [
+    "Zahlung: 14 Tage 2,0%; 30 Tage netto"
+  ],
+  "page_count": 1,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "transfer": null,
+      "carry_forward": null,
+      "summary_present": true
+    }
+  ],
+  "erwarteter_status": "ok",
+  "erwartete_hinweise": [],
+  "kosit": null,
+  "verapdf": null,
+  "validierung_hinweis": "lokal nicht validierbar / spätere Phase (KoSIT/veraPDF prüfen die App-Ausgabe, nicht diese PDFs)",
+  "korrekturen": null,
+  "korrekturen_hinweis": "erst beim echten Anlernen messbar",
+  "test_flags": {
+    "address_name_lines": 2,
+    "po_box": false,
+    "multi_line_positions": 0,
+    "shipping_position": false,
+    "page_format": "A4",
+    "payment": "skonto",
+    "pruefen": null,
+    "missing_order_number": true,
+    "note": "Hold-out: einfach, Skonto",
+    "auftragsnummer": "12271"
+  },
+  "sha256": "b80937a921191c21182cf1fd11344b9aadb26a61e7a8626ea5da528add7873a0"
+}

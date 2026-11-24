@@ -1,0 +1,172 @@
+{
+  "datei": "Rechnung_002_INV-2026-00314.pdf",
+  "format": "PDF 1.4 (reportlab), A4, Schrift Helvetica (Standard-14, nicht eingebettet)",
+  "familie": "f07_din5008",
+  "quelle": "Q9",
+  "holdout": false,
+  "split": "training",
+  "seller": {
+    "name": "Nordlicht Software GmbH",
+    "street": "Holtenauer Straße 88",
+    "postal_code": "24105",
+    "city": "Kiel",
+    "ust_id": "DE298110463",
+    "iban": "DE10 0000 0000 0090 1177 36",
+    "bic": "NORLDEX1KIE",
+    "bank": "Beispielbank Kiel",
+    "email": "buchhaltung@nordlicht-software.example",
+    "register": "HRB 00000 KI",
+    "ceo": "Henrike Jansen"
+  },
+  "buyer": {
+    "name_lines": [
+      "Agentur Lichtblick GmbH"
+    ],
+    "street": "Friedrichstraße 133",
+    "postal_code": "10117",
+    "city": "Berlin",
+    "customer_number": ""
+  },
+  "invoice": {
+    "number": "INV/2026/00314",
+    "date": "15.10.2026",
+    "service_date": "09.10.2026",
+    "order_number": "",
+    "shipping": ""
+  },
+  "druck": {
+    "datum_format": "TT.MM.JJJJ",
+    "schrift": "Helvetica",
+    "seitenformat": "A4"
+  },
+  "BT-72": "09.10.2026",
+  "BT-119": "19.00",
+  "positions": [
+    {
+      "qty": "1",
+      "unit": "Stk.",
+      "description": [
+        "Kartenleser USB für eGK"
+      ],
+      "article_number": "NL-HW-01",
+      "unit_price": "63.75",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "63.75"
+    },
+    {
+      "qty": "1",
+      "unit": "Stk.",
+      "description": [
+        "Zusatzmodul Online-Buchung, gemäß Ticket und",
+        "Freigabe durch die Praxisleitung"
+      ],
+      "article_number": "NL-LIZ-03",
+      "unit_price": "15.75",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "15.75"
+    },
+    {
+      "qty": "10",
+      "unit": "Stk.",
+      "description": [
+        "Lizenz Terminplaner Pro, 12 Monate"
+      ],
+      "article_number": "NL-LIZ-01",
+      "unit_price": "26.00",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "260.00"
+    },
+    {
+      "qty": "5",
+      "unit": "Stk.",
+      "description": [
+        "Lizenz Terminplaner Team, 12 Monate"
+      ],
+      "article_number": "NL-LIZ-02",
+      "unit_price": "60.50",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "302.50"
+    },
+    {
+      "qty": "2",
+      "unit": "Std.",
+      "description": [
+        "Projektleitung, inklusive Dokumentation der",
+        "Einstellungen"
+      ],
+      "article_number": "NL-DL-04",
+      "unit_price": "114.25",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "228.50"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": null,
+  "discount_days": null,
+  "payment_days": 30,
+  "totals": {
+    "net": "870.50",
+    "vat": "165.40",
+    "gross": "1035.90"
+  },
+  "totals_printed": {
+    "net": "870.50",
+    "vat": "165.40",
+    "gross": "1035.90"
+  },
+  "payment": {
+    "discount_date": null,
+    "due_date": "14.11.2026",
+    "discount_amount": null,
+    "discount_base": null
+  },
+  "payment_terms_text": [
+    "Zahlungsbedingungen: 30 Tage"
+  ],
+  "page_count": 1,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "transfer": null,
+      "carry_forward": null,
+      "summary_present": true
+    }
+  ],
+  "erwarteter_status": "ok",
+  "erwartete_hinweise": [],
+  "kosit": null,
+  "verapdf": null,
+  "validierung_hinweis": "lokal nicht validierbar / spätere Phase (KoSIT/veraPDF prüfen die App-Ausgabe, nicht diese PDFs)",
+  "korrekturen": null,
+  "korrekturen_hinweis": "erst beim echten Anlernen messbar",
+  "test_flags": {
+    "address_name_lines": 1,
+    "po_box": false,
+    "multi_line_positions": 2,
+    "shipping_position": false,
+    "page_format": "A4",
+    "payment": "netto",
+    "pruefen": null,
+    "missing_order_number": true,
+    "note": "ohne Referenz, Bezeichnungen mehrzeilig",
+    "quelle": "S00950"
+  },
+  "sha256": "b54b630efe6c0d4ad6f704fee5dcbd9c33a97404dd16d509dbd84aee3eca2fb7"
+}

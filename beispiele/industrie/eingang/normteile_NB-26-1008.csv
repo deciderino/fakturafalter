@@ -1,0 +1,4 @@
+Rechnungsnr;Datum;Lieferdatum;Kunde;Strasse;PLZ;Ort;Artikel;Menge;Einheit;Einzelpreis;Preiseinheit;USt-Satz
+NB-26-1008;26.10.2026;25.10.2026;Anlagenbau Riedel GmbH & Co. KG;Am Walzwerk 21;44147;Dortmund;Zylinderschraube ISO 4762 M6x20 12.9;2000;Stk;9,60;100;19
+NB-26-1008;26.10.2026;25.10.2026;Anlagenbau Riedel GmbH & Co. KG;Am Walzwerk 21;44147;Dortmund;Scheibe DIN 125 A 10,5 verzinkt;5000;Stk;1,35;100;19
+NB-26-1008;26.10.2026;25.10.2026;Anlagenbau Riedel GmbH & Co. KG;Am Walzwerk 21;44147;Dortmund;Drehteil Welle Ø 25 nach Zeichnung 4711-B;12;Stk;14,50;1;19

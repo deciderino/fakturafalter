@@ -1,0 +1,173 @@
+{
+  "datei": "Rechnung_003_202610043.pdf",
+  "format": "PDF 1.4 (reportlab), A4, Schrift Helvetica (Standard-14, nicht eingebettet)",
+  "familie": "f04_kontaktblock",
+  "quelle": "Q3",
+  "holdout": false,
+  "split": "training",
+  "seller": {
+    "name": "Grünwerk Gartenplanung GmbH",
+    "street": "Wilhelmshöher Allee 210",
+    "postal_code": "34119",
+    "city": "Kassel",
+    "ust_id": "DE271044173",
+    "iban": "DE81 0000 0000 0310 0441 70",
+    "bic": "GRUEDEX1KSL",
+    "bank": "Beispielbank Nordhessen",
+    "email": "rechnung@gruenwerk.example",
+    "register": "Amtsgericht Kassel HRB 00000",
+    "ceo": "Lotte Grünewald"
+  },
+  "buyer": {
+    "name_lines": [
+      "Kita Sonnenblume e. V.",
+      "Vorstand",
+      "z. Hd. Frau Brückner"
+    ],
+    "street": "Gartenweg 2",
+    "postal_code": "34246",
+    "city": "Vellmar",
+    "customer_number": "K10112"
+  },
+  "invoice": {
+    "number": "202610043",
+    "date": "14.10.2026",
+    "service_date": "14.10.2026",
+    "order_number": "",
+    "shipping": ""
+  },
+  "druck": {
+    "datum_format": "TT.MM.JJJJ",
+    "schrift": "Helvetica",
+    "seitenformat": "A4"
+  },
+  "BT-72": "14.10.2026",
+  "BT-119": "19.00",
+  "positions": [
+    {
+      "qty": "1",
+      "unit": "Stk.",
+      "description": [
+        "Anfahrtspauschale"
+      ],
+      "article_number": "GP-400",
+      "unit_price": "25.50",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "25.50"
+    },
+    {
+      "qty": "120",
+      "unit": "Stk.",
+      "description": [
+        "Rasenansaat inkl. Bodenvorbereitung, je m², gemäß",
+        "Angebot und Abstimmung vor Ort"
+      ],
+      "article_number": "GP-210",
+      "unit_price": "3.88",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "465.60"
+    },
+    {
+      "qty": "20",
+      "unit": "Stk.",
+      "description": [
+        "Rindenmulch 40 l Sack"
+      ],
+      "article_number": "GP-320",
+      "unit_price": "4.50",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "90.00"
+    },
+    {
+      "qty": "3",
+      "unit": "Stk.",
+      "description": [
+        "Rhododendron 40–50 cm, Container"
+      ],
+      "article_number": "GP-310",
+      "unit_price": "24.00",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "72.00"
+    },
+    {
+      "qty": "2",
+      "unit": "Std.",
+      "description": [
+        "Planung Außenanlage, Entwurf, gemäß Angebot",
+        "und Abstimmung vor Ort"
+      ],
+      "article_number": "GP-100",
+      "unit_price": "69.50",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "139.00"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": null,
+  "discount_days": null,
+  "payment_days": 30,
+  "totals": {
+    "net": "792.10",
+    "vat": "150.50",
+    "gross": "942.60"
+  },
+  "totals_printed": {
+    "net": "792.10",
+    "vat": "150.50",
+    "gross": "942.60"
+  },
+  "payment": {
+    "discount_date": null,
+    "due_date": "13.11.2026",
+    "discount_amount": null,
+    "discount_base": null
+  },
+  "payment_terms_text": [
+    "Bitte begleichen Sie den offenen Betrag bis zum 13.11.2026 an die unten aufgeführte Bankverbindung."
+  ],
+  "page_count": 1,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "transfer": null,
+      "carry_forward": null,
+      "summary_present": true
+    }
+  ],
+  "erwarteter_status": "ok",
+  "erwartete_hinweise": [],
+  "kosit": null,
+  "verapdf": null,
+  "validierung_hinweis": "lokal nicht validierbar / spätere Phase (KoSIT/veraPDF prüfen die App-Ausgabe, nicht diese PDFs)",
+  "korrekturen": null,
+  "korrekturen_hinweis": "erst beim echten Anlernen messbar",
+  "test_flags": {
+    "address_name_lines": 3,
+    "po_box": false,
+    "multi_line_positions": 2,
+    "shipping_position": false,
+    "page_format": "A4",
+    "payment": "fest",
+    "pruefen": null,
+    "missing_order_number": true,
+    "note": "3 Namenszeilen, Bezeichnungen mehrzeilig"
+  },
+  "sha256": "a7e2a628754d5ce4c0337528e5606d165abb178eb72a31e39aff4391e48af948"
+}

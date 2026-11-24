@@ -1,0 +1,632 @@
+{
+  "datei": "Rechnung_018_FA-26-10428.pdf",
+  "format": "PDF 1.4 (reportlab, Schriften eingebettet)",
+  "holdout": false,
+  "seller": {
+    "name": "Fiktiva Antriebstechnik GmbH",
+    "street": "Musterring 12",
+    "postal_code": "04179",
+    "city": "Leipzig",
+    "ust_id": "DE314159262",
+    "iban": "DE71 0000 0000 0047 1108 15",
+    "bic": "FIKTDEX1XXX",
+    "bank": "Beispielbank Leipzig",
+    "email": "rechnung@fiktiva.example",
+    "register": "Amtsgericht Leipzig, HRB 000000",
+    "ceo": "Jana Mustermann"
+  },
+  "buyer": {
+    "name_lines": [
+      "Pumpenwerk Ahrens AG"
+    ],
+    "street": "Wehrstraße 5",
+    "postal_code": "57439",
+    "city": "Attendorn",
+    "customer_number": "40118"
+  },
+  "invoice": {
+    "number": "FA-26-10428",
+    "date": "22.10.2026",
+    "service_date": "22.10.2026",
+    "order_number": "BE-26-252",
+    "shipping": "Abholung"
+  },
+  "positions": [
+    {
+      "qty": 20,
+      "unit": "Stk.",
+      "description": [
+        "Kettenrad 1/2\" Z=19 24-4810"
+      ],
+      "unit_price": "38.00",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "760.00"
+    },
+    {
+      "qty": 400,
+      "unit": "Stk.",
+      "description": [
+        "Sicherungsring DIN 471 20x1,2 24-9847"
+      ],
+      "unit_price": "8.86",
+      "kind": "regular",
+      "price_unit": "/100",
+      "price_unit_qty": 100,
+      "min_order": false,
+      "total": "35.44"
+    },
+    {
+      "qty": 400,
+      "unit": "Stk.",
+      "description": [
+        "Sicherungsring DIN 471 20x1,2 10-8009 inkl.",
+        "Prüfprotokoll und Werkszeugnis 2.2 nach EN 10204"
+      ],
+      "unit_price": "14.85",
+      "kind": "regular",
+      "price_unit": "/100",
+      "price_unit_qty": 100,
+      "min_order": false,
+      "total": "59.40"
+    },
+    {
+      "qty": 6,
+      "unit": "Stk.",
+      "description": [
+        "Schutzhaube Riementrieb 45-7051"
+      ],
+      "unit_price": "132.00",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "792.00"
+    },
+    {
+      "qty": 400,
+      "unit": "Stk.",
+      "description": [
+        "Zylinderschraube ISO 4762 M6x20 8.8 verzinkt 48-4483"
+      ],
+      "unit_price": "5.56",
+      "kind": "regular",
+      "price_unit": "/100",
+      "price_unit_qty": 100,
+      "min_order": false,
+      "total": "22.24"
+    },
+    {
+      "qty": 2,
+      "unit": "Std.",
+      "description": [
+        "Konstruktionsstunden"
+      ],
+      "unit_price": "81.75",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "163.50"
+    },
+    {
+      "qty": 500,
+      "unit": "Stk.",
+      "description": [
+        "Scheibe ISO 7089 8 verzinkt 20-2862"
+      ],
+      "unit_price": "4.10",
+      "kind": "regular",
+      "price_unit": "/100",
+      "price_unit_qty": 100,
+      "min_order": false,
+      "total": "20.50"
+    },
+    {
+      "qty": 8,
+      "unit": "Std.",
+      "description": [
+        "Montagearbeit vor Ort"
+      ],
+      "unit_price": "64.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "516.00"
+    },
+    {
+      "qty": 10,
+      "unit": "Stk.",
+      "description": [
+        "Lagerbock LB-40 Stahl verzinkt 87-8841"
+      ],
+      "unit_price": "47.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "475.00"
+    },
+    {
+      "qty": 25,
+      "unit": "Stk.",
+      "description": [
+        "Lagerbock LB-40 Stahl verzinkt 71-4980"
+      ],
+      "unit_price": "49.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "1237.50"
+    },
+    {
+      "qty": 300,
+      "unit": "Stk.",
+      "description": [
+        "O-Ring 20x2 NBR 70 12-1567"
+      ],
+      "unit_price": "18.40",
+      "kind": "regular",
+      "price_unit": "/100",
+      "price_unit_qty": 100,
+      "min_order": false,
+      "total": "55.20"
+    },
+    {
+      "qty": 4,
+      "unit": "Stk.",
+      "description": [
+        "Antriebswelle nach Zeichnung 36-2077"
+      ],
+      "unit_price": "166.25",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "665.00"
+    },
+    {
+      "qty": 200,
+      "unit": "Stk.",
+      "description": [
+        "Zylinderschraube ISO 4762 M6x20 8.8 verzinkt 41-9628"
+      ],
+      "unit_price": "13.88",
+      "kind": "regular",
+      "price_unit": "/100",
+      "price_unit_qty": 100,
+      "min_order": false,
+      "total": "27.76"
+    },
+    {
+      "qty": 150,
+      "unit": "Stk.",
+      "description": [
+        "Sicherungsring DIN 471 20x1,2 64-9083"
+      ],
+      "unit_price": "12.90",
+      "kind": "regular",
+      "price_unit": "/100",
+      "price_unit_qty": 100,
+      "min_order": false,
+      "total": "19.35"
+    },
+    {
+      "qty": 50,
+      "unit": "Stk.",
+      "description": [
+        "Schutzhaube Riementrieb 56-4397"
+      ],
+      "unit_price": "111.75",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "5587.50"
+    },
+    {
+      "qty": 4,
+      "unit": "Std.",
+      "description": [
+        "Fahrzeit Monteur"
+      ],
+      "unit_price": "45.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "182.00"
+    },
+    {
+      "qty": 400,
+      "unit": "Stk.",
+      "description": [
+        "Zylinderstift ISO 8734 6x24 72-7881"
+      ],
+      "unit_price": "20.50",
+      "kind": "regular",
+      "price_unit": "/100",
+      "price_unit_qty": 100,
+      "min_order": false,
+      "total": "82.00"
+    },
+    {
+      "qty": 40,
+      "unit": "Stk.",
+      "description": [
+        "Zahnriemenscheibe T10 Z=32 52-7676"
+      ],
+      "unit_price": "53.00",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "2120.00"
+    },
+    {
+      "qty": 10,
+      "unit": "Stk.",
+      "description": [
+        "Antriebswelle nach Zeichnung 60-9250"
+      ],
+      "unit_price": "204.75",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "2047.50"
+    },
+    {
+      "qty": 6,
+      "unit": "Stk.",
+      "description": [
+        "Lagerbock LB-40 Stahl verzinkt 45-6651"
+      ],
+      "unit_price": "24.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "147.00"
+    },
+    {
+      "qty": 1,
+      "unit": "Stk.",
+      "description": [
+        "Zahnriemenscheibe T10 Z=32 19-3203"
+      ],
+      "unit_price": "69.25",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "69.25"
+    },
+    {
+      "qty": 4,
+      "unit": "Stk.",
+      "description": [
+        "Lagerdeckel LD-62 38-8337"
+      ],
+      "unit_price": "19.12",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "76.48"
+    },
+    {
+      "qty": 40,
+      "unit": "Std.",
+      "description": [
+        "Programmierung Frequenzumrichter"
+      ],
+      "unit_price": "92.25",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "3690.00"
+    },
+    {
+      "qty": 1,
+      "unit": "Stk.",
+      "description": [
+        "Zahnriemenscheibe T10 Z=32 44-5507"
+      ],
+      "unit_price": "41.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "41.50"
+    },
+    {
+      "qty": 200,
+      "unit": "Stk.",
+      "description": [
+        "Sechskantmutter ISO 4032 M8 verzinkt 70-6271"
+      ],
+      "unit_price": "2.71",
+      "kind": "regular",
+      "price_unit": "/100",
+      "price_unit_qty": 100,
+      "min_order": false,
+      "total": "5.42"
+    },
+    {
+      "qty": 400,
+      "unit": "Stk.",
+      "description": [
+        "O-Ring 20x2 NBR 70 32-8942"
+      ],
+      "unit_price": "10.36",
+      "kind": "regular",
+      "price_unit": "/100",
+      "price_unit_qty": 100,
+      "min_order": false,
+      "total": "41.44"
+    },
+    {
+      "qty": 200,
+      "unit": "Stk.",
+      "description": [
+        "Passfeder DIN 6885 A 8x7x40 51-3471"
+      ],
+      "unit_price": "49.50",
+      "kind": "regular",
+      "price_unit": "/100",
+      "price_unit_qty": 100,
+      "min_order": false,
+      "total": "99.00"
+    },
+    {
+      "qty": 200,
+      "unit": "Stk.",
+      "description": [
+        "Scheibe ISO 7089 8 verzinkt 35-6315"
+      ],
+      "unit_price": "1.39",
+      "kind": "regular",
+      "price_unit": "/100",
+      "price_unit_qty": 100,
+      "min_order": false,
+      "total": "2.78"
+    },
+    {
+      "qty": 1,
+      "unit": "Stk.",
+      "description": [
+        "Antriebswelle nach Zeichnung 73-6948"
+      ],
+      "unit_price": "418.75",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "418.75"
+    },
+    {
+      "qty": 300,
+      "unit": "Stk.",
+      "description": [
+        "Sicherungsring DIN 471 20x1,2 81-5347"
+      ],
+      "unit_price": "9.36",
+      "kind": "regular",
+      "price_unit": "/100",
+      "price_unit_qty": 100,
+      "min_order": false,
+      "total": "28.08"
+    },
+    {
+      "qty": 40,
+      "unit": "Stk.",
+      "description": [
+        "Motorkonsole MK-112 geschweißt 59-1374"
+      ],
+      "unit_price": "128.25",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "5130.00"
+    },
+    {
+      "qty": 4,
+      "unit": "Std.",
+      "description": [
+        "Inbetriebnahme Antriebseinheit"
+      ],
+      "unit_price": "82.00",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "328.00"
+    },
+    {
+      "qty": 12,
+      "unit": "Std.",
+      "description": [
+        "Montagearbeit vor Ort"
+      ],
+      "unit_price": "59.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "714.00"
+    },
+    {
+      "qty": 2,
+      "unit": "Stk.",
+      "description": [
+        "Zahnriemenscheibe T10 Z=32 54-3844"
+      ],
+      "unit_price": "42.75",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "85.50"
+    },
+    {
+      "qty": 500,
+      "unit": "Stk.",
+      "description": [
+        "Passfeder DIN 6885 A 8x7x40 18-3696"
+      ],
+      "unit_price": "26.50",
+      "kind": "regular",
+      "price_unit": "/100",
+      "price_unit_qty": 100,
+      "min_order": false,
+      "total": "132.50"
+    },
+    {
+      "qty": 6,
+      "unit": "Stk.",
+      "description": [
+        "Distanzbuchse 20x30x15 66-7100"
+      ],
+      "unit_price": "5.43",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "32.58"
+    },
+    {
+      "qty": 150,
+      "unit": "Stk.",
+      "description": [
+        "Sechskantmutter ISO 4032 M8 verzinkt 87-1439"
+      ],
+      "unit_price": "4.83",
+      "kind": "regular",
+      "price_unit": "/100",
+      "price_unit_qty": 100,
+      "min_order": false,
+      "total": "7.25"
+    },
+    {
+      "qty": 6,
+      "unit": "Std.",
+      "description": [
+        "Montagearbeit vor Ort"
+      ],
+      "unit_price": "72.75",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "436.50"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": null,
+  "discount_days": null,
+  "payment_days": 30,
+  "totals": {
+    "net": "26353.92",
+    "vat": "5007.24",
+    "gross": "31361.16"
+  },
+  "payment": {
+    "discount_date": null,
+    "due_date": "21.11.2026",
+    "discount_amount": null,
+    "discount_base": null
+  },
+  "payment_terms_text": [
+    "zahlbar bis 21.11.2026 ohne Abzug"
+  ],
+  "page_count": 2,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
+      ],
+      "line_count": 18,
+      "transfer": "10700.39",
+      "carry_forward": null,
+      "summary_present": false,
+      "payment_block_present": true
+    },
+    {
+      "page": 2,
+      "position_indices": [
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38
+      ],
+      "line_count": 21,
+      "transfer": null,
+      "carry_forward": null,
+      "summary_present": true,
+      "payment_block_present": false
+    }
+  ],
+  "test_flags": {
+    "address_name_lines": 1,
+    "address_blank_lines": 2,
+    "address_attention_line": false,
+    "address_department_line": false,
+    "two_line_company_name": false,
+    "missing_order_number": false,
+    "shipping_empty": false,
+    "discount_applied": false,
+    "blank_unit_flat_rate": false,
+    "without_price_count": 0,
+    "flat_rate_count": 0,
+    "min_order": null,
+    "price_unit_100_count": 15,
+    "two_three_line_positions": 1,
+    "four_five_line_positions": 0,
+    "has_qty_thousands": false,
+    "carry_forward": false,
+    "last_table_row_index": 23,
+    "note": "2 Seiten, Endseite bis knapp vor die Fußzeile, 2 Leerzeilen"
+  },
+  "sha256": "51b373737ccd570f2e169bd948397701c54674b7d4284b4ccb2788cc740e34fb"
+}

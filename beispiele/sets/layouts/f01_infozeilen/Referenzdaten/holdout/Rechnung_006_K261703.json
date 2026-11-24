@@ -1,0 +1,207 @@
+{
+  "datei": "Rechnung_006_K261703.pdf",
+  "format": "PDF 1.4 (reportlab), A4, Schrift Helvetica (Standard-14, nicht eingebettet)",
+  "familie": "f01_infozeilen",
+  "quelle": "Q1",
+  "holdout": true,
+  "split": "holdout",
+  "seller": {
+    "name": "Kaltwasser Armaturen GmbH",
+    "street": "Lindenallee 4",
+    "postal_code": "34117",
+    "city": "Kassel",
+    "ust_id": "DE271831041",
+    "iban": "DE30 0000 0000 0041 1700 12",
+    "bic": "KALTDEX1XXX",
+    "bank": "Beispielbank Kassel",
+    "email": "info@kaltwasser.example",
+    "register": "Amtsgericht Kassel HRB 00000",
+    "ceo": "Henrike Kaltwasser"
+  },
+  "buyer": {
+    "name_lines": [
+      "Stadtwerke Beispielstadt",
+      "Abteilung Netzbetrieb"
+    ],
+    "street": "Kraftwerkstraße 2",
+    "postal_code": "06844",
+    "city": "Dessau-Roßlau",
+    "customer_number": "20417"
+  },
+  "invoice": {
+    "number": "K261703",
+    "date": "30.10.2026",
+    "service_date": "30.10.2026",
+    "order_number": "378306",
+    "shipping": "",
+    "date_printed": "30.10.26"
+  },
+  "druck": {
+    "datum_format": "TT.MM.JJ",
+    "schrift": "Helvetica",
+    "seitenformat": "A4"
+  },
+  "BT-72": "30.10.2026",
+  "BT-119": "19.00",
+  "positions": [
+    {
+      "qty": "12",
+      "unit": "Stk.",
+      "description": [
+        "Manometer 0–10 bar, Ø 63 mm"
+      ],
+      "article_number": "MA-8040-GL",
+      "unit_price": "10.05",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "120.60"
+    },
+    {
+      "qty": "10",
+      "unit": "Stk.",
+      "description": [
+        "Flanschdichtung DN65 PN16, Ausführung für",
+        "Trinkwasser, DVGW-geprüft"
+      ],
+      "article_number": "FL-7065-ST",
+      "unit_price": "5.46",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "54.60"
+    },
+    {
+      "qty": "20",
+      "unit": "Stk.",
+      "description": [
+        "Druckminderer 1/2\" mit Manometer"
+      ],
+      "article_number": "DM-3010-ED",
+      "unit_price": "41.25",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "825.00"
+    },
+    {
+      "qty": "12",
+      "unit": "Stk.",
+      "description": [
+        "Kugelhahn DN15 Messing vernickelt"
+      ],
+      "article_number": "KH-1015-MS",
+      "unit_price": "11.12",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "133.44"
+    },
+    {
+      "qty": "6",
+      "unit": "Stk.",
+      "description": [
+        "Schmutzfänger DN32 Edelstahl"
+      ],
+      "article_number": "SF-4032-VA",
+      "unit_price": "96.25",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "577.50"
+    },
+    {
+      "qty": "1",
+      "unit": "Stk.",
+      "description": [
+        "Versand und Verpackung"
+      ],
+      "article_number": "V-13KG",
+      "unit_price": "11.90",
+      "kind": "shipping",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "11.90"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": "2.00",
+  "discount_days": 10,
+  "payment_days": 30,
+  "totals": {
+    "net": "1711.14",
+    "vat": "325.12",
+    "gross": "2036.26"
+  },
+  "totals_printed": {
+    "net": "1711.14",
+    "vat": "325.12",
+    "gross": "2036.26"
+  },
+  "payment": {
+    "discount_date": "09.11.2026",
+    "due_date": "29.11.2026",
+    "discount_amount": "40.73",
+    "discount_base": "gross"
+  },
+  "payment_terms_text": [
+    "10 Tage 2% Skonto, 30 Tage ohne Abzug"
+  ],
+  "page_count": 1,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "transfer": null,
+      "carry_forward": null,
+      "summary_present": true
+    }
+  ],
+  "erwarteter_status": "fehler",
+  "erwartete_hinweise": [
+    "PRUEFEN [BT-109] Kontrollwert der Quelle ≠ berechnet (gedrucktes Netto 1.711,14 €, Σ Positionen 1.723,04 €)"
+  ],
+  "kosit": null,
+  "verapdf": null,
+  "validierung_hinweis": "lokal nicht validierbar / spätere Phase (KoSIT/veraPDF prüfen die App-Ausgabe, nicht diese PDFs)",
+  "korrekturen": null,
+  "korrekturen_hinweis": "erst beim echten Anlernen messbar",
+  "test_flags": {
+    "address_name_lines": 2,
+    "po_box": false,
+    "multi_line_positions": 1,
+    "shipping_position": true,
+    "page_format": "A4",
+    "payment": "skonto",
+    "pruefen": null,
+    "missing_order_number": false,
+    "note": "Hold-out FEHLER: Versandposition nicht im gedruckten Netto",
+    "bearbeiter": "Ilka Brosowski",
+    "auftragsnummer": "O1913",
+    "komission": "Baustelle Fuldaer Straße"
+  },
+  "rolle": "holdout-fehler",
+  "moegliche_folgehinweise": [
+    "PRUEFEN [BT-110] / [BT-112] Kontrollwert der Quelle ≠ berechnet (USt und Brutto folgen dem gedruckten Netto)"
+  ],
+  "fehlerart": "summe_positionen",
+  "fehler_beschreibung": "Σ Positionen ≠ gedrucktes Netto: die letzte Position (Versand) ist nicht mitsummiert; USt und Brutto sind aus dem gedruckten Netto richtig weitergerechnet",
+  "falle": null,
+  "falle_beschreibung": null,
+  "fehler_detail": {
+    "nicht_summiert": "Pos 6 (Versand und Verpackung, 11,90 €)"
+  },
+  "totals_berechnet": {
+    "net": "1723.04",
+    "vat": "327.38",
+    "gross": "2050.42"
+  },
+  "sha256": "b20750eb6f3b735f79321825bf84d0fa5f91ec72c0f2258bd57120e2f23487e4"
+}

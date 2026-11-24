@@ -1,0 +1,148 @@
+{
+  "datei": "Rechnung_005_RE-2026-00129.pdf",
+  "format": "PDF/A-2b",
+  "seller": {
+    "name": "Alberon Industriekomponenten GmbH",
+    "street": "Prüfwerkstraße 18",
+    "postal_code": "09111",
+    "city": "Chemnitz",
+    "ust_id": "DE123456789",
+    "iban": "DE89 3704 0044 0532 0130 00",
+    "bic": "COBADEFFXXX",
+    "bank": "Commerzbank AG",
+    "email": "rechnung@alberon.example",
+    "register": "Amtsgericht Chemnitz, HRB 999999",
+    "ceo": "Markus Seidel"
+  },
+  "buyer": {
+    "name_lines": [
+      "Bergland Anlagenbau GmbH",
+      "Standort West",
+      "z. Hd. Wareneingang"
+    ],
+    "street": "Werkhof 5",
+    "postal_code": "09599",
+    "city": "Freiberg",
+    "customer_number": "0008341"
+  },
+  "invoice": {
+    "number": "RE-2026-00129",
+    "date": "10.08.2026",
+    "service_date": "07.08.2026",
+    "order_number": "593-8337",
+    "shipping": "EXW"
+  },
+  "positions": [
+    {
+      "qty": 100,
+      "unit": "Stk.",
+      "description": [
+        "Spannhülse 460601"
+      ],
+      "unit_price": "1250.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "125050.00"
+    },
+    {
+      "qty": 2,
+      "unit": "Stk.",
+      "description": [
+        "Distanzhülse 276076"
+      ],
+      "unit_price": "480.00",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "960.00"
+    },
+    {
+      "qty": 3,
+      "unit": "Stk.",
+      "description": [
+        "Trägerplatte 18376"
+      ],
+      "unit_price": "2.35",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "7.05"
+    },
+    {
+      "qty": 200,
+      "unit": "Stk.",
+      "description": [
+        "Adapterplatte 354213"
+      ],
+      "unit_price": "12.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "2500.00"
+    },
+    {
+      "qty": 75,
+      "unit": "Stk.",
+      "description": [
+        "Montageschiene 987470"
+      ],
+      "unit_price": "3.90",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "292.50"
+    },
+    {
+      "qty": 75,
+      "unit": "Stk.",
+      "description": [
+        "Aluminiumgehäuse 87549"
+      ],
+      "unit_price": "14.99",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "1124.25"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": null,
+  "discount_days": null,
+  "payment_days": 30,
+  "totals": {
+    "net": "129933.80",
+    "vat": "24687.42",
+    "gross": "154621.22"
+  },
+  "payment": {
+    "discount_date": null,
+    "due_date": "09.09.2026",
+    "discount_amount": null
+  },
+  "page_count": 1,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "line_count": 6,
+      "transfer": null,
+      "summary_present": true,
+      "payment_block_present": true
+    }
+  ],
+  "test_flags": {
+    "address_name_lines": 3,
+    "missing_order_number": false,
+    "shipping_empty": false,
+    "discount_applied": false,
+    "blank_unit_flat_rate": false,
+    "without_price_count": 0,
+    "flat_rate_count": 0,
+    "two_three_line_positions": 0,
+    "four_five_line_positions": 0,
+    "has_qty_thousands": false
+  },
+  "sha256": "d1d9e004bc355675e84bef68c65f073fd3266164500a62a74a78459e4d80c8cb"
+}

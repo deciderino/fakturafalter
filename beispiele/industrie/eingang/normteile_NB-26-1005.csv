@@ -1,0 +1,6 @@
+Rechnungsnr;Datum;Lieferdatum;Kunde;Strasse;PLZ;Ort;Artikel;Menge;Einheit;Einzelpreis;Preiseinheit;USt-Satz
+NB-26-1005;17.10.2026;16.10.2026;Maschinenbau Halder KG;Talsperrenweg 3;58511;Lüdenscheid;Zylinderschraube ISO 4762 M6x20 12.9;2000;Stk;9,60;100;19
+NB-26-1005;17.10.2026;16.10.2026;Maschinenbau Halder KG;Talsperrenweg 3;58511;Lüdenscheid;Sechskantschraube DIN 933 M8x30 8.8 verzinkt;2000;Stk;4,80;100;19
+NB-26-1005;17.10.2026;16.10.2026;Maschinenbau Halder KG;Talsperrenweg 3;58511;Lüdenscheid;Scheibe DIN 125 A 10,5 verzinkt;2500;Stk;1,35;100;19
+NB-26-1005;17.10.2026;16.10.2026;Maschinenbau Halder KG;Talsperrenweg 3;58511;Lüdenscheid;Frästeil Halter AlMgSi nach Zeichnung 0815-C;40;Stk;27,40;1;19
+NB-26-1005;17.10.2026;16.10.2026;Maschinenbau Halder KG;Talsperrenweg 3;58511;Lüdenscheid;Zerspanung Lohnarbeit CNC-Drehen;1,5;Std;68,00;1;19

@@ -1,0 +1,33 @@
+# Elektro Funke e.K. (erfunden) – Windows-1252, Komma als Trennzeichen, Dezimalpunkt
+profil: elektro
+datei: {muster: "elektro_*.csv", trennzeichen: ","}
+zahlen: {dezimal: ".", tausender: ""}
+datum: {format: "%d.%m.%Y"}
+aufbau: {art: zeile_je_position, rechnung_schluessel: belegnr}
+
+felder:
+  kopf:
+    BT-1:  {spalte: belegnr}
+    BT-2:  {spalte: belegdatum, typ: datum}
+    BT-72: {spalte: leistungsdatum, typ: datum}
+    BT-44: {spalte: kunde}
+    BT-50: {spalte: strasse}
+    BT-53: {spalte: plz}
+    BT-52: {spalte: ort}
+  position:
+    BT-153: {spalte: bezeichnung}
+    BT-129: {spalte: menge, typ: zahl}
+    BT-130: {spalte: einheit, mapping: einheiten}
+    BT-146: {spalte: preis, typ: zahl}
+    steuer: {spalte: ust, mapping: steuer}
+
+mappings:
+  einheiten: {h: HUR, m: MTR, Stk: C62, unbekannt: pruefen}
+  steuer: {"19": {BT-151: S, BT-152: 19}, unbekannt: pruefen}
+
+verkaeufer:
+  name: Elektro Funke e.K.
+  anschrift: {strasse: Hellweg 120, plz: "44787", ort: Bochum}
+  ust_id: DE314159262
+  register: Amtsgericht Bochum HRA 77001
+zahlung: {iban: DE44000000000002718281}

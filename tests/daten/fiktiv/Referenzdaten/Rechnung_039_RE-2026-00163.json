@@ -1,0 +1,398 @@
+{
+  "datei": "Rechnung_039_RE-2026-00163.pdf",
+  "format": "PDF/A-2b",
+  "seller": {
+    "name": "Alberon Industriekomponenten GmbH",
+    "street": "Prüfwerkstraße 18",
+    "postal_code": "09111",
+    "city": "Chemnitz",
+    "ust_id": "DE123456789",
+    "iban": "DE89 3704 0044 0532 0130 00",
+    "bic": "COBADEFFXXX",
+    "bank": "Commerzbank AG",
+    "email": "rechnung@alberon.example",
+    "register": "Amtsgericht Chemnitz, HRB 999999",
+    "ceo": "Markus Seidel"
+  },
+  "buyer": {
+    "name_lines": [
+      "Silberberg Vorrichtungen GmbH",
+      "z. Hd. Beschaffung",
+      "Werk Ost"
+    ],
+    "street": "Talring 10",
+    "postal_code": "50667",
+    "city": "Köln",
+    "customer_number": "89341"
+  },
+  "invoice": {
+    "number": "RE-2026-00163",
+    "date": "13.10.2026",
+    "service_date": "11.10.2026",
+    "order_number": "BE-3789-E",
+    "shipping": "Spedition"
+  },
+  "positions": [
+    {
+      "qty": 40,
+      "unit": "Stk.",
+      "description": [
+        "CNC-Nacharbeit 83241"
+      ],
+      "unit_price": "4.75",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "190.00"
+    },
+    {
+      "qty": 5000,
+      "unit": "Stk.",
+      "description": [
+        "Führungsbuchse 200685"
+      ],
+      "unit_price": "7.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "37500.00"
+    },
+    {
+      "qty": 125,
+      "unit": "Stk.",
+      "description": [
+        "Befestigungswinkel 314317"
+      ],
+      "unit_price": null,
+      "kind": "without_price",
+      "price_unit": "/1",
+      "total": null
+    },
+    {
+      "qty": 1,
+      "unit": "",
+      "description": [
+        "Pauschalpreis Auftrag 2026-822"
+      ],
+      "unit_price": "120.00",
+      "kind": "flat_rate",
+      "price_unit": "/1",
+      "total": "120.00"
+    },
+    {
+      "qty": 6,
+      "unit": "Std.",
+      "description": [
+        "Kupplungsstück 621204"
+      ],
+      "unit_price": null,
+      "kind": "without_price",
+      "price_unit": "/1",
+      "total": null
+    },
+    {
+      "qty": 1250,
+      "unit": "Stk.",
+      "description": [
+        "Adapterplatte 298002"
+      ],
+      "unit_price": null,
+      "kind": "without_price",
+      "price_unit": "/1",
+      "total": null
+    },
+    {
+      "qty": 40,
+      "unit": "Stk.",
+      "description": [
+        "Aluminiumgehäuse 300540"
+      ],
+      "unit_price": null,
+      "kind": "without_price",
+      "price_unit": "/1",
+      "total": null
+    },
+    {
+      "qty": 40,
+      "unit": "Stk.",
+      "description": [
+        "Maschinenbolzen 463764"
+      ],
+      "unit_price": null,
+      "kind": "without_price",
+      "price_unit": "/1",
+      "total": null
+    },
+    {
+      "qty": 1,
+      "unit": "",
+      "description": [
+        "Fixpreis Auftrag 2027-189"
+      ],
+      "unit_price": "300.00",
+      "kind": "flat_rate",
+      "price_unit": "/1",
+      "total": "300.00"
+    },
+    {
+      "qty": 25,
+      "unit": "Stk.",
+      "description": [
+        "Befestigungswinkel 561095"
+      ],
+      "unit_price": "12.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "312.50"
+    },
+    {
+      "qty": 2,
+      "unit": "Stk.",
+      "description": [
+        "Distanzhülse 515278"
+      ],
+      "unit_price": "18.75",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "37.50"
+    },
+    {
+      "qty": 1,
+      "unit": "Stk.",
+      "description": [
+        "Trägerplatte 36710"
+      ],
+      "unit_price": "480.00",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "480.00"
+    },
+    {
+      "qty": 75,
+      "unit": "Stk.",
+      "description": [
+        "Trägerplatte 102691"
+      ],
+      "unit_price": "1799.99",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "134999.25"
+    },
+    {
+      "qty": 75,
+      "unit": "Stk.",
+      "description": [
+        "Trägerplatte 274878"
+      ],
+      "unit_price": "7.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "562.50"
+    },
+    {
+      "qty": 3,
+      "unit": "Stk.",
+      "description": [
+        "Aufnahmeflansch 879906"
+      ],
+      "unit_price": "2.35",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "7.05"
+    },
+    {
+      "qty": 5000,
+      "unit": "Stk.",
+      "description": [
+        "Adapterplatte 580435"
+      ],
+      "unit_price": "35.00",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "175000.00"
+    },
+    {
+      "qty": 1,
+      "unit": "Stk.",
+      "description": [
+        "Maschinenbolzen 285961"
+      ],
+      "unit_price": "480.00",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "480.00"
+    },
+    {
+      "qty": 125,
+      "unit": "Stk.",
+      "description": [
+        "Adapterplatte 707712"
+      ],
+      "unit_price": "4.75",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "593.75"
+    },
+    {
+      "qty": 3,
+      "unit": "Stk.",
+      "description": [
+        "Mess- und Prüfarbeit 504373"
+      ],
+      "unit_price": "0.85",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "2.55"
+    },
+    {
+      "qty": 15,
+      "unit": "Stk.",
+      "description": [
+        "Abdeckprofil 572323"
+      ],
+      "unit_price": null,
+      "kind": "without_price",
+      "price_unit": "/1",
+      "total": null
+    },
+    {
+      "qty": 3,
+      "unit": "Stk.",
+      "description": [
+        "Führungsbuchse 421479",
+        "Materialzustand T6, gratfrei"
+      ],
+      "unit_price": null,
+      "kind": "without_price",
+      "price_unit": "/1",
+      "total": null
+    },
+    {
+      "qty": 1,
+      "unit": "Stk.",
+      "description": [
+        "Pauschalpreis Auftrag 2028-704"
+      ],
+      "unit_price": "250.00",
+      "kind": "flat_rate",
+      "price_unit": "/1",
+      "total": "250.00"
+    },
+    {
+      "qty": 50,
+      "unit": "Std.",
+      "description": [
+        "Nachbearbeitung 997544"
+      ],
+      "unit_price": "46.80",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "2340.00"
+    },
+    {
+      "qty": 40,
+      "unit": "Stk.",
+      "description": [
+        "Führungsbuchse 823347"
+      ],
+      "unit_price": "3.90",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "156.00"
+    },
+    {
+      "qty": 5,
+      "unit": "Stk.",
+      "description": [
+        "Passstift 419478"
+      ],
+      "unit_price": "46.80",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "234.00"
+    },
+    {
+      "qty": 12,
+      "unit": "Stk.",
+      "description": [
+        "Trägerplatte 909149"
+      ],
+      "unit_price": "3.90",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "46.80"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": null,
+  "discount_days": null,
+  "payment_days": 30,
+  "totals": {
+    "net": "353611.90",
+    "vat": "67186.26",
+    "gross": "420798.16"
+  },
+  "payment": {
+    "discount_date": null,
+    "due_date": "12.11.2026",
+    "discount_amount": null
+  },
+  "page_count": 2,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19
+      ],
+      "line_count": 19,
+      "transfer": "350585.10",
+      "summary_present": false,
+      "payment_block_present": true
+    },
+    {
+      "page": 2,
+      "position_indices": [
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26
+      ],
+      "line_count": 8,
+      "transfer": null,
+      "summary_present": true,
+      "payment_block_present": false
+    }
+  ],
+  "test_flags": {
+    "address_name_lines": 3,
+    "missing_order_number": false,
+    "shipping_empty": false,
+    "discount_applied": false,
+    "blank_unit_flat_rate": true,
+    "without_price_count": 7,
+    "flat_rate_count": 3,
+    "two_three_line_positions": 1,
+    "four_five_line_positions": 0,
+    "has_qty_thousands": true
+  },
+  "sha256": "a7f59141cc5ecaf0e91d8191e2637392a7a6185115a4c56605f73f6c8f7996ea"
+}

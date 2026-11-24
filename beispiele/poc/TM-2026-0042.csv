@@ -1,0 +1,5 @@
+rechnungsnummer;rechnungsdatum;leistungsdatum;kundennummer;bestellnummer;kunde_name;kunde_strasse;kunde_plz;kunde_ort;kunde_land;kunde_ustid;kunde_email;leitweg_id;pos;artikelnummer;bezeichnung;menge;einheit;einzelpreis_netto;steuerschluessel
+TM-2026-0042;28.10.2026;23.10.2026;K-2001;BB-2026-117;Beispiel Bau GmbH;Baustellenweg 12;54321;Beispielstadt;DE;DE000000003;rechnung@beispiel-bau.example;;1;EB-100;Einbauschrank Eiche nach Maß;1;Stk;1.850,00;1
+TM-2026-0042;28.10.2026;23.10.2026;K-2001;BB-2026-117;Beispiel Bau GmbH;Baustellenweg 12;54321;Beispielstadt;DE;DE000000003;rechnung@beispiel-bau.example;;2;MON-01;Montage vor Ort;6;Std;58,50;1
+TM-2026-0042;28.10.2026;23.10.2026;K-2001;BB-2026-117;Beispiel Bau GmbH;Baustellenweg 12;54321;Beispielstadt;DE;DE000000003;rechnung@beispiel-bau.example;;3;MAT-220;Kantenumleimer Eiche 22 mm;12,5;m;1,90;1
+TM-2026-0042;28.10.2026;23.10.2026;K-2001;BB-2026-117;Beispiel Bau GmbH;Baustellenweg 12;54321;Beispielstadt;DE;DE000000003;rechnung@beispiel-bau.example;;4;ANF-01;Anfahrtspauschale;1;psch;35,00;1

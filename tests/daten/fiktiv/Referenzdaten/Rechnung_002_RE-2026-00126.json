@@ -1,0 +1,122 @@
+{
+  "datei": "Rechnung_002_RE-2026-00126.pdf",
+  "format": "PDF/A-2b",
+  "seller": {
+    "name": "Alberon Industriekomponenten GmbH",
+    "street": "Prüfwerkstraße 18",
+    "postal_code": "09111",
+    "city": "Chemnitz",
+    "ust_id": "DE123456789",
+    "iban": "DE89 3704 0044 0532 0130 00",
+    "bic": "COBADEFFXXX",
+    "bank": "Commerzbank AG",
+    "email": "rechnung@alberon.example",
+    "register": "Amtsgericht Chemnitz, HRB 999999",
+    "ceo": "Markus Seidel"
+  },
+  "buyer": {
+    "name_lines": [
+      "Nordhafen Präzisionsbau GmbH"
+    ],
+    "street": "Prüferweg 8",
+    "postal_code": "20095",
+    "city": "Hamburg",
+    "customer_number": "1042"
+  },
+  "invoice": {
+    "number": "RE-2026-00126",
+    "date": "05.08.2026",
+    "service_date": "26.07.2026",
+    "order_number": "76236716",
+    "shipping": "DHL"
+  },
+  "positions": [
+    {
+      "qty": 100,
+      "unit": "Stk.",
+      "description": [
+        "Abdeckprofil 622207"
+      ],
+      "unit_price": "1799.99",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "179999.00"
+    },
+    {
+      "qty": 12,
+      "unit": "Stk.",
+      "description": [
+        "Nachbearbeitung 526417"
+      ],
+      "unit_price": "1250.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "15006.00"
+    },
+    {
+      "qty": 2,
+      "unit": "Std.",
+      "description": [
+        "Bearbeitung 78279"
+      ],
+      "unit_price": "3.90",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "7.80"
+    },
+    {
+      "qty": 2500,
+      "unit": "Stk.",
+      "description": [
+        "Aluminiumgehäuse 21948"
+      ],
+      "unit_price": "18.75",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "46875.00"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": null,
+  "discount_days": null,
+  "payment_days": 30,
+  "totals": {
+    "net": "241887.80",
+    "vat": "45958.68",
+    "gross": "287846.48"
+  },
+  "payment": {
+    "discount_date": null,
+    "due_date": "04.09.2026",
+    "discount_amount": null
+  },
+  "page_count": 1,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "line_count": 4,
+      "transfer": null,
+      "summary_present": true,
+      "payment_block_present": true
+    }
+  ],
+  "test_flags": {
+    "address_name_lines": 1,
+    "missing_order_number": false,
+    "shipping_empty": false,
+    "discount_applied": false,
+    "blank_unit_flat_rate": false,
+    "without_price_count": 0,
+    "flat_rate_count": 0,
+    "two_three_line_positions": 0,
+    "four_five_line_positions": 0,
+    "has_qty_thousands": true
+  },
+  "sha256": "623355e6737dde68d617034ffe2e37bf68acee77302c2d5e5ead0ae4ea53c2c0"
+}

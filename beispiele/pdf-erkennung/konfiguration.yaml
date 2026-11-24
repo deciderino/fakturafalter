@@ -1,0 +1,18 @@
+# Konfiguration für die Beispiele zur PDF-Erkennung (ALLE Daten erfunden).
+# Verkäufer und Bank stehen jeweils im Profil; Käufer in der CSV (Metallbau: im Kundenstamm).
+# Angelernte Vorlagen landen in ./angelernt/ (wird beim ersten Paar PDF + CSV angelegt).
+
+ordner:                     # relativ zu dieser Datei
+  eingang: ../../laufzeit/pdf-erkennung/eingang
+  ausgang: ../../laufzeit/pdf-erkennung/ausgang
+  erledigt: ../../laufzeit/pdf-erkennung/erledigt
+  fehler: ../../laufzeit/pdf-erkennung/fehler
+  pruefen: ../../laufzeit/pdf-erkennung/pruefen
+
+csv_profile: [profil-baeckerei.yaml, profil-elektro.yaml, profil-gartenbau.yaml, profil-musikschule.yaml,
+              profil-pixelwerk.yaml, profil-metallbau.yaml]
+pdf_vorlagen: []
+
+optionen:
+  sichtteil: original
+  xrechnung_zusatz: false

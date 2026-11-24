@@ -1,0 +1,4 @@
+belegnr,belegdatum,leistungsdatum,kunde,strasse,plz,ort,menge,einheit,bezeichnung,preis,ust
+EF-1045,17.10.2026,15.10.2026,Wohnbau Nordring GmbH,Nordring 14,44787,Bochum,5,Stk,Fehlerstromschutzschalter 40 A 30 mA vierpolig,64.80,19
+EF-1045,17.10.2026,15.10.2026,Wohnbau Nordring GmbH,Nordring 14,44787,Bochum,25,h,Arbeitszeit Elektromeister,68.00,19
+EF-1045,17.10.2026,15.10.2026,Wohnbau Nordring GmbH,Nordring 14,44787,Bochum,5,Stk,Steckdose Schuko mit Klappdeckel für Feuchtraum IP44,9.90,19

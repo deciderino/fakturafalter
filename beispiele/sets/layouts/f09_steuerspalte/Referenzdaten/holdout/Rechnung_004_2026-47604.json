@@ -1,0 +1,207 @@
+{
+  "datei": "Rechnung_004_2026-47604.pdf",
+  "format": "PDF 1.4 (reportlab), A4, Schrift Courier (Standard-14, nicht eingebettet)",
+  "familie": "f09_steuerspalte",
+  "quelle": "Q8",
+  "holdout": true,
+  "split": "holdout",
+  "seller": {
+    "name": "Lüders Kaffeerösterei GmbH",
+    "street": "Sandtorkai 31",
+    "postal_code": "20457",
+    "city": "Hamburg",
+    "ust_id": "DE118236049",
+    "iban": "DE39 0000 0000 0037 7661 20",
+    "bic": "LUEDDEX1HAM",
+    "bank": "Beispielbank Hamburg",
+    "email": "rechnung@lueders-kaffee.example",
+    "register": "Amtsgericht Hamburg HRB 000000",
+    "ceo": "Jens Lüders"
+  },
+  "buyer": {
+    "name_lines": [
+      "Praxis für Physiotherapie",
+      "Annika Vogelsang"
+    ],
+    "street": "Am Stadtgraben 11",
+    "postal_code": "34117",
+    "city": "Kassel",
+    "customer_number": "K10045"
+  },
+  "invoice": {
+    "number": "2026-47604",
+    "date": "20.10.2026",
+    "service_date": "17.10.2026",
+    "order_number": "B93799",
+    "shipping": ""
+  },
+  "druck": {
+    "datum_format": "TT.MM.JJJJ",
+    "schrift": "Courier",
+    "seitenformat": "A4"
+  },
+  "BT-72": "17.10.2026",
+  "BT-119": [
+    "7.00",
+    "19.00"
+  ],
+  "positions": [
+    {
+      "qty": "20",
+      "unit": "Stk.",
+      "description": [
+        "Röstkaffee Crema, ganze Bohne 1 kg"
+      ],
+      "article_number": "KF-1002",
+      "unit_price": "15.75",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "315.00",
+      "vat_rate": "7.00"
+    },
+    {
+      "qty": "4",
+      "unit": "Stk.",
+      "description": [
+        "Milchkännchen Edelstahl 0,6 l"
+      ],
+      "article_number": "ZB-2010",
+      "unit_price": "11.70",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "46.80",
+      "vat_rate": "19.00"
+    },
+    {
+      "qty": "3",
+      "unit": "Stk.",
+      "description": [
+        "Rohrzucker-Sticks, Karton 1000 Stück"
+      ],
+      "article_number": "KF-1040",
+      "unit_price": "19.60",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "58.80",
+      "vat_rate": "7.00"
+    },
+    {
+      "qty": "1",
+      "unit": "Stk.",
+      "description": [
+        "Siebträgermaschine 2-gruppig"
+      ],
+      "article_number": "ZB-2001",
+      "unit_price": "2569.75",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "2569.75",
+      "vat_rate": "19.00"
+    },
+    {
+      "qty": "10",
+      "unit": "Stk.",
+      "description": [
+        "Filterkaffee gemahlen 500 g, Gerät",
+        "inklusive Einweisung des Personals"
+      ],
+      "article_number": "KF-1010",
+      "unit_price": "8.40",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "84.00",
+      "vat_rate": "7.00"
+    },
+    {
+      "qty": "4",
+      "unit": "Stk.",
+      "description": [
+        "Kakaopulver 1 kg"
+      ],
+      "article_number": "KF-1030",
+      "unit_price": "12.80",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "51.20",
+      "vat_rate": "7.00"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": null,
+  "discount_days": null,
+  "payment_days": 14,
+  "totals": {
+    "net": "3125.55",
+    "vat": "532.77",
+    "gross": "3658.32"
+  },
+  "totals_printed": {
+    "net": "3125.55",
+    "vat": "532.77",
+    "gross": "3658.32"
+  },
+  "payment": {
+    "discount_date": null,
+    "due_date": "03.11.2026",
+    "discount_amount": null,
+    "discount_base": null
+  },
+  "payment_terms_text": [
+    "Zahlbar innerhalb 14 Tagen netto bis 03.11.2026"
+  ],
+  "page_count": 1,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "transfer": null,
+      "carry_forward": null,
+      "summary_present": true
+    }
+  ],
+  "erwarteter_status": "ok",
+  "erwartete_hinweise": [],
+  "kosit": null,
+  "verapdf": null,
+  "validierung_hinweis": "lokal nicht validierbar / spätere Phase (KoSIT/veraPDF prüfen die App-Ausgabe, nicht diese PDFs)",
+  "korrekturen": null,
+  "korrekturen_hinweis": "erst beim echten Anlernen messbar",
+  "test_flags": {
+    "address_name_lines": 2,
+    "po_box": false,
+    "multi_line_positions": 1,
+    "shipping_position": false,
+    "page_format": "A4",
+    "payment": "netto",
+    "pruefen": null,
+    "missing_order_number": false,
+    "note": "Hold-out: gemischt 7/19 %"
+  },
+  "vat_rate_hinweis": "vat_rate bleibt 19.00 für tools/benchmark.py (kennt nur einen Satz); maßgeblich sind BT-119 und vat_breakdown",
+  "vat_breakdown": [
+    {
+      "rate": "7.00",
+      "net": "509.00",
+      "vat": "35.63"
+    },
+    {
+      "rate": "19.00",
+      "net": "2616.55",
+      "vat": "497.14"
+    }
+  ],
+  "sha256": "6dd3eaf6548758816d95544bc2bd5d8d86f81dda751ec90f80f02bb41c7ba504"
+}

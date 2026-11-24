@@ -1,0 +1,77 @@
+# CSV-Zuordnungsprofil – passt zu variante-b_wawi_cp1252.csv (erfundene Daten)
+profil: wawi-semikolon
+version: 1
+beschreibung: "WaWi-Export, Satzart K/P, Windows-1252, Semikolon, Dezimalkomma"
+
+datei:
+  muster: "*.csv"
+  kodierung: auto            # auto | utf-8 | utf-8-sig | cp1252 | cp850 | iso-8859-15
+  kodierung_erwartet: cp1252 # Hinweis für die Erkennung
+  trennzeichen: ";"          # oder auto (Sniffer: ; , TAB |)
+  textbegrenzer: '"'
+  kopfzeile: true            # erste Zeile = Spaltennamen
+  zeilen_ueberspringen: 0
+  zeilenende: auto
+
+zahlen:  {dezimal: ",", tausender: "."}
+datum:   {format: "%d.%m.%Y"}
+
+aufbau:
+  art: satzart               # zeile_je_position | satzart | kopf_und_positionsdatei | feste_breite
+  satzart_spalte: Satzart
+  kopf: K
+  position: P
+  rechnung_schluessel: Belegnr   # verbindet K- und P-Zeilen
+
+felder:
+  kopf:
+    BT-1:          {spalte: Belegnr}
+    BT-2:          {spalte: Belegdatum, typ: datum}
+    BT-72:         {spalte: Lieferdatum, typ: datum, optional: true}
+    BT-13:         {spalte: "Ihre Bestellung", optional: true}
+    kundennummer:  {spalte: Kundennr}
+    BT-3:          {fest: "380"}
+    BT-5:          {fest: EUR}
+    BT-112:        {spalte: "Summe brutto", typ: zahl, zweck: pruefung}
+  position:
+    BT-126:        {spalte: Pos}
+    BT-155:        {spalte: Artikelnr, optional: true}
+    BT-153:        {spalte: Bezeichnung}
+    BT-129:        {spalte: Menge, typ: zahl}
+    BT-130:        {spalte: ME, mapping: einheiten}
+    BT-146:        {spalte: "EP netto", typ: zahl}
+    steuer:        {spalte: StSchl, mapping: steuer}
+
+mappings:
+  einheiten:                 # Hausbezeichnung -> UN/ECE Rec 20
+    "Stück": C62
+    "Stk": C62
+    "Std.": HUR
+    "Std": HUR
+    "m": MTR
+    "kg": KGM
+    "l": LTR
+    "Tag": DAY
+    "psch.": LS
+    unbekannt: pruefen       # pruefen | fehler | C62
+  steuer:                    # WaWi-Steuerschlüssel -> BT-151 / BT-152 (+ BT-120/121)
+    "1": {BT-151: S, BT-152: 19}
+    "2": {BT-151: S, BT-152: 7}
+    "0": {BT-151: E, BT-152: 0, BT-120: "Steuerfrei nach § 4 Nr. … UStG (Beispiel)", BT-121: "VATEX-EU-132"}
+    "9": {BT-151: AE, BT-152: 0, BT-120: "Steuerschuldnerschaft des Leistungsempfängers", BT-121: "VATEX-EU-AE"}
+    unbekannt: pruefen
+
+kundenstamm:
+  datei: kundenstamm.csv
+  schluessel: kundennummer
+  liefert: [BT-44, BT-50, BT-52, BT-53, BT-55, BT-48, BT-49, BT-10, zahlungsziel_tage, format]
+  fehlt: pruefen
+
+ausgabe:
+  format: aus_kundenstamm    # sonst fest: XRECHNUNG_CII | XRECHNUNG_UBL | ZUGFERD_EN16931
+  zahlungsbedingung: "Zahlbar innerhalb {zahlungsziel_tage} Tagen ohne Abzug."
+
+sicherheit:
+  pflichtfeld_fehlt: pruefen
+  zahl_unlesbar: fehler
+  summe_weicht_ab: pruefen   # Toleranz 0,01 €

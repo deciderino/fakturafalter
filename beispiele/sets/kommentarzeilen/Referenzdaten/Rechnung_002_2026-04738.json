@@ -1,0 +1,167 @@
+{
+  "datei": "Rechnung_002_2026-04738.pdf",
+  "format": "PDF 1.4 (reportlab, Schriften eingebettet)",
+  "rolle": "nachlesen",
+  "holdout": false,
+  "seller": {
+    "name": "Testoria Zerspanungstechnik GmbH",
+    "street": "Beispielallee 5",
+    "postal_code": "34117",
+    "city": "Kassel",
+    "ust_id": "DE271828180",
+    "iban": "DE70 0000 0000 0002 6047 11",
+    "bic": "TESTDEX1XXX",
+    "bank": "Musterbank Kassel",
+    "email": "buchhaltung@testoria.example",
+    "register": "Amtsgericht Kassel, HRB 000000",
+    "ceo": "Max Beispiel"
+  },
+  "buyer": {
+    "name_lines": [
+      "Krummbach Verpackungsmaschinen KG"
+    ],
+    "street": "Am Gleisdreieck 4",
+    "postal_code": "59065",
+    "city": "Hamm",
+    "customer_number": "20457"
+  },
+  "invoice": {
+    "number": "2026-04738",
+    "date": "21.10.2026",
+    "service_date": "21.10.2026",
+    "order_number": "BE-26-588",
+    "shipping": "DHL"
+  },
+  "positions": [
+    {
+      "qty": 30,
+      "unit": "Stk.",
+      "description": [
+        "Kettenrad 1/2\" Z=19 18-6604",
+        "davon 8 Stück brüniert"
+      ],
+      "unit_price": "15.06",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "451.80",
+      "comment_lines": [
+        "davon 8 Stück brüniert"
+      ]
+    },
+    {
+      "qty": 1000,
+      "unit": "Stk.",
+      "description": [
+        "Sechskantmutter ISO 4032 M8 verzinkt"
+      ],
+      "unit_price": "3.96",
+      "kind": "regular",
+      "price_unit": "/100",
+      "price_unit_qty": 100,
+      "min_order": false,
+      "total": "39.60",
+      "comment_lines": []
+    },
+    {
+      "qty": 12,
+      "unit": "Stk.",
+      "description": [
+        "Spannsatz SP-30 Ø 30 mm 52-0175"
+      ],
+      "unit_price": "33.75",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "405.00",
+      "comment_lines": []
+    },
+    {
+      "qty": 4,
+      "unit": "Stk.",
+      "description": [
+        "Getriebeflansch GF-80 63-3390",
+        "Restmenge 2 Stück folgt in KW 46"
+      ],
+      "unit_price": "99.75",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "399.00",
+      "comment_lines": [
+        "Restmenge 2 Stück folgt in KW 46"
+      ]
+    },
+    {
+      "qty": 250,
+      "unit": "Stk.",
+      "description": [
+        "Passfeder DIN 6885 A 8x7x40"
+      ],
+      "unit_price": "35.50",
+      "kind": "regular",
+      "price_unit": "/100",
+      "price_unit_qty": 100,
+      "min_order": false,
+      "total": "88.75",
+      "comment_lines": []
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": null,
+  "discount_days": null,
+  "payment_days": 30,
+  "totals": {
+    "net": "1384.15",
+    "vat": "262.99",
+    "gross": "1647.14"
+  },
+  "payment": {
+    "discount_date": null,
+    "due_date": "20.11.2026",
+    "discount_amount": null,
+    "discount_base": null
+  },
+  "payment_terms_text": [
+    "zahlbar bis 20.11.2026 ohne Abzug"
+  ],
+  "page_count": 1,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "line_count": 7,
+      "transfer": null,
+      "carry_forward": null,
+      "summary_present": true,
+      "payment_block_present": true
+    }
+  ],
+  "test_flags": {
+    "address_name_lines": 1,
+    "address_blank_lines": 1,
+    "missing_order_number": false,
+    "discount_applied": false,
+    "price_unit_100_count": 2,
+    "comment_line_count": 2,
+    "comment_line_positions": [
+      1,
+      4
+    ],
+    "comment_starts_at_unit_column": true,
+    "invoice_number_outside_header_block": true,
+    "invoice_number_label": "Rechnung Nr. 2026-04738",
+    "last_table_row_index": 9,
+    "note": "Kommentarzeilen + Rechnungsnummer oben links; Rolle: nachlesen"
+  },
+  "sha256": "f04a880b69065c845ca813265e9d23169c3dfb6c3c1adfc3a14440dd68284958"
+}

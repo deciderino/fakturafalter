@@ -1,0 +1,204 @@
+{
+  "datei": "Rechnung_004_K261668.pdf",
+  "format": "PDF 1.4 (reportlab), A4, Schrift Helvetica (Standard-14, nicht eingebettet)",
+  "familie": "f01_infozeilen",
+  "quelle": "Q1",
+  "holdout": true,
+  "split": "holdout",
+  "seller": {
+    "name": "Kaltwasser Armaturen GmbH",
+    "street": "Lindenallee 4",
+    "postal_code": "34117",
+    "city": "Kassel",
+    "ust_id": "DE271831041",
+    "iban": "DE30 0000 0000 0041 1700 12",
+    "bic": "KALTDEX1XXX",
+    "bank": "Beispielbank Kassel",
+    "email": "info@kaltwasser.example",
+    "register": "Amtsgericht Kassel HRB 00000",
+    "ceo": "Henrike Kaltwasser"
+  },
+  "buyer": {
+    "name_lines": [
+      "Wohnbau Nordheide eG",
+      "z. Hd. Herrn Kowalczyk"
+    ],
+    "street": "Lüneburger Straße 9",
+    "postal_code": "21244",
+    "city": "Buchholz in der Nordheide",
+    "customer_number": "20963"
+  },
+  "invoice": {
+    "number": "K261668",
+    "date": "21.10.2026",
+    "service_date": "21.10.2026",
+    "order_number": "380663",
+    "shipping": "",
+    "date_printed": "21.10.26"
+  },
+  "druck": {
+    "datum_format": "TT.MM.JJ",
+    "schrift": "Helvetica",
+    "seitenformat": "A4"
+  },
+  "BT-72": "21.10.2026",
+  "BT-119": "19.00",
+  "positions": [
+    {
+      "qty": "3",
+      "unit": "Stk.",
+      "description": [
+        "Rückflussverhinderer DN20 Rotguss"
+      ],
+      "article_number": "RV-2020-RG",
+      "unit_price": "39.75",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "119.25"
+    },
+    {
+      "qty": "25",
+      "unit": "Stk.",
+      "description": [
+        "Thermostatkopf weiß, Fühler eingebaut, mit",
+        "Entleerung und Kappe, Gewinde nach DIN EN"
+      ],
+      "article_number": "TH-5100-WS",
+      "unit_price": "12.57",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "314.25"
+    },
+    {
+      "qty": "5",
+      "unit": "Stk.",
+      "description": [
+        "Kugelhahn DN15 Messing vernickelt"
+      ],
+      "article_number": "KH-1015-MS",
+      "unit_price": "8.98",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "44.90"
+    },
+    {
+      "qty": "4",
+      "unit": "Stk.",
+      "description": [
+        "Strangregulierventil DN15, Ausführung für",
+        "Trinkwasser, DVGW-geprüft"
+      ],
+      "article_number": "SV-6015-MS",
+      "unit_price": "47.25",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "189.00"
+    },
+    {
+      "qty": "3",
+      "unit": "Std.",
+      "description": [
+        "Montage Armaturengruppe vor Ort"
+      ],
+      "article_number": "MS-9001",
+      "unit_price": "61.25",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "183.75"
+    },
+    {
+      "qty": "4",
+      "unit": "Stk.",
+      "description": [
+        "Kugelhahn DN25 Messing vernickelt"
+      ],
+      "article_number": "KH-1025-MS",
+      "unit_price": "26.00",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "104.00"
+    },
+    {
+      "qty": "1",
+      "unit": "Stk.",
+      "description": [
+        "Versand und Verpackung"
+      ],
+      "article_number": "V-13KG",
+      "unit_price": "11.90",
+      "kind": "shipping",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "11.90"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": "3.00",
+  "discount_days": 14,
+  "payment_days": 30,
+  "totals": {
+    "net": "967.05",
+    "vat": "183.74",
+    "gross": "1150.79"
+  },
+  "totals_printed": {
+    "net": "967.05",
+    "vat": "183.74",
+    "gross": "1150.79"
+  },
+  "payment": {
+    "discount_date": "04.11.2026",
+    "due_date": "20.11.2026",
+    "discount_amount": "34.52",
+    "discount_base": "gross"
+  },
+  "payment_terms_text": [
+    "14 Tage 3% Skonto, 30 Tage ohne Abzug"
+  ],
+  "page_count": 1,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "transfer": null,
+      "carry_forward": null,
+      "summary_present": true
+    }
+  ],
+  "erwarteter_status": "ok",
+  "erwartete_hinweise": [],
+  "kosit": null,
+  "verapdf": null,
+  "validierung_hinweis": "lokal nicht validierbar / spätere Phase (KoSIT/veraPDF prüfen die App-Ausgabe, nicht diese PDFs)",
+  "korrekturen": null,
+  "korrekturen_hinweis": "erst beim echten Anlernen messbar",
+  "test_flags": {
+    "address_name_lines": 2,
+    "po_box": false,
+    "multi_line_positions": 2,
+    "shipping_position": true,
+    "page_format": "A4",
+    "payment": "skonto",
+    "pruefen": null,
+    "missing_order_number": false,
+    "note": "Hold-out: z. Hd.-Zeile, 3 % Skonto 14 Tage",
+    "bearbeiter": "Ilka Brosowski",
+    "auftragsnummer": "O1720",
+    "komission": "Baustelle Fuldaer Straße"
+  },
+  "sha256": "87e4cc538142d12f41f640da79a8aa876998447e98ff7d67771b0c6a196b2b50"
+}

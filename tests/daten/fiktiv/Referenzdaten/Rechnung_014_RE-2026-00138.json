@@ -1,0 +1,198 @@
+{
+  "datei": "Rechnung_014_RE-2026-00138.pdf",
+  "format": "PDF/A-2b",
+  "seller": {
+    "name": "Alberon Industriekomponenten GmbH",
+    "street": "Prüfwerkstraße 18",
+    "postal_code": "09111",
+    "city": "Chemnitz",
+    "ust_id": "DE123456789",
+    "iban": "DE89 3704 0044 0532 0130 00",
+    "bic": "COBADEFFXXX",
+    "bank": "Commerzbank AG",
+    "email": "rechnung@alberon.example",
+    "register": "Amtsgericht Chemnitz, HRB 999999",
+    "ceo": "Markus Seidel"
+  },
+  "buyer": {
+    "name_lines": [
+      "Kieselgrund Industriemontage GmbH",
+      "Abteilung Einkauf",
+      "Standort Mitte"
+    ],
+    "street": "Betriebshof 32",
+    "postal_code": "02826",
+    "city": "Görlitz",
+    "customer_number": "006200"
+  },
+  "invoice": {
+    "number": "RE-2026-00138",
+    "date": "27.08.2026",
+    "service_date": "22.08.2026",
+    "order_number": "PO/2026/8495",
+    "shipping": "GO!"
+  },
+  "positions": [
+    {
+      "qty": 2,
+      "unit": "Stk.",
+      "description": [
+        "Nachbearbeitung 557527"
+      ],
+      "unit_price": "105.00",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "210.00"
+    },
+    {
+      "qty": 25,
+      "unit": "Stk.",
+      "description": [
+        "Befestigungswinkel 698035"
+      ],
+      "unit_price": "1799.99",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "44999.75"
+    },
+    {
+      "qty": 40,
+      "unit": "Stk.",
+      "description": [
+        "Aufnahmeflansch 110458"
+      ],
+      "unit_price": "7.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "300.00"
+    },
+    {
+      "qty": 2500,
+      "unit": "Stk.",
+      "description": [
+        "Bearbeitung 550054",
+        "Materialzustand T6, gratfrei",
+        "Oberfläche harteloxiert 40 µm"
+      ],
+      "unit_price": "18.75",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "46875.00"
+    },
+    {
+      "qty": 5000,
+      "unit": "Stk.",
+      "description": [
+        "CNC-Nacharbeit 980273"
+      ],
+      "unit_price": "2.35",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "11750.00"
+    },
+    {
+      "qty": 75,
+      "unit": "Stk.",
+      "description": [
+        "Gehäusedeckel 984511"
+      ],
+      "unit_price": "0.85",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "63.75"
+    },
+    {
+      "qty": 500,
+      "unit": "Stk.",
+      "description": [
+        "Passstift 551198"
+      ],
+      "unit_price": "18.75",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "9375.00"
+    },
+    {
+      "qty": 25,
+      "unit": "Stk.",
+      "description": [
+        "Führungsbuchse 234133"
+      ],
+      "unit_price": "14.99",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "374.75"
+    },
+    {
+      "qty": 5000,
+      "unit": "Stk.",
+      "description": [
+        "Gehäuseboden 88532"
+      ],
+      "unit_price": "35.00",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "175000.00"
+    },
+    {
+      "qty": 500,
+      "unit": "Stk.",
+      "description": [
+        "Trägerplatte 228642"
+      ],
+      "unit_price": "2.35",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "1175.00"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": "4.00",
+  "discount_days": 10,
+  "payment_days": 30,
+  "totals": {
+    "net": "290123.25",
+    "vat": "55123.42",
+    "gross": "345246.67"
+  },
+  "payment": {
+    "discount_date": "06.09.2026",
+    "due_date": "26.09.2026",
+    "discount_amount": "13809.87"
+  },
+  "page_count": 1,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "line_count": 12,
+      "transfer": null,
+      "summary_present": true,
+      "payment_block_present": true
+    }
+  ],
+  "test_flags": {
+    "address_name_lines": 3,
+    "missing_order_number": false,
+    "shipping_empty": false,
+    "discount_applied": true,
+    "blank_unit_flat_rate": false,
+    "without_price_count": 0,
+    "flat_rate_count": 0,
+    "two_three_line_positions": 1,
+    "four_five_line_positions": 0,
+    "has_qty_thousands": true
+  },
+  "sha256": "88477571475e260bd5d33d3681fd05688375621451083735977f64a4faef2010"
+}

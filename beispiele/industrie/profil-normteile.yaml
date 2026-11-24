@@ -1,0 +1,42 @@
+# Normteile Brückner GmbH (erfunden) – schlanker CSV-Export: UTF-8, Semikolon, Dezimalkomma, TT.MM.JJJJ.
+# Nur die Mindestspalten aus docs/csv-format.md plus „Preiseinheit“ (Preis pro 100 Stk).
+profil: normteile
+datei: {muster: "normteile_*.csv", trennzeichen: ";"}
+zahlen: {dezimal: ",", tausender: "."}
+datum: {format: "%d.%m.%Y"}
+aufbau: {art: zeile_je_position, rechnung_schluessel: Rechnungsnr}
+
+felder:
+  kopf:
+    BT-1:  {spalte: Rechnungsnr}
+    BT-2:  {spalte: Datum, typ: datum}
+    BT-72: {spalte: Lieferdatum, typ: datum}
+    BT-44: {spalte: Kunde}
+    BT-50: {spalte: Strasse}
+    BT-53: {spalte: PLZ}
+    BT-52: {spalte: Ort}
+  position:
+    BT-153: {spalte: Artikel}
+    BT-129: {spalte: Menge, typ: zahl}
+    BT-130: {spalte: Einheit, mapping: einheiten}
+    BT-146: {spalte: Einzelpreis, typ: zahl}
+    BT-149: {spalte: Preiseinheit, typ: zahl}
+    steuer: {spalte: USt-Satz, mapping: steuer}
+
+mappings:
+  einheiten: {Stk: H87, Std: HUR, unbekannt: pruefen}
+  steuer: {"19": {BT-151: S, BT-152: 19}, unbekannt: pruefen}
+
+zahlung:
+  iban: DE34000000000071100842
+  ziel_tage: 30
+  bedingungen: "Zahlbar innerhalb {zahlungsziel_tage} Tagen ohne Abzug."
+
+verkaeufer:
+  name: Normteile Brückner GmbH
+  anschrift: {strasse: Gewerbering 14, plz: "42897", ort: Remscheid}
+  ust_id: DE290319664
+  steuernummer: 126/5743/0815
+  register: Amtsgericht Wuppertal HRB 990042
+  kontakt: {name: Normteile Brückner GmbH, telefon: "02191 990420", email: rechnung@normteile-brueckner.invalid}
+  elektronische_adresse: rechnung@normteile-brueckner.invalid

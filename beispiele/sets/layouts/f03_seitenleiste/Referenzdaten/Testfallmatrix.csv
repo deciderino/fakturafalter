@@ -1,0 +1,7 @@
+﻿Datei;Split;Rechnungsnummer;Rechnungsdatum;Kundennummer;Namenszeilen;Seiten;Format;Positionen;Mehrzeilig;Versand;Zahlung;Skonto;Netto;USt;Brutto;Status;Notiz;SHA256
+Rechnung_001_RE202603143.pdf;training;RE202603143;08.10.2026;100734;1;1;A4;6;4;;netto;;616.30;117.10;733.40;ok;1 Seite, Zahlungsziel 30 Tage;9c77dd69a56902bd0c58524abde4dad09e74a70b42d14c1016a24f7d981f3f6e
+Rechnung_002_RE202603210.pdf;training;RE202603210;12.10.2026;100892;2;2;A4;26;15;;skonto;2;5257.20;998.87;6256.07;ok;2 Seiten mit Zwischensumme / Übertrag von Seite 1, Skonto als Anmerkung;f4169bb26938b63bc7409f3301599852b6ee10483f1e05f0c472fef25d19de26
+Rechnung_003_RE202603244.pdf;training;RE202603244;19.10.2026;101215;3;1;A4;8;6;;netto;;1275.55;242.35;1517.90;ok;3 Namenszeilen, Zahlungsziel 14 Tage;5e7545b072f07121c0cc9c3fa27c54408581524f8fe257725ed90a248bb22cfb
+Rechnung_004_RE202603278.pdf;holdout;RE202603278;22.10.2026;101377;1;2;A4;24;16;;netto;;4413.82;838.63;5252.45;ok;Hold-out: 2 Seiten, Übertrag;c970b38d9652b9bd19f5bbdf9a85e70ca86a9784b8fcabcc7ec1411389a05e4e
+Rechnung_005_RE202603316.pdf;holdout;RE202603316;29.10.2026;101502;1;3;A4;46;34;;skonto;3;9311.75;1769.23;11080.98;ok;Hold-out: 3 Seiten, zwei Überträge, 3 % Skonto als Anmerkung;19be5e9852fef4e567a568ae2b79bde412eb6e8b7b74701aebf5b9d678bb323b
+Rechnung_006_RE202603351.pdf;holdout;RE202603351;05.11.2026;100734;1;1;A4;7;3;;netto;;1433.65;272.39;1706.04;fehler;Hold-out FEHLER: USt-IdNr. in der Seitenleiste mit falscher Prüfziffer;263583025cbb7f81fc2d2da23c96313b46c70ea53b3a719fdd29bf689d8d798a

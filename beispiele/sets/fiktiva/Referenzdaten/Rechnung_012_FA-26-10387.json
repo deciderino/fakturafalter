@@ -1,0 +1,302 @@
+{
+  "datei": "Rechnung_012_FA-26-10387.pdf",
+  "format": "PDF 1.4 (reportlab, Schriften eingebettet)",
+  "holdout": false,
+  "seller": {
+    "name": "Fiktiva Antriebstechnik GmbH",
+    "street": "Musterring 12",
+    "postal_code": "04179",
+    "city": "Leipzig",
+    "ust_id": "DE314159262",
+    "iban": "DE71 0000 0000 0047 1108 15",
+    "bic": "FIKTDEX1XXX",
+    "bank": "Beispielbank Leipzig",
+    "email": "rechnung@fiktiva.example",
+    "register": "Amtsgericht Leipzig, HRB 000000",
+    "ceo": "Jana Mustermann"
+  },
+  "buyer": {
+    "name_lines": [
+      "Elbtal Steuerungsbau GmbH",
+      "Abteilung Einkauf"
+    ],
+    "street": "Werkstättenstraße 120",
+    "postal_code": "01159",
+    "city": "Dresden",
+    "customer_number": "70014"
+  },
+  "invoice": {
+    "number": "FA-26-10387",
+    "date": "16.10.2026",
+    "service_date": "16.10.2026",
+    "order_number": "BE-26-146",
+    "shipping": "Lieferung frei Haus"
+  },
+  "positions": [
+    {
+      "qty": 16,
+      "unit": "Std.",
+      "description": [
+        "Programmierung Frequenzumrichter inkl. Prüfprotokoll",
+        "und Werkszeugnis 2.2 nach EN 10204"
+      ],
+      "unit_price": "79.75",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "1276.00"
+    },
+    {
+      "qty": 40,
+      "unit": "Stk.",
+      "description": [
+        "Klemmhebel M8 Kunststoff 81-6394"
+      ],
+      "unit_price": "5.87",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "234.80"
+    },
+    {
+      "qty": 500,
+      "unit": "Stk.",
+      "description": [
+        "O-Ring 20x2 NBR 70 19-4581"
+      ],
+      "unit_price": "20.75",
+      "kind": "regular",
+      "price_unit": "/100",
+      "price_unit_qty": 100,
+      "min_order": false,
+      "total": "103.75"
+    },
+    {
+      "qty": 4,
+      "unit": "Stk.",
+      "description": [
+        "Wellenkupplung WK-25 elastisch 42-5742"
+      ],
+      "unit_price": "92.00",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "368.00"
+    },
+    {
+      "qty": 16,
+      "unit": "Std.",
+      "description": [
+        "Fahrzeit Monteur"
+      ],
+      "unit_price": "59.75",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "956.00"
+    },
+    {
+      "qty": 20,
+      "unit": "Stk.",
+      "description": [
+        "Lagerdeckel LD-62 47-4097"
+      ],
+      "unit_price": "12.42",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "248.40"
+    },
+    {
+      "qty": 1,
+      "unit": "Stk.",
+      "description": [
+        "Spannsatz SP-30 Ø 30 mm 81-9867"
+      ],
+      "unit_price": "45.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "45.50"
+    },
+    {
+      "qty": 10,
+      "unit": "Stk.",
+      "description": [
+        "Wellenkupplung WK-25 elastisch 87-1885"
+      ],
+      "unit_price": "57.25",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "572.50"
+    },
+    {
+      "qty": 4,
+      "unit": "Std.",
+      "description": [
+        "Inbetriebnahme Antriebseinheit"
+      ],
+      "unit_price": "75.75",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "303.00"
+    },
+    {
+      "qty": 10,
+      "unit": "Stk.",
+      "description": [
+        "Distanzbuchse 20x30x15 26-5700"
+      ],
+      "unit_price": "4.33",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "43.30"
+    },
+    {
+      "qty": 2,
+      "unit": "Std.",
+      "description": [
+        "Inbetriebnahme Antriebseinheit"
+      ],
+      "unit_price": "76.75",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "153.50"
+    },
+    {
+      "qty": 150,
+      "unit": "Stk.",
+      "description": [
+        "Scheibe ISO 7089 8 verzinkt 18-4236"
+      ],
+      "unit_price": "2.94",
+      "kind": "regular",
+      "price_unit": "/100",
+      "price_unit_qty": 100,
+      "min_order": false,
+      "total": "4.41"
+    },
+    {
+      "qty": 16,
+      "unit": "Std.",
+      "description": [
+        "Programmierung Frequenzumrichter"
+      ],
+      "unit_price": "78.25",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "1252.00"
+    },
+    {
+      "qty": 400,
+      "unit": "Stk.",
+      "description": [
+        "Sechskantmutter ISO 4032 M8 verzinkt 77-9135"
+      ],
+      "unit_price": "4.12",
+      "kind": "regular",
+      "price_unit": "/100",
+      "price_unit_qty": 100,
+      "min_order": false,
+      "total": "16.48"
+    },
+    {
+      "qty": 5,
+      "unit": "Stk.",
+      "description": [
+        "Getriebeflansch GF-80 88-5185"
+      ],
+      "unit_price": "158.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "792.50"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": "3.00",
+  "discount_days": 10,
+  "payment_days": 30,
+  "totals": {
+    "net": "6370.14",
+    "vat": "1210.33",
+    "gross": "7580.47"
+  },
+  "payment": {
+    "discount_date": "26.10.2026",
+    "due_date": "15.11.2026",
+    "discount_amount": "227.41",
+    "discount_base": "gross"
+  },
+  "payment_terms_text": [
+    "zahlbar bis 26.10.26 bei 3 % Skonto (227,41 €)",
+    "bis 15.11.2026 ohne Abzug"
+  ],
+  "page_count": 1,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "line_count": 16,
+      "transfer": null,
+      "carry_forward": null,
+      "summary_present": true,
+      "payment_block_present": true
+    }
+  ],
+  "test_flags": {
+    "address_name_lines": 2,
+    "address_blank_lines": 1,
+    "address_attention_line": false,
+    "address_department_line": true,
+    "two_line_company_name": false,
+    "missing_order_number": false,
+    "shipping_empty": false,
+    "discount_applied": true,
+    "blank_unit_flat_rate": false,
+    "without_price_count": 0,
+    "flat_rate_count": 0,
+    "min_order": null,
+    "price_unit_100_count": 3,
+    "two_three_line_positions": 1,
+    "four_five_line_positions": 0,
+    "has_qty_thousands": false,
+    "carry_forward": false,
+    "last_table_row_index": 18,
+    "note": "einseitig knapp am Seitenende (Netto-Zeile 631,6 pt), Skonto"
+  },
+  "sha256": "26cdf00c116db7f56108444bcb7e1b0aed71ce679e06256ad6a6fbb0e846db63"
+}

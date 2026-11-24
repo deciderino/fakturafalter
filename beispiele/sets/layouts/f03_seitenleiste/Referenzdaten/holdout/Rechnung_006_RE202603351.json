@@ -1,0 +1,222 @@
+{
+  "datei": "Rechnung_006_RE202603351.pdf",
+  "format": "PDF 1.4 (reportlab), A4, Schrift Helvetica (Standard-14, nicht eingebettet)",
+  "familie": "f03_seitenleiste",
+  "quelle": "Q4",
+  "holdout": true,
+  "split": "holdout",
+  "seller": {
+    "name": "Seeberger Radsport-Teile GmbH",
+    "street": "Gewerbering 27",
+    "postal_code": "86899",
+    "city": "Landsberg am Lech",
+    "ust_id": "DE130722958",
+    "iban": "DE02 0000 0000 0868 9900 50",
+    "bic": "SEEBDEX1LAL",
+    "bank": "Beispiel-Sparkasse Landsberg",
+    "email": "buchhaltung@seeberger-rad.example",
+    "register": "Amtsgericht Augsburg HRB 00000",
+    "ceo": "Korbinian Seeberger"
+  },
+  "buyer": {
+    "name_lines": [
+      "Fahrradhaus Lindemann"
+    ],
+    "street": "Bahnhofstraße 22",
+    "postal_code": "86899",
+    "city": "Landsberg am Lech",
+    "customer_number": "100734"
+  },
+  "invoice": {
+    "number": "RE202603351",
+    "date": "05.11.2026",
+    "service_date": "03.11.2026",
+    "order_number": "",
+    "shipping": ""
+  },
+  "druck": {
+    "datum_format": "TT.MM.JJJJ",
+    "schrift": "Helvetica",
+    "seitenformat": "A4"
+  },
+  "BT-72": "03.11.2026",
+  "BT-119": "19.00",
+  "positions": [
+    {
+      "qty": "3",
+      "unit": "Stk.",
+      "description": [
+        "Kassette 11-fach 11-34 Z., Lieferung",
+        "erfolgt in Einzelverpackung mit",
+        "EAN-Etikett für den Ladenverkauf"
+      ],
+      "article_number": "SR-11410",
+      "unit_price": "39.25",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "117.75"
+    },
+    {
+      "qty": "20",
+      "unit": "Stk.",
+      "description": [
+        "Kette 11-fach, 116 Glieder, mit",
+        "Kettenschloss, Farbe nach",
+        "Verfügbarkeit, bei Nachbestellung"
+      ],
+      "article_number": "SR-12001",
+      "unit_price": "27.00",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "540.00"
+    },
+    {
+      "qty": "6",
+      "unit": "Stk.",
+      "description": [
+        "Faltreifen 29 x 2,35, Tubeless Ready"
+      ],
+      "article_number": "SR-15300",
+      "unit_price": "48.50",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "291.00"
+    },
+    {
+      "qty": "5",
+      "unit": "Stk.",
+      "description": [
+        "Schaltzug-Set Edelstahl, beschichtet"
+      ],
+      "article_number": "SR-18044",
+      "unit_price": "11.38",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "56.90"
+    },
+    {
+      "qty": "3",
+      "unit": "Std.",
+      "description": [
+        "Werkstattstunde Laufradzentrierung"
+      ],
+      "article_number": "SR-19870",
+      "unit_price": "59.50",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "178.50"
+    },
+    {
+      "qty": "4",
+      "unit": "Stk.",
+      "description": [
+        "Pedal-Paar Plattform, Aluminium"
+      ],
+      "article_number": "SR-19003",
+      "unit_price": "50.00",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "200.00"
+    },
+    {
+      "qty": "2",
+      "unit": "Stk.",
+      "description": [
+        "Lichtset Akku StVZO, Front- und",
+        "Rücklicht"
+      ],
+      "article_number": "SR-20500",
+      "unit_price": "24.75",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "49.50"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": null,
+  "discount_days": null,
+  "payment_days": 30,
+  "totals": {
+    "net": "1433.65",
+    "vat": "272.39",
+    "gross": "1706.04"
+  },
+  "totals_printed": {
+    "net": "1433.65",
+    "vat": "272.39",
+    "gross": "1706.04"
+  },
+  "payment": {
+    "discount_date": null,
+    "due_date": "05.12.2026",
+    "discount_amount": null,
+    "discount_base": null
+  },
+  "payment_terms_text": [
+    "Zahlungsziel: 30 Tage"
+  ],
+  "page_count": 1,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "transfer": null,
+      "carry_forward": null,
+      "summary_present": true
+    }
+  ],
+  "erwarteter_status": "fehler",
+  "erwartete_hinweise": [
+    "FEHLER [BT-31] Verkäufer – USt-IdNr. (BT-31) „DE130722958“ ist ungültig (Aufbau DE + 9 Ziffern, Prüfziffer nach BZSt stimmt nicht)."
+  ],
+  "kosit": null,
+  "verapdf": null,
+  "validierung_hinweis": "lokal nicht validierbar / spätere Phase (KoSIT/veraPDF prüfen die App-Ausgabe, nicht diese PDFs)",
+  "korrekturen": null,
+  "korrekturen_hinweis": "erst beim echten Anlernen messbar",
+  "test_flags": {
+    "address_name_lines": 1,
+    "po_box": false,
+    "multi_line_positions": 3,
+    "shipping_position": false,
+    "page_format": "A4",
+    "payment": "netto",
+    "pruefen": null,
+    "missing_order_number": true,
+    "note": "Hold-out FEHLER: USt-IdNr. in der Seitenleiste mit falscher Prüfziffer",
+    "bearbeiter": "Lorenz Huber",
+    "auftragsnummer": "20214425",
+    "versandart": "Spedition"
+  },
+  "rolle": "holdout-fehler",
+  "moegliche_folgehinweise": [],
+  "fehlerart": "ust_id_pruefziffer",
+  "fehler_beschreibung": "USt-IdNr. des Verkäufers mit falscher Prüfziffer (ISO 7064 MOD 11,10); sonst alles richtig",
+  "falle": null,
+  "falle_beschreibung": null,
+  "fehler_detail": {
+    "gedruckt": "DE130722958",
+    "richtig": "DE130722955"
+  },
+  "totals_berechnet": {
+    "net": "1433.65",
+    "vat": "272.39",
+    "gross": "1706.04"
+  },
+  "sha256": "263583025cbb7f81fc2d2da23c96313b46c70ea53b3a719fdd29bf689d8d798a"
+}

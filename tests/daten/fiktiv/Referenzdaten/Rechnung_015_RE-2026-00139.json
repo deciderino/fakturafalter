@@ -1,0 +1,183 @@
+{
+  "datei": "Rechnung_015_RE-2026-00139.pdf",
+  "format": "PDF/A-2b",
+  "seller": {
+    "name": "Alberon Industriekomponenten GmbH",
+    "street": "Prüfwerkstraße 18",
+    "postal_code": "09111",
+    "city": "Chemnitz",
+    "ust_id": "DE123456789",
+    "iban": "DE89 3704 0044 0532 0130 00",
+    "bic": "COBADEFFXXX",
+    "bank": "Commerzbank AG",
+    "email": "rechnung@alberon.example",
+    "register": "Amtsgericht Chemnitz, HRB 999999",
+    "ceo": "Markus Seidel"
+  },
+  "buyer": {
+    "name_lines": [
+      "Odertal Vorrichtungsbau GmbH"
+    ],
+    "street": "Wiesenbogen 3",
+    "postal_code": "07545",
+    "city": "Gera",
+    "customer_number": "100825"
+  },
+  "invoice": {
+    "number": "RE-2026-00139",
+    "date": "29.08.2026",
+    "service_date": "25.08.2026",
+    "order_number": "PO/2026/4576",
+    "shipping": "Selbstabholung"
+  },
+  "positions": [
+    {
+      "qty": 40,
+      "unit": "Stk.",
+      "description": [
+        "Mess- und Prüfarbeit 36947"
+      ],
+      "unit_price": "3.90",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "156.00"
+    },
+    {
+      "qty": 1,
+      "unit": "Stk.",
+      "description": [
+        "Gehäusedeckel 117010"
+      ],
+      "unit_price": "14.99",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "14.99"
+    },
+    {
+      "qty": 100,
+      "unit": "Stk.",
+      "description": [
+        "Distanzhülse 71006"
+      ],
+      "unit_price": null,
+      "kind": "without_price",
+      "price_unit": "/1",
+      "total": null
+    },
+    {
+      "qty": 10,
+      "unit": "Stk.",
+      "description": [
+        "Montageschiene 148511"
+      ],
+      "unit_price": null,
+      "kind": "without_price",
+      "price_unit": "/1",
+      "total": null
+    },
+    {
+      "qty": 1,
+      "unit": "",
+      "description": [
+        "Fixpreis Auftrag 2027-482"
+      ],
+      "unit_price": "2890.00",
+      "kind": "flat_rate",
+      "price_unit": "/1",
+      "total": "2890.00"
+    },
+    {
+      "qty": 20,
+      "unit": "Stk.",
+      "description": [
+        "Wellenhalter 76063",
+        "inkl. Sichtprüfung nach Vorgabe"
+      ],
+      "unit_price": null,
+      "kind": "without_price",
+      "price_unit": "/1",
+      "total": null
+    },
+    {
+      "qty": 1,
+      "unit": "Stk.",
+      "description": [
+        "Distanzhülse 167105"
+      ],
+      "unit_price": null,
+      "kind": "without_price",
+      "price_unit": "/1",
+      "total": null
+    },
+    {
+      "qty": 1,
+      "unit": "",
+      "description": [
+        "Gesamtpreis Auftrag 2028-377"
+      ],
+      "unit_price": "250.00",
+      "kind": "flat_rate",
+      "price_unit": "/1",
+      "total": "250.00"
+    },
+    {
+      "qty": 15,
+      "unit": "Stk.",
+      "description": [
+        "CNC-Nacharbeit 448389"
+      ],
+      "unit_price": "65.00",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "975.00"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": "2.00",
+  "discount_days": 10,
+  "payment_days": 30,
+  "totals": {
+    "net": "4285.99",
+    "vat": "814.34",
+    "gross": "5100.33"
+  },
+  "payment": {
+    "discount_date": "08.09.2026",
+    "due_date": "28.09.2026",
+    "discount_amount": "102.01"
+  },
+  "page_count": 1,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "line_count": 10,
+      "transfer": null,
+      "summary_present": true,
+      "payment_block_present": true
+    }
+  ],
+  "test_flags": {
+    "address_name_lines": 1,
+    "missing_order_number": false,
+    "shipping_empty": false,
+    "discount_applied": true,
+    "blank_unit_flat_rate": true,
+    "without_price_count": 4,
+    "flat_rate_count": 2,
+    "two_three_line_positions": 1,
+    "four_five_line_positions": 0,
+    "has_qty_thousands": false
+  },
+  "sha256": "ac186a71ebd2b93f6f4a248e8146752c64fe2902d9d505b6de7c786350eb1fe3"
+}

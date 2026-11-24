@@ -1,0 +1,215 @@
+{
+  "datei": "Rechnung_003_RE26-19003.pdf",
+  "format": "PDF 1.4 (reportlab), A4, Schrift Helvetica (Standard-14, nicht eingebettet)",
+  "familie": "f05_versatz",
+  "quelle": "Q5",
+  "holdout": false,
+  "split": "training",
+  "seller": {
+    "name": "Kerber Bürobedarf GmbH",
+    "street": "Stadtgraben 17",
+    "postal_code": "94315",
+    "city": "Straubing",
+    "ust_id": "DE139055215",
+    "iban": "DE87 0000 0000 0752 0099 15",
+    "bic": "KERBDEX1STR",
+    "bank": "Beispielbank Niederbayern",
+    "email": "service@kerber-buero.example",
+    "register": "Amtsgericht Straubing HRB 0000",
+    "ceo": "Thomas Kerber"
+  },
+  "buyer": {
+    "name_lines": [
+      "Landratsamt Musterhausen",
+      "Sachgebiet IT"
+    ],
+    "street": "Bahnhofplatz 2",
+    "postal_code": "84028",
+    "city": "Landshut",
+    "customer_number": "4802"
+  },
+  "invoice": {
+    "number": "RE26-19003",
+    "date": "19.10.2026",
+    "service_date": "16.10.2026",
+    "order_number": "",
+    "shipping": ""
+  },
+  "druck": {
+    "datum_format": "TT.MM.JJJJ",
+    "schrift": "Helvetica",
+    "seitenformat": "A4"
+  },
+  "BT-72": "16.10.2026",
+  "BT-119": "19.00",
+  "positions": [
+    {
+      "qty": "10",
+      "unit": "Stk.",
+      "description": [
+        "Kopierpapier A4 80 g, 500 Blatt"
+      ],
+      "article_number": "100234",
+      "unit_price": "5.06",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "50.60"
+    },
+    {
+      "qty": "4",
+      "unit": "Stk.",
+      "description": [
+        "Tonerkartusche schwarz, kompatibel"
+      ],
+      "article_number": "140001",
+      "unit_price": "54.00",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "216.00"
+    },
+    {
+      "qty": "12",
+      "unit": "Stk.",
+      "description": [
+        "Haftnotizen 76 × 76 mm, gelb"
+      ],
+      "article_number": "130100",
+      "unit_price": "1.18",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "14.16"
+    },
+    {
+      "qty": "1",
+      "unit": "Stk.",
+      "description": [
+        "Laminierfolien A4 125 mic, 100 Stück, FSC-zertifiziert,",
+        "chlorfrei gebleicht"
+      ],
+      "article_number": "160050",
+      "unit_price": "14.47",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "14.47"
+    },
+    {
+      "qty": "10",
+      "unit": "Stk.",
+      "description": [
+        "Ordner A4 schmal 5 cm, rot, FSC-zertifiziert, chlorfrei",
+        "gebleicht"
+      ],
+      "article_number": "110411",
+      "unit_price": "2.06",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "20.60"
+    },
+    {
+      "qty": "10",
+      "unit": "Stk.",
+      "description": [
+        "Heftklammern 24/6, 1000 Stück"
+      ],
+      "article_number": "150330",
+      "unit_price": "1.06",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "10.60"
+    },
+    {
+      "qty": "2",
+      "unit": "Stk.",
+      "description": [
+        "Hängeregistratur A4, 25 Stück"
+      ],
+      "article_number": "170210",
+      "unit_price": "10.49",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "20.98"
+    },
+    {
+      "qty": "1",
+      "unit": "Stk.",
+      "description": [
+        "Versandkosten Paket"
+      ],
+      "article_number": "900001",
+      "unit_price": "6.90",
+      "kind": "shipping",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "6.90"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": null,
+  "discount_days": null,
+  "payment_days": 14,
+  "totals": {
+    "net": "354.31",
+    "vat": "67.32",
+    "gross": "421.63"
+  },
+  "totals_printed": {
+    "net": "354.31",
+    "vat": "67.32",
+    "gross": "421.63"
+  },
+  "payment": {
+    "discount_date": null,
+    "due_date": "02.11.2026",
+    "discount_amount": null,
+    "discount_base": null
+  },
+  "payment_terms_text": [
+    "Zahlungsziel: 14 Tage"
+  ],
+  "page_count": 1,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "transfer": null,
+      "carry_forward": null,
+      "summary_present": true
+    }
+  ],
+  "erwarteter_status": "ok",
+  "erwartete_hinweise": [],
+  "kosit": null,
+  "verapdf": null,
+  "validierung_hinweis": "lokal nicht validierbar / spätere Phase (KoSIT/veraPDF prüfen die App-Ausgabe, nicht diese PDFs)",
+  "korrekturen": null,
+  "korrekturen_hinweis": "erst beim echten Anlernen messbar",
+  "test_flags": {
+    "address_name_lines": 2,
+    "po_box": false,
+    "multi_line_positions": 2,
+    "shipping_position": true,
+    "page_format": "A4",
+    "payment": "netto",
+    "pruefen": null,
+    "missing_order_number": true,
+    "note": "Versatz-Infoblock, Dienstleistung in Std. gemischt",
+    "auftragsnummer": "AU107496"
+  },
+  "sha256": "a831c0743404f04d7b1326f4a14bec38319b02a94ddfcff8d92b6ceb05476241"
+}

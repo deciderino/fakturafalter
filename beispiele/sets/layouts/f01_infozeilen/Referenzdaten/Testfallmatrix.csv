@@ -1,0 +1,8 @@
+﻿Datei;Split;Rechnungsnummer;Rechnungsdatum;Kundennummer;Namenszeilen;Seiten;Format;Positionen;Mehrzeilig;Versand;Zahlung;Skonto;Netto;USt;Brutto;Status;Notiz;SHA256
+Rechnung_001_K261618.pdf;training;K261618;07.10.2026;10231;1;1;A4;5;1;ja;skonto;2;860.02;163.40;1023.42;ok;einzeilige Anschrift, 2% Skonto 10 Tage, Versandposition;2cda4ff2a18773bb6637eb0a414c97553131618bcbe17cb4944b63e65e5508f8
+Rechnung_002_K261640.pdf;training;K261640;12.10.2026;10587;2;1;A4;5;2;;netto;;2529.45;480.60;3010.05;ok;Firmenname zweizeilig, 14 Tage ohne Abzug;419e208d97bff68dd11a436c71e68c3381c4d1ea818cf89213a253874e066eb8
+Rechnung_003_K261658.pdf;training;K261658;14.10.2026;30088;3;1;A4;4;0;ja;fest;;1277.15;242.66;1519.81;ok;3 Namenszeilen, festes Zahldatum TT.MM.JJ (nicht in der Vorlage), ohne Bestellnummer;716513072520f2d8a307c68d52b105a31d3110ffc085adc3c22623a5b86efa86
+Rechnung_004_K261668.pdf;holdout;K261668;21.10.2026;20963;2;1;A4;7;2;ja;skonto;3;967.05;183.74;1150.79;ok;Hold-out: z. Hd.-Zeile, 3 % Skonto 14 Tage;87e4cc538142d12f41f640da79a8aa876998447e98ff7d67771b0c6a196b2b50
+Rechnung_005_K261688.pdf;holdout;K261688;28.10.2026;10044;1;1;A4;4;0;;netto;;784.32;147.12;921.44;prüfen;Hold-out PRÜFEN: gedrucktes Netto 10,00 € über Σ Positionen;4196eb1fa7e55d4558860b331dd3b84d0cdef368f83315114bdc7aa3bc5a55a3
+Rechnung_006_K261703.pdf;holdout;K261703;30.10.2026;20417;2;1;A4;6;1;ja;skonto;2;1711.14;325.12;2036.26;fehler;Hold-out FEHLER: Versandposition nicht im gedruckten Netto;b20750eb6f3b735f79321825bf84d0fa5f91ec72c0f2258bd57120e2f23487e4
+Rechnung_007_K261721.pdf;holdout;K261721;06.11.2026;41120;1;1;A4;4;1;;netto;;1306.60;248.25;1554.85;ok;Hold-out FALLE: Angebots-Nr. direkt unter der Rechnungs-Nr.;e47af92c08c2f069874d995ff61f02a9870826fc161d9df3072ed1a916e9a97b

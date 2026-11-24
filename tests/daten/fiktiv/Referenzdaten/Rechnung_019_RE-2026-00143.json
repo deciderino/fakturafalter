@@ -1,0 +1,138 @@
+{
+  "datei": "Rechnung_019_RE-2026-00143.pdf",
+  "format": "PDF/A-2b",
+  "seller": {
+    "name": "Alberon Industriekomponenten GmbH",
+    "street": "Prüfwerkstraße 18",
+    "postal_code": "09111",
+    "city": "Chemnitz",
+    "ust_id": "DE123456789",
+    "iban": "DE89 3704 0044 0532 0130 00",
+    "bic": "COBADEFFXXX",
+    "bank": "Commerzbank AG",
+    "email": "rechnung@alberon.example",
+    "register": "Amtsgericht Chemnitz, HRB 999999",
+    "ceo": "Markus Seidel"
+  },
+  "buyer": {
+    "name_lines": [
+      "Silberberg Vorrichtungen GmbH",
+      "z. Hd. Beschaffung",
+      "Werk Ost"
+    ],
+    "street": "Talring 10",
+    "postal_code": "50667",
+    "city": "Köln",
+    "customer_number": "89341"
+  },
+  "invoice": {
+    "number": "RE-2026-00143",
+    "date": "05.09.2026",
+    "service_date": "30.08.2026",
+    "order_number": "PO/2026/2899",
+    "shipping": "Lieferung"
+  },
+  "positions": [
+    {
+      "qty": 125,
+      "unit": "Stk.",
+      "description": [
+        "Montagewinkel 556596"
+      ],
+      "unit_price": "480.00",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "60000.00"
+    },
+    {
+      "qty": 1,
+      "unit": "Stk.",
+      "description": [
+        "Bearbeitung 683934"
+      ],
+      "unit_price": "105.00",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "105.00"
+    },
+    {
+      "qty": 10000,
+      "unit": "Stk.",
+      "description": [
+        "Mess- und Prüfarbeit 259451",
+        "Sondermaß nach Zeichnung 2026-18"
+      ],
+      "unit_price": "2.35",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "23500.00"
+    },
+    {
+      "qty": 2,
+      "unit": "Std.",
+      "description": [
+        "Formstück 478547",
+        "Oberfläche eloxiert, natur"
+      ],
+      "unit_price": "1250.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "2501.00"
+    },
+    {
+      "qty": 100,
+      "unit": "Stk.",
+      "description": [
+        "Gehäusedeckel 669823"
+      ],
+      "unit_price": "18.75",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "1875.00"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": "4.00",
+  "discount_days": 10,
+  "payment_days": 30,
+  "totals": {
+    "net": "87981.00",
+    "vat": "16716.39",
+    "gross": "104697.39"
+  },
+  "payment": {
+    "discount_date": "15.09.2026",
+    "due_date": "05.10.2026",
+    "discount_amount": "4187.90"
+  },
+  "page_count": 1,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "line_count": 7,
+      "transfer": null,
+      "summary_present": true,
+      "payment_block_present": true
+    }
+  ],
+  "test_flags": {
+    "address_name_lines": 3,
+    "missing_order_number": false,
+    "shipping_empty": false,
+    "discount_applied": true,
+    "blank_unit_flat_rate": false,
+    "without_price_count": 0,
+    "flat_rate_count": 0,
+    "two_three_line_positions": 2,
+    "four_five_line_positions": 0,
+    "has_qty_thousands": true
+  },
+  "sha256": "8e89954d54a16419e750d8d901d46c8f35b8982e1100afba69eba6c2b1ad5ab3"
+}

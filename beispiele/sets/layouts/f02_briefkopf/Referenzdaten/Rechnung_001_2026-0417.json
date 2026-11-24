@@ -1,0 +1,143 @@
+{
+  "datei": "Rechnung_001_2026-0417.pdf",
+  "format": "PDF 1.4 (reportlab), A4, Schrift Times-Roman (Standard-14, nicht eingebettet)",
+  "familie": "f02_briefkopf",
+  "quelle": "Q2",
+  "holdout": false,
+  "split": "training",
+  "seller": {
+    "name": "Ingenieurbüro Brandauer GmbH",
+    "street": "Am Klosterhof 9",
+    "postal_code": "37073",
+    "city": "Göttingen",
+    "ust_id": "DE315590279",
+    "iban": "DE96 0000 0000 0270 7300 91",
+    "bic": "BRANDEX1GOE",
+    "bank": "Beispiel-Volksbank Göttingen",
+    "email": "info@ib-brandauer.example",
+    "register": "Amtsgericht Göttingen HRB 00000",
+    "ceo": "Dipl.-Ing. Jakob Brandauer"
+  },
+  "buyer": {
+    "name_lines": [
+      "Architekturbüro Sandvoss"
+    ],
+    "street": "Lindenstraße 31",
+    "postal_code": "49074",
+    "city": "Osnabrück",
+    "customer_number": "2026-118"
+  },
+  "invoice": {
+    "number": "2026-0417",
+    "date": "08.10.2026",
+    "service_date": "05.10.2026",
+    "order_number": "",
+    "shipping": "",
+    "date_printed": "8. Oktober 2026"
+  },
+  "druck": {
+    "datum_format": "ausgeschrieben („3. November 2026“)",
+    "schrift": "Times-Roman",
+    "seitenformat": "A4"
+  },
+  "BT-72": "05.10.2026",
+  "BT-119": "19.00",
+  "positions": [
+    {
+      "qty": "1",
+      "unit": "Stk.",
+      "description": [
+        "Thermografie-Messung Gebäudehülle"
+      ],
+      "article_number": "",
+      "unit_price": "381.75",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "381.75"
+    },
+    {
+      "qty": "12",
+      "unit": "Std.",
+      "description": [
+        "Planungsleistung Technische Gebäudeausrüstung"
+      ],
+      "article_number": "",
+      "unit_price": "115.25",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "1383.00"
+    },
+    {
+      "qty": "1.5",
+      "unit": "Std.",
+      "description": [
+        "Besprechung mit Bauherr und Fachplanern"
+      ],
+      "article_number": "",
+      "unit_price": "105.25",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "157.88"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": null,
+  "discount_days": null,
+  "payment_days": 14,
+  "totals": {
+    "net": "1922.63",
+    "vat": "365.30",
+    "gross": "2287.93"
+  },
+  "totals_printed": {
+    "net": "1922.63",
+    "vat": "365.30",
+    "gross": "2287.93"
+  },
+  "payment": {
+    "discount_date": null,
+    "due_date": "22.10.2026",
+    "discount_amount": null,
+    "discount_base": null
+  },
+  "payment_terms_text": [
+    "Zahlung innerhalb von 14 Tagen ab Rechnungseingang ohne Abzüge an die unten angegebene",
+    "Bankverbindung."
+  ],
+  "page_count": 1,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3
+      ],
+      "transfer": null,
+      "carry_forward": null,
+      "summary_present": true
+    }
+  ],
+  "erwarteter_status": "ok",
+  "erwartete_hinweise": [],
+  "kosit": null,
+  "verapdf": null,
+  "validierung_hinweis": "lokal nicht validierbar / spätere Phase (KoSIT/veraPDF prüfen die App-Ausgabe, nicht diese PDFs)",
+  "korrekturen": null,
+  "korrekturen_hinweis": "erst beim echten Anlernen messbar",
+  "test_flags": {
+    "address_name_lines": 1,
+    "po_box": false,
+    "multi_line_positions": 0,
+    "shipping_position": false,
+    "page_format": "A4",
+    "payment": "netto",
+    "pruefen": null,
+    "missing_order_number": true,
+    "note": "Leistungen in Std., 14 Tage ab Rechnungseingang"
+  },
+  "sha256": "097ca8e8ec54c609c43abe01040736155bb0889924ea9b3c250fb45249af56b9"
+}

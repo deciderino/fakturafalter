@@ -1,0 +1,160 @@
+{
+  "datei": "Rechnung_024_FA-26-10468.pdf",
+  "format": "PDF 1.4 (reportlab, Schriften eingebettet)",
+  "holdout": true,
+  "seller": {
+    "name": "Fiktiva Antriebstechnik GmbH",
+    "street": "Musterring 12",
+    "postal_code": "04179",
+    "city": "Leipzig",
+    "ust_id": "DE314159262",
+    "iban": "DE71 0000 0000 0047 1108 15",
+    "bic": "FIKTDEX1XXX",
+    "bank": "Beispielbank Leipzig",
+    "email": "rechnung@fiktiva.example",
+    "register": "Amtsgericht Leipzig, HRB 000000",
+    "ceo": "Jana Mustermann"
+  },
+  "buyer": {
+    "name_lines": [
+      "Elbtal Steuerungsbau GmbH"
+    ],
+    "street": "Werkstättenstraße 120",
+    "postal_code": "01159",
+    "city": "Dresden",
+    "customer_number": "70014"
+  },
+  "invoice": {
+    "number": "FA-26-10468",
+    "date": "02.11.2026",
+    "service_date": "02.11.2026",
+    "order_number": "",
+    "shipping": "DHL"
+  },
+  "positions": [
+    {
+      "qty": 200,
+      "unit": "",
+      "description": [
+        "Passscheibe 10x16x0,5 13-8178"
+      ],
+      "unit_price": null,
+      "kind": "without_price",
+      "price_unit": null,
+      "price_unit_qty": null,
+      "min_order": true,
+      "total": null
+    },
+    {
+      "qty": 25,
+      "unit": "",
+      "description": [
+        "Gummipuffer 20x15 M6 69-4414"
+      ],
+      "unit_price": null,
+      "kind": "without_price",
+      "price_unit": null,
+      "price_unit_qty": null,
+      "min_order": true,
+      "total": null
+    },
+    {
+      "qty": 200,
+      "unit": "",
+      "description": [
+        "Senkschraube ISO 10642 M4x12 73-1010"
+      ],
+      "unit_price": null,
+      "kind": "without_price",
+      "price_unit": null,
+      "price_unit_qty": null,
+      "min_order": true,
+      "total": null
+    },
+    {
+      "qty": 200,
+      "unit": "",
+      "description": [
+        "Stellring 12 mm verzinkt 27-3429"
+      ],
+      "unit_price": null,
+      "kind": "without_price",
+      "price_unit": null,
+      "price_unit_qty": null,
+      "min_order": true,
+      "total": null
+    },
+    {
+      "qty": 1,
+      "unit": "",
+      "description": [
+        "Gesamtpreis"
+      ],
+      "unit_price": "95.00",
+      "kind": "flat_rate",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": true,
+      "total": "95.00"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": "2.00",
+  "discount_days": 10,
+  "payment_days": 30,
+  "totals": {
+    "net": "95.00",
+    "vat": "18.05",
+    "gross": "113.05"
+  },
+  "payment": {
+    "discount_date": "12.11.2026",
+    "due_date": "02.12.2026",
+    "discount_amount": "2.26",
+    "discount_base": "gross"
+  },
+  "payment_terms_text": [
+    "zahlbar bis 12.11.26 bei 2 % Skonto (2,26 €)",
+    "bis 02.12.2026 ohne Abzug"
+  ],
+  "page_count": 1,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "line_count": 5,
+      "transfer": null,
+      "carry_forward": null,
+      "summary_present": true,
+      "payment_block_present": true
+    }
+  ],
+  "test_flags": {
+    "address_name_lines": 1,
+    "address_blank_lines": 1,
+    "address_attention_line": false,
+    "address_department_line": false,
+    "two_line_company_name": false,
+    "missing_order_number": true,
+    "shipping_empty": false,
+    "discount_applied": true,
+    "blank_unit_flat_rate": true,
+    "without_price_count": 4,
+    "flat_rate_count": 1,
+    "min_order": "rein",
+    "price_unit_100_count": 0,
+    "two_three_line_positions": 0,
+    "four_five_line_positions": 0,
+    "has_qty_thousands": false,
+    "carry_forward": false,
+    "last_table_row_index": 7,
+    "note": "reiner Mindestauftrag, Skonto"
+  },
+  "sha256": "53f3d99e2e669456f6b6753a9aef84db303022e9344163ebcba68f778f4d595f"
+}

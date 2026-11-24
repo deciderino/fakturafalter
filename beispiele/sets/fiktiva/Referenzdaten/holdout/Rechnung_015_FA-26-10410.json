@@ -1,0 +1,783 @@
+{
+  "datei": "Rechnung_015_FA-26-10410.pdf",
+  "format": "PDF 1.4 (reportlab, Schriften eingebettet)",
+  "holdout": true,
+  "seller": {
+    "name": "Fiktiva Antriebstechnik GmbH",
+    "street": "Musterring 12",
+    "postal_code": "04179",
+    "city": "Leipzig",
+    "ust_id": "DE314159262",
+    "iban": "DE71 0000 0000 0047 1108 15",
+    "bic": "FIKTDEX1XXX",
+    "bank": "Beispielbank Leipzig",
+    "email": "rechnung@fiktiva.example",
+    "register": "Amtsgericht Leipzig, HRB 000000",
+    "ceo": "Jana Mustermann"
+  },
+  "buyer": {
+    "name_lines": [
+      "Werkzeugbau Lindqvist KG"
+    ],
+    "street": "Talweg 3",
+    "postal_code": "72764",
+    "city": "Reutlingen",
+    "customer_number": "0008815"
+  },
+  "invoice": {
+    "number": "FA-26-10410",
+    "date": "21.10.2026",
+    "service_date": "21.10.2026",
+    "order_number": "BE-26-885",
+    "shipping": "Abholung"
+  },
+  "positions": [
+    {
+      "qty": 20,
+      "unit": "Stk.",
+      "description": [
+        "Lagerbock LB-40 Stahl verzinkt 44-6513"
+      ],
+      "unit_price": "60.25",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "1205.00"
+    },
+    {
+      "qty": 20,
+      "unit": "Stk.",
+      "description": [
+        "Schutzhaube Riementrieb 29-2631"
+      ],
+      "unit_price": "136.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "2730.00"
+    },
+    {
+      "qty": 10,
+      "unit": "Stk.",
+      "description": [
+        "Lagerbock LB-40 Stahl verzinkt 65-9103"
+      ],
+      "unit_price": "48.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "485.00"
+    },
+    {
+      "qty": 6,
+      "unit": "Stk.",
+      "description": [
+        "Lagerdeckel LD-62 64-4728 Bohrung H7 Ø 20 mm mit",
+        "Passfedernut DIN 6885, Gewindebohrungen 4x M6 auf",
+        "Teilkreis 70 mm"
+      ],
+      "unit_price": "9.27",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "55.62"
+    },
+    {
+      "qty": 12,
+      "unit": "Stk.",
+      "description": [
+        "Schutzhaube Riementrieb 84-5449"
+      ],
+      "unit_price": "156.00",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "1872.00"
+    },
+    {
+      "qty": 50,
+      "unit": "Stk.",
+      "description": [
+        "Spannsatz SP-30 Ø 30 mm 38-7292"
+      ],
+      "unit_price": "42.25",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "2112.50"
+    },
+    {
+      "qty": 20,
+      "unit": "Stk.",
+      "description": [
+        "Lagerbock LB-40 Stahl verzinkt 26-1458"
+      ],
+      "unit_price": "57.25",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "1145.00"
+    },
+    {
+      "qty": 5,
+      "unit": "Stk.",
+      "description": [
+        "Motorkonsole MK-112 geschweißt 59-2406"
+      ],
+      "unit_price": "142.75",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "713.75"
+    },
+    {
+      "qty": 6,
+      "unit": "Stk.",
+      "description": [
+        "Zahnriemenscheibe T10 Z=32 46-6627"
+      ],
+      "unit_price": "86.75",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "520.50"
+    },
+    {
+      "qty": 12,
+      "unit": "Stk.",
+      "description": [
+        "Getriebeflansch GF-80 44-7335"
+      ],
+      "unit_price": "141.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "1698.00"
+    },
+    {
+      "qty": 10,
+      "unit": "Stk.",
+      "description": [
+        "Lagerdeckel LD-62 14-6759"
+      ],
+      "unit_price": "9.52",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "95.20"
+    },
+    {
+      "qty": 5,
+      "unit": "Stk.",
+      "description": [
+        "Lagerdeckel LD-62 46-7988"
+      ],
+      "unit_price": "9.90",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "49.50"
+    },
+    {
+      "qty": 50,
+      "unit": "Stk.",
+      "description": [
+        "Spannsatz SP-30 Ø 30 mm 31-4417"
+      ],
+      "unit_price": "38.00",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "1900.00"
+    },
+    {
+      "qty": 50,
+      "unit": "Stk.",
+      "description": [
+        "Wellenkupplung WK-25 elastisch 89-3182"
+      ],
+      "unit_price": "101.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "5075.00"
+    },
+    {
+      "qty": 6,
+      "unit": "Stk.",
+      "description": [
+        "Lagerdeckel LD-62 68-2805"
+      ],
+      "unit_price": "14.11",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "84.66"
+    },
+    {
+      "qty": 4,
+      "unit": "Stk.",
+      "description": [
+        "Wellenkupplung WK-25 elastisch 65-8453"
+      ],
+      "unit_price": "54.75",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "219.00"
+    },
+    {
+      "qty": 50,
+      "unit": "Stk.",
+      "description": [
+        "Klemmhebel M8 Kunststoff 64-9831"
+      ],
+      "unit_price": "6.41",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "320.50"
+    },
+    {
+      "qty": 10,
+      "unit": "Stk.",
+      "description": [
+        "Wellenkupplung WK-25 elastisch 65-2284"
+      ],
+      "unit_price": "112.00",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "1120.00"
+    },
+    {
+      "qty": 6,
+      "unit": "Stk.",
+      "description": [
+        "Distanzbuchse 20x30x15 21-4945"
+      ],
+      "unit_price": "5.25",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "31.50"
+    },
+    {
+      "qty": 10,
+      "unit": "Stk.",
+      "description": [
+        "Getriebeflansch GF-80 37-3240"
+      ],
+      "unit_price": "172.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "1725.00"
+    },
+    {
+      "qty": 6,
+      "unit": "Stk.",
+      "description": [
+        "Distanzbuchse 20x30x15 64-1057"
+      ],
+      "unit_price": "2.63",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "15.78"
+    },
+    {
+      "qty": 6,
+      "unit": "Stk.",
+      "description": [
+        "Lagerbock LB-40 Stahl verzinkt 44-6084"
+      ],
+      "unit_price": "48.00",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "288.00"
+    },
+    {
+      "qty": 20,
+      "unit": "Stk.",
+      "description": [
+        "Schutzhaube Riementrieb 31-3984"
+      ],
+      "unit_price": "132.25",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "2645.00"
+    },
+    {
+      "qty": 5,
+      "unit": "Stk.",
+      "description": [
+        "Klemmhebel M8 Kunststoff 24-3012"
+      ],
+      "unit_price": "6.93",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "34.65"
+    },
+    {
+      "qty": 12,
+      "unit": "Stk.",
+      "description": [
+        "Lagerdeckel LD-62 63-6595"
+      ],
+      "unit_price": "15.91",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "190.92"
+    },
+    {
+      "qty": 50,
+      "unit": "Stk.",
+      "description": [
+        "Distanzbuchse 20x30x15 84-1049"
+      ],
+      "unit_price": "1.42",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "71.00"
+    },
+    {
+      "qty": 1,
+      "unit": "Stk.",
+      "description": [
+        "Antriebswelle nach Zeichnung 43-6678"
+      ],
+      "unit_price": "349.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "349.50"
+    },
+    {
+      "qty": 5,
+      "unit": "Stk.",
+      "description": [
+        "Spannsatz SP-30 Ø 30 mm 79-7993"
+      ],
+      "unit_price": "33.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "167.50"
+    },
+    {
+      "qty": 5,
+      "unit": "Stk.",
+      "description": [
+        "Antriebswelle nach Zeichnung 84-7280"
+      ],
+      "unit_price": "252.00",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "1260.00"
+    },
+    {
+      "qty": 12,
+      "unit": "Stk.",
+      "description": [
+        "Getriebeflansch GF-80 62-2540"
+      ],
+      "unit_price": "185.00",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "2220.00"
+    },
+    {
+      "qty": 6,
+      "unit": "Stk.",
+      "description": [
+        "Spannsatz SP-30 Ø 30 mm 82-6158"
+      ],
+      "unit_price": "27.25",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "163.50"
+    },
+    {
+      "qty": 12,
+      "unit": "Stk.",
+      "description": [
+        "Spannsatz SP-30 Ø 30 mm 10-5767"
+      ],
+      "unit_price": "22.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "270.00"
+    },
+    {
+      "qty": 50,
+      "unit": "Stk.",
+      "description": [
+        "Getriebeflansch GF-80 88-3051"
+      ],
+      "unit_price": "121.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "6075.00"
+    },
+    {
+      "qty": 20,
+      "unit": "Stk.",
+      "description": [
+        "Antriebswelle nach Zeichnung 52-3477"
+      ],
+      "unit_price": "254.25",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "5085.00"
+    },
+    {
+      "qty": 40,
+      "unit": "Stk.",
+      "description": [
+        "Lagerbock LB-40 Stahl verzinkt 15-6780"
+      ],
+      "unit_price": "37.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "1500.00"
+    },
+    {
+      "qty": 25,
+      "unit": "Stk.",
+      "description": [
+        "Antriebswelle nach Zeichnung 72-7703"
+      ],
+      "unit_price": "329.25",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "8231.25"
+    },
+    {
+      "qty": 5,
+      "unit": "Stk.",
+      "description": [
+        "Motorkonsole MK-112 geschweißt 51-2415"
+      ],
+      "unit_price": "293.00",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "1465.00"
+    },
+    {
+      "qty": 50,
+      "unit": "Stk.",
+      "description": [
+        "Kettenrad 1/2\" Z=19 24-7699"
+      ],
+      "unit_price": "29.25",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "1462.50"
+    },
+    {
+      "qty": 6,
+      "unit": "Stk.",
+      "description": [
+        "Antriebswelle nach Zeichnung 51-5496"
+      ],
+      "unit_price": "133.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "801.00"
+    },
+    {
+      "qty": 10,
+      "unit": "Stk.",
+      "description": [
+        "Spannsatz SP-30 Ø 30 mm 66-7360"
+      ],
+      "unit_price": "30.25",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "302.50"
+    },
+    {
+      "qty": 25,
+      "unit": "Stk.",
+      "description": [
+        "Lagerdeckel LD-62 38-6180"
+      ],
+      "unit_price": "16.92",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "423.00"
+    },
+    {
+      "qty": 20,
+      "unit": "Stk.",
+      "description": [
+        "Distanzbuchse 20x30x15 70-3728"
+      ],
+      "unit_price": "1.79",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "35.80"
+    },
+    {
+      "qty": 10,
+      "unit": "Stk.",
+      "description": [
+        "Lagerbock LB-40 Stahl verzinkt 47-6965"
+      ],
+      "unit_price": "33.75",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "337.50"
+    },
+    {
+      "qty": 6,
+      "unit": "Stk.",
+      "description": [
+        "Schutzhaube Riementrieb 10-6235"
+      ],
+      "unit_price": "96.75",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "580.50"
+    },
+    {
+      "qty": 40,
+      "unit": "Stk.",
+      "description": [
+        "Klemmhebel M8 Kunststoff 39-8709"
+      ],
+      "unit_price": "7.66",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "306.40"
+    },
+    {
+      "qty": 10,
+      "unit": "Stk.",
+      "description": [
+        "Getriebeflansch GF-80 22-3445"
+      ],
+      "unit_price": "154.25",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "1542.50"
+    },
+    {
+      "qty": 4,
+      "unit": "Stk.",
+      "description": [
+        "Schutzhaube Riementrieb 19-7771"
+      ],
+      "unit_price": "92.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "370.00"
+    },
+    {
+      "qty": 50,
+      "unit": "Stk.",
+      "description": [
+        "Kettenrad 1/2\" Z=19 10-2123"
+      ],
+      "unit_price": "30.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "1525.00"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": null,
+  "discount_days": null,
+  "payment_days": 30,
+  "totals": {
+    "net": "60876.53",
+    "vat": "11566.54",
+    "gross": "72443.07"
+  },
+  "payment": {
+    "discount_date": null,
+    "due_date": "20.11.2026",
+    "discount_amount": null,
+    "discount_base": null
+  },
+  "payment_terms_text": [
+    "zahlbar bis 20.11.2026 ohne Abzug"
+  ],
+  "page_count": 3,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16
+      ],
+      "line_count": 18,
+      "transfer": "19960.73",
+      "carry_forward": null,
+      "summary_present": false,
+      "payment_block_present": true
+    },
+    {
+      "page": 2,
+      "position_indices": [
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39
+      ],
+      "line_count": 23,
+      "transfer": "55453.33",
+      "carry_forward": null,
+      "summary_present": false,
+      "payment_block_present": false
+    },
+    {
+      "page": 3,
+      "position_indices": [
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48
+      ],
+      "line_count": 9,
+      "transfer": null,
+      "carry_forward": null,
+      "summary_present": true,
+      "payment_block_present": false
+    }
+  ],
+  "test_flags": {
+    "address_name_lines": 1,
+    "address_blank_lines": 1,
+    "address_attention_line": false,
+    "address_department_line": false,
+    "two_line_company_name": false,
+    "missing_order_number": false,
+    "shipping_empty": false,
+    "discount_applied": false,
+    "blank_unit_flat_rate": false,
+    "without_price_count": 0,
+    "flat_rate_count": 0,
+    "min_order": null,
+    "price_unit_100_count": 0,
+    "two_three_line_positions": 1,
+    "four_five_line_positions": 0,
+    "has_qty_thousands": false,
+    "carry_forward": false,
+    "last_table_row_index": 11,
+    "note": "3 Seiten ohne Vortrag"
+  },
+  "sha256": "d8ee15a095649e771125083780324f05ae26c48150b75268da9e835f0656b8f1"
+}

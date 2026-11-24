@@ -1,0 +1,33 @@
+# Gartenbau Lindgrün GmbH (erfunden) – UTF-8, Tabulator, Dezimalkomma, ISO-Datum, Leistungsmonat
+profil: gartenbau
+datei: {muster: "gartenbau_*.csv", trennzeichen: "\t"}
+zahlen: {dezimal: ",", tausender: "."}
+datum: {format: "%Y-%m-%d"}
+aufbau: {art: zeile_je_position, rechnung_schluessel: Rechnungsnummer}
+
+felder:
+  kopf:
+    BT-1:  {spalte: Rechnungsnummer}
+    BT-2:  {spalte: Rechnungsdatum, typ: datum}
+    leistungsmonat: {spalte: Leistungsmonat}      # 2026-10 -> 01.10.–31.10.2026
+    BT-44: {spalte: Kunde}
+    BT-50: {spalte: Strasse}
+    BT-53: {spalte: PLZ}
+    BT-52: {spalte: Ort}
+  position:
+    BT-153: {spalte: Leistung}
+    BT-129: {spalte: Menge, typ: zahl}
+    BT-130: {spalte: Einheit, mapping: einheiten}
+    BT-146: {spalte: Preis, typ: zahl}
+    steuer: {spalte: MwSt, mapping: steuer}
+
+mappings:
+  einheiten: {"m²": MTK, m: MTR, h: HUR, pauschal: LS, unbekannt: pruefen}
+  steuer: {"19": {BT-151: S, BT-152: 19}, unbekannt: pruefen}
+
+verkaeufer:
+  name: Gartenbau Lindgrün GmbH
+  anschrift: {strasse: Wiesenpfad 12, plz: "79098", ort: Freiburg}
+  ust_id: DE445566772
+  register: Amtsgericht Freiburg HRB 990003
+zahlung: {iban: DE30000000000001230456}

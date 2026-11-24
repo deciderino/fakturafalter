@@ -1,0 +1,36 @@
+# Bäckerei Sonnenkorn GmbH (erfunden) – UTF-8, Semikolon, Dezimalkomma, TT.MM.JJJJ
+profil: baeckerei
+datei: {muster: "baeckerei_*.csv", trennzeichen: ";"}
+zahlen: {dezimal: ",", tausender: "."}
+datum: {format: "%d.%m.%Y"}
+aufbau: {art: zeile_je_position, rechnung_schluessel: Rechnungsnr}
+
+felder:
+  kopf:
+    BT-1:  {spalte: Rechnungsnr}
+    BT-2:  {spalte: Datum, typ: datum}
+    BT-72: {spalte: Lieferdatum, typ: datum}
+    BT-44: {spalte: Kunde}
+    BT-50: {spalte: Strasse}
+    BT-53: {spalte: PLZ}
+    BT-52: {spalte: Ort}
+  position:
+    BT-153: {spalte: Artikel}
+    BT-129: {spalte: Menge, typ: zahl}
+    BT-130: {spalte: Einheit, mapping: einheiten}
+    BT-146: {spalte: Einzelpreis, typ: zahl}
+    steuer: {spalte: USt-Satz, mapping: steuer}
+
+mappings:
+  einheiten: {Stk: C62, kg: KGM, unbekannt: pruefen}
+  steuer:
+    "7":  {BT-151: S, BT-152: 7}
+    "19": {BT-151: S, BT-152: 19}
+    unbekannt: pruefen
+
+verkaeufer:
+  name: Bäckerei Sonnenkorn GmbH
+  anschrift: {strasse: Kornweg 3, plz: "31134", ort: Hildesheim}
+  ust_id: DE271408158
+  register: Amtsgericht Hildesheim HRB 990001
+zahlung: {iban: DE79000000000004711001}

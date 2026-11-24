@@ -1,0 +1,174 @@
+{
+  "datei": "Rechnung_007_K261721.pdf",
+  "format": "PDF 1.4 (reportlab), A4, Schrift Helvetica (Standard-14, nicht eingebettet)",
+  "familie": "f01_infozeilen",
+  "quelle": "Q1",
+  "holdout": true,
+  "split": "holdout",
+  "seller": {
+    "name": "Kaltwasser Armaturen GmbH",
+    "street": "Lindenallee 4",
+    "postal_code": "34117",
+    "city": "Kassel",
+    "ust_id": "DE271831041",
+    "iban": "DE30 0000 0000 0041 1700 12",
+    "bic": "KALTDEX1XXX",
+    "bank": "Beispielbank Kassel",
+    "email": "info@kaltwasser.example",
+    "register": "Amtsgericht Kassel HRB 00000",
+    "ceo": "Henrike Kaltwasser"
+  },
+  "buyer": {
+    "name_lines": [
+      "Weißenfels Kältetechnik e. K."
+    ],
+    "street": "Hauptstraße 117b",
+    "postal_code": "06667",
+    "city": "Weißenfels",
+    "customer_number": "41120"
+  },
+  "invoice": {
+    "number": "K261721",
+    "date": "06.11.2026",
+    "service_date": "03.11.2026",
+    "order_number": "378698",
+    "shipping": "",
+    "date_printed": "06.11.26"
+  },
+  "druck": {
+    "datum_format": "TT.MM.JJ",
+    "schrift": "Helvetica",
+    "seitenformat": "A4"
+  },
+  "BT-72": "03.11.2026",
+  "BT-119": "19.00",
+  "positions": [
+    {
+      "qty": "20",
+      "unit": "Stk.",
+      "description": [
+        "Flanschdichtung DN65 PN16"
+      ],
+      "article_number": "FL-7065-ST",
+      "unit_price": "4.18",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "83.60"
+    },
+    {
+      "qty": "20",
+      "unit": "Stk.",
+      "description": [
+        "Kugelhahn DN25 Messing vernickelt, mit",
+        "Entleerung und Kappe, Gewinde nach DIN EN"
+      ],
+      "article_number": "KH-1025-MS",
+      "unit_price": "23.50",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "470.00"
+    },
+    {
+      "qty": "12",
+      "unit": "Stk.",
+      "description": [
+        "Strangregulierventil DN15"
+      ],
+      "article_number": "SV-6015-MS",
+      "unit_price": "53.00",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "636.00"
+    },
+    {
+      "qty": "2",
+      "unit": "Std.",
+      "description": [
+        "Montage Armaturengruppe vor Ort"
+      ],
+      "article_number": "MS-9001",
+      "unit_price": "58.50",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "117.00"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": null,
+  "discount_days": null,
+  "payment_days": 14,
+  "totals": {
+    "net": "1306.60",
+    "vat": "248.25",
+    "gross": "1554.85"
+  },
+  "totals_printed": {
+    "net": "1306.60",
+    "vat": "248.25",
+    "gross": "1554.85"
+  },
+  "payment": {
+    "discount_date": null,
+    "due_date": "20.11.2026",
+    "discount_amount": null,
+    "discount_base": null
+  },
+  "payment_terms_text": [
+    "14 Tage ohne Abzug"
+  ],
+  "page_count": 1,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "transfer": null,
+      "carry_forward": null,
+      "summary_present": true
+    }
+  ],
+  "erwarteter_status": "ok",
+  "erwartete_hinweise": [],
+  "kosit": null,
+  "verapdf": null,
+  "validierung_hinweis": "lokal nicht validierbar / spätere Phase (KoSIT/veraPDF prüfen die App-Ausgabe, nicht diese PDFs)",
+  "korrekturen": null,
+  "korrekturen_hinweis": "erst beim echten Anlernen messbar",
+  "test_flags": {
+    "address_name_lines": 1,
+    "po_box": false,
+    "multi_line_positions": 1,
+    "shipping_position": false,
+    "page_format": "A4",
+    "payment": "netto",
+    "pruefen": null,
+    "missing_order_number": false,
+    "note": "Hold-out FALLE: Angebots-Nr. direkt unter der Rechnungs-Nr.",
+    "bearbeiter": "Ilka Brosowski",
+    "auftragsnummer": "O1779",
+    "komission": "Baustelle Fuldaer Straße"
+  },
+  "rolle": "holdout-falle",
+  "moegliche_folgehinweise": [],
+  "fehlerart": null,
+  "fehler_beschreibung": null,
+  "falle": "angebot_nr",
+  "falle_beschreibung": "zusätzliche Zeile „Angebots-Nr.“ mit ähnlichem Nummernformat direkt unter der Rechnungs-Nr.",
+  "falle_detail": {
+    "angebots_nr": "A261662"
+  },
+  "totals_berechnet": {
+    "net": "1306.60",
+    "vat": "248.25",
+    "gross": "1554.85"
+  },
+  "sha256": "e47af92c08c2f069874d995ff61f02a9870826fc161d9df3072ed1a916e9a97b"
+}

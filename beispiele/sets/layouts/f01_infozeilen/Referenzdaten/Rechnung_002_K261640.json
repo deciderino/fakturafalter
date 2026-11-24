@@ -1,0 +1,176 @@
+{
+  "datei": "Rechnung_002_K261640.pdf",
+  "format": "PDF 1.4 (reportlab), A4, Schrift Helvetica (Standard-14, nicht eingebettet)",
+  "familie": "f01_infozeilen",
+  "quelle": "Q1",
+  "holdout": false,
+  "split": "training",
+  "seller": {
+    "name": "Kaltwasser Armaturen GmbH",
+    "street": "Lindenallee 4",
+    "postal_code": "34117",
+    "city": "Kassel",
+    "ust_id": "DE271831041",
+    "iban": "DE30 0000 0000 0041 1700 12",
+    "bic": "KALTDEX1XXX",
+    "bank": "Beispielbank Kassel",
+    "email": "info@kaltwasser.example",
+    "register": "Amtsgericht Kassel HRB 00000",
+    "ceo": "Henrike Kaltwasser"
+  },
+  "buyer": {
+    "name_lines": [
+      "Brauerei Kesselring",
+      "GmbH & Co. KG"
+    ],
+    "street": "Am Hopfengarten 3",
+    "postal_code": "95444",
+    "city": "Bayreuth",
+    "customer_number": "10587"
+  },
+  "invoice": {
+    "number": "K261640",
+    "date": "12.10.2026",
+    "service_date": "12.10.2026",
+    "order_number": "374553",
+    "shipping": "",
+    "date_printed": "12.10.26"
+  },
+  "druck": {
+    "datum_format": "TT.MM.JJ",
+    "schrift": "Helvetica",
+    "seitenformat": "A4"
+  },
+  "BT-72": "12.10.2026",
+  "BT-119": "19.00",
+  "positions": [
+    {
+      "qty": "3",
+      "unit": "Stk.",
+      "description": [
+        "Schmutzfänger DN32 Edelstahl, mit Entleerung",
+        "und Kappe, Gewinde nach DIN EN 10226-1"
+      ],
+      "article_number": "SF-4032-VA",
+      "unit_price": "108.25",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "324.75"
+    },
+    {
+      "qty": "20",
+      "unit": "Stk.",
+      "description": [
+        "Druckminderer 1/2\" mit Manometer"
+      ],
+      "article_number": "DM-3010-ED",
+      "unit_price": "70.75",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "1415.00"
+    },
+    {
+      "qty": "3",
+      "unit": "Std.",
+      "description": [
+        "Montage Armaturengruppe vor Ort"
+      ],
+      "article_number": "MS-9001",
+      "unit_price": "62.00",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "186.00"
+    },
+    {
+      "qty": "20",
+      "unit": "Stk.",
+      "description": [
+        "Manometer 0–10 bar, Ø 63 mm"
+      ],
+      "article_number": "MA-8040-GL",
+      "unit_price": "14.36",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "287.20"
+    },
+    {
+      "qty": "50",
+      "unit": "Stk.",
+      "description": [
+        "Flanschdichtung DN65 PN16, mit Entleerung",
+        "und Kappe, Gewinde nach DIN EN 10226-1"
+      ],
+      "article_number": "FL-7065-ST",
+      "unit_price": "6.33",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "316.50"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": null,
+  "discount_days": null,
+  "payment_days": 14,
+  "totals": {
+    "net": "2529.45",
+    "vat": "480.60",
+    "gross": "3010.05"
+  },
+  "totals_printed": {
+    "net": "2529.45",
+    "vat": "480.60",
+    "gross": "3010.05"
+  },
+  "payment": {
+    "discount_date": null,
+    "due_date": "26.10.2026",
+    "discount_amount": null,
+    "discount_base": null
+  },
+  "payment_terms_text": [
+    "14 Tage ohne Abzug"
+  ],
+  "page_count": 1,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "transfer": null,
+      "carry_forward": null,
+      "summary_present": true
+    }
+  ],
+  "erwarteter_status": "ok",
+  "erwartete_hinweise": [],
+  "kosit": null,
+  "verapdf": null,
+  "validierung_hinweis": "lokal nicht validierbar / spätere Phase (KoSIT/veraPDF prüfen die App-Ausgabe, nicht diese PDFs)",
+  "korrekturen": null,
+  "korrekturen_hinweis": "erst beim echten Anlernen messbar",
+  "test_flags": {
+    "address_name_lines": 2,
+    "po_box": false,
+    "multi_line_positions": 2,
+    "shipping_position": false,
+    "page_format": "A4",
+    "payment": "netto",
+    "pruefen": null,
+    "missing_order_number": false,
+    "note": "Firmenname zweizeilig, 14 Tage ohne Abzug",
+    "bearbeiter": "Dorothea Schäfer",
+    "auftragsnummer": "O1906",
+    "komission": "Baustelle Fuldaer Straße"
+  },
+  "sha256": "419e208d97bff68dd11a436c71e68c3381c4d1ea818cf89213a253874e066eb8"
+}

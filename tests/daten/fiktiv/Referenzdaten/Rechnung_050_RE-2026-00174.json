@@ -1,0 +1,606 @@
+{
+  "datei": "Rechnung_050_RE-2026-00174.pdf",
+  "format": "PDF/A-2b",
+  "seller": {
+    "name": "Alberon Industriekomponenten GmbH",
+    "street": "Prüfwerkstraße 18",
+    "postal_code": "09111",
+    "city": "Chemnitz",
+    "ust_id": "DE123456789",
+    "iban": "DE89 3704 0044 0532 0130 00",
+    "bic": "COBADEFFXXX",
+    "bank": "Commerzbank AG",
+    "email": "rechnung@alberon.example",
+    "register": "Amtsgericht Chemnitz, HRB 999999",
+    "ceo": "Markus Seidel"
+  },
+  "buyer": {
+    "name_lines": [
+      "Waldstrom Fahrzeugtechnik GmbH",
+      "Materialwirtschaft"
+    ],
+    "street": "Eichenhof 17",
+    "postal_code": "90402",
+    "city": "Nürnberg",
+    "customer_number": "07014"
+  },
+  "invoice": {
+    "number": "RE-2026-00174",
+    "date": "02.11.2026",
+    "service_date": "19.10.2026",
+    "order_number": "PO/2026/4811",
+    "shipping": "Lieferung"
+  },
+  "positions": [
+    {
+      "qty": 100,
+      "unit": "Stk.",
+      "description": [
+        "Distanzhülse 577791"
+      ],
+      "unit_price": "1.20",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "120.00"
+    },
+    {
+      "qty": 12,
+      "unit": "Stk.",
+      "description": [
+        "Befestigungswinkel 325897"
+      ],
+      "unit_price": "65.00",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "780.00"
+    },
+    {
+      "qty": 1000,
+      "unit": "Stk.",
+      "description": [
+        "Passstift 145533"
+      ],
+      "unit_price": "3.90",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "3900.00"
+    },
+    {
+      "qty": 4,
+      "unit": "Std.",
+      "description": [
+        "Gehäuseboden 285174"
+      ],
+      "unit_price": "35.00",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "140.00"
+    },
+    {
+      "qty": 2500,
+      "unit": "Stk.",
+      "description": [
+        "Kupplungsstück 611326"
+      ],
+      "unit_price": "1.20",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "3000.00"
+    },
+    {
+      "qty": 100,
+      "unit": "Stk.",
+      "description": [
+        "Befestigungswinkel 440160"
+      ],
+      "unit_price": "18.75",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "1875.00"
+    },
+    {
+      "qty": 125,
+      "unit": "Stk.",
+      "description": [
+        "Spannhülse 429073",
+        "nach Zeichnung A-572, EN AW-6082"
+      ],
+      "unit_price": "1.20",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "150.00"
+    },
+    {
+      "qty": 3,
+      "unit": "Stk.",
+      "description": [
+        "Aufnahmeflansch 388307",
+        "Werkstoff EN AW-5083"
+      ],
+      "unit_price": null,
+      "kind": "without_price",
+      "price_unit": "/1",
+      "total": null
+    },
+    {
+      "qty": 40,
+      "unit": "Stk.",
+      "description": [
+        "Kupplungsstück 537878"
+      ],
+      "unit_price": null,
+      "kind": "without_price",
+      "price_unit": "/1",
+      "total": null
+    },
+    {
+      "qty": 2,
+      "unit": "Std.",
+      "description": [
+        "Montagewinkel 811558"
+      ],
+      "unit_price": null,
+      "kind": "without_price",
+      "price_unit": "/1",
+      "total": null
+    },
+    {
+      "qty": 1,
+      "unit": "",
+      "description": [
+        "Pauschalpreis Auftrag 2028-211"
+      ],
+      "unit_price": "4250.00",
+      "kind": "flat_rate",
+      "price_unit": "/1",
+      "total": "4250.00"
+    },
+    {
+      "qty": 25,
+      "unit": "Stk.",
+      "description": [
+        "Montageschiene 22172"
+      ],
+      "unit_price": "1799.99",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "44999.75"
+    },
+    {
+      "qty": 12,
+      "unit": "Stk.",
+      "description": [
+        "Führungsbuchse 141720",
+        "Prüfmaß 0,02 mm berücksichtigen",
+        "nach Zeichnung A-572, EN AW-6082"
+      ],
+      "unit_price": "4.75",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "57.00"
+    },
+    {
+      "qty": 40,
+      "unit": "Stk.",
+      "description": [
+        "Führungsbuchse 90707"
+      ],
+      "unit_price": "1.20",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "48.00"
+    },
+    {
+      "qty": 125,
+      "unit": "Stk.",
+      "description": [
+        "CNC-Nacharbeit 421456"
+      ],
+      "unit_price": "65.00",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "8125.00"
+    },
+    {
+      "qty": 750,
+      "unit": "Stk.",
+      "description": [
+        "Mess- und Prüfarbeit 990442"
+      ],
+      "unit_price": "12.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "9375.00"
+    },
+    {
+      "qty": 5,
+      "unit": "Stk.",
+      "description": [
+        "CNC-Nacharbeit 767550"
+      ],
+      "unit_price": "480.00",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "2400.00"
+    },
+    {
+      "qty": 20,
+      "unit": "Stk.",
+      "description": [
+        "Adapterplatte 990926",
+        "Bohrungen gegen Beschichtung schützen"
+      ],
+      "unit_price": "3.90",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "78.00"
+    },
+    {
+      "qty": 1000,
+      "unit": "Stk.",
+      "description": [
+        "Adapterplatte 900117"
+      ],
+      "unit_price": "0.85",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "850.00"
+    },
+    {
+      "qty": 75,
+      "unit": "Stk.",
+      "description": [
+        "Bearbeitung 530642"
+      ],
+      "unit_price": "1.20",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "90.00"
+    },
+    {
+      "qty": 10000,
+      "unit": "Stk.",
+      "description": [
+        "CNC-Nacharbeit 815146"
+      ],
+      "unit_price": "14.99",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "149900.00"
+    },
+    {
+      "qty": 3,
+      "unit": "Stk.",
+      "description": [
+        "Gehäusedeckel 761840"
+      ],
+      "unit_price": "2.35",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "7.05"
+    },
+    {
+      "qty": 5000,
+      "unit": "Stk.",
+      "description": [
+        "Formstück 913114"
+      ],
+      "unit_price": "7.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "37500.00"
+    },
+    {
+      "qty": 3,
+      "unit": "Stk.",
+      "description": [
+        "Wellenhalter 432390"
+      ],
+      "unit_price": "0.85",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "2.55"
+    },
+    {
+      "qty": 50,
+      "unit": "Std.",
+      "description": [
+        "Schutzblende 714669"
+      ],
+      "unit_price": null,
+      "kind": "without_price",
+      "price_unit": "/1",
+      "total": null
+    },
+    {
+      "qty": 1000,
+      "unit": "Stk.",
+      "description": [
+        "Spannhülse 633893"
+      ],
+      "unit_price": null,
+      "kind": "without_price",
+      "price_unit": "/1",
+      "total": null
+    },
+    {
+      "qty": 125,
+      "unit": "Stk.",
+      "description": [
+        "Formstück 283075"
+      ],
+      "unit_price": null,
+      "kind": "without_price",
+      "price_unit": "/1",
+      "total": null
+    },
+    {
+      "qty": 1,
+      "unit": "Stk.",
+      "description": [
+        "Gesamtpreis Auftrag 2029-178"
+      ],
+      "unit_price": "850.00",
+      "kind": "flat_rate",
+      "price_unit": "/1",
+      "total": "850.00"
+    },
+    {
+      "qty": 75,
+      "unit": "Stk.",
+      "description": [
+        "Halterungsplatte 386468"
+      ],
+      "unit_price": "35.00",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "2625.00"
+    },
+    {
+      "qty": 30,
+      "unit": "Std.",
+      "description": [
+        "Montagearbeit 451266"
+      ],
+      "unit_price": "2.35",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "70.50"
+    },
+    {
+      "qty": 250,
+      "unit": "Stk.",
+      "description": [
+        "Distanzhülse 601451"
+      ],
+      "unit_price": "180.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "45125.00"
+    },
+    {
+      "qty": 200,
+      "unit": "Stk.",
+      "description": [
+        "Gehäusedeckel 779845"
+      ],
+      "unit_price": null,
+      "kind": "without_price",
+      "price_unit": "/1",
+      "total": null
+    },
+    {
+      "qty": 25,
+      "unit": "Stk.",
+      "description": [
+        "Bearbeitung 623535"
+      ],
+      "unit_price": null,
+      "kind": "without_price",
+      "price_unit": "/1",
+      "total": null
+    },
+    {
+      "qty": 1,
+      "unit": "Stk.",
+      "description": [
+        "Mindestauftrag Auftrag 2028-224"
+      ],
+      "unit_price": "250.00",
+      "kind": "flat_rate",
+      "price_unit": "/1",
+      "total": "250.00"
+    },
+    {
+      "qty": 50,
+      "unit": "Stk.",
+      "description": [
+        "Bearbeitung 614264"
+      ],
+      "unit_price": "12.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "625.00"
+    },
+    {
+      "qty": 2,
+      "unit": "Std.",
+      "description": [
+        "Führungsbuchse 908199"
+      ],
+      "unit_price": "89.90",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "179.80"
+    },
+    {
+      "qty": 2,
+      "unit": "Stk.",
+      "description": [
+        "Aluminiumgehäuse 241810"
+      ],
+      "unit_price": "180.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "361.00"
+    },
+    {
+      "qty": 5000,
+      "unit": "Stk.",
+      "description": [
+        "Gehäuseboden 901038"
+      ],
+      "unit_price": "18.75",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "93750.00"
+    },
+    {
+      "qty": 20,
+      "unit": "Stk.",
+      "description": [
+        "Schutzblende 162403",
+        "Sondermaß nach Zeichnung 2026-18"
+      ],
+      "unit_price": "65.00",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "1300.00"
+    },
+    {
+      "qty": 1250,
+      "unit": "Stk.",
+      "description": [
+        "Wellenhalter 419953",
+        "Gewinde M5 und Passungen prüfen"
+      ],
+      "unit_price": "4.75",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "5937.50"
+    },
+    {
+      "qty": 1250,
+      "unit": "Stk.",
+      "description": [
+        "Abdeckprofil 53570",
+        "Oberfläche eloxiert, natur"
+      ],
+      "unit_price": "2.35",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "2937.50"
+    },
+    {
+      "qty": 75,
+      "unit": "Stk.",
+      "description": [
+        "Trägerplatte 579648",
+        "Prüfmaß 0,02 mm berücksichtigen"
+      ],
+      "unit_price": "3.90",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "292.50"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": "4.00",
+  "discount_days": 10,
+  "payment_days": 30,
+  "totals": {
+    "net": "421951.15",
+    "vat": "80170.72",
+    "gross": "502121.87"
+  },
+  "payment": {
+    "discount_date": "12.11.2026",
+    "due_date": "02.12.2026",
+    "discount_amount": "20084.87"
+  },
+  "page_count": 3,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "line_count": 19,
+      "transfer": "67444.75",
+      "summary_present": false,
+      "payment_block_present": true
+    },
+    {
+      "page": 2,
+      "position_indices": [
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37
+      ],
+      "line_count": 23,
+      "transfer": "317733.65",
+      "summary_present": false,
+      "payment_block_present": false
+    },
+    {
+      "page": 3,
+      "position_indices": [
+        38,
+        39,
+        40,
+        41,
+        42
+      ],
+      "line_count": 9,
+      "transfer": null,
+      "summary_present": true,
+      "payment_block_present": false
+    }
+  ],
+  "test_flags": {
+    "address_name_lines": 2,
+    "missing_order_number": false,
+    "shipping_empty": false,
+    "discount_applied": true,
+    "blank_unit_flat_rate": true,
+    "without_price_count": 8,
+    "flat_rate_count": 3,
+    "two_three_line_positions": 8,
+    "four_five_line_positions": 0,
+    "has_qty_thousands": true
+  },
+  "sha256": "b1cb36e36fae7b3bb428261a0c0c79939a045761744a0e226b2cbc9f02423d2d"
+}

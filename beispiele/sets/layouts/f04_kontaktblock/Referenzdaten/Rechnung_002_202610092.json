@@ -1,0 +1,186 @@
+{
+  "datei": "Rechnung_002_202610092.pdf",
+  "format": "PDF 1.4 (reportlab), A4, Schrift Helvetica (Standard-14, nicht eingebettet)",
+  "familie": "f04_kontaktblock",
+  "quelle": "Q3",
+  "holdout": false,
+  "split": "training",
+  "seller": {
+    "name": "Grünwerk Gartenplanung GmbH",
+    "street": "Wilhelmshöher Allee 210",
+    "postal_code": "34119",
+    "city": "Kassel",
+    "ust_id": "DE271044173",
+    "iban": "DE81 0000 0000 0310 0441 70",
+    "bic": "GRUEDEX1KSL",
+    "bank": "Beispielbank Nordhessen",
+    "email": "rechnung@gruenwerk.example",
+    "register": "Amtsgericht Kassel HRB 00000",
+    "ceo": "Lotte Grünewald"
+  },
+  "buyer": {
+    "name_lines": [
+      "Weingut Hohenrain GbR"
+    ],
+    "street": "Rheinstraße 70",
+    "postal_code": "65375",
+    "city": "Oestrich-Winkel",
+    "customer_number": "K10077"
+  },
+  "invoice": {
+    "number": "202610092",
+    "date": "12.10.2026",
+    "service_date": "12.10.2026",
+    "order_number": "",
+    "shipping": ""
+  },
+  "druck": {
+    "datum_format": "TT.MM.JJJJ",
+    "schrift": "Helvetica",
+    "seitenformat": "A4"
+  },
+  "BT-72": "12.10.2026",
+  "BT-119": "19.00",
+  "positions": [
+    {
+      "qty": "12",
+      "unit": "Std.",
+      "description": [
+        "Pflanzarbeiten Gehölze"
+      ],
+      "article_number": "GP-200",
+      "unit_price": "55.00",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "660.00"
+    },
+    {
+      "qty": "12",
+      "unit": "Stk.",
+      "description": [
+        "Natursteinpflaster Granit, je m², gemäß Angebot und",
+        "Abstimmung vor Ort"
+      ],
+      "article_number": "GP-330",
+      "unit_price": "43.00",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "516.00"
+    },
+    {
+      "qty": "1",
+      "unit": "Stk.",
+      "description": [
+        "Anfahrtspauschale"
+      ],
+      "article_number": "GP-400",
+      "unit_price": "33.00",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "33.00"
+    },
+    {
+      "qty": "60",
+      "unit": "Stk.",
+      "description": [
+        "Hainbuche Heckenpflanze 100–125 cm, inklusive",
+        "Entsorgung des Grünschnitts über den Wertstoffhof"
+      ],
+      "article_number": "GP-300",
+      "unit_price": "9.58",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "574.80"
+    },
+    {
+      "qty": "2.5",
+      "unit": "Std.",
+      "description": [
+        "Baustellentermin vor Ort"
+      ],
+      "article_number": "GP-120",
+      "unit_price": "66.00",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "165.00"
+    },
+    {
+      "qty": "200",
+      "unit": "Stk.",
+      "description": [
+        "Rasenansaat inkl. Bodenvorbereitung, je m²"
+      ],
+      "article_number": "GP-210",
+      "unit_price": "4.46",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "892.00"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": "2.00",
+  "discount_days": 7,
+  "payment_days": 21,
+  "totals": {
+    "net": "2840.80",
+    "vat": "539.75",
+    "gross": "3380.55"
+  },
+  "totals_printed": {
+    "net": "2840.80",
+    "vat": "539.75",
+    "gross": "3380.55"
+  },
+  "payment": {
+    "discount_date": "19.10.2026",
+    "due_date": "02.11.2026",
+    "discount_amount": "67.61",
+    "discount_base": "gross"
+  },
+  "payment_terms_text": [
+    "Bei Zahlung bis zum 19.10.2026 gewähren wir 2 % Skonto.",
+    "Bitte begleichen Sie den offenen Betrag bis zum 02.11.2026 an die unten aufgeführte Bankverbindung."
+  ],
+  "page_count": 1,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "transfer": null,
+      "carry_forward": null,
+      "summary_present": true
+    }
+  ],
+  "erwarteter_status": "ok",
+  "erwartete_hinweise": [],
+  "kosit": null,
+  "verapdf": null,
+  "validierung_hinweis": "lokal nicht validierbar / spätere Phase (KoSIT/veraPDF prüfen die App-Ausgabe, nicht diese PDFs)",
+  "korrekturen": null,
+  "korrekturen_hinweis": "erst beim echten Anlernen messbar",
+  "test_flags": {
+    "address_name_lines": 1,
+    "po_box": false,
+    "multi_line_positions": 2,
+    "shipping_position": false,
+    "page_format": "A4",
+    "payment": "skonto",
+    "pruefen": null,
+    "missing_order_number": true,
+    "note": "Waren und Std. gemischt, Skontosatz vor dem Zahlsatz"
+  },
+  "sha256": "097d15a1d19a196c3dc5e569fc80a83d889bff4732eaace313c237fd782f1a4a"
+}

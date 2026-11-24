@@ -1,0 +1,109 @@
+{
+  "set": "kommentarzeilen",
+  "version": "1.0.0",
+  "eingefroren": true,
+  "seed": 264712,
+  "generator": "beispiele/sets/kommentarzeilen/erzeuge.py",
+  "aufruf": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python beispiele/sets/kommentarzeilen/erzeuge.py",
+  "abhaengigkeiten": [
+    "beispiele/sets/fiktiva/erzeuge.py (Geometrie und Hilfen)",
+    "src/fakturafalter/pflichtpruefung.py (Selbstcheck)"
+  ],
+  "umgebung": {
+    "python": "3.13.18",
+    "reportlab": "5.1.0",
+    "pillow": "13.0.0",
+    "pdfplumber": "0.11.10",
+    "hinweis": "Neulauf mit dieser Umgebung ist byte-gleich zu den Hashes unten"
+  },
+  "inhalt_commit": "b6eafd377965fcc0a3ff8c871878b85119bb1ec2",
+  "inhalt_commit_hinweis": "Commit, der Generator und Belege dieser Version enthält; MANIFEST.json selbst liegt in einem eigenen Commit danach",
+  "erzeugt_am": "2026-11-20T08:13:22+00:00",
+  "pfade_relativ_zu": "beispiele/sets/kommentarzeilen/",
+  "rollen": {
+    "anlernen": "Trainings-Split (fehlerfrei): Anlernen/Tunen; der Benchmark lernt mit den ersten --lernen Belegen und misst den Rest",
+    "nachlesen": "mit dem angelernten Profil nachlesen (fehlerfrei)",
+    "holdout": "nur messen, nie tunen (fehlerfrei)",
+    "holdout-fehler": "nur messen; Druck enthält genau einen absichtlichen Fehler (erwarteter_status fehler bzw. prüfen)",
+    "holdout-falle": "nur messen; fachlich korrekt, mit Ablenker für False Positives (erwarteter_status ok)"
+  },
+  "anzahl": {
+    "belege": 2,
+    "anlernen": 1,
+    "nachlesen": 1,
+    "ausserhalb_v1": 0
+  },
+  "hinweis": "Bei A1 inhaltlich unverändert; keine Fehler- oder Fallenbelege.",
+  "belege": [
+    {
+      "pdf": "Rechnungen/Rechnung_001_2026-04711.pdf",
+      "soll": "Referenzdaten/Rechnung_001_2026-04711.json",
+      "rechnungsnummer": "2026-04711",
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false,
+      "erwarteter_status": "ok"
+    },
+    {
+      "pdf": "Rechnungen/Rechnung_002_2026-04738.pdf",
+      "soll": "Referenzdaten/Rechnung_002_2026-04738.json",
+      "rechnungsnummer": "2026-04738",
+      "rolle": "nachlesen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false,
+      "erwarteter_status": "ok"
+    }
+  ],
+  "dateien": [
+    {
+      "pfad": "README.md",
+      "sha256": "d6bfa4601c16479455c5a810aa8a2e6ead6a899fe95f57fb22189aef82e796cb",
+      "bytes": 4137,
+      "art": "doku"
+    },
+    {
+      "pfad": "Rechnungen/Rechnung_001_2026-04711.pdf",
+      "sha256": "ebc24f98ebe90e7567358913c45205c3feb8a143c6002db8bc8e26a32c1191e3",
+      "bytes": 43897,
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "Rechnungen/Rechnung_002_2026-04738.pdf",
+      "sha256": "f04a880b69065c845ca813265e9d23169c3dfb6c3c1adfc3a14440dd68284958",
+      "bytes": 43507,
+      "rolle": "nachlesen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "Referenzdaten/Rechnung_001_2026-04711.json",
+      "sha256": "46e92f36d533735842e599ea556ac1c120dd2aa27ee8ee40bc705d57411645b4",
+      "bytes": 4049,
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "Referenzdaten/Rechnung_002_2026-04738.json",
+      "sha256": "2641e0ea0786537018b5056e14a85ef67492d64dcd9aa846781c89d8dd51143c",
+      "bytes": 3947,
+      "rolle": "nachlesen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "erzeuge.py",
+      "sha256": "33eafce425fa1579a4025efb35383b8c18ca26e0935758fd33a95676c98b1aaa",
+      "bytes": 18226,
+      "art": "generator"
+    }
+  ]
+}

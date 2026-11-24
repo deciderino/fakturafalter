@@ -1,0 +1,7 @@
+﻿Datei;Split;Rechnungsnummer;Rechnungsdatum;Kundennummer;Namenszeilen;Seiten;Format;Positionen;Mehrzeilig;Versand;Zahlung;Skonto;Netto;USt;Brutto;Status;Notiz;SHA256
+Rechnung_001_RE26-76001.pdf;training;RE26-76001;07.10.2026;4711;1;1;A4;6;1;ja;netto;;297.30;56.49;353.79;ok;einfach, Versandkosten als Position;9a65c64f12248a904fd21a61c58bf63dd1c5f9fab156a1828e6b365f8ab597f5
+Rechnung_002_RE26-30002.pdf;training;RE26-30002;12.10.2026;4788;2;2;A4;30;3;;skonto;2;1414.21;268.70;1682.91;ok;2 Seiten mit Zwischensumme/Übertrag, Skonto;6d7a18a6a58b824f77ad1a76fdb108f2590ee2042863585a9a77b28d2d19c29a
+Rechnung_003_RE26-19003.pdf;training;RE26-19003;19.10.2026;4802;2;1;A4;8;2;ja;netto;;354.31;67.32;421.63;ok;Versatz-Infoblock, Dienstleistung in Std. gemischt;a831c0743404f04d7b1326f4a14bec38319b02a94ddfcff8d92b6ceb05476241
+Rechnung_004_RE26-66004.pdf;holdout;RE26-66004;26.10.2026;K10112;3;1;A4;9;2;;netto;;396.48;75.33;471.81;ok;Hold-out: 3 Namenszeilen;25061bd9a4f61197867f4a39bd401bc35d8fcc19d0e5424bff4fe496b72f56af
+Rechnung_005_RE26-74005.pdf;holdout;RE26-74005;29.10.2026;C00322;2;3;A4;87;1;ja;skonto;3;3557.21;675.87;4233.08;ok;Hold-out: 3 Seiten, zwei Überträge;b1aaf4e1a349d3cbae041cacfae9a58cac32c10bc50655534eb92c4cd6580bcf
+Rechnung_006_RE26-11006.pdf;holdout;RE26-11006;;4802;2;1;A4;7;1;ja;netto;;219.16;41.64;260.80;fehler;Hold-out FEHLER: Rechnungsdatum nicht gedruckt (Lieferdatum steht da);8f10438f5a6583a7638ff1f1b18d2fa696bdc647e23e99793f90fcf6a3bfbdaf

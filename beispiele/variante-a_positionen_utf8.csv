@@ -1,0 +1,8 @@
+rechnungsnummer,rechnungsdatum,leistungsdatum,kundennummer,bestellnummer,pos,artikelnummer,bezeichnung,menge,einheit,einzelpreis_netto,steuerschluessel
+RE-2026-0101,2026-10-05,2026-10-02,K-1001,,1,A-100,"Schraube M8 verzinkt",500,Stk,0.12,1
+RE-2026-0101,2026-10-05,2026-10-02,K-1001,,2,A-200,"Montagearbeit vor Ort",3.5,Std,65.00,1
+RE-2026-0101,2026-10-05,2026-10-02,K-1001,,3,B-010,"Fachbuch „Montage für Einsteiger“",1,Stk,39.90,2
+RE-2026-0102,2026-10-06,2026-10-06,K-1002,B-2026-77,1,C-300,"Kabel NYM 3x1,5 mm²",50,m,0.89,1
+RE-2026-0102,2026-10-06,2026-10-06,K-1002,B-2026-77,2,A-200,"Montagearbeit vor Ort",2,Std,65.00,1
+RE-2026-0103,2026-10-07,2026-10-07,K-1003,,1,D-001,"Wartungspauschale Heizung",1,pausch,120.00,1
+RE-2026-0103,2026-10-07,2026-10-07,K-1003,,2,D-002,"Anfahrt Zone 1",1,pausch,25.00,1

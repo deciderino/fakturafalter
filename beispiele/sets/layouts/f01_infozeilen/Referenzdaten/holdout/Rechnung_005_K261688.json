@@ -1,0 +1,161 @@
+{
+  "datei": "Rechnung_005_K261688.pdf",
+  "format": "PDF 1.4 (reportlab), A4, Schrift Helvetica (Standard-14, nicht eingebettet)",
+  "familie": "f01_infozeilen",
+  "quelle": "Q1",
+  "holdout": true,
+  "split": "holdout",
+  "seller": {
+    "name": "Kaltwasser Armaturen GmbH",
+    "street": "Lindenallee 4",
+    "postal_code": "34117",
+    "city": "Kassel",
+    "ust_id": "DE271831041",
+    "iban": "DE30 0000 0000 0041 1700 12",
+    "bic": "KALTDEX1XXX",
+    "bank": "Beispielbank Kassel",
+    "email": "info@kaltwasser.example",
+    "register": "Amtsgericht Kassel HRB 00000",
+    "ceo": "Henrike Kaltwasser"
+  },
+  "buyer": {
+    "name_lines": [
+      "Rösner Metallbau GmbH"
+    ],
+    "street": "Industriegebiet Süd 5",
+    "postal_code": "36037",
+    "city": "Fulda",
+    "customer_number": "10044"
+  },
+  "invoice": {
+    "number": "K261688",
+    "date": "28.10.2026",
+    "service_date": "27.10.2026",
+    "order_number": "386693",
+    "shipping": "",
+    "date_printed": "28.10.26"
+  },
+  "druck": {
+    "datum_format": "TT.MM.JJ",
+    "schrift": "Helvetica",
+    "seitenformat": "A4"
+  },
+  "BT-72": "27.10.2026",
+  "BT-119": "19.00",
+  "positions": [
+    {
+      "qty": "10",
+      "unit": "Stk.",
+      "description": [
+        "Thermostatkopf weiß, Fühler eingebaut"
+      ],
+      "article_number": "TH-5100-WS",
+      "unit_price": "10.13",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "101.30"
+    },
+    {
+      "qty": "3",
+      "unit": "Stk.",
+      "description": [
+        "Kugelhahn DN25 Messing vernickelt"
+      ],
+      "article_number": "KH-1025-MS",
+      "unit_price": "14.84",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "44.52"
+    },
+    {
+      "qty": "10",
+      "unit": "Stk.",
+      "description": [
+        "Strangregulierventil DN15"
+      ],
+      "article_number": "SV-6015-MS",
+      "unit_price": "37.25",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "372.50"
+    },
+    {
+      "qty": "4",
+      "unit": "Stk.",
+      "description": [
+        "Druckminderer 1/2\" mit Manometer"
+      ],
+      "article_number": "DM-3010-ED",
+      "unit_price": "64.00",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "256.00"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": null,
+  "discount_days": null,
+  "payment_days": 14,
+  "totals": {
+    "net": "774.32",
+    "vat": "147.12",
+    "gross": "921.44"
+  },
+  "totals_printed": {
+    "net": "784.32",
+    "vat": "147.12",
+    "gross": "921.44"
+  },
+  "payment": {
+    "discount_date": null,
+    "due_date": "11.11.2026",
+    "discount_amount": null,
+    "discount_base": null
+  },
+  "payment_terms_text": [
+    "14 Tage ohne Abzug"
+  ],
+  "page_count": 1,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "transfer": null,
+      "carry_forward": null,
+      "summary_present": true
+    }
+  ],
+  "erwarteter_status": "prüfen",
+  "erwartete_hinweise": [
+    "PRUEFEN [BT-109] Kontrollwert der Quelle ≠ berechnet (gedrucktes Netto 10,00 € über Σ Positionen)"
+  ],
+  "kosit": null,
+  "verapdf": null,
+  "validierung_hinweis": "lokal nicht validierbar / spätere Phase (KoSIT/veraPDF prüfen die App-Ausgabe, nicht diese PDFs)",
+  "korrekturen": null,
+  "korrekturen_hinweis": "erst beim echten Anlernen messbar",
+  "test_flags": {
+    "address_name_lines": 1,
+    "po_box": false,
+    "multi_line_positions": 0,
+    "shipping_position": false,
+    "page_format": "A4",
+    "payment": "netto",
+    "pruefen": "netto",
+    "missing_order_number": false,
+    "note": "Hold-out PRÜFEN: gedrucktes Netto 10,00 € über Σ Positionen",
+    "bearbeiter": "Ilka Brosowski",
+    "auftragsnummer": "O1746",
+    "komission": "Wartung Heizzentrale"
+  },
+  "sha256": "4196eb1fa7e55d4558860b331dd3b84d0cdef368f83315114bdc7aa3bc5a55a3"
+}

@@ -1,0 +1,187 @@
+{
+  "datei": "Rechnung_006_103006.pdf",
+  "format": "PDF 1.4 (reportlab), A4, Schrift Times (Standard-14, nicht eingebettet)",
+  "familie": "f08_bildkopf",
+  "quelle": "Q10",
+  "holdout": true,
+  "split": "holdout",
+  "seller": {
+    "name": "Weserblick Elektrotechnik GmbH",
+    "street": "Am Speicher XI 7",
+    "postal_code": "28217",
+    "city": "Bremen",
+    "ust_id": "DE314775200",
+    "iban": "DE81 0000 0000 0045 1200 98",
+    "bic": "WESBDEX1BRE",
+    "bank": "Beispielbank Bremen",
+    "email": "rechnungen@weserblick-elektro.example",
+    "register": "Amtsgericht Bremen HRB 00000 HB",
+    "ceo": "Gesa Thormählen"
+  },
+  "buyer": {
+    "name_lines": [
+      "Elektro Wittkowski GmbH & Co. KG",
+      "Kreditorenbuchhaltung"
+    ],
+    "street": "Hafenstraße 41",
+    "postal_code": "26725",
+    "city": "Emden",
+    "customer_number": "30227"
+  },
+  "invoice": {
+    "number": "103006",
+    "date": "09.11.2026",
+    "service_date": "08.11.2026",
+    "order_number": "4500062317",
+    "shipping": ""
+  },
+  "druck": {
+    "datum_format": "TT.MM.JJJJ",
+    "schrift": "Times",
+    "seitenformat": "A4"
+  },
+  "BT-72": "08.11.2026",
+  "BT-119": "19.00",
+  "positions": [
+    {
+      "qty": "40",
+      "unit": "Stk.",
+      "description": [
+        "Abzweigdose IP65 mit Klemmen"
+      ],
+      "article_number": "1929-S",
+      "unit_price": "3.94",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "157.60"
+    },
+    {
+      "qty": "5",
+      "unit": "Stk.",
+      "description": [
+        "Kabelkanal 40 × 60, 2 m"
+      ],
+      "article_number": "1960-S",
+      "unit_price": "8.78",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "43.90"
+    },
+    {
+      "qty": "2",
+      "unit": "Stk.",
+      "description": [
+        "Bewegungsmelder Decke 360°"
+      ],
+      "article_number": "1906-S",
+      "unit_price": "25.00",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "50.00"
+    },
+    {
+      "qty": "20",
+      "unit": "Stk.",
+      "description": [
+        "Steckdose Schuko Aufputz, grau, inklusive Prüfung",
+        "und Dokumentation nach DIN VDE 0100-600"
+      ],
+      "article_number": "1928-S",
+      "unit_price": "6.39",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "127.80"
+    },
+    {
+      "qty": "2",
+      "unit": "Stk.",
+      "description": [
+        "Wallbox 11 kW inkl. Montagematerial"
+      ],
+      "article_number": "1968-S",
+      "unit_price": "759.50",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "1519.00"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": "2.00",
+  "discount_days": 8,
+  "payment_days": 30,
+  "totals": {
+    "net": "1898.30",
+    "vat": "360.68",
+    "gross": "2258.98"
+  },
+  "totals_printed": {
+    "net": "1898.30",
+    "vat": "360.68",
+    "gross": "2258.98"
+  },
+  "payment": {
+    "discount_date": "17.11.2026",
+    "due_date": "09.12.2026",
+    "discount_amount": "45.18",
+    "discount_base": "gross"
+  },
+  "payment_terms_text": [
+    "2 % Skonto 8 Tage, 30 Tage netto"
+  ],
+  "page_count": 1,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "transfer": null,
+      "carry_forward": null,
+      "summary_present": true
+    }
+  ],
+  "erwarteter_status": "ok",
+  "erwartete_hinweise": [],
+  "kosit": null,
+  "verapdf": null,
+  "validierung_hinweis": "lokal nicht validierbar / spätere Phase (KoSIT/veraPDF prüfen die App-Ausgabe, nicht diese PDFs)",
+  "korrekturen": null,
+  "korrekturen_hinweis": "erst beim echten Anlernen messbar",
+  "test_flags": {
+    "address_name_lines": 2,
+    "po_box": false,
+    "multi_line_positions": 1,
+    "shipping_position": false,
+    "page_format": "A4",
+    "payment": "skonto",
+    "pruefen": null,
+    "missing_order_number": false,
+    "note": "Hold-out FALLE: Projektnr. im Format der Rechnungsnummer neben der Debitorennr.",
+    "uebertrag_gedruckt": false,
+    "kopf_fuss_als_bild": true
+  },
+  "rolle": "holdout-falle",
+  "moegliche_folgehinweise": [],
+  "fehlerart": null,
+  "fehler_beschreibung": null,
+  "falle": "nummer_aehnlich",
+  "falle_beschreibung": "zusätzliche „Projektnr.“ im gleichen sechsstelligen Format wie die Rechnungsnummer",
+  "falle_detail": {
+    "projektnr": "103619"
+  },
+  "totals_berechnet": {
+    "net": "1898.30",
+    "vat": "360.68",
+    "gross": "2258.98"
+  },
+  "sha256": "925beec81e16bff5ce82946cd1e84e081cd650c1fa49b0c559a72593995a4020"
+}

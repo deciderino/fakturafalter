@@ -1,0 +1,196 @@
+{
+  "datei": "Rechnung_012_RE-2026-00136.pdf",
+  "format": "PDF/A-2b",
+  "seller": {
+    "name": "Alberon Industriekomponenten GmbH",
+    "street": "Prüfwerkstraße 18",
+    "postal_code": "09111",
+    "city": "Chemnitz",
+    "ust_id": "DE123456789",
+    "iban": "DE89 3704 0044 0532 0130 00",
+    "bic": "COBADEFFXXX",
+    "bank": "Commerzbank AG",
+    "email": "rechnung@alberon.example",
+    "register": "Amtsgericht Chemnitz, HRB 999999",
+    "ceo": "Markus Seidel"
+  },
+  "buyer": {
+    "name_lines": [
+      "Falkensee Komponentenbau GmbH",
+      "Einkauf Nord"
+    ],
+    "street": "Präzisionsweg 29",
+    "postal_code": "34117",
+    "city": "Kassel",
+    "customer_number": "103887"
+  },
+  "invoice": {
+    "number": "RE-2026-00136",
+    "date": "23.08.2026",
+    "service_date": "23.08.2026",
+    "order_number": "",
+    "shipping": "Lieferung"
+  },
+  "positions": [
+    {
+      "qty": 750,
+      "unit": "Stk.",
+      "description": [
+        "Spannhülse 21214"
+      ],
+      "unit_price": null,
+      "kind": "without_price",
+      "price_unit": "/1",
+      "total": null
+    },
+    {
+      "qty": 25,
+      "unit": "Stk.",
+      "description": [
+        "Gehäusedeckel 560275"
+      ],
+      "unit_price": null,
+      "kind": "without_price",
+      "price_unit": "/1",
+      "total": null
+    },
+    {
+      "qty": 1,
+      "unit": "Stk.",
+      "description": [
+        "Pauschalpreis Auftrag 2029-680"
+      ],
+      "unit_price": "600.00",
+      "kind": "flat_rate",
+      "price_unit": "/1",
+      "total": "600.00"
+    },
+    {
+      "qty": 2,
+      "unit": "Stk.",
+      "description": [
+        "Führungsbuchse 828336"
+      ],
+      "unit_price": null,
+      "kind": "without_price",
+      "price_unit": "/1",
+      "total": null
+    },
+    {
+      "qty": 1,
+      "unit": "Stk.",
+      "description": [
+        "Gesamtpreis Auftrag 2029-850"
+      ],
+      "unit_price": "1120.50",
+      "kind": "flat_rate",
+      "price_unit": "/1",
+      "total": "1120.50"
+    },
+    {
+      "qty": 5,
+      "unit": "Stk.",
+      "description": [
+        "Bearbeitung 236171"
+      ],
+      "unit_price": "250.00",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "1250.00"
+    },
+    {
+      "qty": 2500,
+      "unit": "Stk.",
+      "description": [
+        "Montagearbeit 677701"
+      ],
+      "unit_price": null,
+      "kind": "without_price",
+      "price_unit": "/1",
+      "total": null
+    },
+    {
+      "qty": 1,
+      "unit": "",
+      "description": [
+        "Fixpreis Auftrag 2028-371"
+      ],
+      "unit_price": "450.00",
+      "kind": "flat_rate",
+      "price_unit": "/1",
+      "total": "450.00"
+    },
+    {
+      "qty": 3,
+      "unit": "Stk.",
+      "description": [
+        "Distanzhülse 843802"
+      ],
+      "unit_price": "7.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "22.50"
+    },
+    {
+      "qty": 500,
+      "unit": "Stk.",
+      "description": [
+        "Aluminiumgehäuse 303351",
+        "Ausführung gemäß Zeichnung Rev. B"
+      ],
+      "unit_price": "4.75",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "2375.00"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": "4.00",
+  "discount_days": 10,
+  "payment_days": 30,
+  "totals": {
+    "net": "5818.00",
+    "vat": "1105.42",
+    "gross": "6923.42"
+  },
+  "payment": {
+    "discount_date": "02.09.2026",
+    "due_date": "22.09.2026",
+    "discount_amount": "276.94"
+  },
+  "page_count": 1,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "line_count": 11,
+      "transfer": null,
+      "summary_present": true,
+      "payment_block_present": true
+    }
+  ],
+  "test_flags": {
+    "address_name_lines": 2,
+    "missing_order_number": true,
+    "shipping_empty": false,
+    "discount_applied": true,
+    "blank_unit_flat_rate": true,
+    "without_price_count": 4,
+    "flat_rate_count": 3,
+    "two_three_line_positions": 1,
+    "four_five_line_positions": 0,
+    "has_qty_thousands": true
+  },
+  "sha256": "93c07ee9a2ee5caa42b32e9a0db133054cd130485066d29c2563fc9102c0f147"
+}

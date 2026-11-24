@@ -1,0 +1,194 @@
+{
+  "datei": "Rechnung_020_RE-2026-00144.pdf",
+  "format": "PDF/A-2b",
+  "seller": {
+    "name": "Alberon Industriekomponenten GmbH",
+    "street": "Prüfwerkstraße 18",
+    "postal_code": "09111",
+    "city": "Chemnitz",
+    "ust_id": "DE123456789",
+    "iban": "DE89 3704 0044 0532 0130 00",
+    "bic": "COBADEFFXXX",
+    "bank": "Commerzbank AG",
+    "email": "rechnung@alberon.example",
+    "register": "Amtsgericht Chemnitz, HRB 999999",
+    "ceo": "Markus Seidel"
+  },
+  "buyer": {
+    "name_lines": [
+      "Westmark Maschinenkomponenten KG"
+    ],
+    "street": "Sonderweg 21",
+    "postal_code": "80331",
+    "city": "München",
+    "customer_number": "0007104"
+  },
+  "invoice": {
+    "number": "RE-2026-00144",
+    "date": "07.09.2026",
+    "service_date": "07.09.2026",
+    "order_number": "AB-2026-0416",
+    "shipping": "Spedition"
+  },
+  "positions": [
+    {
+      "qty": 200,
+      "unit": "Stk.",
+      "description": [
+        "Passstift 503044"
+      ],
+      "unit_price": "46.80",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "9360.00"
+    },
+    {
+      "qty": 50,
+      "unit": "Std.",
+      "description": [
+        "Trägerplatte 43688"
+      ],
+      "unit_price": null,
+      "kind": "without_price",
+      "price_unit": "/1",
+      "total": null
+    },
+    {
+      "qty": 250,
+      "unit": "Stk.",
+      "description": [
+        "Adapterplatte 983492"
+      ],
+      "unit_price": null,
+      "kind": "without_price",
+      "price_unit": "/1",
+      "total": null
+    },
+    {
+      "qty": 100,
+      "unit": "Stk.",
+      "description": [
+        "Maschinenbolzen 170116"
+      ],
+      "unit_price": null,
+      "kind": "without_price",
+      "price_unit": "/1",
+      "total": null
+    },
+    {
+      "qty": 1,
+      "unit": "Stk.",
+      "description": [
+        "Pauschalpreis Auftrag 2026-138"
+      ],
+      "unit_price": "120.00",
+      "kind": "flat_rate",
+      "price_unit": "/1",
+      "total": "120.00"
+    },
+    {
+      "qty": 200,
+      "unit": "Stk.",
+      "description": [
+        "Halterungsplatte 766641"
+      ],
+      "unit_price": "89.90",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "17980.00"
+    },
+    {
+      "qty": 40,
+      "unit": "Std.",
+      "description": [
+        "Halterungsplatte 531110"
+      ],
+      "unit_price": "89.90",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "3596.00"
+    },
+    {
+      "qty": 1,
+      "unit": "Stk.",
+      "description": [
+        "Gehäuseboden 364837"
+      ],
+      "unit_price": "1250.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "1250.50"
+    },
+    {
+      "qty": 1250,
+      "unit": "Stk.",
+      "description": [
+        "Montageschiene 551234"
+      ],
+      "unit_price": "12.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "15625.00"
+    },
+    {
+      "qty": 10000,
+      "unit": "Stk.",
+      "description": [
+        "Bearbeitung 305909"
+      ],
+      "unit_price": "4.75",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "47500.00"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": null,
+  "discount_days": null,
+  "payment_days": 30,
+  "totals": {
+    "net": "95431.50",
+    "vat": "18131.99",
+    "gross": "113563.49"
+  },
+  "payment": {
+    "discount_date": null,
+    "due_date": "07.10.2026",
+    "discount_amount": null
+  },
+  "page_count": 1,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "line_count": 10,
+      "transfer": null,
+      "summary_present": true,
+      "payment_block_present": true
+    }
+  ],
+  "test_flags": {
+    "address_name_lines": 1,
+    "missing_order_number": false,
+    "shipping_empty": false,
+    "discount_applied": false,
+    "blank_unit_flat_rate": false,
+    "without_price_count": 3,
+    "flat_rate_count": 1,
+    "two_three_line_positions": 0,
+    "four_five_line_positions": 0,
+    "has_qty_thousands": true
+  },
+  "sha256": "d9238575b27a74753f51864bfe5dc926580bd98bc9f7248b80f081e673a0412d"
+}

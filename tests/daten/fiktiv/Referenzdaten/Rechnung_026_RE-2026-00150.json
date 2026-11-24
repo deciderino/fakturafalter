@@ -1,0 +1,220 @@
+{
+  "datei": "Rechnung_026_RE-2026-00150.pdf",
+  "format": "PDF/A-2b",
+  "seller": {
+    "name": "Alberon Industriekomponenten GmbH",
+    "street": "Prüfwerkstraße 18",
+    "postal_code": "09111",
+    "city": "Chemnitz",
+    "ust_id": "DE123456789",
+    "iban": "DE89 3704 0044 0532 0130 00",
+    "bic": "COBADEFFXXX",
+    "bank": "Commerzbank AG",
+    "email": "rechnung@alberon.example",
+    "register": "Amtsgericht Chemnitz, HRB 999999",
+    "ceo": "Markus Seidel"
+  },
+  "buyer": {
+    "name_lines": [
+      "Elmbach Metalltechnik GmbH"
+    ],
+    "street": "Schmiedeweg 39",
+    "postal_code": "08056",
+    "city": "Zwickau",
+    "customer_number": "25903"
+  },
+  "invoice": {
+    "number": "RE-2026-00150",
+    "date": "18.09.2026",
+    "service_date": "11.09.2026",
+    "order_number": "",
+    "shipping": "DHL"
+  },
+  "positions": [
+    {
+      "qty": 8,
+      "unit": "Stk.",
+      "description": [
+        "Mess- und Prüfarbeit 413629"
+      ],
+      "unit_price": "480.00",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "3840.00"
+    },
+    {
+      "qty": 500,
+      "unit": "Stk.",
+      "description": [
+        "Montagearbeit 219645"
+      ],
+      "unit_price": "4.75",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "2375.00"
+    },
+    {
+      "qty": 20,
+      "unit": "Stk.",
+      "description": [
+        "Bearbeitung 721948",
+        "Ausführung gemäß Zeichnung Rev. B"
+      ],
+      "unit_price": null,
+      "kind": "without_price",
+      "price_unit": "/1",
+      "total": null
+    },
+    {
+      "qty": 750,
+      "unit": "Stk.",
+      "description": [
+        "Montagewinkel 913595"
+      ],
+      "unit_price": null,
+      "kind": "without_price",
+      "price_unit": "/1",
+      "total": null
+    },
+    {
+      "qty": 1000,
+      "unit": "Stk.",
+      "description": [
+        "Mess- und Prüfarbeit 72263"
+      ],
+      "unit_price": null,
+      "kind": "without_price",
+      "price_unit": "/1",
+      "total": null
+    },
+    {
+      "qty": 1,
+      "unit": "Stk.",
+      "description": [
+        "Pauschalpreis Auftrag 2027-285"
+      ],
+      "unit_price": "2890.00",
+      "kind": "flat_rate",
+      "price_unit": "/1",
+      "total": "2890.00"
+    },
+    {
+      "qty": 5,
+      "unit": "Stk.",
+      "description": [
+        "Aluminiumgehäuse 36396"
+      ],
+      "unit_price": "12.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "62.50"
+    },
+    {
+      "qty": 40,
+      "unit": "Std.",
+      "description": [
+        "Kupplungsstück 210838"
+      ],
+      "unit_price": null,
+      "kind": "without_price",
+      "price_unit": "/1",
+      "total": null
+    },
+    {
+      "qty": 1,
+      "unit": "",
+      "description": [
+        "Gesamtpreis Auftrag 2026-217"
+      ],
+      "unit_price": "85.00",
+      "kind": "flat_rate",
+      "price_unit": "/1",
+      "total": "85.00"
+    },
+    {
+      "qty": 40,
+      "unit": "Stk.",
+      "description": [
+        "Montagearbeit 102888"
+      ],
+      "unit_price": "1799.99",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "71999.60"
+    },
+    {
+      "qty": 50,
+      "unit": "Stk.",
+      "description": [
+        "Adapterplatte 162584"
+      ],
+      "unit_price": "89.90",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "4495.00"
+    },
+    {
+      "qty": 250,
+      "unit": "Stk.",
+      "description": [
+        "Maschinenbolzen 86878",
+        "Ausführung Serie B2"
+      ],
+      "unit_price": "3.90",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "975.00"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": null,
+  "discount_days": null,
+  "payment_days": 30,
+  "totals": {
+    "net": "86722.10",
+    "vat": "16477.20",
+    "gross": "103199.30"
+  },
+  "payment": {
+    "discount_date": null,
+    "due_date": "18.10.2026",
+    "discount_amount": null
+  },
+  "page_count": 1,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "line_count": 14,
+      "transfer": null,
+      "summary_present": true,
+      "payment_block_present": true
+    }
+  ],
+  "test_flags": {
+    "address_name_lines": 1,
+    "missing_order_number": true,
+    "shipping_empty": false,
+    "discount_applied": false,
+    "blank_unit_flat_rate": true,
+    "without_price_count": 4,
+    "flat_rate_count": 2,
+    "two_three_line_positions": 2,
+    "four_five_line_positions": 0,
+    "has_qty_thousands": true
+  },
+  "sha256": "1804dca2c5a872694562484b3e5414b293ea8090c89c10b2047cacaf69049e0e"
+}

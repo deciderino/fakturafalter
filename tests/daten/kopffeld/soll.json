@@ -1,0 +1,2969 @@
+[
+ {
+  "id": "g1-n1",
+  "text": "Standard (Straße mit Hausnummer), Name 1-zeilig",
+  "holdout": false,
+  "kaeufer": {
+   "name_zeilen": [
+    "Kessler Antriebstechnik GmbH"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Talstraße 12",
+   "plz": "54321",
+   "ort": "Neustadt",
+   "land": "DE"
+  },
+  "vorlage_kaeufer": {
+   "name_zeilen": [
+    "Normalkunde Handel GmbH"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Lindenweg 4",
+   "plz": "12345",
+   "ort": "Musterstadt",
+   "land": "DE"
+  },
+  "absender": {
+   "name": "Nordlicht Normteile GmbH",
+   "strasse": "Kaistraße 8",
+   "plz": "24103",
+   "ort": "Kiel"
+  },
+  "layout": {
+   "form": "B",
+   "zone": [
+    67.9,
+    177.7,
+    297.6,
+    255.1
+   ],
+   "block_unten": 213.7
+  }
+ },
+ {
+  "id": "g2-n1",
+  "text": "Straße ohne Hausnummer („Am Hafen“), Name 1-zeilig",
+  "holdout": false,
+  "kaeufer": {
+   "name_zeilen": [
+    "Lohmann Kältebau AG"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Am Hafen",
+   "plz": "54321",
+   "ort": "Neustadt",
+   "land": "DE"
+  },
+  "vorlage_kaeufer": {
+   "name_zeilen": [
+    "Normalkunde Handel GmbH"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Lindenweg 4",
+   "plz": "12345",
+   "ort": "Musterstadt",
+   "land": "DE"
+  },
+  "absender": {
+   "name": "Hartwig & Söhne Metallbau KG",
+   "strasse": "Mühlenweg 21",
+   "plz": "33602",
+   "ort": "Bielefeld"
+  },
+  "layout": {
+   "form": "B",
+   "zone": [
+    67.9,
+    177.7,
+    297.6,
+    255.1
+   ],
+   "block_unten": 213.7
+  }
+ },
+ {
+  "id": "g3-n1",
+  "text": "Postfach statt Straße, Name 1-zeilig",
+  "holdout": true,
+  "kaeufer": {
+   "name_zeilen": [
+    "Stadtwerke Talheim"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Postfach 10 20 30",
+   "plz": "54290",
+   "ort": "Neustadt",
+   "land": "DE"
+  },
+  "vorlage_kaeufer": {
+   "name_zeilen": [
+    "Normalkunde Handel GmbH"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Lindenweg 4",
+   "plz": "12345",
+   "ort": "Musterstadt",
+   "land": "DE"
+  },
+  "absender": {
+   "name": "Tannberg Elektrotechnik e.K.",
+   "strasse": "Bahnhofstraße 3",
+   "plz": "79098",
+   "ort": "Freiburg"
+  },
+  "layout": {
+   "form": "B",
+   "zone": [
+    67.9,
+    177.7,
+    297.6,
+    255.1
+   ],
+   "block_unten": 213.7
+  }
+ },
+ {
+  "id": "g4-n1",
+  "text": "Straße und Hausnummer in zwei Zeilen, Name 1-zeilig",
+  "holdout": false,
+  "kaeufer": {
+   "name_zeilen": [
+    "Kessler Antriebstechnik GmbH"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Carl-Benz-Straße 14",
+   "plz": "54321",
+   "ort": "Neustadt",
+   "land": "DE"
+  },
+  "vorlage_kaeufer": {
+   "name_zeilen": [
+    "Normalkunde Handel GmbH"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Lindenweg 4",
+   "plz": "12345",
+   "ort": "Musterstadt",
+   "land": "DE"
+  },
+  "absender": {
+   "name": "Nordlicht Normteile GmbH",
+   "strasse": "Kaistraße 8",
+   "plz": "24103",
+   "ort": "Kiel"
+  },
+  "layout": {
+   "form": "B",
+   "zone": [
+    67.9,
+    177.7,
+    297.6,
+    255.1
+   ],
+   "block_unten": 225.7
+  }
+ },
+ {
+  "id": "g5-n1",
+  "text": "Zusatz unter der Straße („Hinterhaus, 2. OG“), Name 1-zeilig",
+  "holdout": false,
+  "kaeufer": {
+   "name_zeilen": [
+    "Lohmann Kältebau AG"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [
+    "Hinterhaus, 2. OG"
+   ],
+   "strasse": "Talstraße 12",
+   "plz": "54321",
+   "ort": "Neustadt",
+   "land": "DE"
+  },
+  "vorlage_kaeufer": {
+   "name_zeilen": [
+    "Normalkunde Handel GmbH"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Lindenweg 4",
+   "plz": "12345",
+   "ort": "Musterstadt",
+   "land": "DE"
+  },
+  "absender": {
+   "name": "Hartwig & Söhne Metallbau KG",
+   "strasse": "Mühlenweg 21",
+   "plz": "33602",
+   "ort": "Bielefeld"
+  },
+  "layout": {
+   "form": "B",
+   "zone": [
+    67.9,
+    177.7,
+    297.6,
+    255.1
+   ],
+   "block_unten": 225.7
+  }
+ },
+ {
+  "id": "g6-n1",
+  "text": "Kontaktzeile „Herrn …“ unter dem Namen, Name 1-zeilig",
+  "holdout": true,
+  "kaeufer": {
+   "name_zeilen": [
+    "Stadtwerke Talheim"
+   ],
+   "zusatz_oben": [
+    "Herrn Jonas Beispiel"
+   ],
+   "zusatz_unten": [],
+   "strasse": "Talstraße 12",
+   "plz": "54321",
+   "ort": "Neustadt",
+   "land": "DE"
+  },
+  "vorlage_kaeufer": {
+   "name_zeilen": [
+    "Normalkunde Handel GmbH"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Lindenweg 4",
+   "plz": "12345",
+   "ort": "Musterstadt",
+   "land": "DE"
+  },
+  "absender": {
+   "name": "Tannberg Elektrotechnik e.K.",
+   "strasse": "Bahnhofstraße 3",
+   "plz": "79098",
+   "ort": "Freiburg"
+  },
+  "layout": {
+   "form": "B",
+   "zone": [
+    67.9,
+    177.7,
+    297.6,
+    255.1
+   ],
+   "block_unten": 225.7
+  }
+ },
+ {
+  "id": "g7-n1",
+  "text": "Gewerbegebiet/Ortsteil über der Straße, Name 1-zeilig",
+  "holdout": false,
+  "kaeufer": {
+   "name_zeilen": [
+    "Kessler Antriebstechnik GmbH"
+   ],
+   "zusatz_oben": [
+    "Gewerbegebiet Ost"
+   ],
+   "zusatz_unten": [],
+   "strasse": "Talstraße 12",
+   "plz": "54321",
+   "ort": "Neustadt",
+   "land": "DE"
+  },
+  "vorlage_kaeufer": {
+   "name_zeilen": [
+    "Normalkunde Handel GmbH"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Lindenweg 4",
+   "plz": "12345",
+   "ort": "Musterstadt",
+   "land": "DE"
+  },
+  "absender": {
+   "name": "Nordlicht Normteile GmbH",
+   "strasse": "Kaistraße 8",
+   "plz": "24103",
+   "ort": "Kiel"
+  },
+  "layout": {
+   "form": "B",
+   "zone": [
+    67.9,
+    177.7,
+    297.6,
+    255.1
+   ],
+   "block_unten": 225.7
+  }
+ },
+ {
+  "id": "g1-n2",
+  "text": "Standard (Straße mit Hausnummer), Name 2-zeilig",
+  "holdout": false,
+  "kaeufer": {
+   "name_zeilen": [
+    "Beispiel Werkzeug- und",
+    "Anlagenbau GmbH"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Talstraße 12",
+   "plz": "54321",
+   "ort": "Neustadt",
+   "land": "DE"
+  },
+  "vorlage_kaeufer": {
+   "name_zeilen": [
+    "Normalkunde Handel GmbH"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Lindenweg 4",
+   "plz": "12345",
+   "ort": "Musterstadt",
+   "land": "DE"
+  },
+  "absender": {
+   "name": "Hartwig & Söhne Metallbau KG",
+   "strasse": "Mühlenweg 21",
+   "plz": "33602",
+   "ort": "Bielefeld"
+  },
+  "layout": {
+   "form": "B",
+   "zone": [
+    67.9,
+    177.7,
+    297.6,
+    255.1
+   ],
+   "block_unten": 225.7
+  }
+ },
+ {
+  "id": "g2-n2",
+  "text": "Straße ohne Hausnummer („Am Hafen“), Name 2-zeilig",
+  "holdout": true,
+  "kaeufer": {
+   "name_zeilen": [
+    "Ingenieurbüro Hessel",
+    "Planung und Statik"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Am Hafen",
+   "plz": "54321",
+   "ort": "Neustadt",
+   "land": "DE"
+  },
+  "vorlage_kaeufer": {
+   "name_zeilen": [
+    "Normalkunde Handel GmbH"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Lindenweg 4",
+   "plz": "12345",
+   "ort": "Musterstadt",
+   "land": "DE"
+  },
+  "absender": {
+   "name": "Tannberg Elektrotechnik e.K.",
+   "strasse": "Bahnhofstraße 3",
+   "plz": "79098",
+   "ort": "Freiburg"
+  },
+  "layout": {
+   "form": "B",
+   "zone": [
+    67.9,
+    177.7,
+    297.6,
+    255.1
+   ],
+   "block_unten": 225.7
+  }
+ },
+ {
+  "id": "g3-n2",
+  "text": "Postfach statt Straße, Name 2-zeilig",
+  "holdout": false,
+  "kaeufer": {
+   "name_zeilen": [
+    "Verein der Freunde des",
+    "Heimatmuseums Talheim e.V."
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Postfach 10 20 30",
+   "plz": "54290",
+   "ort": "Neustadt",
+   "land": "DE"
+  },
+  "vorlage_kaeufer": {
+   "name_zeilen": [
+    "Normalkunde Handel GmbH"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Lindenweg 4",
+   "plz": "12345",
+   "ort": "Musterstadt",
+   "land": "DE"
+  },
+  "absender": {
+   "name": "Nordlicht Normteile GmbH",
+   "strasse": "Kaistraße 8",
+   "plz": "24103",
+   "ort": "Kiel"
+  },
+  "layout": {
+   "form": "B",
+   "zone": [
+    67.9,
+    177.7,
+    297.6,
+    255.1
+   ],
+   "block_unten": 225.7
+  }
+ },
+ {
+  "id": "g4-n2",
+  "text": "Straße und Hausnummer in zwei Zeilen, Name 2-zeilig",
+  "holdout": false,
+  "kaeufer": {
+   "name_zeilen": [
+    "Beispiel Werkzeug- und",
+    "Anlagenbau GmbH"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Carl-Benz-Straße 14",
+   "plz": "54321",
+   "ort": "Neustadt",
+   "land": "DE"
+  },
+  "vorlage_kaeufer": {
+   "name_zeilen": [
+    "Normalkunde Handel GmbH"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Lindenweg 4",
+   "plz": "12345",
+   "ort": "Musterstadt",
+   "land": "DE"
+  },
+  "absender": {
+   "name": "Hartwig & Söhne Metallbau KG",
+   "strasse": "Mühlenweg 21",
+   "plz": "33602",
+   "ort": "Bielefeld"
+  },
+  "layout": {
+   "form": "B",
+   "zone": [
+    67.9,
+    177.7,
+    297.6,
+    255.1
+   ],
+   "block_unten": 237.7
+  }
+ },
+ {
+  "id": "g5-n2",
+  "text": "Zusatz unter der Straße („Hinterhaus, 2. OG“), Name 2-zeilig",
+  "holdout": true,
+  "kaeufer": {
+   "name_zeilen": [
+    "Ingenieurbüro Hessel",
+    "Planung und Statik"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [
+    "Hinterhaus, 2. OG"
+   ],
+   "strasse": "Talstraße 12",
+   "plz": "54321",
+   "ort": "Neustadt",
+   "land": "DE"
+  },
+  "vorlage_kaeufer": {
+   "name_zeilen": [
+    "Normalkunde Handel GmbH"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Lindenweg 4",
+   "plz": "12345",
+   "ort": "Musterstadt",
+   "land": "DE"
+  },
+  "absender": {
+   "name": "Tannberg Elektrotechnik e.K.",
+   "strasse": "Bahnhofstraße 3",
+   "plz": "79098",
+   "ort": "Freiburg"
+  },
+  "layout": {
+   "form": "B",
+   "zone": [
+    67.9,
+    177.7,
+    297.6,
+    255.1
+   ],
+   "block_unten": 237.7
+  }
+ },
+ {
+  "id": "g6-n2",
+  "text": "Kontaktzeile „Herrn …“ unter dem Namen, Name 2-zeilig",
+  "holdout": false,
+  "kaeufer": {
+   "name_zeilen": [
+    "Verein der Freunde des",
+    "Heimatmuseums Talheim e.V."
+   ],
+   "zusatz_oben": [
+    "Herrn Jonas Beispiel"
+   ],
+   "zusatz_unten": [],
+   "strasse": "Talstraße 12",
+   "plz": "54321",
+   "ort": "Neustadt",
+   "land": "DE"
+  },
+  "vorlage_kaeufer": {
+   "name_zeilen": [
+    "Normalkunde Handel GmbH"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Lindenweg 4",
+   "plz": "12345",
+   "ort": "Musterstadt",
+   "land": "DE"
+  },
+  "absender": {
+   "name": "Nordlicht Normteile GmbH",
+   "strasse": "Kaistraße 8",
+   "plz": "24103",
+   "ort": "Kiel"
+  },
+  "layout": {
+   "form": "B",
+   "zone": [
+    67.9,
+    177.7,
+    297.6,
+    255.1
+   ],
+   "block_unten": 237.7
+  }
+ },
+ {
+  "id": "g7-n2",
+  "text": "Gewerbegebiet/Ortsteil über der Straße, Name 2-zeilig",
+  "holdout": false,
+  "kaeufer": {
+   "name_zeilen": [
+    "Beispiel Werkzeug- und",
+    "Anlagenbau GmbH"
+   ],
+   "zusatz_oben": [
+    "Gewerbegebiet Ost"
+   ],
+   "zusatz_unten": [],
+   "strasse": "Talstraße 12",
+   "plz": "54321",
+   "ort": "Neustadt",
+   "land": "DE"
+  },
+  "vorlage_kaeufer": {
+   "name_zeilen": [
+    "Normalkunde Handel GmbH"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Lindenweg 4",
+   "plz": "12345",
+   "ort": "Musterstadt",
+   "land": "DE"
+  },
+  "absender": {
+   "name": "Hartwig & Söhne Metallbau KG",
+   "strasse": "Mühlenweg 21",
+   "plz": "33602",
+   "ort": "Bielefeld"
+  },
+  "layout": {
+   "form": "B",
+   "zone": [
+    67.9,
+    177.7,
+    297.6,
+    255.1
+   ],
+   "block_unten": 237.7
+  }
+ },
+ {
+  "id": "g1-n3",
+  "text": "Standard (Straße mit Hausnummer), Name 3-zeilig",
+  "holdout": true,
+  "kaeufer": {
+   "name_zeilen": [
+    "Gemeinschaftspraxis für",
+    "Physiotherapie",
+    "Dr. Anna Muster und Ben Beispiel"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Talstraße 12",
+   "plz": "54321",
+   "ort": "Neustadt",
+   "land": "DE"
+  },
+  "vorlage_kaeufer": {
+   "name_zeilen": [
+    "Normalkunde Handel GmbH"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Lindenweg 4",
+   "plz": "12345",
+   "ort": "Musterstadt",
+   "land": "DE"
+  },
+  "absender": {
+   "name": "Tannberg Elektrotechnik e.K.",
+   "strasse": "Bahnhofstraße 3",
+   "plz": "79098",
+   "ort": "Freiburg"
+  },
+  "layout": {
+   "form": "B",
+   "zone": [
+    67.9,
+    177.7,
+    297.6,
+    255.1
+   ],
+   "block_unten": 237.7
+  }
+ },
+ {
+  "id": "g2-n3",
+  "text": "Straße ohne Hausnummer („Am Hafen“), Name 3-zeilig",
+  "holdout": false,
+  "kaeufer": {
+   "name_zeilen": [
+    "Ostwind Logistik",
+    "Verwaltungs GmbH & Co.",
+    "Speditions KG"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Am Hafen",
+   "plz": "54321",
+   "ort": "Neustadt",
+   "land": "DE"
+  },
+  "vorlage_kaeufer": {
+   "name_zeilen": [
+    "Normalkunde Handel GmbH"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Lindenweg 4",
+   "plz": "12345",
+   "ort": "Musterstadt",
+   "land": "DE"
+  },
+  "absender": {
+   "name": "Nordlicht Normteile GmbH",
+   "strasse": "Kaistraße 8",
+   "plz": "24103",
+   "ort": "Kiel"
+  },
+  "layout": {
+   "form": "B",
+   "zone": [
+    67.9,
+    177.7,
+    297.6,
+    255.1
+   ],
+   "block_unten": 237.7
+  }
+ },
+ {
+  "id": "g3-n3",
+  "text": "Postfach statt Straße, Name 3-zeilig",
+  "holdout": false,
+  "kaeufer": {
+   "name_zeilen": [
+    "Kreisverwaltung Talheim",
+    "Fachbereich Hochbau",
+    "Gebäudemanagement"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Postfach 10 20 30",
+   "plz": "54290",
+   "ort": "Neustadt",
+   "land": "DE"
+  },
+  "vorlage_kaeufer": {
+   "name_zeilen": [
+    "Normalkunde Handel GmbH"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Lindenweg 4",
+   "plz": "12345",
+   "ort": "Musterstadt",
+   "land": "DE"
+  },
+  "absender": {
+   "name": "Hartwig & Söhne Metallbau KG",
+   "strasse": "Mühlenweg 21",
+   "plz": "33602",
+   "ort": "Bielefeld"
+  },
+  "layout": {
+   "form": "B",
+   "zone": [
+    67.9,
+    177.7,
+    297.6,
+    255.1
+   ],
+   "block_unten": 237.7
+  }
+ },
+ {
+  "id": "g4-n3",
+  "text": "Straße und Hausnummer in zwei Zeilen, Name 3-zeilig",
+  "holdout": true,
+  "kaeufer": {
+   "name_zeilen": [
+    "Gemeinschaftspraxis für",
+    "Physiotherapie",
+    "Dr. Anna Muster und Ben Beispiel"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Carl-Benz-Straße 14",
+   "plz": "54321",
+   "ort": "Neustadt",
+   "land": "DE"
+  },
+  "vorlage_kaeufer": {
+   "name_zeilen": [
+    "Normalkunde Handel GmbH"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Lindenweg 4",
+   "plz": "12345",
+   "ort": "Musterstadt",
+   "land": "DE"
+  },
+  "absender": {
+   "name": "Tannberg Elektrotechnik e.K.",
+   "strasse": "Bahnhofstraße 3",
+   "plz": "79098",
+   "ort": "Freiburg"
+  },
+  "layout": {
+   "form": "B",
+   "zone": [
+    67.9,
+    177.7,
+    297.6,
+    255.1
+   ],
+   "block_unten": 249.7
+  }
+ },
+ {
+  "id": "g5-n3",
+  "text": "Zusatz unter der Straße („Hinterhaus, 2. OG“), Name 3-zeilig",
+  "holdout": false,
+  "kaeufer": {
+   "name_zeilen": [
+    "Ostwind Logistik",
+    "Verwaltungs GmbH & Co.",
+    "Speditions KG"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [
+    "Hinterhaus, 2. OG"
+   ],
+   "strasse": "Talstraße 12",
+   "plz": "54321",
+   "ort": "Neustadt",
+   "land": "DE"
+  },
+  "vorlage_kaeufer": {
+   "name_zeilen": [
+    "Normalkunde Handel GmbH"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Lindenweg 4",
+   "plz": "12345",
+   "ort": "Musterstadt",
+   "land": "DE"
+  },
+  "absender": {
+   "name": "Nordlicht Normteile GmbH",
+   "strasse": "Kaistraße 8",
+   "plz": "24103",
+   "ort": "Kiel"
+  },
+  "layout": {
+   "form": "B",
+   "zone": [
+    67.9,
+    177.7,
+    297.6,
+    255.1
+   ],
+   "block_unten": 249.7
+  }
+ },
+ {
+  "id": "g6-n3",
+  "text": "Kontaktzeile „Herrn …“ unter dem Namen, Name 3-zeilig",
+  "holdout": false,
+  "kaeufer": {
+   "name_zeilen": [
+    "Kreisverwaltung Talheim",
+    "Fachbereich Hochbau",
+    "Gebäudemanagement"
+   ],
+   "zusatz_oben": [
+    "Herrn Jonas Beispiel"
+   ],
+   "zusatz_unten": [],
+   "strasse": "Talstraße 12",
+   "plz": "54321",
+   "ort": "Neustadt",
+   "land": "DE"
+  },
+  "vorlage_kaeufer": {
+   "name_zeilen": [
+    "Normalkunde Handel GmbH"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Lindenweg 4",
+   "plz": "12345",
+   "ort": "Musterstadt",
+   "land": "DE"
+  },
+  "absender": {
+   "name": "Hartwig & Söhne Metallbau KG",
+   "strasse": "Mühlenweg 21",
+   "plz": "33602",
+   "ort": "Bielefeld"
+  },
+  "layout": {
+   "form": "B",
+   "zone": [
+    67.9,
+    177.7,
+    297.6,
+    255.1
+   ],
+   "block_unten": 249.7
+  }
+ },
+ {
+  "id": "g7-n3",
+  "text": "Gewerbegebiet/Ortsteil über der Straße, Name 3-zeilig",
+  "holdout": true,
+  "kaeufer": {
+   "name_zeilen": [
+    "Gemeinschaftspraxis für",
+    "Physiotherapie",
+    "Dr. Anna Muster und Ben Beispiel"
+   ],
+   "zusatz_oben": [
+    "Gewerbegebiet Ost"
+   ],
+   "zusatz_unten": [],
+   "strasse": "Talstraße 12",
+   "plz": "54321",
+   "ort": "Neustadt",
+   "land": "DE"
+  },
+  "vorlage_kaeufer": {
+   "name_zeilen": [
+    "Normalkunde Handel GmbH"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Lindenweg 4",
+   "plz": "12345",
+   "ort": "Musterstadt",
+   "land": "DE"
+  },
+  "absender": {
+   "name": "Tannberg Elektrotechnik e.K.",
+   "strasse": "Bahnhofstraße 3",
+   "plz": "79098",
+   "ort": "Freiburg"
+  },
+  "layout": {
+   "form": "B",
+   "zone": [
+    67.9,
+    177.7,
+    297.6,
+    255.1
+   ],
+   "block_unten": 249.7
+  }
+ },
+ {
+  "id": "l1",
+  "text": "Land „DEUTSCHLAND“ als letzte Zeile",
+  "holdout": false,
+  "kaeufer": {
+   "name_zeilen": [
+    "Kessler Antriebstechnik GmbH"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Talstraße 12",
+   "plz": "54321",
+   "ort": "Neustadt",
+   "land": "DE"
+  },
+  "vorlage_kaeufer": {
+   "name_zeilen": [
+    "Normalkunde Handel GmbH"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Lindenweg 4",
+   "plz": "12345",
+   "ort": "Musterstadt",
+   "land": "DE"
+  },
+  "absender": {
+   "name": "Nordlicht Normteile GmbH",
+   "strasse": "Kaistraße 8",
+   "plz": "24103",
+   "ort": "Kiel"
+  },
+  "layout": {
+   "form": "B",
+   "zone": [
+    67.9,
+    177.7,
+    297.6,
+    255.1
+   ],
+   "block_unten": 225.7
+  }
+ },
+ {
+  "id": "l2",
+  "text": "Österreich: 4-stellige PLZ, „ÖSTERREICH“ als letzte Zeile",
+  "holdout": false,
+  "kaeufer": {
+   "name_zeilen": [
+    "Beispiel Werkzeug- und",
+    "Anlagenbau GmbH"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Museumstraße 5",
+   "plz": "6020",
+   "ort": "Innsbruck",
+   "land": "AT"
+  },
+  "vorlage_kaeufer": {
+   "name_zeilen": [
+    "Normalkunde Handel GmbH"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Lindenweg 4",
+   "plz": "12345",
+   "ort": "Musterstadt",
+   "land": "DE"
+  },
+  "absender": {
+   "name": "Hartwig & Söhne Metallbau KG",
+   "strasse": "Mühlenweg 21",
+   "plz": "33602",
+   "ort": "Bielefeld"
+  },
+  "layout": {
+   "form": "B",
+   "zone": [
+    67.9,
+    177.7,
+    297.6,
+    255.1
+   ],
+   "block_unten": 237.7
+  }
+ },
+ {
+  "id": "l3",
+  "text": "Schweiz: 4-stellige PLZ, „SCHWEIZ“ als letzte Zeile",
+  "holdout": true,
+  "kaeufer": {
+   "name_zeilen": [
+    "Ostwind Logistik",
+    "Verwaltungs GmbH & Co.",
+    "Speditions KG"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Hardturmstrasse 101",
+   "plz": "8005",
+   "ort": "Zürich",
+   "land": "CH"
+  },
+  "vorlage_kaeufer": {
+   "name_zeilen": [
+    "Normalkunde Handel GmbH"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Lindenweg 4",
+   "plz": "12345",
+   "ort": "Musterstadt",
+   "land": "DE"
+  },
+  "absender": {
+   "name": "Tannberg Elektrotechnik e.K.",
+   "strasse": "Bahnhofstraße 3",
+   "plz": "79098",
+   "ort": "Freiburg"
+  },
+  "layout": {
+   "form": "B",
+   "zone": [
+    67.9,
+    177.7,
+    297.6,
+    255.1
+   ],
+   "block_unten": 249.7
+  }
+ },
+ {
+  "id": "l4",
+  "text": "PLZ mit Länderkürzel „D-12345“",
+  "holdout": false,
+  "kaeufer": {
+   "name_zeilen": [
+    "Lohmann Kältebau AG"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Talstraße 12",
+   "plz": "54321",
+   "ort": "Neustadt",
+   "land": "DE"
+  },
+  "vorlage_kaeufer": {
+   "name_zeilen": [
+    "Normalkunde Handel GmbH"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Lindenweg 4",
+   "plz": "12345",
+   "ort": "Musterstadt",
+   "land": "DE"
+  },
+  "absender": {
+   "name": "Nordlicht Normteile GmbH",
+   "strasse": "Kaistraße 8",
+   "plz": "24103",
+   "ort": "Kiel"
+  },
+  "layout": {
+   "form": "B",
+   "zone": [
+    67.9,
+    177.7,
+    297.6,
+    255.1
+   ],
+   "block_unten": 213.7
+  }
+ },
+ {
+  "id": "l5",
+  "text": "„A-1010 Wien“ ohne Landzeile",
+  "holdout": false,
+  "kaeufer": {
+   "name_zeilen": [
+    "Ingenieurbüro Hessel",
+    "Planung und Statik"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Kärntner Ring 12",
+   "plz": "1010",
+   "ort": "Wien",
+   "land": "AT"
+  },
+  "vorlage_kaeufer": {
+   "name_zeilen": [
+    "Normalkunde Handel GmbH"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Lindenweg 4",
+   "plz": "12345",
+   "ort": "Musterstadt",
+   "land": "DE"
+  },
+  "absender": {
+   "name": "Hartwig & Söhne Metallbau KG",
+   "strasse": "Mühlenweg 21",
+   "plz": "33602",
+   "ort": "Bielefeld"
+  },
+  "layout": {
+   "form": "B",
+   "zone": [
+    67.9,
+    177.7,
+    297.6,
+    255.1
+   ],
+   "block_unten": 225.7
+  }
+ },
+ {
+  "id": "l6",
+  "text": "„CH-4051 Basel“ ohne Landzeile",
+  "holdout": true,
+  "kaeufer": {
+   "name_zeilen": [
+    "Stadtwerke Talheim"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Steinenvorstadt 2",
+   "plz": "4051",
+   "ort": "Basel",
+   "land": "CH"
+  },
+  "vorlage_kaeufer": {
+   "name_zeilen": [
+    "Normalkunde Handel GmbH"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Lindenweg 4",
+   "plz": "12345",
+   "ort": "Musterstadt",
+   "land": "DE"
+  },
+  "absender": {
+   "name": "Tannberg Elektrotechnik e.K.",
+   "strasse": "Bahnhofstraße 3",
+   "plz": "79098",
+   "ort": "Freiburg"
+  },
+  "layout": {
+   "form": "B",
+   "zone": [
+    67.9,
+    177.7,
+    297.6,
+    255.1
+   ],
+   "block_unten": 213.7
+  }
+ },
+ {
+  "id": "l7",
+  "text": "„DE-12345“ und „GERMANY“",
+  "holdout": false,
+  "kaeufer": {
+   "name_zeilen": [
+    "Gemeinschaftspraxis für",
+    "Physiotherapie",
+    "Dr. Anna Muster und Ben Beispiel"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Talstraße 12",
+   "plz": "54321",
+   "ort": "Neustadt",
+   "land": "DE"
+  },
+  "vorlage_kaeufer": {
+   "name_zeilen": [
+    "Normalkunde Handel GmbH"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Lindenweg 4",
+   "plz": "12345",
+   "ort": "Musterstadt",
+   "land": "DE"
+  },
+  "absender": {
+   "name": "Nordlicht Normteile GmbH",
+   "strasse": "Kaistraße 8",
+   "plz": "24103",
+   "ort": "Kiel"
+  },
+  "layout": {
+   "form": "B",
+   "zone": [
+    67.9,
+    177.7,
+    297.6,
+    255.1
+   ],
+   "block_unten": 249.7
+  }
+ },
+ {
+  "id": "l8",
+  "text": "Ort mit Zusatz „Frankfurt am Main“",
+  "holdout": false,
+  "kaeufer": {
+   "name_zeilen": [
+    "Verein der Freunde des",
+    "Heimatmuseums Talheim e.V."
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Talstraße 12",
+   "plz": "60311",
+   "ort": "Frankfurt am Main",
+   "land": "DE"
+  },
+  "vorlage_kaeufer": {
+   "name_zeilen": [
+    "Normalkunde Handel GmbH"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Lindenweg 4",
+   "plz": "12345",
+   "ort": "Musterstadt",
+   "land": "DE"
+  },
+  "absender": {
+   "name": "Hartwig & Söhne Metallbau KG",
+   "strasse": "Mühlenweg 21",
+   "plz": "33602",
+   "ort": "Bielefeld"
+  },
+  "layout": {
+   "form": "B",
+   "zone": [
+    67.9,
+    177.7,
+    297.6,
+    255.1
+   ],
+   "block_unten": 225.7
+  }
+ },
+ {
+  "id": "l9",
+  "text": "Ort mit Klammer „Halle (Saale)“",
+  "holdout": true,
+  "kaeufer": {
+   "name_zeilen": [
+    "Kessler Antriebstechnik GmbH"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Talstraße 12",
+   "plz": "06108",
+   "ort": "Halle (Saale)",
+   "land": "DE"
+  },
+  "vorlage_kaeufer": {
+   "name_zeilen": [
+    "Normalkunde Handel GmbH"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Lindenweg 4",
+   "plz": "12345",
+   "ort": "Musterstadt",
+   "land": "DE"
+  },
+  "absender": {
+   "name": "Tannberg Elektrotechnik e.K.",
+   "strasse": "Bahnhofstraße 3",
+   "plz": "79098",
+   "ort": "Freiburg"
+  },
+  "layout": {
+   "form": "B",
+   "zone": [
+    67.9,
+    177.7,
+    297.6,
+    255.1
+   ],
+   "block_unten": 213.7
+  }
+ },
+ {
+  "id": "l10",
+  "text": "Niederlande: „1012 AB Amsterdam“, „NIEDERLANDE“",
+  "holdout": false,
+  "kaeufer": {
+   "name_zeilen": [
+    "Lohmann Kältebau AG"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Damrak 70",
+   "plz": "1012 AB",
+   "ort": "Amsterdam",
+   "land": "NL"
+  },
+  "vorlage_kaeufer": {
+   "name_zeilen": [
+    "Normalkunde Handel GmbH"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Lindenweg 4",
+   "plz": "12345",
+   "ort": "Musterstadt",
+   "land": "DE"
+  },
+  "absender": {
+   "name": "Nordlicht Normteile GmbH",
+   "strasse": "Kaistraße 8",
+   "plz": "24103",
+   "ort": "Kiel"
+  },
+  "layout": {
+   "form": "B",
+   "zone": [
+    67.9,
+    177.7,
+    297.6,
+    255.1
+   ],
+   "block_unten": 225.7
+  }
+ },
+ {
+  "id": "f1",
+  "text": "DIN 5008 Form A (Fenster höher)",
+  "holdout": false,
+  "kaeufer": {
+   "name_zeilen": [
+    "Beispiel Werkzeug- und",
+    "Anlagenbau GmbH"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Talstraße 12",
+   "plz": "54321",
+   "ort": "Neustadt",
+   "land": "DE"
+  },
+  "vorlage_kaeufer": {
+   "name_zeilen": [
+    "Normalkunde Handel GmbH"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Lindenweg 4",
+   "plz": "12345",
+   "ort": "Musterstadt",
+   "land": "DE"
+  },
+  "absender": {
+   "name": "Hartwig & Söhne Metallbau KG",
+   "strasse": "Mühlenweg 21",
+   "plz": "33602",
+   "ort": "Bielefeld"
+  },
+  "layout": {
+   "form": "A",
+   "zone": [
+    67.9,
+    112.5,
+    297.6,
+    204.1
+   ],
+   "block_unten": 160.5
+  }
+ },
+ {
+  "id": "f2",
+  "text": "Anschrift rechts, Infoblock links",
+  "holdout": true,
+  "kaeufer": {
+   "name_zeilen": [
+    "Ingenieurbüro Hessel",
+    "Planung und Statik"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Talstraße 12",
+   "plz": "54321",
+   "ort": "Neustadt",
+   "land": "DE"
+  },
+  "vorlage_kaeufer": {
+   "name_zeilen": [
+    "Normalkunde Handel GmbH"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Lindenweg 4",
+   "plz": "12345",
+   "ort": "Musterstadt",
+   "land": "DE"
+  },
+  "absender": {
+   "name": "Tannberg Elektrotechnik e.K.",
+   "strasse": "Bahnhofstraße 3",
+   "plz": "79098",
+   "ort": "Freiburg"
+  },
+  "layout": {
+   "form": "B",
+   "zone": [
+    323.0,
+    177.7,
+    552.8,
+    255.1
+   ],
+   "block_unten": 225.7
+  }
+ },
+ {
+  "id": "f3",
+  "text": "Infoblock dicht rechts neben der Anschrift (gleiche Zeilenhöhen)",
+  "holdout": false,
+  "kaeufer": {
+   "name_zeilen": [
+    "Kreisverwaltung Talheim",
+    "Fachbereich Hochbau",
+    "Gebäudemanagement"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Talstraße 12",
+   "plz": "54321",
+   "ort": "Neustadt",
+   "land": "DE"
+  },
+  "vorlage_kaeufer": {
+   "name_zeilen": [
+    "Normalkunde Handel GmbH"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Lindenweg 4",
+   "plz": "12345",
+   "ort": "Musterstadt",
+   "land": "DE"
+  },
+  "absender": {
+   "name": "Nordlicht Normteile GmbH",
+   "strasse": "Kaistraße 8",
+   "plz": "24103",
+   "ort": "Kiel"
+  },
+  "layout": {
+   "form": "B",
+   "zone": [
+    67.9,
+    177.7,
+    297.6,
+    255.1
+   ],
+   "block_unten": 237.7
+  }
+ },
+ {
+  "id": "f4",
+  "text": "Rücksendeangabe mit Kommas",
+  "holdout": false,
+  "kaeufer": {
+   "name_zeilen": [
+    "Stadtwerke Talheim"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Talstraße 12",
+   "plz": "54321",
+   "ort": "Neustadt",
+   "land": "DE"
+  },
+  "vorlage_kaeufer": {
+   "name_zeilen": [
+    "Normalkunde Handel GmbH"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Lindenweg 4",
+   "plz": "12345",
+   "ort": "Musterstadt",
+   "land": "DE"
+  },
+  "absender": {
+   "name": "Hartwig & Söhne Metallbau KG",
+   "strasse": "Mühlenweg 21",
+   "plz": "33602",
+   "ort": "Bielefeld"
+  },
+  "layout": {
+   "form": "B",
+   "zone": [
+    67.9,
+    177.7,
+    297.6,
+    255.1
+   ],
+   "block_unten": 213.7
+  }
+ },
+ {
+  "id": "f5",
+  "text": "Rücksendeangabe mit „ - “, unterstrichen",
+  "holdout": true,
+  "kaeufer": {
+   "name_zeilen": [
+    "Beispiel Werkzeug- und",
+    "Anlagenbau GmbH"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Talstraße 12",
+   "plz": "54321",
+   "ort": "Neustadt",
+   "land": "DE"
+  },
+  "vorlage_kaeufer": {
+   "name_zeilen": [
+    "Normalkunde Handel GmbH"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Lindenweg 4",
+   "plz": "12345",
+   "ort": "Musterstadt",
+   "land": "DE"
+  },
+  "absender": {
+   "name": "Tannberg Elektrotechnik e.K.",
+   "strasse": "Bahnhofstraße 3",
+   "plz": "79098",
+   "ort": "Freiburg"
+  },
+  "layout": {
+   "form": "B",
+   "zone": [
+    67.9,
+    177.7,
+    297.6,
+    255.1
+   ],
+   "block_unten": 225.7
+  }
+ },
+ {
+  "id": "f6",
+  "text": "keine Rücksendeangabe",
+  "holdout": false,
+  "kaeufer": {
+   "name_zeilen": [
+    "Gemeinschaftspraxis für",
+    "Physiotherapie",
+    "Dr. Anna Muster und Ben Beispiel"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Talstraße 12",
+   "plz": "54321",
+   "ort": "Neustadt",
+   "land": "DE"
+  },
+  "vorlage_kaeufer": {
+   "name_zeilen": [
+    "Normalkunde Handel GmbH"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Lindenweg 4",
+   "plz": "12345",
+   "ort": "Musterstadt",
+   "land": "DE"
+  },
+  "absender": {
+   "name": "Nordlicht Normteile GmbH",
+   "strasse": "Kaistraße 8",
+   "plz": "24103",
+   "ort": "Kiel"
+  },
+  "layout": {
+   "form": "B",
+   "zone": [
+    67.9,
+    177.7,
+    297.6,
+    255.1
+   ],
+   "block_unten": 237.7
+  }
+ },
+ {
+  "id": "f7",
+  "text": "Vermerk „Einschreiben“ in der Vermerkzone",
+  "holdout": false,
+  "kaeufer": {
+   "name_zeilen": [
+    "Lohmann Kältebau AG"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Talstraße 12",
+   "plz": "54321",
+   "ort": "Neustadt",
+   "land": "DE"
+  },
+  "vorlage_kaeufer": {
+   "name_zeilen": [
+    "Normalkunde Handel GmbH"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Lindenweg 4",
+   "plz": "12345",
+   "ort": "Musterstadt",
+   "land": "DE"
+  },
+  "absender": {
+   "name": "Hartwig & Söhne Metallbau KG",
+   "strasse": "Mühlenweg 21",
+   "plz": "33602",
+   "ort": "Bielefeld"
+  },
+  "layout": {
+   "form": "B",
+   "zone": [
+    67.9,
+    177.7,
+    297.6,
+    255.1
+   ],
+   "block_unten": 213.7
+  }
+ },
+ {
+  "id": "f8",
+  "text": "Beschriftung „Rechnungsanschrift:“ über dem Block",
+  "holdout": true,
+  "kaeufer": {
+   "name_zeilen": [
+    "Verein der Freunde des",
+    "Heimatmuseums Talheim e.V."
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Talstraße 12",
+   "plz": "54321",
+   "ort": "Neustadt",
+   "land": "DE"
+  },
+  "vorlage_kaeufer": {
+   "name_zeilen": [
+    "Normalkunde Handel GmbH"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Lindenweg 4",
+   "plz": "12345",
+   "ort": "Musterstadt",
+   "land": "DE"
+  },
+  "absender": {
+   "name": "Tannberg Elektrotechnik e.K.",
+   "strasse": "Bahnhofstraße 3",
+   "plz": "79098",
+   "ort": "Freiburg"
+  },
+  "layout": {
+   "form": "B",
+   "zone": [
+    67.9,
+    177.7,
+    297.6,
+    255.1
+   ],
+   "block_unten": 235.7
+  }
+ },
+ {
+  "id": "f9",
+  "text": "Leerzeilen zwischen Name, Straße und Ort",
+  "holdout": false,
+  "kaeufer": {
+   "name_zeilen": [
+    "Ostwind Logistik",
+    "Verwaltungs GmbH & Co.",
+    "Speditions KG"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Talstraße 12",
+   "plz": "54321",
+   "ort": "Neustadt",
+   "land": "DE"
+  },
+  "vorlage_kaeufer": {
+   "name_zeilen": [
+    "Normalkunde Handel GmbH"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Lindenweg 4",
+   "plz": "12345",
+   "ort": "Musterstadt",
+   "land": "DE"
+  },
+  "absender": {
+   "name": "Nordlicht Normteile GmbH",
+   "strasse": "Kaistraße 8",
+   "plz": "24103",
+   "ort": "Kiel"
+  },
+  "layout": {
+   "form": "B",
+   "zone": [
+    67.9,
+    177.7,
+    297.6,
+    255.1
+   ],
+   "block_unten": 261.7
+  }
+ },
+ {
+  "id": "f10",
+  "text": "Name fett 12 pt, Rest 10 pt",
+  "holdout": false,
+  "kaeufer": {
+   "name_zeilen": [
+    "Ingenieurbüro Hessel",
+    "Planung und Statik"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Talstraße 12",
+   "plz": "54321",
+   "ort": "Neustadt",
+   "land": "DE"
+  },
+  "vorlage_kaeufer": {
+   "name_zeilen": [
+    "Normalkunde Handel GmbH"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Lindenweg 4",
+   "plz": "12345",
+   "ort": "Musterstadt",
+   "land": "DE"
+  },
+  "absender": {
+   "name": "Hartwig & Söhne Metallbau KG",
+   "strasse": "Mühlenweg 21",
+   "plz": "33602",
+   "ort": "Bielefeld"
+  },
+  "layout": {
+   "form": "B",
+   "zone": [
+    67.9,
+    177.7,
+    297.6,
+    255.1
+   ],
+   "block_unten": 229.7
+  }
+ },
+ {
+  "id": "f11",
+  "text": "kleine Schrift 8 pt, enger Zeilenabstand 9,5 pt",
+  "holdout": true,
+  "kaeufer": {
+   "name_zeilen": [
+    "Kreisverwaltung Talheim",
+    "Fachbereich Hochbau",
+    "Gebäudemanagement"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Talstraße 12",
+   "plz": "54321",
+   "ort": "Neustadt",
+   "land": "DE"
+  },
+  "vorlage_kaeufer": {
+   "name_zeilen": [
+    "Normalkunde Handel GmbH"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Lindenweg 4",
+   "plz": "12345",
+   "ort": "Musterstadt",
+   "land": "DE"
+  },
+  "absender": {
+   "name": "Tannberg Elektrotechnik e.K.",
+   "strasse": "Bahnhofstraße 3",
+   "plz": "79098",
+   "ort": "Freiburg"
+  },
+  "layout": {
+   "form": "B",
+   "zone": [
+    67.9,
+    177.7,
+    297.6,
+    255.1
+   ],
+   "block_unten": 225.7
+  }
+ },
+ {
+  "id": "f12",
+  "text": "weiter Zeilenabstand 15 pt",
+  "holdout": false,
+  "kaeufer": {
+   "name_zeilen": [
+    "Gemeinschaftspraxis für",
+    "Physiotherapie",
+    "Dr. Anna Muster und Ben Beispiel"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Talstraße 12",
+   "plz": "54321",
+   "ort": "Neustadt",
+   "land": "DE"
+  },
+  "vorlage_kaeufer": {
+   "name_zeilen": [
+    "Normalkunde Handel GmbH"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Lindenweg 4",
+   "plz": "12345",
+   "ort": "Musterstadt",
+   "land": "DE"
+  },
+  "absender": {
+   "name": "Nordlicht Normteile GmbH",
+   "strasse": "Kaistraße 8",
+   "plz": "24103",
+   "ort": "Kiel"
+  },
+  "layout": {
+   "form": "B",
+   "zone": [
+    67.9,
+    177.7,
+    297.6,
+    255.1
+   ],
+   "block_unten": 249.7
+  }
+ },
+ {
+  "id": "f13",
+  "text": "Briefkopf des Absenders links oben über dem Fenster",
+  "holdout": false,
+  "kaeufer": {
+   "name_zeilen": [
+    "Kessler Antriebstechnik GmbH"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Talstraße 12",
+   "plz": "54321",
+   "ort": "Neustadt",
+   "land": "DE"
+  },
+  "vorlage_kaeufer": {
+   "name_zeilen": [
+    "Normalkunde Handel GmbH"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Lindenweg 4",
+   "plz": "12345",
+   "ort": "Musterstadt",
+   "land": "DE"
+  },
+  "absender": {
+   "name": "Hartwig & Söhne Metallbau KG",
+   "strasse": "Mühlenweg 21",
+   "plz": "33602",
+   "ort": "Bielefeld"
+  },
+  "layout": {
+   "form": "B",
+   "zone": [
+    67.9,
+    177.7,
+    297.6,
+    255.1
+   ],
+   "block_unten": 213.7
+  }
+ },
+ {
+  "id": "f14",
+  "text": "Briefkopf nur als Grafik, Absender nur in der Fußzeile",
+  "holdout": true,
+  "kaeufer": {
+   "name_zeilen": [
+    "Ingenieurbüro Hessel",
+    "Planung und Statik"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Talstraße 12",
+   "plz": "54321",
+   "ort": "Neustadt",
+   "land": "DE"
+  },
+  "vorlage_kaeufer": {
+   "name_zeilen": [
+    "Normalkunde Handel GmbH"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Lindenweg 4",
+   "plz": "12345",
+   "ort": "Musterstadt",
+   "land": "DE"
+  },
+  "absender": {
+   "name": "Tannberg Elektrotechnik e.K.",
+   "strasse": "Bahnhofstraße 3",
+   "plz": "79098",
+   "ort": "Freiburg"
+  },
+  "layout": {
+   "form": "B",
+   "zone": [
+    67.9,
+    177.7,
+    297.6,
+    255.1
+   ],
+   "block_unten": 225.7
+  }
+ },
+ {
+  "id": "f15",
+  "text": "Straße „Q 7, 12“ (Quadrat)",
+  "holdout": false,
+  "kaeufer": {
+   "name_zeilen": [
+    "Lohmann Kältebau AG"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Q 7, 12",
+   "plz": "68161",
+   "ort": "Mannheim",
+   "land": "DE"
+  },
+  "vorlage_kaeufer": {
+   "name_zeilen": [
+    "Normalkunde Handel GmbH"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Lindenweg 4",
+   "plz": "12345",
+   "ort": "Musterstadt",
+   "land": "DE"
+  },
+  "absender": {
+   "name": "Nordlicht Normteile GmbH",
+   "strasse": "Kaistraße 8",
+   "plz": "24103",
+   "ort": "Kiel"
+  },
+  "layout": {
+   "form": "B",
+   "zone": [
+    67.9,
+    177.7,
+    297.6,
+    255.1
+   ],
+   "block_unten": 213.7
+  }
+ },
+ {
+  "id": "f16",
+  "text": "Straße „Straße des 17. Juni 112“",
+  "holdout": false,
+  "kaeufer": {
+   "name_zeilen": [
+    "Verein der Freunde des",
+    "Heimatmuseums Talheim e.V."
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Straße des 17. Juni 112",
+   "plz": "10623",
+   "ort": "Berlin",
+   "land": "DE"
+  },
+  "vorlage_kaeufer": {
+   "name_zeilen": [
+    "Normalkunde Handel GmbH"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Lindenweg 4",
+   "plz": "12345",
+   "ort": "Musterstadt",
+   "land": "DE"
+  },
+  "absender": {
+   "name": "Hartwig & Söhne Metallbau KG",
+   "strasse": "Mühlenweg 21",
+   "plz": "33602",
+   "ort": "Bielefeld"
+  },
+  "layout": {
+   "form": "B",
+   "zone": [
+    67.9,
+    177.7,
+    297.6,
+    255.1
+   ],
+   "block_unten": 225.7
+  }
+ },
+ {
+  "id": "f17",
+  "text": "Straße „Am Markt 3–5“ und Name mit „c/o“",
+  "holdout": true,
+  "kaeufer": {
+   "name_zeilen": [
+    "Stadtwerke Talheim"
+   ],
+   "zusatz_oben": [
+    "c/o Muster Verwaltung"
+   ],
+   "zusatz_unten": [],
+   "strasse": "Am Markt 3–5",
+   "plz": "54321",
+   "ort": "Neustadt",
+   "land": "DE"
+  },
+  "vorlage_kaeufer": {
+   "name_zeilen": [
+    "Normalkunde Handel GmbH"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Lindenweg 4",
+   "plz": "12345",
+   "ort": "Musterstadt",
+   "land": "DE"
+  },
+  "absender": {
+   "name": "Tannberg Elektrotechnik e.K.",
+   "strasse": "Bahnhofstraße 3",
+   "plz": "79098",
+   "ort": "Freiburg"
+  },
+  "layout": {
+   "form": "B",
+   "zone": [
+    67.9,
+    177.7,
+    297.6,
+    255.1
+   ],
+   "block_unten": 225.7
+  }
+ },
+ {
+  "id": "f18",
+  "text": "„z. Hd. Frau Muster“ und „Abteilung Einkauf“",
+  "holdout": false,
+  "kaeufer": {
+   "name_zeilen": [
+    "Kessler Antriebstechnik GmbH"
+   ],
+   "zusatz_oben": [
+    "Abteilung Einkauf",
+    "z. Hd. Frau Muster"
+   ],
+   "zusatz_unten": [],
+   "strasse": "Talstraße 12",
+   "plz": "54321",
+   "ort": "Neustadt",
+   "land": "DE"
+  },
+  "vorlage_kaeufer": {
+   "name_zeilen": [
+    "Normalkunde Handel GmbH"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Lindenweg 4",
+   "plz": "12345",
+   "ort": "Musterstadt",
+   "land": "DE"
+  },
+  "absender": {
+   "name": "Nordlicht Normteile GmbH",
+   "strasse": "Kaistraße 8",
+   "plz": "24103",
+   "ort": "Kiel"
+  },
+  "layout": {
+   "form": "B",
+   "zone": [
+    67.9,
+    177.7,
+    297.6,
+    255.1
+   ],
+   "block_unten": 237.7
+  }
+ },
+ {
+  "id": "f19",
+  "text": "Rechnungs- und Lieferanschrift nebeneinander",
+  "holdout": false,
+  "kaeufer": {
+   "name_zeilen": [
+    "Beispiel Werkzeug- und",
+    "Anlagenbau GmbH"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Talstraße 12",
+   "plz": "54321",
+   "ort": "Neustadt",
+   "land": "DE"
+  },
+  "vorlage_kaeufer": {
+   "name_zeilen": [
+    "Normalkunde Handel GmbH"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Lindenweg 4",
+   "plz": "12345",
+   "ort": "Musterstadt",
+   "land": "DE"
+  },
+  "absender": {
+   "name": "Hartwig & Söhne Metallbau KG",
+   "strasse": "Mühlenweg 21",
+   "plz": "33602",
+   "ort": "Bielefeld"
+  },
+  "layout": {
+   "form": "B",
+   "zone": [
+    67.9,
+    177.7,
+    297.6,
+    255.1
+   ],
+   "block_unten": 225.7
+  }
+ },
+ {
+  "id": "f20",
+  "text": "PLZ und Ort mit großem Abstand (Tabulator)",
+  "holdout": true,
+  "kaeufer": {
+   "name_zeilen": [
+    "Lohmann Kältebau AG"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Talstraße 12",
+   "plz": "54321",
+   "ort": "Neustadt",
+   "land": "DE"
+  },
+  "vorlage_kaeufer": {
+   "name_zeilen": [
+    "Normalkunde Handel GmbH"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Lindenweg 4",
+   "plz": "12345",
+   "ort": "Musterstadt",
+   "land": "DE"
+  },
+  "absender": {
+   "name": "Tannberg Elektrotechnik e.K.",
+   "strasse": "Bahnhofstraße 3",
+   "plz": "79098",
+   "ort": "Freiburg"
+  },
+  "layout": {
+   "form": "B",
+   "zone": [
+    67.9,
+    177.7,
+    297.6,
+    255.1
+   ],
+   "block_unten": 213.7
+  }
+ },
+ {
+  "id": "f21",
+  "text": "Kundennummer als Vermerk über dem Namen",
+  "holdout": false,
+  "kaeufer": {
+   "name_zeilen": [
+    "Verein der Freunde des",
+    "Heimatmuseums Talheim e.V."
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Talstraße 12",
+   "plz": "54321",
+   "ort": "Neustadt",
+   "land": "DE"
+  },
+  "vorlage_kaeufer": {
+   "name_zeilen": [
+    "Normalkunde Handel GmbH"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Lindenweg 4",
+   "plz": "12345",
+   "ort": "Musterstadt",
+   "land": "DE"
+  },
+  "absender": {
+   "name": "Nordlicht Normteile GmbH",
+   "strasse": "Kaistraße 8",
+   "plz": "24103",
+   "ort": "Kiel"
+  },
+  "layout": {
+   "form": "B",
+   "zone": [
+    67.9,
+    177.7,
+    297.6,
+    255.1
+   ],
+   "block_unten": 225.7
+  }
+ },
+ {
+  "id": "f22",
+  "text": "Absenderzeile ohne Trenner, nur Leerzeichen",
+  "holdout": false,
+  "kaeufer": {
+   "name_zeilen": [
+    "Ostwind Logistik",
+    "Verwaltungs GmbH & Co.",
+    "Speditions KG"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Talstraße 12",
+   "plz": "54321",
+   "ort": "Neustadt",
+   "land": "DE"
+  },
+  "vorlage_kaeufer": {
+   "name_zeilen": [
+    "Normalkunde Handel GmbH"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Lindenweg 4",
+   "plz": "12345",
+   "ort": "Musterstadt",
+   "land": "DE"
+  },
+  "absender": {
+   "name": "Hartwig & Söhne Metallbau KG",
+   "strasse": "Mühlenweg 21",
+   "plz": "33602",
+   "ort": "Bielefeld"
+  },
+  "layout": {
+   "form": "B",
+   "zone": [
+    67.9,
+    177.7,
+    297.6,
+    255.1
+   ],
+   "block_unten": 237.7
+  }
+ },
+ {
+  "id": "f23",
+  "text": "Fenster-Rücksendeangabe zweizeilig",
+  "holdout": true,
+  "kaeufer": {
+   "name_zeilen": [
+    "Kessler Antriebstechnik GmbH"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Talstraße 12",
+   "plz": "54321",
+   "ort": "Neustadt",
+   "land": "DE"
+  },
+  "vorlage_kaeufer": {
+   "name_zeilen": [
+    "Normalkunde Handel GmbH"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Lindenweg 4",
+   "plz": "12345",
+   "ort": "Musterstadt",
+   "land": "DE"
+  },
+  "absender": {
+   "name": "Tannberg Elektrotechnik e.K.",
+   "strasse": "Bahnhofstraße 3",
+   "plz": "79098",
+   "ort": "Freiburg"
+  },
+  "layout": {
+   "form": "B",
+   "zone": [
+    67.9,
+    177.7,
+    297.6,
+    255.1
+   ],
+   "block_unten": 213.7
+  }
+ },
+ {
+  "id": "f24",
+  "text": "Name in Großbuchstaben",
+  "holdout": false,
+  "kaeufer": {
+   "name_zeilen": [
+    "KESSLER ANTRIEBSTECHNIK GMBH"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Talstraße 12",
+   "plz": "54321",
+   "ort": "Neustadt",
+   "land": "DE"
+  },
+  "vorlage_kaeufer": {
+   "name_zeilen": [
+    "Normalkunde Handel GmbH"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Lindenweg 4",
+   "plz": "12345",
+   "ort": "Musterstadt",
+   "land": "DE"
+  },
+  "absender": {
+   "name": "Nordlicht Normteile GmbH",
+   "strasse": "Kaistraße 8",
+   "plz": "24103",
+   "ort": "Kiel"
+  },
+  "layout": {
+   "form": "B",
+   "zone": [
+    67.9,
+    177.7,
+    297.6,
+    255.1
+   ],
+   "block_unten": 213.7
+  }
+ },
+ {
+  "id": "h1",
+  "text": "Straße ohne Hausnummer „Lange Reihe“, Name 2-zeilig",
+  "holdout": true,
+  "kaeufer": {
+   "name_zeilen": [
+    "Verein der Freunde des",
+    "Heimatmuseums Talheim e.V."
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Lange Reihe",
+   "plz": "54321",
+   "ort": "Neustadt",
+   "land": "DE"
+  },
+  "vorlage_kaeufer": {
+   "name_zeilen": [
+    "Normalkunde Handel GmbH"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Lindenweg 4",
+   "plz": "12345",
+   "ort": "Musterstadt",
+   "land": "DE"
+  },
+  "absender": {
+   "name": "Hartwig & Söhne Metallbau KG",
+   "strasse": "Mühlenweg 21",
+   "plz": "33602",
+   "ort": "Bielefeld"
+  },
+  "layout": {
+   "form": "B",
+   "zone": [
+    67.9,
+    177.7,
+    297.6,
+    255.1
+   ],
+   "block_unten": 225.7
+  }
+ },
+ {
+  "id": "h2",
+  "text": "Hausnummernbereich mit Leerzeichen „Hafenstraße 10 - 12“",
+  "holdout": true,
+  "kaeufer": {
+   "name_zeilen": [
+    "Kessler Antriebstechnik GmbH"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Hafenstraße 10 - 12",
+   "plz": "54321",
+   "ort": "Neustadt",
+   "land": "DE"
+  },
+  "vorlage_kaeufer": {
+   "name_zeilen": [
+    "Normalkunde Handel GmbH"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Lindenweg 4",
+   "plz": "12345",
+   "ort": "Musterstadt",
+   "land": "DE"
+  },
+  "absender": {
+   "name": "Tannberg Elektrotechnik e.K.",
+   "strasse": "Bahnhofstraße 3",
+   "plz": "79098",
+   "ort": "Freiburg"
+  },
+  "layout": {
+   "form": "B",
+   "zone": [
+    67.9,
+    177.7,
+    297.6,
+    255.1
+   ],
+   "block_unten": 213.7
+  }
+ },
+ {
+  "id": "h3",
+  "text": "Hausnummernbereich mit Gedankenstrich „Am Kai 3 – 5“, Name 3-zeilig",
+  "holdout": true,
+  "kaeufer": {
+   "name_zeilen": [
+    "Ostwind Logistik",
+    "Verwaltungs GmbH & Co.",
+    "Speditions KG"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Am Kai 3 – 5",
+   "plz": "54321",
+   "ort": "Neustadt",
+   "land": "DE"
+  },
+  "vorlage_kaeufer": {
+   "name_zeilen": [
+    "Normalkunde Handel GmbH"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Lindenweg 4",
+   "plz": "12345",
+   "ort": "Musterstadt",
+   "land": "DE"
+  },
+  "absender": {
+   "name": "Nordlicht Normteile GmbH",
+   "strasse": "Kaistraße 8",
+   "plz": "24103",
+   "ort": "Kiel"
+  },
+  "layout": {
+   "form": "B",
+   "zone": [
+    67.9,
+    177.7,
+    297.6,
+    255.1
+   ],
+   "block_unten": 237.7
+  }
+ },
+ {
+  "id": "h4",
+  "text": "Straße „P 7, 20“ (Quadrat), Name 2-zeilig",
+  "holdout": true,
+  "kaeufer": {
+   "name_zeilen": [
+    "Beispiel Werkzeug- und",
+    "Anlagenbau GmbH"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "P 7, 20",
+   "plz": "68161",
+   "ort": "Mannheim",
+   "land": "DE"
+  },
+  "vorlage_kaeufer": {
+   "name_zeilen": [
+    "Normalkunde Handel GmbH"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Lindenweg 4",
+   "plz": "12345",
+   "ort": "Musterstadt",
+   "land": "DE"
+  },
+  "absender": {
+   "name": "Hartwig & Söhne Metallbau KG",
+   "strasse": "Mühlenweg 21",
+   "plz": "33602",
+   "ort": "Bielefeld"
+  },
+  "layout": {
+   "form": "B",
+   "zone": [
+    67.9,
+    177.7,
+    297.6,
+    255.1
+   ],
+   "block_unten": 225.7
+  }
+ },
+ {
+  "id": "h5",
+  "text": "Straße „Straße des 17. Juni“ ohne Hausnummer",
+  "holdout": true,
+  "kaeufer": {
+   "name_zeilen": [
+    "Lohmann Kältebau AG"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Straße des 17. Juni",
+   "plz": "10623",
+   "ort": "Berlin",
+   "land": "DE"
+  },
+  "vorlage_kaeufer": {
+   "name_zeilen": [
+    "Normalkunde Handel GmbH"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Lindenweg 4",
+   "plz": "12345",
+   "ort": "Musterstadt",
+   "land": "DE"
+  },
+  "absender": {
+   "name": "Tannberg Elektrotechnik e.K.",
+   "strasse": "Bahnhofstraße 3",
+   "plz": "79098",
+   "ort": "Freiburg"
+  },
+  "layout": {
+   "form": "B",
+   "zone": [
+    67.9,
+    177.7,
+    297.6,
+    255.1
+   ],
+   "block_unten": 213.7
+  }
+ },
+ {
+  "id": "h6",
+  "text": "Hausnummer „7a“ in eigener Zeile unter „Lange Reihe“, Name 2-zeilig",
+  "holdout": true,
+  "kaeufer": {
+   "name_zeilen": [
+    "Ingenieurbüro Hessel",
+    "Planung und Statik"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Lange Reihe 7a",
+   "plz": "54321",
+   "ort": "Neustadt",
+   "land": "DE"
+  },
+  "vorlage_kaeufer": {
+   "name_zeilen": [
+    "Normalkunde Handel GmbH"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Lindenweg 4",
+   "plz": "12345",
+   "ort": "Musterstadt",
+   "land": "DE"
+  },
+  "absender": {
+   "name": "Nordlicht Normteile GmbH",
+   "strasse": "Kaistraße 8",
+   "plz": "24103",
+   "ort": "Kiel"
+  },
+  "layout": {
+   "form": "B",
+   "zone": [
+    67.9,
+    177.7,
+    297.6,
+    255.1
+   ],
+   "block_unten": 237.7
+  }
+ },
+ {
+  "id": "h7",
+  "text": "Hausnummer „12–14“ in eigener Zeile, Name 3-zeilig",
+  "holdout": true,
+  "kaeufer": {
+   "name_zeilen": [
+    "Kreisverwaltung Talheim",
+    "Fachbereich Hochbau",
+    "Gebäudemanagement"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Industriestraße 12–14",
+   "plz": "54321",
+   "ort": "Neustadt",
+   "land": "DE"
+  },
+  "vorlage_kaeufer": {
+   "name_zeilen": [
+    "Normalkunde Handel GmbH"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Lindenweg 4",
+   "plz": "12345",
+   "ort": "Musterstadt",
+   "land": "DE"
+  },
+  "absender": {
+   "name": "Hartwig & Söhne Metallbau KG",
+   "strasse": "Mühlenweg 21",
+   "plz": "33602",
+   "ort": "Bielefeld"
+  },
+  "layout": {
+   "form": "B",
+   "zone": [
+    67.9,
+    177.7,
+    297.6,
+    255.1
+   ],
+   "block_unten": 249.7
+  }
+ },
+ {
+  "id": "h8",
+  "text": "Zusatz unter der Straße „Gebäude C, 3. Stock“, Name 2-zeilig",
+  "holdout": true,
+  "kaeufer": {
+   "name_zeilen": [
+    "Beispiel Werkzeug- und",
+    "Anlagenbau GmbH"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [
+    "Gebäude C, 3. Stock"
+   ],
+   "strasse": "Talstraße 12",
+   "plz": "54321",
+   "ort": "Neustadt",
+   "land": "DE"
+  },
+  "vorlage_kaeufer": {
+   "name_zeilen": [
+    "Normalkunde Handel GmbH"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Lindenweg 4",
+   "plz": "12345",
+   "ort": "Musterstadt",
+   "land": "DE"
+  },
+  "absender": {
+   "name": "Tannberg Elektrotechnik e.K.",
+   "strasse": "Bahnhofstraße 3",
+   "plz": "79098",
+   "ort": "Freiburg"
+  },
+  "layout": {
+   "form": "B",
+   "zone": [
+    67.9,
+    177.7,
+    297.6,
+    255.1
+   ],
+   "block_unten": 237.7
+  }
+ },
+ {
+  "id": "h9",
+  "text": "Zusatz unter der Straße ohne Ziffer („Hintereingang“), Name 1-zeilig",
+  "holdout": true,
+  "kaeufer": {
+   "name_zeilen": [
+    "Stadtwerke Talheim"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [
+    "Hintereingang"
+   ],
+   "strasse": "Talstraße 12",
+   "plz": "54321",
+   "ort": "Neustadt",
+   "land": "DE"
+  },
+  "vorlage_kaeufer": {
+   "name_zeilen": [
+    "Normalkunde Handel GmbH"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Lindenweg 4",
+   "plz": "12345",
+   "ort": "Musterstadt",
+   "land": "DE"
+  },
+  "absender": {
+   "name": "Nordlicht Normteile GmbH",
+   "strasse": "Kaistraße 8",
+   "plz": "24103",
+   "ort": "Kiel"
+  },
+  "layout": {
+   "form": "B",
+   "zone": [
+    67.9,
+    177.7,
+    297.6,
+    255.1
+   ],
+   "block_unten": 225.7
+  }
+ },
+ {
+  "id": "h10",
+  "text": "Gegenprobe: Namenszeile „Werk 2“ über Straße ohne Hausnummer „Am Hafen“",
+  "holdout": true,
+  "kaeufer": {
+   "name_zeilen": [
+    "Kessler Antriebstechnik GmbH",
+    "Werk 2"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Am Hafen",
+   "plz": "54321",
+   "ort": "Neustadt",
+   "land": "DE"
+  },
+  "vorlage_kaeufer": {
+   "name_zeilen": [
+    "Normalkunde Handel GmbH"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Lindenweg 4",
+   "plz": "12345",
+   "ort": "Musterstadt",
+   "land": "DE"
+  },
+  "absender": {
+   "name": "Hartwig & Söhne Metallbau KG",
+   "strasse": "Mühlenweg 21",
+   "plz": "33602",
+   "ort": "Bielefeld"
+  },
+  "layout": {
+   "form": "B",
+   "zone": [
+    67.9,
+    177.7,
+    297.6,
+    255.1
+   ],
+   "block_unten": 225.7
+  }
+ },
+ {
+  "id": "h11",
+  "text": "Gegenprobe: Namenszeile „Halle 3“ über „Talstraße 12“",
+  "holdout": true,
+  "kaeufer": {
+   "name_zeilen": [
+    "Lohmann Kältebau AG",
+    "Halle 3"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Talstraße 12",
+   "plz": "54321",
+   "ort": "Neustadt",
+   "land": "DE"
+  },
+  "vorlage_kaeufer": {
+   "name_zeilen": [
+    "Normalkunde Handel GmbH"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Lindenweg 4",
+   "plz": "12345",
+   "ort": "Musterstadt",
+   "land": "DE"
+  },
+  "absender": {
+   "name": "Tannberg Elektrotechnik e.K.",
+   "strasse": "Bahnhofstraße 3",
+   "plz": "79098",
+   "ort": "Freiburg"
+  },
+  "layout": {
+   "form": "B",
+   "zone": [
+    67.9,
+    177.7,
+    297.6,
+    255.1
+   ],
+   "block_unten": 225.7
+  }
+ },
+ {
+  "id": "h12",
+  "text": "Gegenprobe: Name mit Ziffer „Werkstatt 3000 GmbH“, Straße „Am Hafen 2“",
+  "holdout": true,
+  "kaeufer": {
+   "name_zeilen": [
+    "Werkstatt 3000 GmbH"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Am Hafen 2",
+   "plz": "54321",
+   "ort": "Neustadt",
+   "land": "DE"
+  },
+  "vorlage_kaeufer": {
+   "name_zeilen": [
+    "Normalkunde Handel GmbH"
+   ],
+   "zusatz_oben": [],
+   "zusatz_unten": [],
+   "strasse": "Lindenweg 4",
+   "plz": "12345",
+   "ort": "Musterstadt",
+   "land": "DE"
+  },
+  "absender": {
+   "name": "Nordlicht Normteile GmbH",
+   "strasse": "Kaistraße 8",
+   "plz": "24103",
+   "ort": "Kiel"
+  },
+  "layout": {
+   "form": "B",
+   "zone": [
+    67.9,
+    177.7,
+    297.6,
+    255.1
+   ],
+   "block_unten": 213.7
+  }
+ }
+]

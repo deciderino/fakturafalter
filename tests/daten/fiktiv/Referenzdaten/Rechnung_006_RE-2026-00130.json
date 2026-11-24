@@ -1,0 +1,148 @@
+{
+  "datei": "Rechnung_006_RE-2026-00130.pdf",
+  "format": "PDF/A-2b",
+  "seller": {
+    "name": "Alberon Industriekomponenten GmbH",
+    "street": "Prüfwerkstraße 18",
+    "postal_code": "09111",
+    "city": "Chemnitz",
+    "ust_id": "DE123456789",
+    "iban": "DE89 3704 0044 0532 0130 00",
+    "bic": "COBADEFFXXX",
+    "bank": "Commerzbank AG",
+    "email": "rechnung@alberon.example",
+    "register": "Amtsgericht Chemnitz, HRB 999999",
+    "ceo": "Markus Seidel"
+  },
+  "buyer": {
+    "name_lines": [
+      "Elmbach Metalltechnik GmbH"
+    ],
+    "street": "Schmiedeweg 39",
+    "postal_code": "08056",
+    "city": "Zwickau",
+    "customer_number": "25903"
+  },
+  "invoice": {
+    "number": "RE-2026-00130",
+    "date": "12.08.2026",
+    "service_date": "05.08.2026",
+    "order_number": "",
+    "shipping": "GO!"
+  },
+  "positions": [
+    {
+      "qty": 1250,
+      "unit": "Stk.",
+      "description": [
+        "Spannhülse 103454"
+      ],
+      "unit_price": "7.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "9375.00"
+    },
+    {
+      "qty": 12,
+      "unit": "Stk.",
+      "description": [
+        "Trägerplatte 723378"
+      ],
+      "unit_price": "12.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "150.00"
+    },
+    {
+      "qty": 5000,
+      "unit": "Stk.",
+      "description": [
+        "Adapterplatte 797886",
+        "Prüfmaß 0,02 mm berücksichtigen"
+      ],
+      "unit_price": "4.75",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "23750.00"
+    },
+    {
+      "qty": 10000,
+      "unit": "Stk.",
+      "description": [
+        "Passstift 490772",
+        "Ausführung Serie B2"
+      ],
+      "unit_price": null,
+      "kind": "without_price",
+      "price_unit": "/1",
+      "total": null
+    },
+    {
+      "qty": 50,
+      "unit": "Stk.",
+      "description": [
+        "Schutzblende 486709"
+      ],
+      "unit_price": null,
+      "kind": "without_price",
+      "price_unit": "/1",
+      "total": null
+    },
+    {
+      "qty": 1,
+      "unit": "Stk.",
+      "description": [
+        "Fixpreis Auftrag 2029-987"
+      ],
+      "unit_price": "2890.00",
+      "kind": "flat_rate",
+      "price_unit": "/1",
+      "total": "2890.00"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": null,
+  "discount_days": null,
+  "payment_days": 30,
+  "totals": {
+    "net": "36165.00",
+    "vat": "6871.35",
+    "gross": "43036.35"
+  },
+  "payment": {
+    "discount_date": null,
+    "due_date": "11.09.2026",
+    "discount_amount": null
+  },
+  "page_count": 1,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "line_count": 8,
+      "transfer": null,
+      "summary_present": true,
+      "payment_block_present": true
+    }
+  ],
+  "test_flags": {
+    "address_name_lines": 1,
+    "missing_order_number": true,
+    "shipping_empty": false,
+    "discount_applied": false,
+    "blank_unit_flat_rate": false,
+    "without_price_count": 2,
+    "flat_rate_count": 1,
+    "two_three_line_positions": 2,
+    "four_five_line_positions": 0,
+    "has_qty_thousands": true
+  },
+  "sha256": "297f1738cade4c366ae38c87028cc4d42f44a6d4f8a0f1ec3fc5035e7311a012"
+}

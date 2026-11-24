@@ -1,0 +1,5 @@
+Rechnungsnr;Datum;Lieferdatum;Kunde;Strasse;PLZ;Ort;Artikel;Menge;Einheit;Einzelpreis;Preiseinheit;USt-Satz
+NB-26-1006;20.10.2026;19.10.2026;Fördertechnik Ostwind GmbH;Hafenstraße 88;47119;Duisburg;Sechskantschraube DIN 933 M8x30 8.8 verzinkt;5000;Stk;4,80;100;19
+NB-26-1006;20.10.2026;19.10.2026;Fördertechnik Ostwind GmbH;Hafenstraße 88;47119;Duisburg;Scheibe DIN 125 A 10,5 verzinkt;5000;Stk;1,35;100;19
+NB-26-1006;20.10.2026;19.10.2026;Fördertechnik Ostwind GmbH;Hafenstraße 88;47119;Duisburg;Passfeder DIN 6885 A 8x7x50;4;Stk;0,85;1;19
+NB-26-1006;20.10.2026;19.10.2026;Fördertechnik Ostwind GmbH;Hafenstraße 88;47119;Duisburg;Frästeil Halter AlMgSi nach Zeichnung 0815-C;4;Stk;27,40;1;19

@@ -1,0 +1,186 @@
+{
+  "datei": "Rechnung_034_RE-2026-00158.pdf",
+  "format": "PDF/A-2b",
+  "seller": {
+    "name": "Alberon Industriekomponenten GmbH",
+    "street": "Prüfwerkstraße 18",
+    "postal_code": "09111",
+    "city": "Chemnitz",
+    "ust_id": "DE123456789",
+    "iban": "DE89 3704 0044 0532 0130 00",
+    "bic": "COBADEFFXXX",
+    "bank": "Commerzbank AG",
+    "email": "rechnung@alberon.example",
+    "register": "Amtsgericht Chemnitz, HRB 999999",
+    "ceo": "Markus Seidel"
+  },
+  "buyer": {
+    "name_lines": [
+      "Kieselgrund Industriemontage GmbH",
+      "Abteilung Einkauf",
+      "Standort Mitte"
+    ],
+    "street": "Betriebshof 32",
+    "postal_code": "02826",
+    "city": "Görlitz",
+    "customer_number": "006200"
+  },
+  "invoice": {
+    "number": "RE-2026-00158",
+    "date": "03.10.2026",
+    "service_date": "28.09.2026",
+    "order_number": "PO/2026/8406",
+    "shipping": "UPS"
+  },
+  "positions": [
+    {
+      "qty": 15,
+      "unit": "Stk.",
+      "description": [
+        "Bearbeitung 454317"
+      ],
+      "unit_price": "14.99",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "224.85"
+    },
+    {
+      "qty": 10,
+      "unit": "Stk.",
+      "description": [
+        "Aufnahmeflansch 388285"
+      ],
+      "unit_price": "0.85",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "8.50"
+    },
+    {
+      "qty": 125,
+      "unit": "Stk.",
+      "description": [
+        "Adapterplatte 887287"
+      ],
+      "unit_price": "7.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "937.50"
+    },
+    {
+      "qty": 750,
+      "unit": "Stk.",
+      "description": [
+        "Halterungsplatte 583580"
+      ],
+      "unit_price": "3.90",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "2925.00"
+    },
+    {
+      "qty": 10000,
+      "unit": "Stk.",
+      "description": [
+        "Nachbearbeitung 186621",
+        "nach Zeichnung A-572, EN AW-6082",
+        "inkl. Sichtprüfung nach Vorgabe"
+      ],
+      "unit_price": "18.75",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "187500.00"
+    },
+    {
+      "qty": 2500,
+      "unit": "Stk.",
+      "description": [
+        "Spannhülse 878375"
+      ],
+      "unit_price": "2.35",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "5875.00"
+    },
+    {
+      "qty": 2500,
+      "unit": "Stk.",
+      "description": [
+        "Halterungsplatte 270918"
+      ],
+      "unit_price": "14.99",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "37475.00"
+    },
+    {
+      "qty": 500,
+      "unit": "Stk.",
+      "description": [
+        "CNC-Nacharbeit 310500"
+      ],
+      "unit_price": "12.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "6250.00"
+    },
+    {
+      "qty": 10,
+      "unit": "Stk.",
+      "description": [
+        "Adapterplatte 202134"
+      ],
+      "unit_price": "2.35",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "23.50"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": "3.00",
+  "discount_days": 10,
+  "payment_days": 30,
+  "totals": {
+    "net": "241219.35",
+    "vat": "45831.68",
+    "gross": "287051.03"
+  },
+  "payment": {
+    "discount_date": "13.10.2026",
+    "due_date": "02.11.2026",
+    "discount_amount": "8611.53"
+  },
+  "page_count": 1,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "line_count": 11,
+      "transfer": null,
+      "summary_present": true,
+      "payment_block_present": true
+    }
+  ],
+  "test_flags": {
+    "address_name_lines": 3,
+    "missing_order_number": false,
+    "shipping_empty": false,
+    "discount_applied": true,
+    "blank_unit_flat_rate": false,
+    "without_price_count": 0,
+    "flat_rate_count": 0,
+    "two_three_line_positions": 1,
+    "four_five_line_positions": 0,
+    "has_qty_thousands": true
+  },
+  "sha256": "eeb038958b337ba2eecfecf6b7e0b47660f386a9c5ae71b183ca9670ca07eda5"
+}

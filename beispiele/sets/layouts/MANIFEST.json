@@ -1,0 +1,1938 @@
+{
+  "set": "layouts",
+  "version": "1.0.0",
+  "eingefroren": true,
+  "seed": {
+    "f01_infozeilen": 264721,
+    "f02_briefkopf": 264722,
+    "f03_seitenleiste": 264723,
+    "f04_kontaktblock": 264724,
+    "f05_versatz": 264725,
+    "f06_schreibmaschine": 264726,
+    "f07_din5008": 264727,
+    "f08_bildkopf": 264728,
+    "f09_steuerspalte": 264729,
+    "f10_satztabelle": 265081
+  },
+  "generator": "beispiele/sets/layouts/erzeuge.py (+ _rahmen.py, fNN_*/familie.py)",
+  "aufruf": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python beispiele/sets/layouts/erzeuge.py",
+  "abhaengigkeiten": [
+    "src/fakturafalter/pflichtpruefung.py (Prüfziffern, Selbstcheck)",
+    "Pillow (Logo-/Kopfbilder)"
+  ],
+  "umgebung": {
+    "python": "3.13.18",
+    "reportlab": "5.1.0",
+    "pillow": "13.0.0",
+    "pdfplumber": "0.11.10",
+    "hinweis": "Neulauf mit dieser Umgebung ist byte-gleich zu den Hashes unten"
+  },
+  "inhalt_commit": "b6eafd377965fcc0a3ff8c871878b85119bb1ec2",
+  "inhalt_commit_hinweis": "Commit, der Generator und Belege dieser Version enthält; MANIFEST.json selbst liegt in einem eigenen Commit danach",
+  "erzeugt_am": "2026-11-20T08:13:22+00:00",
+  "pfade_relativ_zu": "beispiele/sets/layouts/",
+  "rollen": {
+    "anlernen": "Trainings-Split (fehlerfrei): Anlernen/Tunen; der Benchmark lernt mit den ersten --lernen Belegen und misst den Rest",
+    "nachlesen": "mit dem angelernten Profil nachlesen (fehlerfrei)",
+    "holdout": "nur messen, nie tunen (fehlerfrei)",
+    "holdout-fehler": "nur messen; Druck enthält genau einen absichtlichen Fehler (erwarteter_status fehler bzw. prüfen)",
+    "holdout-falle": "nur messen; fachlich korrekt, mit Ablenker für False Positives (erwarteter_status ok)"
+  },
+  "anzahl": {
+    "belege": 60,
+    "anlernen": 24,
+    "holdout": 21,
+    "holdout-falle": 3,
+    "holdout-fehler": 12,
+    "ausserhalb_v1": 10
+  },
+  "hinweis": "Seed je Familie. F9/F10 (7/19 % gemischt) sind außerhalb v1. Die fünf alten Prüfen-Fälle (Phase 2) zählen als holdout-fehler mit fehler=pruefen_<art>; bei ihnen ist totals berechnet, totals_printed gedruckt. Bei den A1-Belegen ist totals = gedruckt.",
+  "belege": [
+    {
+      "pdf": "f01_infozeilen/Rechnungen/Rechnung_001_K261618.pdf",
+      "soll": "f01_infozeilen/Referenzdaten/Rechnung_001_K261618.json",
+      "rechnungsnummer": "K261618",
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false,
+      "erwarteter_status": "ok"
+    },
+    {
+      "pdf": "f01_infozeilen/Rechnungen/Rechnung_002_K261640.pdf",
+      "soll": "f01_infozeilen/Referenzdaten/Rechnung_002_K261640.json",
+      "rechnungsnummer": "K261640",
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false,
+      "erwarteter_status": "ok"
+    },
+    {
+      "pdf": "f01_infozeilen/Rechnungen/Rechnung_003_K261658.pdf",
+      "soll": "f01_infozeilen/Referenzdaten/Rechnung_003_K261658.json",
+      "rechnungsnummer": "K261658",
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false,
+      "erwarteter_status": "ok"
+    },
+    {
+      "pdf": "f01_infozeilen/Rechnungen/Rechnung_004_K261668.pdf",
+      "soll": "f01_infozeilen/Referenzdaten/holdout/Rechnung_004_K261668.json",
+      "rechnungsnummer": "K261668",
+      "rolle": "holdout",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false,
+      "erwarteter_status": "ok"
+    },
+    {
+      "pdf": "f01_infozeilen/Rechnungen/Rechnung_005_K261688.pdf",
+      "soll": "f01_infozeilen/Referenzdaten/holdout/Rechnung_005_K261688.json",
+      "rechnungsnummer": "K261688",
+      "rolle": "holdout-fehler",
+      "fehler": "pruefen_netto",
+      "falle": null,
+      "ausserhalb_v1": false,
+      "erwarteter_status": "prüfen"
+    },
+    {
+      "pdf": "f01_infozeilen/Rechnungen/Rechnung_006_K261703.pdf",
+      "soll": "f01_infozeilen/Referenzdaten/holdout/Rechnung_006_K261703.json",
+      "rechnungsnummer": "K261703",
+      "rolle": "holdout-fehler",
+      "fehler": "summe_positionen",
+      "falle": null,
+      "ausserhalb_v1": false,
+      "erwarteter_status": "fehler"
+    },
+    {
+      "pdf": "f01_infozeilen/Rechnungen/Rechnung_007_K261721.pdf",
+      "soll": "f01_infozeilen/Referenzdaten/holdout/Rechnung_007_K261721.json",
+      "rechnungsnummer": "K261721",
+      "rolle": "holdout-falle",
+      "fehler": null,
+      "falle": "angebot_nr",
+      "ausserhalb_v1": false,
+      "erwarteter_status": "ok"
+    },
+    {
+      "pdf": "f02_briefkopf/Rechnungen/Rechnung_001_2026-0417.pdf",
+      "soll": "f02_briefkopf/Referenzdaten/Rechnung_001_2026-0417.json",
+      "rechnungsnummer": "2026-0417",
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false,
+      "erwarteter_status": "ok"
+    },
+    {
+      "pdf": "f02_briefkopf/Rechnungen/Rechnung_002_2026-0426.pdf",
+      "soll": "f02_briefkopf/Referenzdaten/Rechnung_002_2026-0426.json",
+      "rechnungsnummer": "2026-0426",
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false,
+      "erwarteter_status": "ok"
+    },
+    {
+      "pdf": "f02_briefkopf/Rechnungen/Rechnung_003_2026-0432.pdf",
+      "soll": "f02_briefkopf/Referenzdaten/Rechnung_003_2026-0432.json",
+      "rechnungsnummer": "2026-0432",
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false,
+      "erwarteter_status": "ok"
+    },
+    {
+      "pdf": "f02_briefkopf/Rechnungen/Rechnung_004_2026-0434.pdf",
+      "soll": "f02_briefkopf/Referenzdaten/holdout/Rechnung_004_2026-0434.json",
+      "rechnungsnummer": "2026-0434",
+      "rolle": "holdout",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false,
+      "erwarteter_status": "ok"
+    },
+    {
+      "pdf": "f02_briefkopf/Rechnungen/Rechnung_005_2026-0444.pdf",
+      "soll": "f02_briefkopf/Referenzdaten/holdout/Rechnung_005_2026-0444.json",
+      "rechnungsnummer": "2026-0444",
+      "rolle": "holdout-fehler",
+      "fehler": "pruefen_brutto",
+      "falle": null,
+      "ausserhalb_v1": false,
+      "erwarteter_status": "prüfen"
+    },
+    {
+      "pdf": "f02_briefkopf/Rechnungen/Rechnung_006_2026-0450.pdf",
+      "soll": "f02_briefkopf/Referenzdaten/holdout/Rechnung_006_2026-0450.json",
+      "rechnungsnummer": "2026-0450",
+      "rolle": "holdout-fehler",
+      "fehler": "iban_pruefziffer",
+      "falle": null,
+      "ausserhalb_v1": false,
+      "erwarteter_status": "fehler"
+    },
+    {
+      "pdf": "f03_seitenleiste/Rechnungen/Rechnung_001_RE202603143.pdf",
+      "soll": "f03_seitenleiste/Referenzdaten/Rechnung_001_RE202603143.json",
+      "rechnungsnummer": "RE202603143",
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false,
+      "erwarteter_status": "ok"
+    },
+    {
+      "pdf": "f03_seitenleiste/Rechnungen/Rechnung_002_RE202603210.pdf",
+      "soll": "f03_seitenleiste/Referenzdaten/Rechnung_002_RE202603210.json",
+      "rechnungsnummer": "RE202603210",
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false,
+      "erwarteter_status": "ok"
+    },
+    {
+      "pdf": "f03_seitenleiste/Rechnungen/Rechnung_003_RE202603244.pdf",
+      "soll": "f03_seitenleiste/Referenzdaten/Rechnung_003_RE202603244.json",
+      "rechnungsnummer": "RE202603244",
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false,
+      "erwarteter_status": "ok"
+    },
+    {
+      "pdf": "f03_seitenleiste/Rechnungen/Rechnung_004_RE202603278.pdf",
+      "soll": "f03_seitenleiste/Referenzdaten/holdout/Rechnung_004_RE202603278.json",
+      "rechnungsnummer": "RE202603278",
+      "rolle": "holdout",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false,
+      "erwarteter_status": "ok"
+    },
+    {
+      "pdf": "f03_seitenleiste/Rechnungen/Rechnung_005_RE202603316.pdf",
+      "soll": "f03_seitenleiste/Referenzdaten/holdout/Rechnung_005_RE202603316.json",
+      "rechnungsnummer": "RE202603316",
+      "rolle": "holdout",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false,
+      "erwarteter_status": "ok"
+    },
+    {
+      "pdf": "f03_seitenleiste/Rechnungen/Rechnung_006_RE202603351.pdf",
+      "soll": "f03_seitenleiste/Referenzdaten/holdout/Rechnung_006_RE202603351.json",
+      "rechnungsnummer": "RE202603351",
+      "rolle": "holdout-fehler",
+      "fehler": "ust_id_pruefziffer",
+      "falle": null,
+      "ausserhalb_v1": false,
+      "erwarteter_status": "fehler"
+    },
+    {
+      "pdf": "f04_kontaktblock/Rechnungen/Rechnung_001_202610091.pdf",
+      "soll": "f04_kontaktblock/Referenzdaten/Rechnung_001_202610091.json",
+      "rechnungsnummer": "202610091",
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false,
+      "erwarteter_status": "ok"
+    },
+    {
+      "pdf": "f04_kontaktblock/Rechnungen/Rechnung_002_202610092.pdf",
+      "soll": "f04_kontaktblock/Referenzdaten/Rechnung_002_202610092.json",
+      "rechnungsnummer": "202610092",
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false,
+      "erwarteter_status": "ok"
+    },
+    {
+      "pdf": "f04_kontaktblock/Rechnungen/Rechnung_003_202610043.pdf",
+      "soll": "f04_kontaktblock/Referenzdaten/Rechnung_003_202610043.json",
+      "rechnungsnummer": "202610043",
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false,
+      "erwarteter_status": "ok"
+    },
+    {
+      "pdf": "f04_kontaktblock/Rechnungen/Rechnung_004_202610044.pdf",
+      "soll": "f04_kontaktblock/Referenzdaten/holdout/Rechnung_004_202610044.json",
+      "rechnungsnummer": "202610044",
+      "rolle": "holdout",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false,
+      "erwarteter_status": "ok"
+    },
+    {
+      "pdf": "f04_kontaktblock/Rechnungen/Rechnung_005_202610095.pdf",
+      "soll": "f04_kontaktblock/Referenzdaten/holdout/Rechnung_005_202610095.json",
+      "rechnungsnummer": "202610095",
+      "rolle": "holdout-fehler",
+      "fehler": "pruefen_ohne_leistungsdatum",
+      "falle": null,
+      "ausserhalb_v1": false,
+      "erwarteter_status": "prüfen"
+    },
+    {
+      "pdf": "f04_kontaktblock/Rechnungen/Rechnung_006_ohne-Nummer.pdf",
+      "soll": "f04_kontaktblock/Referenzdaten/holdout/Rechnung_006_ohne-Nummer.json",
+      "rechnungsnummer": "",
+      "rolle": "holdout-fehler",
+      "fehler": "rechnungsnummer_fehlt",
+      "falle": null,
+      "ausserhalb_v1": false,
+      "erwarteter_status": "fehler"
+    },
+    {
+      "pdf": "f05_versatz/Rechnungen/Rechnung_001_RE26-76001.pdf",
+      "soll": "f05_versatz/Referenzdaten/Rechnung_001_RE26-76001.json",
+      "rechnungsnummer": "RE26-76001",
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false,
+      "erwarteter_status": "ok"
+    },
+    {
+      "pdf": "f05_versatz/Rechnungen/Rechnung_002_RE26-30002.pdf",
+      "soll": "f05_versatz/Referenzdaten/Rechnung_002_RE26-30002.json",
+      "rechnungsnummer": "RE26-30002",
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false,
+      "erwarteter_status": "ok"
+    },
+    {
+      "pdf": "f05_versatz/Rechnungen/Rechnung_003_RE26-19003.pdf",
+      "soll": "f05_versatz/Referenzdaten/Rechnung_003_RE26-19003.json",
+      "rechnungsnummer": "RE26-19003",
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false,
+      "erwarteter_status": "ok"
+    },
+    {
+      "pdf": "f05_versatz/Rechnungen/Rechnung_004_RE26-66004.pdf",
+      "soll": "f05_versatz/Referenzdaten/holdout/Rechnung_004_RE26-66004.json",
+      "rechnungsnummer": "RE26-66004",
+      "rolle": "holdout",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false,
+      "erwarteter_status": "ok"
+    },
+    {
+      "pdf": "f05_versatz/Rechnungen/Rechnung_005_RE26-74005.pdf",
+      "soll": "f05_versatz/Referenzdaten/holdout/Rechnung_005_RE26-74005.json",
+      "rechnungsnummer": "RE26-74005",
+      "rolle": "holdout",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false,
+      "erwarteter_status": "ok"
+    },
+    {
+      "pdf": "f05_versatz/Rechnungen/Rechnung_006_RE26-11006.pdf",
+      "soll": "f05_versatz/Referenzdaten/holdout/Rechnung_006_RE26-11006.json",
+      "rechnungsnummer": "RE26-11006",
+      "rolle": "holdout-fehler",
+      "fehler": "rechnungsdatum_fehlt",
+      "falle": null,
+      "ausserhalb_v1": false,
+      "erwarteter_status": "fehler"
+    },
+    {
+      "pdf": "f06_schreibmaschine/Rechnungen/Rechnung_001_50110.pdf",
+      "soll": "f06_schreibmaschine/Referenzdaten/Rechnung_001_50110.json",
+      "rechnungsnummer": "50110",
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false,
+      "erwarteter_status": "ok"
+    },
+    {
+      "pdf": "f06_schreibmaschine/Rechnungen/Rechnung_002_50210.pdf",
+      "soll": "f06_schreibmaschine/Referenzdaten/Rechnung_002_50210.json",
+      "rechnungsnummer": "50210",
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false,
+      "erwarteter_status": "ok"
+    },
+    {
+      "pdf": "f06_schreibmaschine/Rechnungen/Rechnung_003_40310.pdf",
+      "soll": "f06_schreibmaschine/Referenzdaten/Rechnung_003_40310.json",
+      "rechnungsnummer": "40310",
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false,
+      "erwarteter_status": "ok"
+    },
+    {
+      "pdf": "f06_schreibmaschine/Rechnungen/Rechnung_004_50410.pdf",
+      "soll": "f06_schreibmaschine/Referenzdaten/holdout/Rechnung_004_50410.json",
+      "rechnungsnummer": "50410",
+      "rolle": "holdout",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false,
+      "erwarteter_status": "ok"
+    },
+    {
+      "pdf": "f06_schreibmaschine/Rechnungen/Rechnung_005_60510.pdf",
+      "soll": "f06_schreibmaschine/Referenzdaten/holdout/Rechnung_005_60510.json",
+      "rechnungsnummer": "60510",
+      "rolle": "holdout",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false,
+      "erwarteter_status": "ok"
+    },
+    {
+      "pdf": "f06_schreibmaschine/Rechnungen/Rechnung_006_60611.pdf",
+      "soll": "f06_schreibmaschine/Referenzdaten/holdout/Rechnung_006_60611.json",
+      "rechnungsnummer": "60611",
+      "rolle": "holdout-fehler",
+      "fehler": "netto_brutto",
+      "falle": null,
+      "ausserhalb_v1": false,
+      "erwarteter_status": "fehler"
+    },
+    {
+      "pdf": "f06_schreibmaschine/Rechnungen/Rechnung_007_40711.pdf",
+      "soll": "f06_schreibmaschine/Referenzdaten/holdout/Rechnung_007_40711.json",
+      "rechnungsnummer": "40711",
+      "rolle": "holdout-falle",
+      "fehler": null,
+      "falle": "zweites_datum",
+      "ausserhalb_v1": false,
+      "erwarteter_status": "ok"
+    },
+    {
+      "pdf": "f07_din5008/Rechnungen/Rechnung_001_INV-2026-00107.pdf",
+      "soll": "f07_din5008/Referenzdaten/Rechnung_001_INV-2026-00107.json",
+      "rechnungsnummer": "INV/2026/00107",
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false,
+      "erwarteter_status": "ok"
+    },
+    {
+      "pdf": "f07_din5008/Rechnungen/Rechnung_002_INV-2026-00314.pdf",
+      "soll": "f07_din5008/Referenzdaten/Rechnung_002_INV-2026-00314.json",
+      "rechnungsnummer": "INV/2026/00314",
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false,
+      "erwarteter_status": "ok"
+    },
+    {
+      "pdf": "f07_din5008/Rechnungen/Rechnung_003_INV-2026-00321.pdf",
+      "soll": "f07_din5008/Referenzdaten/Rechnung_003_INV-2026-00321.json",
+      "rechnungsnummer": "INV/2026/00321",
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false,
+      "erwarteter_status": "ok"
+    },
+    {
+      "pdf": "f07_din5008/Rechnungen/Rechnung_004_INV-2026-00228.pdf",
+      "soll": "f07_din5008/Referenzdaten/holdout/Rechnung_004_INV-2026-00228.json",
+      "rechnungsnummer": "INV/2026/00228",
+      "rolle": "holdout",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false,
+      "erwarteter_status": "ok"
+    },
+    {
+      "pdf": "f07_din5008/Rechnungen/Rechnung_005_INV-2026-00235.pdf",
+      "soll": "f07_din5008/Referenzdaten/holdout/Rechnung_005_INV-2026-00235.json",
+      "rechnungsnummer": "INV/2026/00235",
+      "rolle": "holdout-fehler",
+      "fehler": "pruefen_brutto",
+      "falle": null,
+      "ausserhalb_v1": false,
+      "erwarteter_status": "prüfen"
+    },
+    {
+      "pdf": "f07_din5008/Rechnungen/Rechnung_006_INV-2026-00342.pdf",
+      "soll": "f07_din5008/Referenzdaten/holdout/Rechnung_006_INV-2026-00342.json",
+      "rechnungsnummer": "INV/2026/00342",
+      "rolle": "holdout-fehler",
+      "fehler": "faelligkeit_vor_datum",
+      "falle": null,
+      "ausserhalb_v1": false,
+      "erwarteter_status": "fehler"
+    },
+    {
+      "pdf": "f08_bildkopf/Rechnungen/Rechnung_001_103701.pdf",
+      "soll": "f08_bildkopf/Referenzdaten/holdout/Rechnung_001_103701.json",
+      "rechnungsnummer": "103701",
+      "rolle": "holdout",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false,
+      "erwarteter_status": "ok"
+    },
+    {
+      "pdf": "f08_bildkopf/Rechnungen/Rechnung_002_103602.pdf",
+      "soll": "f08_bildkopf/Referenzdaten/holdout/Rechnung_002_103602.json",
+      "rechnungsnummer": "103602",
+      "rolle": "holdout",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false,
+      "erwarteter_status": "ok"
+    },
+    {
+      "pdf": "f08_bildkopf/Rechnungen/Rechnung_003_103603.pdf",
+      "soll": "f08_bildkopf/Referenzdaten/holdout/Rechnung_003_103603.json",
+      "rechnungsnummer": "103603",
+      "rolle": "holdout",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false,
+      "erwarteter_status": "ok"
+    },
+    {
+      "pdf": "f08_bildkopf/Rechnungen/Rechnung_004_103404.pdf",
+      "soll": "f08_bildkopf/Referenzdaten/holdout/Rechnung_004_103404.json",
+      "rechnungsnummer": "103404",
+      "rolle": "holdout",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false,
+      "erwarteter_status": "ok"
+    },
+    {
+      "pdf": "f08_bildkopf/Rechnungen/Rechnung_005_103905.pdf",
+      "soll": "f08_bildkopf/Referenzdaten/holdout/Rechnung_005_103905.json",
+      "rechnungsnummer": "103905",
+      "rolle": "holdout",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false,
+      "erwarteter_status": "ok"
+    },
+    {
+      "pdf": "f08_bildkopf/Rechnungen/Rechnung_006_103006.pdf",
+      "soll": "f08_bildkopf/Referenzdaten/holdout/Rechnung_006_103006.json",
+      "rechnungsnummer": "103006",
+      "rolle": "holdout-falle",
+      "fehler": null,
+      "falle": "nummer_aehnlich",
+      "ausserhalb_v1": false,
+      "erwarteter_status": "ok"
+    },
+    {
+      "pdf": "f09_steuerspalte/Rechnungen/Rechnung_001_2026-48001.pdf",
+      "soll": "f09_steuerspalte/Referenzdaten/Rechnung_001_2026-48001.json",
+      "rechnungsnummer": "2026-48001",
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": true,
+      "erwarteter_status": "ok"
+    },
+    {
+      "pdf": "f09_steuerspalte/Rechnungen/Rechnung_002_2026-47002.pdf",
+      "soll": "f09_steuerspalte/Referenzdaten/Rechnung_002_2026-47002.json",
+      "rechnungsnummer": "2026-47002",
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": true,
+      "erwarteter_status": "ok"
+    },
+    {
+      "pdf": "f09_steuerspalte/Rechnungen/Rechnung_003_2026-48803.pdf",
+      "soll": "f09_steuerspalte/Referenzdaten/Rechnung_003_2026-48803.json",
+      "rechnungsnummer": "2026-48803",
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": true,
+      "erwarteter_status": "ok"
+    },
+    {
+      "pdf": "f09_steuerspalte/Rechnungen/Rechnung_004_2026-47604.pdf",
+      "soll": "f09_steuerspalte/Referenzdaten/holdout/Rechnung_004_2026-47604.json",
+      "rechnungsnummer": "2026-47604",
+      "rolle": "holdout",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": true,
+      "erwarteter_status": "ok"
+    },
+    {
+      "pdf": "f09_steuerspalte/Rechnungen/Rechnung_005_2026-48405.pdf",
+      "soll": "f09_steuerspalte/Referenzdaten/holdout/Rechnung_005_2026-48405.json",
+      "rechnungsnummer": "2026-48405",
+      "rolle": "holdout-fehler",
+      "fehler": "pruefen_ust",
+      "falle": null,
+      "ausserhalb_v1": true,
+      "erwarteter_status": "prüfen"
+    },
+    {
+      "pdf": "f10_satztabelle/Rechnungen/Rechnung_001_RE-20261012-530.pdf",
+      "soll": "f10_satztabelle/Referenzdaten/holdout/Rechnung_001_RE-20261012-530.json",
+      "rechnungsnummer": "RE-20261012/530",
+      "rolle": "holdout",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": true,
+      "erwarteter_status": "ok"
+    },
+    {
+      "pdf": "f10_satztabelle/Rechnungen/Rechnung_002_RE-20261015-719.pdf",
+      "soll": "f10_satztabelle/Referenzdaten/holdout/Rechnung_002_RE-20261015-719.json",
+      "rechnungsnummer": "RE-20261015/719",
+      "rolle": "holdout",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": true,
+      "erwarteter_status": "ok"
+    },
+    {
+      "pdf": "f10_satztabelle/Rechnungen/Rechnung_003_RE-20261019-500.pdf",
+      "soll": "f10_satztabelle/Referenzdaten/holdout/Rechnung_003_RE-20261019-500.json",
+      "rechnungsnummer": "RE-20261019/500",
+      "rolle": "holdout",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": true,
+      "erwarteter_status": "ok"
+    },
+    {
+      "pdf": "f10_satztabelle/Rechnungen/Rechnung_004_RE-20261026-786.pdf",
+      "soll": "f10_satztabelle/Referenzdaten/holdout/Rechnung_004_RE-20261026-786.json",
+      "rechnungsnummer": "RE-20261026/786",
+      "rolle": "holdout",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": true,
+      "erwarteter_status": "ok"
+    },
+    {
+      "pdf": "f10_satztabelle/Rechnungen/Rechnung_005_RE-20261102-551.pdf",
+      "soll": "f10_satztabelle/Referenzdaten/holdout/Rechnung_005_RE-20261102-551.json",
+      "rechnungsnummer": "RE-20261102/551",
+      "rolle": "holdout",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": true,
+      "erwarteter_status": "ok"
+    }
+  ],
+  "dateien": [
+    {
+      "pfad": "QUELLEN.md",
+      "sha256": "5c63149af6ee57262ec1b7e0af86c84e85377da1a85a6553dd32279f3a25014b",
+      "bytes": 11242,
+      "art": "doku"
+    },
+    {
+      "pfad": "README.md",
+      "sha256": "1c26417f9246775d9ee95c46c070a90373eaa8b841673658fda79475d681d679",
+      "bytes": 11592,
+      "art": "doku"
+    },
+    {
+      "pfad": "_rahmen.py",
+      "sha256": "60371a262655d4f10d106790c0bdbaac43213fb76373968be827118bd40420c6",
+      "bytes": 40791,
+      "art": "generator"
+    },
+    {
+      "pfad": "erzeuge.py",
+      "sha256": "8da1248bb6fb413cb26eac5d222e2a69ca8b9cbf30dbd82b124d6f6c18f21176",
+      "bytes": 1294,
+      "art": "generator"
+    },
+    {
+      "pfad": "f01_infozeilen/README.md",
+      "sha256": "fc99faebf0d1e05ba74f92f590bcf924c82c0cb179688ea17a5125611b1318a7",
+      "bytes": 1786,
+      "art": "doku"
+    },
+    {
+      "pfad": "f01_infozeilen/Rechnungen/Rechnung_001_K261618.pdf",
+      "sha256": "2cda4ff2a18773bb6637eb0a414c97553131618bcbe17cb4944b63e65e5508f8",
+      "bytes": 3360,
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f01_infozeilen/Rechnungen/Rechnung_002_K261640.pdf",
+      "sha256": "419e208d97bff68dd11a436c71e68c3381c4d1ea818cf89213a253874e066eb8",
+      "bytes": 3403,
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f01_infozeilen/Rechnungen/Rechnung_003_K261658.pdf",
+      "sha256": "716513072520f2d8a307c68d52b105a31d3110ffc085adc3c22623a5b86efa86",
+      "bytes": 3225,
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f01_infozeilen/Rechnungen/Rechnung_004_K261668.pdf",
+      "sha256": "87e4cc538142d12f41f640da79a8aa876998447e98ff7d67771b0c6a196b2b50",
+      "bytes": 3585,
+      "rolle": "holdout",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f01_infozeilen/Rechnungen/Rechnung_005_K261688.pdf",
+      "sha256": "4196eb1fa7e55d4558860b331dd3b84d0cdef368f83315114bdc7aa3bc5a55a3",
+      "bytes": 3224,
+      "rolle": "holdout-fehler",
+      "fehler": "pruefen_netto",
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f01_infozeilen/Rechnungen/Rechnung_006_K261703.pdf",
+      "sha256": "b20750eb6f3b735f79321825bf84d0fa5f91ec72c0f2258bd57120e2f23487e4",
+      "bytes": 3468,
+      "rolle": "holdout-fehler",
+      "fehler": "summe_positionen",
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f01_infozeilen/Rechnungen/Rechnung_007_K261721.pdf",
+      "sha256": "e47af92c08c2f069874d995ff61f02a9870826fc161d9df3072ed1a916e9a97b",
+      "bytes": 3284,
+      "rolle": "holdout-falle",
+      "fehler": null,
+      "falle": "angebot_nr",
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f01_infozeilen/Referenzdaten/Rechnung_001_K261618.json",
+      "sha256": "5330439827720cd89aca5f82824866c546fdbd1003c06cd7139476b4da31fb98",
+      "bytes": 4240,
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f01_infozeilen/Referenzdaten/Rechnung_002_K261640.json",
+      "sha256": "a9bbfcdddb0d416242ff2eae786f23afaa3a37ab3f9e159662ff12989747a202",
+      "bytes": 4297,
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f01_infozeilen/Referenzdaten/Rechnung_003_K261658.json",
+      "sha256": "1729bc9eefb8be59fd77164fb94b21b7a7e1a16f339702dd0ac693d1269eba83",
+      "bytes": 3928,
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f01_infozeilen/Referenzdaten/Testfallmatrix.csv",
+      "sha256": "04543ea47f4fc8abd587c86d143fad2eace53546c12d941c39d3c30213c6569e",
+      "bytes": 1784,
+      "art": "testfallmatrix"
+    },
+    {
+      "pfad": "f01_infozeilen/Referenzdaten/holdout/Rechnung_004_K261668.json",
+      "sha256": "83c69fd6137e9f2a16667acc7dfd940ebf5222945ced2209ea61f2ccf153c899",
+      "bytes": 4949,
+      "rolle": "holdout",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f01_infozeilen/Referenzdaten/holdout/Rechnung_005_K261688.json",
+      "sha256": "b666939c215da29a209c10f5b02a0e7912425e8543f12153b6d2b8a4d78b0a1b",
+      "bytes": 3983,
+      "rolle": "holdout-fehler",
+      "fehler": "pruefen_netto",
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f01_infozeilen/Referenzdaten/holdout/Rechnung_006_K261703.json",
+      "sha256": "6eb007c99813ba6278acb1e6596a6159712a499bd3b93692809413d2c82d57f7",
+      "bytes": 5348,
+      "rolle": "holdout-fehler",
+      "fehler": "summe_positionen",
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f01_infozeilen/Referenzdaten/holdout/Rechnung_007_K261721.json",
+      "sha256": "0de2ea4bb5c3a4c0c42afc383ae2e98d969e6de4d19b754c5344d1f23b212f22",
+      "bytes": 4327,
+      "rolle": "holdout-falle",
+      "fehler": null,
+      "falle": "angebot_nr",
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f01_infozeilen/familie.py",
+      "sha256": "913106d46d081a4b33ca60729b672dd97cf774ee07edfc445e6d18b32fb8dac0",
+      "bytes": 9906,
+      "art": "generator"
+    },
+    {
+      "pfad": "f02_briefkopf/README.md",
+      "sha256": "f443333ec7db725a7155697d372ac051ae64a821d667babbf1c249e29f5101fe",
+      "bytes": 1868,
+      "art": "doku"
+    },
+    {
+      "pfad": "f02_briefkopf/Rechnungen/Rechnung_001_2026-0417.pdf",
+      "sha256": "097ca8e8ec54c609c43abe01040736155bb0889924ea9b3c250fb45249af56b9",
+      "bytes": 6007,
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f02_briefkopf/Rechnungen/Rechnung_002_2026-0426.pdf",
+      "sha256": "255505aac4f1f643dfbd562d53b356dc91b9113d40baa40386f333b3b6b3d729",
+      "bytes": 6198,
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f02_briefkopf/Rechnungen/Rechnung_003_2026-0432.pdf",
+      "sha256": "06a24685e4470196f1fc6a8dd6f4541a36c296eeee402b63e4096146e892490c",
+      "bytes": 6081,
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f02_briefkopf/Rechnungen/Rechnung_004_2026-0434.pdf",
+      "sha256": "bd21aaf87326aa13140d140e14b35598975107ecea70c3c6bce3a49bb2b51613",
+      "bytes": 6091,
+      "rolle": "holdout",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f02_briefkopf/Rechnungen/Rechnung_005_2026-0444.pdf",
+      "sha256": "b26cce5bb87fc053b856b4e5bd862cc09751da85a70b17406ea1c6a5e1573be7",
+      "bytes": 6143,
+      "rolle": "holdout-fehler",
+      "fehler": "pruefen_brutto",
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f02_briefkopf/Rechnungen/Rechnung_006_2026-0450.pdf",
+      "sha256": "0c07cbb4eb2528eaa1509af674bf31c98c8bea107f36cbac590e693652a9251a",
+      "bytes": 6077,
+      "rolle": "holdout-fehler",
+      "fehler": "iban_pruefziffer",
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f02_briefkopf/Referenzdaten/Rechnung_001_2026-0417.json",
+      "sha256": "3c384205fba91579ccfd4f994a73130cf6765d3579293469eabd65a6796c7836",
+      "bytes": 3603,
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f02_briefkopf/Referenzdaten/Rechnung_002_2026-0426.json",
+      "sha256": "101d9ff4fe3f8dd21877f32aab5e89bc61ac3a7c9d1425526e76fcfc18069a56",
+      "bytes": 4098,
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f02_briefkopf/Referenzdaten/Rechnung_003_2026-0432.json",
+      "sha256": "136b595c68850a5268d825390886e1adf86e912e177526cb3539325537b71bd0",
+      "bytes": 3693,
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f02_briefkopf/Referenzdaten/Testfallmatrix.csv",
+      "sha256": "8aed60bf27d05eab6e276049118257c2e0193b24a7feae8177209659be3952d9",
+      "bytes": 1555,
+      "art": "testfallmatrix"
+    },
+    {
+      "pfad": "f02_briefkopf/Referenzdaten/holdout/Rechnung_004_2026-0434.json",
+      "sha256": "b99ff0a1017eec05843bb01a8affe1f7885b79183a36fbdd29b7651133fe3f3d",
+      "bytes": 3288,
+      "rolle": "holdout",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f02_briefkopf/Referenzdaten/holdout/Rechnung_005_2026-0444.json",
+      "sha256": "e1360494ffa33f908a18cd3e37813f6a5d9e73c15eed0a0acc28cac08f061dd2",
+      "bytes": 4145,
+      "rolle": "holdout-fehler",
+      "fehler": "pruefen_brutto",
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f02_briefkopf/Referenzdaten/holdout/Rechnung_006_2026-0450.json",
+      "sha256": "a1f0d45b2eba8b0ac8bfe2cb851ba881c7174813747d36929447eee1aa9c67b3",
+      "bytes": 4281,
+      "rolle": "holdout-fehler",
+      "fehler": "iban_pruefziffer",
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f02_briefkopf/familie.py",
+      "sha256": "dc4ae601063c18b1ddcbc785aed57160040c6b02383dd069b001c36c1ade0d22",
+      "bytes": 10674,
+      "art": "generator"
+    },
+    {
+      "pfad": "f03_seitenleiste/README.md",
+      "sha256": "66c0a14752d588a5341de74d0194d18e8520727c620c09a173cb428f9afe712d",
+      "bytes": 2019,
+      "art": "doku"
+    },
+    {
+      "pfad": "f03_seitenleiste/Rechnungen/Rechnung_001_RE202603143.pdf",
+      "sha256": "9c77dd69a56902bd0c58524abde4dad09e74a70b42d14c1016a24f7d981f3f6e",
+      "bytes": 7941,
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f03_seitenleiste/Rechnungen/Rechnung_002_RE202603210.pdf",
+      "sha256": "f4169bb26938b63bc7409f3301599852b6ee10483f1e05f0c472fef25d19de26",
+      "bytes": 11602,
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f03_seitenleiste/Rechnungen/Rechnung_003_RE202603244.pdf",
+      "sha256": "5e7545b072f07121c0cc9c3fa27c54408581524f8fe257725ed90a248bb22cfb",
+      "bytes": 8294,
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f03_seitenleiste/Rechnungen/Rechnung_004_RE202603278.pdf",
+      "sha256": "c970b38d9652b9bd19f5bbdf9a85e70ca86a9784b8fcabcc7ec1411389a05e4e",
+      "bytes": 11395,
+      "rolle": "holdout",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f03_seitenleiste/Rechnungen/Rechnung_005_RE202603316.pdf",
+      "sha256": "19be5e9852fef4e567a568ae2b79bde412eb6e8b7b74701aebf5b9d678bb323b",
+      "bytes": 15210,
+      "rolle": "holdout",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f03_seitenleiste/Rechnungen/Rechnung_006_RE202603351.pdf",
+      "sha256": "263583025cbb7f81fc2d2da23c96313b46c70ea53b3a719fdd29bf689d8d798a",
+      "bytes": 8102,
+      "rolle": "holdout-fehler",
+      "fehler": "ust_id_pruefziffer",
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f03_seitenleiste/Referenzdaten/Rechnung_001_RE202603143.json",
+      "sha256": "2135cf15924c0a8fefbd7008338173795bb2f3f7aa6b3e7743c9951d916b608c",
+      "bytes": 4622,
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f03_seitenleiste/Referenzdaten/Rechnung_002_RE202603210.json",
+      "sha256": "9d8cfbdb5e1f9cab22ade87b2af1172b58ea42bb01f8a3722140d56e12a4abc3",
+      "bytes": 11835,
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f03_seitenleiste/Referenzdaten/Rechnung_003_RE202603244.json",
+      "sha256": "360f8b3ee9a683aa85a909f94a6c7edfaa513e169b3f29bbe9ee4bdd6eb19946",
+      "bytes": 5424,
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f03_seitenleiste/Referenzdaten/Testfallmatrix.csv",
+      "sha256": "9c2c29fc257c4586be7ae8f515f69730f1f5e9f8a7a67773c2b7419d42c3ca2f",
+      "bytes": 1559,
+      "art": "testfallmatrix"
+    },
+    {
+      "pfad": "f03_seitenleiste/Referenzdaten/holdout/Rechnung_004_RE202603278.json",
+      "sha256": "45d5788a5cd07d42918057e5d2f0d35e46fa82c114e9c69316b41a8acf1fa6b0",
+      "bytes": 11203,
+      "rolle": "holdout",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f03_seitenleiste/Referenzdaten/holdout/Rechnung_005_RE202603316.json",
+      "sha256": "f28af6924ef719da12a54515728d0b85a17b7e9319b2c16253b46bab92c72922",
+      "bytes": 19582,
+      "rolle": "holdout",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f03_seitenleiste/Referenzdaten/holdout/Rechnung_006_RE202603351.json",
+      "sha256": "ea30e84ca7eafb8332e6b8c2040ed9e3d90b3fab3032175e30155d1739bf970b",
+      "bytes": 5597,
+      "rolle": "holdout-fehler",
+      "fehler": "ust_id_pruefziffer",
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f03_seitenleiste/familie.py",
+      "sha256": "9e955dc24670d359afb9fa428d2ae94ca8e5c823f8e4a225f3f3b2ca0377013b",
+      "bytes": 13413,
+      "art": "generator"
+    },
+    {
+      "pfad": "f04_kontaktblock/README.md",
+      "sha256": "fc65921c610c0ff0a12490cee5dfcab4b066e99e475b36e62f04b0584ad153a9",
+      "bytes": 2159,
+      "art": "doku"
+    },
+    {
+      "pfad": "f04_kontaktblock/Rechnungen/Rechnung_001_202610091.pdf",
+      "sha256": "79f6c2dcb5ce0971f4620cd28c21294cadab7e604bf62658d4adb6bf02cac9e9",
+      "bytes": 7846,
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f04_kontaktblock/Rechnungen/Rechnung_002_202610092.pdf",
+      "sha256": "097d15a1d19a196c3dc5e569fc80a83d889bff4732eaace313c237fd782f1a4a",
+      "bytes": 8095,
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f04_kontaktblock/Rechnungen/Rechnung_003_202610043.pdf",
+      "sha256": "a7e2a628754d5ce4c0337528e5606d165abb178eb72a31e39aff4391e48af948",
+      "bytes": 7957,
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f04_kontaktblock/Rechnungen/Rechnung_004_202610044.pdf",
+      "sha256": "9a106905ea4d7477db212a8f9376755a25c6655a0277bc81cd5aa5894c90d01b",
+      "bytes": 8218,
+      "rolle": "holdout",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f04_kontaktblock/Rechnungen/Rechnung_005_202610095.pdf",
+      "sha256": "b9103a5780e46b1ef4567ee5464e3db8ba4f3ecbd6dbcbc9e00c1536f9569278",
+      "bytes": 7725,
+      "rolle": "holdout-fehler",
+      "fehler": "pruefen_ohne_leistungsdatum",
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f04_kontaktblock/Rechnungen/Rechnung_006_ohne-Nummer.pdf",
+      "sha256": "fcf61ccc8a06ce60eec14ad9612dea8b3fb6c3d5e186bc608f32d4bf4c3d3dbd",
+      "bytes": 7814,
+      "rolle": "holdout-fehler",
+      "fehler": "rechnungsnummer_fehlt",
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f04_kontaktblock/Referenzdaten/Rechnung_001_202610091.json",
+      "sha256": "b9af9be3045930dc9d4b1e1ce0bd00a8807e3c913883fb47e38c06d339b03012",
+      "bytes": 3858,
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f04_kontaktblock/Referenzdaten/Rechnung_002_202610092.json",
+      "sha256": "5e35a3a697e89d3c9a3acf36fdf4a522ea774344cc937c27db4275a79e15f9d1",
+      "bytes": 4601,
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f04_kontaktblock/Referenzdaten/Rechnung_003_202610043.json",
+      "sha256": "bc3534184fc1bb4d4928de0de719a8588b3c5506e9dc1657156e61d0b13023f7",
+      "bytes": 4211,
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f04_kontaktblock/Referenzdaten/Testfallmatrix.csv",
+      "sha256": "baa98c69f4bbd1c97cb8e3c77cb39e87a33b67b408a1983cc14abd3bc91b52bc",
+      "bytes": 1552,
+      "art": "testfallmatrix"
+    },
+    {
+      "pfad": "f04_kontaktblock/Referenzdaten/holdout/Rechnung_004_202610044.json",
+      "sha256": "e3d2d58c86b6a9bf9ba43fc2c3e5bfeafe0d9d8aff73c502a52ada3210d7bf44",
+      "bytes": 5135,
+      "rolle": "holdout",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f04_kontaktblock/Referenzdaten/holdout/Rechnung_005_202610095.json",
+      "sha256": "414245b1a65a2c99df47d2d03222da7dca0c76db449566272c76b5584fd56890",
+      "bytes": 3767,
+      "rolle": "holdout-fehler",
+      "fehler": "pruefen_ohne_leistungsdatum",
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f04_kontaktblock/Referenzdaten/holdout/Rechnung_006_ohne-Nummer.json",
+      "sha256": "4e87d138cfc34abbc2e4b723649b8b9d580f6bd52dd394e1e0af91da21cb3c6b",
+      "bytes": 4297,
+      "rolle": "holdout-fehler",
+      "fehler": "rechnungsnummer_fehlt",
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f04_kontaktblock/familie.py",
+      "sha256": "9725fc3f8d60ad3499b1c8297ceba294674e3aa04ec7572fa57abe72e24c10c0",
+      "bytes": 9072,
+      "art": "generator"
+    },
+    {
+      "pfad": "f05_versatz/README.md",
+      "sha256": "a2626a03fd96a70e8ff111e659934cdacf6de8f4734a1f3089627c4ee5e61eb2",
+      "bytes": 2223,
+      "art": "doku"
+    },
+    {
+      "pfad": "f05_versatz/Rechnungen/Rechnung_001_RE26-76001.pdf",
+      "sha256": "9a65c64f12248a904fd21a61c58bf63dd1c5f9fab156a1828e6b365f8ab597f5",
+      "bytes": 6605,
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f05_versatz/Rechnungen/Rechnung_002_RE26-30002.pdf",
+      "sha256": "6d7a18a6a58b824f77ad1a76fdb108f2590ee2042863585a9a77b28d2d19c29a",
+      "bytes": 9708,
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f05_versatz/Rechnungen/Rechnung_003_RE26-19003.pdf",
+      "sha256": "a831c0743404f04d7b1326f4a14bec38319b02a94ddfcff8d92b6ceb05476241",
+      "bytes": 6777,
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f05_versatz/Rechnungen/Rechnung_004_RE26-66004.pdf",
+      "sha256": "25061bd9a4f61197867f4a39bd401bc35d8fcc19d0e5424bff4fe496b72f56af",
+      "bytes": 6922,
+      "rolle": "holdout",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f05_versatz/Rechnungen/Rechnung_005_RE26-74005.pdf",
+      "sha256": "b1aaf4e1a349d3cbae041cacfae9a58cac32c10bc50655534eb92c4cd6580bcf",
+      "bytes": 14514,
+      "rolle": "holdout",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f05_versatz/Rechnungen/Rechnung_006_RE26-11006.pdf",
+      "sha256": "8f10438f5a6583a7638ff1f1b18d2fa696bdc647e23e99793f90fcf6a3bfbdaf",
+      "bytes": 6665,
+      "rolle": "holdout-fehler",
+      "fehler": "rechnungsdatum_fehlt",
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f05_versatz/Referenzdaten/Rechnung_001_RE26-76001.json",
+      "sha256": "a7b4503e7e86b23a88591ddea436e4b8421e72dcbce09b3b930fb5b623ebf9af",
+      "bytes": 4340,
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f05_versatz/Referenzdaten/Rechnung_002_RE26-30002.json",
+      "sha256": "5328aaebdbb87e820bcc6f24923a91c3e48af1b987194dfc3f7d72fcd4479411",
+      "bytes": 11974,
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f05_versatz/Referenzdaten/Rechnung_003_RE26-19003.json",
+      "sha256": "2c7aea858652d5ad203db4baf2ceca825f6cd1983ef99374c0c3889ddc0304da",
+      "bytes": 5041,
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f05_versatz/Referenzdaten/Testfallmatrix.csv",
+      "sha256": "b9fc5d768c670a92979aac94ea62f00bbcb0bccd29b8f9556186448b9dfbc64d",
+      "bytes": 1480,
+      "art": "testfallmatrix"
+    },
+    {
+      "pfad": "f05_versatz/Referenzdaten/holdout/Rechnung_004_RE26-66004.json",
+      "sha256": "679bd15588cba8d22256b0527ef2848eaefe1086bb63fab2089b8e07a4d06ec2",
+      "bytes": 5346,
+      "rolle": "holdout",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f05_versatz/Referenzdaten/holdout/Rechnung_005_RE26-74005.json",
+      "sha256": "c5521ac6d7bf5b008966f95387d230637e41c0b3c7ff2275f98ec2d7ebfac604",
+      "bytes": 29297,
+      "rolle": "holdout",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f05_versatz/Referenzdaten/holdout/Rechnung_006_RE26-11006.json",
+      "sha256": "8c29f56d236998a70289728406f3916b7ac360f5d263d7eda423463b9a445aa7",
+      "bytes": 5273,
+      "rolle": "holdout-fehler",
+      "fehler": "rechnungsdatum_fehlt",
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f05_versatz/familie.py",
+      "sha256": "8e60f37ef8f19a6d7b6813319083ff44d7d733e285651674aec096282865c542",
+      "bytes": 11280,
+      "art": "generator"
+    },
+    {
+      "pfad": "f06_schreibmaschine/README.md",
+      "sha256": "b41ca90ea6d8fd7ec133edcba76515e58fc1c6d2e103f9d6bdb3872b1fc61b4f",
+      "bytes": 2044,
+      "art": "doku"
+    },
+    {
+      "pfad": "f06_schreibmaschine/Rechnungen/Rechnung_001_50110.pdf",
+      "sha256": "9a2321a1a4b875f169690a5b762e2e7a8061ef1e1baecd76a5b6a66ea3cc6453",
+      "bytes": 3311,
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f06_schreibmaschine/Rechnungen/Rechnung_002_50210.pdf",
+      "sha256": "7b9d75a760abbb4db0e84181ac41ddf1ea8a64e3ec3bedb4f431b13f9e41c4e6",
+      "bytes": 3980,
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f06_schreibmaschine/Rechnungen/Rechnung_003_40310.pdf",
+      "sha256": "cefb7d57fa5e8373f5e4071d97a2f3286b173eb35a868e35c017e40da7b496f6",
+      "bytes": 6856,
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f06_schreibmaschine/Rechnungen/Rechnung_004_50410.pdf",
+      "sha256": "56995043b3f402b449f4ec04a5bc1ac9baa934f8a1f23c78d364a551c7d6c955",
+      "bytes": 3801,
+      "rolle": "holdout",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f06_schreibmaschine/Rechnungen/Rechnung_005_60510.pdf",
+      "sha256": "b80937a921191c21182cf1fd11344b9aadb26a61e7a8626ea5da528add7873a0",
+      "bytes": 3400,
+      "rolle": "holdout",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f06_schreibmaschine/Rechnungen/Rechnung_006_60611.pdf",
+      "sha256": "4b8edefea916b4ae28947e2bd4dd08799d90f921a07a4115f311f9420d7a4264",
+      "bytes": 3542,
+      "rolle": "holdout-fehler",
+      "fehler": "netto_brutto",
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f06_schreibmaschine/Rechnungen/Rechnung_007_40711.pdf",
+      "sha256": "01a606ee3fa269221aa093680196e34ae1b4bf82dbe94dc5ba7d2dfa028b0383",
+      "bytes": 3491,
+      "rolle": "holdout-falle",
+      "fehler": null,
+      "falle": "zweites_datum",
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f06_schreibmaschine/Referenzdaten/Rechnung_001_50110.json",
+      "sha256": "c811f8d1146f6c373bdc3fbd3bf44d311a23211c67cad64c8326409c20bcf3de",
+      "bytes": 3814,
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f06_schreibmaschine/Referenzdaten/Rechnung_002_50210.json",
+      "sha256": "86f2fc5cd68827286b962816d710491bb7a421d610937ab91edaf001d527e795",
+      "bytes": 5747,
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f06_schreibmaschine/Referenzdaten/Rechnung_003_40310.json",
+      "sha256": "c66e906d7c92c5ebcbbae9294bffd3f5638e5462b375a16a682ac8f5bfee0c83",
+      "bytes": 12073,
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f06_schreibmaschine/Referenzdaten/Testfallmatrix.csv",
+      "sha256": "23cbf6c584207ae979c03e69b62fefa537da11325a743054878470d17fbffaea",
+      "bytes": 1692,
+      "art": "testfallmatrix"
+    },
+    {
+      "pfad": "f06_schreibmaschine/Referenzdaten/holdout/Rechnung_004_50410.json",
+      "sha256": "e27b845ed7bbec5a6e51e09f2ae358a33a8d38ccf2f361a28dd4cb78dd186b1f",
+      "bytes": 5197,
+      "rolle": "holdout",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f06_schreibmaschine/Referenzdaten/holdout/Rechnung_005_60510.json",
+      "sha256": "7fffd90aa644c03d6c82d3a4dfc3a2b4ec5d4d3ffbd9c65af83f8c70a4bda5ec",
+      "bytes": 4070,
+      "rolle": "holdout",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f06_schreibmaschine/Referenzdaten/holdout/Rechnung_006_60611.json",
+      "sha256": "80cdf2d75c5aa333d35a12912157a2b8ecf1717456fe92f0ad842e95e5f53686",
+      "bytes": 5017,
+      "rolle": "holdout-fehler",
+      "fehler": "netto_brutto",
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f06_schreibmaschine/Referenzdaten/holdout/Rechnung_007_40711.json",
+      "sha256": "d48b3ae701b5c3956b919fcd10b83f73a35a97850fb7be9e2e138f1626ac02bb",
+      "bytes": 4686,
+      "rolle": "holdout-falle",
+      "fehler": null,
+      "falle": "zweites_datum",
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f06_schreibmaschine/familie.py",
+      "sha256": "c95dc939c813ae74e5850590c543d58eeef0cb00e046963d4e743a28852bf454",
+      "bytes": 10920,
+      "art": "generator"
+    },
+    {
+      "pfad": "f07_din5008/README.md",
+      "sha256": "4df9c08a9f305554e66c451f6a98441f6359fba1813a65e6e2d32ad547bd9e0f",
+      "bytes": 2200,
+      "art": "doku"
+    },
+    {
+      "pfad": "f07_din5008/Rechnungen/Rechnung_001_INV-2026-00107.pdf",
+      "sha256": "67c4b7ae38a162cb2f176d4c3ff70880d74d917ca466c051e8208ace75683194",
+      "bytes": 5569,
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f07_din5008/Rechnungen/Rechnung_002_INV-2026-00314.pdf",
+      "sha256": "b54b630efe6c0d4ad6f704fee5dcbd9c33a97404dd16d509dbd84aee3eca2fb7",
+      "bytes": 5685,
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f07_din5008/Rechnungen/Rechnung_003_INV-2026-00321.pdf",
+      "sha256": "0b94bf153dde93cd7f652c7649e849c195a0fd31a994bb37b900a211a7da53cf",
+      "bytes": 5632,
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f07_din5008/Rechnungen/Rechnung_004_INV-2026-00228.pdf",
+      "sha256": "d412fdfa47316fd473b3f95de74dbb616a6a68f95cd8a609a3cf41b9877866ae",
+      "bytes": 5882,
+      "rolle": "holdout",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f07_din5008/Rechnungen/Rechnung_005_INV-2026-00235.pdf",
+      "sha256": "84cfffa462b6ff7803352bd8198d128d7191b82dfabb501799b8ecda3997b9b7",
+      "bytes": 5536,
+      "rolle": "holdout-fehler",
+      "fehler": "pruefen_brutto",
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f07_din5008/Rechnungen/Rechnung_006_INV-2026-00342.pdf",
+      "sha256": "ccb7ec7c6ff738a921d1482de4ee84da1bf9e41cc20d92c29be7b25afb03ad22",
+      "bytes": 5632,
+      "rolle": "holdout-fehler",
+      "fehler": "faelligkeit_vor_datum",
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f07_din5008/Referenzdaten/Rechnung_001_INV-2026-00107.json",
+      "sha256": "30facd5df50ea431ca3d598885f239e0b031e7240fff0ef31091f67fb2027a98",
+      "bytes": 3506,
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f07_din5008/Referenzdaten/Rechnung_002_INV-2026-00314.json",
+      "sha256": "3a5e4e61e64c43fb01c7d1d7cb6b300cf977cb209408ff3c90360a1c815329d3",
+      "bytes": 4122,
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f07_din5008/Referenzdaten/Rechnung_003_INV-2026-00321.json",
+      "sha256": "432cd9e4b8314da7c54b9a2b6ff4e9d37af91532aefc1aac3330f099069ae8a9",
+      "bytes": 3793,
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f07_din5008/Referenzdaten/Testfallmatrix.csv",
+      "sha256": "41a17b2d70270528b6612d2efbbac9460b033b5b6d850e53323f11c5538e39ae",
+      "bytes": 1531,
+      "art": "testfallmatrix"
+    },
+    {
+      "pfad": "f07_din5008/Referenzdaten/holdout/Rechnung_004_INV-2026-00228.json",
+      "sha256": "50e84068bf7aba70ac6a50e1655442e14a393facad61d5853c4cf4fff7fcd121",
+      "bytes": 4530,
+      "rolle": "holdout",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f07_din5008/Referenzdaten/holdout/Rechnung_005_INV-2026-00235.json",
+      "sha256": "2c9a72432ea6bede31a7058c62c0e1afb6423be5ebb7ee09970f793a0ff639c9",
+      "bytes": 3848,
+      "rolle": "holdout-fehler",
+      "fehler": "pruefen_brutto",
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f07_din5008/Referenzdaten/holdout/Rechnung_006_INV-2026-00342.json",
+      "sha256": "295946278b7bfbdd797f30aa1b77802fcf3c04ed77562e0a10280c84511eb0b5",
+      "bytes": 4406,
+      "rolle": "holdout-fehler",
+      "fehler": "faelligkeit_vor_datum",
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f07_din5008/familie.py",
+      "sha256": "e8fb176ade629fefd762f69ad06f04160b10866a4922d88fa604cd476375e242",
+      "bytes": 8346,
+      "art": "generator"
+    },
+    {
+      "pfad": "f08_bildkopf/README.md",
+      "sha256": "a076b1bd8010b4fea0a3646880fc61bedab3882c004d48416690288952ce0a37",
+      "bytes": 2195,
+      "art": "doku"
+    },
+    {
+      "pfad": "f08_bildkopf/Rechnungen/Rechnung_001_103701.pdf",
+      "sha256": "8ea32472d7947f0923c9ea8963d002700deb125933b0d7c8406c6189f018bb60",
+      "bytes": 24435,
+      "rolle": "holdout",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f08_bildkopf/Rechnungen/Rechnung_002_103602.pdf",
+      "sha256": "c7624a7dfe5bda58ee88deb451cef31755621f7218c119891e0893f6074761df",
+      "bytes": 24653,
+      "rolle": "holdout",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f08_bildkopf/Rechnungen/Rechnung_003_103603.pdf",
+      "sha256": "3fab1dabb26576516aa0d2256b14fabe8c33883c6c9fc7dd72d14e9628ec0bfd",
+      "bytes": 27861,
+      "rolle": "holdout",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f08_bildkopf/Rechnungen/Rechnung_004_103404.pdf",
+      "sha256": "7cb83a0ad4a3c52b8cdc6f1bac23d8ad137c024e4da020968487093fd8f39648",
+      "bytes": 24239,
+      "rolle": "holdout",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f08_bildkopf/Rechnungen/Rechnung_005_103905.pdf",
+      "sha256": "478b83fc4ac39fa5a6070c5ef749c232aaab16b204cf10d8e885799e86f22640",
+      "bytes": 24812,
+      "rolle": "holdout",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f08_bildkopf/Rechnungen/Rechnung_006_103006.pdf",
+      "sha256": "925beec81e16bff5ce82946cd1e84e081cd650c1fa49b0c559a72593995a4020",
+      "bytes": 24563,
+      "rolle": "holdout-falle",
+      "fehler": null,
+      "falle": "nummer_aehnlich",
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f08_bildkopf/Referenzdaten/Testfallmatrix.csv",
+      "sha256": "04da6b672005a585c6f0124114d0671b6454c4c310b9cce0780cffad1b5a3812",
+      "bytes": 1518,
+      "art": "testfallmatrix"
+    },
+    {
+      "pfad": "f08_bildkopf/Referenzdaten/holdout/Rechnung_001_103701.json",
+      "sha256": "5e1956262203e75a70db27f07216ac74f00d011dd30817e5ae1c637a8824720b",
+      "bytes": 3861,
+      "rolle": "holdout",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f08_bildkopf/Referenzdaten/holdout/Rechnung_002_103602.json",
+      "sha256": "9b3049a081df2d1cec6f44c5f9c7ff6f5fa10edcc52fe2a1de551f7d44a64a32",
+      "bytes": 4600,
+      "rolle": "holdout",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f08_bildkopf/Referenzdaten/holdout/Rechnung_003_103603.json",
+      "sha256": "7bff36d76662a3c81ad5501840eb3a2e8fad54f15de4f364568b46d3239866cc",
+      "bytes": 13209,
+      "rolle": "holdout",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f08_bildkopf/Referenzdaten/holdout/Rechnung_004_103404.json",
+      "sha256": "a5f753be6d283082e5a9bca25a871dfa86f7e148e53cd3ec338d0ed51a4d1794",
+      "bytes": 3460,
+      "rolle": "holdout",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f08_bildkopf/Referenzdaten/holdout/Rechnung_005_103905.json",
+      "sha256": "cc56bdefb6ee80697a66fa933fffe488877f01cf04d359b093ea6108f3077c17",
+      "bytes": 4933,
+      "rolle": "holdout",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f08_bildkopf/Referenzdaten/holdout/Rechnung_006_103006.json",
+      "sha256": "1a4fdcab549efb2858ba6d7284d3fb7fc6933ef81808274fe0c1835be0b59904",
+      "bytes": 4629,
+      "rolle": "holdout-falle",
+      "fehler": null,
+      "falle": "nummer_aehnlich",
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "f08_bildkopf/familie.py",
+      "sha256": "e27332a68b18396af0442c0d3ca3972bea86affa98443ab884a1c7ee96977a7d",
+      "bytes": 11143,
+      "art": "generator"
+    },
+    {
+      "pfad": "f09_steuerspalte/README.md",
+      "sha256": "523aacf4e3e556303f6eabf47f13f3918ee9146e970175038071f96f32ef6444",
+      "bytes": 2456,
+      "art": "doku"
+    },
+    {
+      "pfad": "f09_steuerspalte/Rechnungen/Rechnung_001_2026-48001.pdf",
+      "sha256": "b1751e94535dc059c7eb087f1428ecedf90b3ddd71b345caa25d8d05c497901e",
+      "bytes": 3600,
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": true
+    },
+    {
+      "pfad": "f09_steuerspalte/Rechnungen/Rechnung_002_2026-47002.pdf",
+      "sha256": "d0d5ef74d36eb195c05f1da2d8077d513e56f2eeb7a758a467a2721ea1b7fe31",
+      "bytes": 3373,
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": true
+    },
+    {
+      "pfad": "f09_steuerspalte/Rechnungen/Rechnung_003_2026-48803.pdf",
+      "sha256": "4de5af3ba13549c02e7a861f28b4168e46d2a9a898e7fc1dc6a4f33e009f86bf",
+      "bytes": 3762,
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": true
+    },
+    {
+      "pfad": "f09_steuerspalte/Rechnungen/Rechnung_004_2026-47604.pdf",
+      "sha256": "6dd3eaf6548758816d95544bc2bd5d8d86f81dda751ec90f80f02bb41c7ba504",
+      "bytes": 3666,
+      "rolle": "holdout",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": true
+    },
+    {
+      "pfad": "f09_steuerspalte/Rechnungen/Rechnung_005_2026-48405.pdf",
+      "sha256": "871e51401e72f979e4d07c0493ae647d1597a856a639054b3683e49baa18e103",
+      "bytes": 3547,
+      "rolle": "holdout-fehler",
+      "fehler": "pruefen_ust",
+      "falle": null,
+      "ausserhalb_v1": true
+    },
+    {
+      "pfad": "f09_steuerspalte/Referenzdaten/Rechnung_001_2026-48001.json",
+      "sha256": "93d63860318c307f69714de569b09f0dbf6f299d4123d1e7082b38999f4ca96d",
+      "bytes": 4691,
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": true
+    },
+    {
+      "pfad": "f09_steuerspalte/Referenzdaten/Rechnung_002_2026-47002.json",
+      "sha256": "cdb0afd7730b1d1a1c53ea77d3622f95804b27e31a6a3090fb2b65963c2601b7",
+      "bytes": 4199,
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": true
+    },
+    {
+      "pfad": "f09_steuerspalte/Referenzdaten/Rechnung_003_2026-48803.json",
+      "sha256": "a95074f69a4ce51414935164a8e2b3408585c894df5dff32c9e5c2f85cc08887",
+      "bytes": 5339,
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": true
+    },
+    {
+      "pfad": "f09_steuerspalte/Referenzdaten/Testfallmatrix.csv",
+      "sha256": "9839da6dd35bb2f6daeb4e2d1295e982c345624dfc8821e12e4b929b62acd476",
+      "bytes": 1276,
+      "art": "testfallmatrix"
+    },
+    {
+      "pfad": "f09_steuerspalte/Referenzdaten/holdout/Rechnung_004_2026-47604.json",
+      "sha256": "60b35f83d6a9ef964a0691520dbb6dad261aa023005ec34531a470e161330a49",
+      "bytes": 4892,
+      "rolle": "holdout",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": true
+    },
+    {
+      "pfad": "f09_steuerspalte/Referenzdaten/holdout/Rechnung_005_2026-48405.json",
+      "sha256": "70b0ef20c61d0c9fd3a8b750cfaf29a00eb47a8c13b71f29c1adcd3921398e86",
+      "bytes": 4796,
+      "rolle": "holdout-fehler",
+      "fehler": "pruefen_ust",
+      "falle": null,
+      "ausserhalb_v1": true
+    },
+    {
+      "pfad": "f09_steuerspalte/familie.py",
+      "sha256": "6e1cb8eb9438e279a9e28149093cbd7d25eb352f4c03f55cacbeed25aeb130b7",
+      "bytes": 9259,
+      "art": "generator"
+    },
+    {
+      "pfad": "f10_satztabelle/README.md",
+      "sha256": "26fa29e439292f9630d02e832a6c009aa6081575ce51dfe5e411bc849377d882",
+      "bytes": 2045,
+      "art": "doku"
+    },
+    {
+      "pfad": "f10_satztabelle/Rechnungen/Rechnung_001_RE-20261012-530.pdf",
+      "sha256": "a67003fca3ebb6171554957fc12cd993b1b83d509616a953f41fe3e89e33d6c5",
+      "bytes": 3460,
+      "rolle": "holdout",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": true
+    },
+    {
+      "pfad": "f10_satztabelle/Rechnungen/Rechnung_002_RE-20261015-719.pdf",
+      "sha256": "45410e7fdf783868aa5b8457a7ff584f75b97ecac01283603c7b85fece9881ea",
+      "bytes": 3331,
+      "rolle": "holdout",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": true
+    },
+    {
+      "pfad": "f10_satztabelle/Rechnungen/Rechnung_003_RE-20261019-500.pdf",
+      "sha256": "e7b67b00976a4860d7f774502cf6edc86e83d47a3e8d44484db774333ea5d5bc",
+      "bytes": 3200,
+      "rolle": "holdout",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": true
+    },
+    {
+      "pfad": "f10_satztabelle/Rechnungen/Rechnung_004_RE-20261026-786.pdf",
+      "sha256": "f842bf96e2a61def5c319ec09f2bd61fcf42ddb69ce314af2cab82be76c510c4",
+      "bytes": 3684,
+      "rolle": "holdout",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": true
+    },
+    {
+      "pfad": "f10_satztabelle/Rechnungen/Rechnung_005_RE-20261102-551.pdf",
+      "sha256": "3440e602e5dabda1f79203b1fbb3f3dc0523d1bba98799d3a7c0f6b83020cb2d",
+      "bytes": 3312,
+      "rolle": "holdout",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": true
+    },
+    {
+      "pfad": "f10_satztabelle/Referenzdaten/Testfallmatrix.csv",
+      "sha256": "1602dda63d5ac5cbff4d542f2dd64f590667726548dbcfe27a19ee4556ef8e2e",
+      "bytes": 1270,
+      "art": "testfallmatrix"
+    },
+    {
+      "pfad": "f10_satztabelle/Referenzdaten/holdout/Rechnung_001_RE-20261012-530.json",
+      "sha256": "7f09c4f5820458212b966553ee0c7b562bb0febcf38bde0c6f92c64029804451",
+      "bytes": 4596,
+      "rolle": "holdout",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": true
+    },
+    {
+      "pfad": "f10_satztabelle/Referenzdaten/holdout/Rechnung_002_RE-20261015-719.json",
+      "sha256": "b8c74163f60c19790deb4a9d68c44a6d53b23d037c58ab6621702568405b4336",
+      "bytes": 4218,
+      "rolle": "holdout",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": true
+    },
+    {
+      "pfad": "f10_satztabelle/Referenzdaten/holdout/Rechnung_003_RE-20261019-500.json",
+      "sha256": "fed12d5bbefade16f487351ecf1b94055e3ef54e0c979b8b0e55a4190ef6f4e6",
+      "bytes": 3898,
+      "rolle": "holdout",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": true
+    },
+    {
+      "pfad": "f10_satztabelle/Referenzdaten/holdout/Rechnung_004_RE-20261026-786.json",
+      "sha256": "d8919458a168b24776d7cddca2ed6dfd4d011d19274aa384faf8bf9a25a8e600",
+      "bytes": 5295,
+      "rolle": "holdout",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": true
+    },
+    {
+      "pfad": "f10_satztabelle/Referenzdaten/holdout/Rechnung_005_RE-20261102-551.json",
+      "sha256": "ef90d1fe72eb9bf54d665ff784dc89599aca8e0a670588be699296107017248b",
+      "bytes": 4197,
+      "rolle": "holdout",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": true
+    },
+    {
+      "pfad": "f10_satztabelle/familie.py",
+      "sha256": "821c57e8cdcac80ae87eaf6f73536cf13cd31a850de9cc40184556bf67646924",
+      "bytes": 8165,
+      "art": "generator"
+    }
+  ]
+}

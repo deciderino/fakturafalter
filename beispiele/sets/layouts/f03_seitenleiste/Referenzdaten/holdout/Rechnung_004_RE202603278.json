@@ -1,0 +1,474 @@
+{
+  "datei": "Rechnung_004_RE202603278.pdf",
+  "format": "PDF 1.4 (reportlab), A4, Schrift Helvetica (Standard-14, nicht eingebettet)",
+  "familie": "f03_seitenleiste",
+  "quelle": "Q4",
+  "holdout": true,
+  "split": "holdout",
+  "seller": {
+    "name": "Seeberger Radsport-Teile GmbH",
+    "street": "Gewerbering 27",
+    "postal_code": "86899",
+    "city": "Landsberg am Lech",
+    "ust_id": "DE130722955",
+    "iban": "DE02 0000 0000 0868 9900 50",
+    "bic": "SEEBDEX1LAL",
+    "bank": "Beispiel-Sparkasse Landsberg",
+    "email": "buchhaltung@seeberger-rad.example",
+    "register": "Amtsgericht Augsburg HRB 00000",
+    "ceo": "Korbinian Seeberger"
+  },
+  "buyer": {
+    "name_lines": [
+      "Radsport Ellwanger"
+    ],
+    "street": "Marktplatz 7",
+    "postal_code": "73479",
+    "city": "Ellwangen (Jagst)",
+    "customer_number": "101377"
+  },
+  "invoice": {
+    "number": "RE202603278",
+    "date": "22.10.2026",
+    "service_date": "16.10.2026",
+    "order_number": "",
+    "shipping": ""
+  },
+  "druck": {
+    "datum_format": "TT.MM.JJJJ",
+    "schrift": "Helvetica",
+    "seitenformat": "A4"
+  },
+  "BT-72": "16.10.2026",
+  "BT-119": "19.00",
+  "positions": [
+    {
+      "qty": "10",
+      "unit": "Stk.",
+      "description": [
+        "Bremsscheibe 180 mm, 6-Loch"
+      ],
+      "article_number": "SR-14090",
+      "unit_price": "18.94",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "189.40"
+    },
+    {
+      "qty": "5",
+      "unit": "Stk.",
+      "description": [
+        "Lenkerband, Kork, schwarz,",
+        "Restposten aus Saisonware 2026,",
+        "Rückgabe ausgeschlossen"
+      ],
+      "article_number": "SR-16020",
+      "unit_price": "10.72",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "53.60"
+    },
+    {
+      "qty": "5",
+      "unit": "Stk.",
+      "description": [
+        "Kette 11-fach, 116 Glieder, mit",
+        "Kettenschloss, kompatibel mit",
+        "gängigen Schaltgruppen,"
+      ],
+      "article_number": "SR-12001",
+      "unit_price": "18.09",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "90.45"
+    },
+    {
+      "qty": "5",
+      "unit": "Stk.",
+      "description": [
+        "Lichtset Akku StVZO, Front- und",
+        "Rücklicht"
+      ],
+      "article_number": "SR-20500",
+      "unit_price": "38.75",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "193.75"
+    },
+    {
+      "qty": "3",
+      "unit": "Stk.",
+      "description": [
+        "Sattelstütze 31,6 x 400 mm, Carbon,",
+        "Lieferung erfolgt in Einzelverpackung",
+        "mit EAN-Etikett für den Ladenverkauf"
+      ],
+      "article_number": "SR-17101",
+      "unit_price": "76.25",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "228.75"
+    },
+    {
+      "qty": "2",
+      "unit": "Stk.",
+      "description": [
+        "Faltreifen 29 x 2,35, Tubeless Ready"
+      ],
+      "article_number": "SR-15300",
+      "unit_price": "35.00",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "70.00"
+    },
+    {
+      "qty": "3",
+      "unit": "Std.",
+      "description": [
+        "Werkstattstunde Laufradzentrierung"
+      ],
+      "article_number": "SR-19870",
+      "unit_price": "48.75",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "146.25"
+    },
+    {
+      "qty": "3",
+      "unit": "Stk.",
+      "description": [
+        "Kettenblatt 34 Z., 4-Loch, Aluminium",
+        "schwarz eloxiert"
+      ],
+      "article_number": "SR-11020",
+      "unit_price": "27.50",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "82.50"
+    },
+    {
+      "qty": "50",
+      "unit": "Stk.",
+      "description": [
+        "Schlauch 28\", Sclaverandventil 60",
+        "mm, Lieferung erfolgt in",
+        "Einzelverpackung mit EAN-Etikett für"
+      ],
+      "article_number": "SR-15812",
+      "unit_price": "4.81",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "240.50"
+    },
+    {
+      "qty": "25",
+      "unit": "Stk.",
+      "description": [
+        "Scheibenbremsbeläge organisch,",
+        "Satz, kompatibel mit gängigen",
+        "Schaltgruppen, Montageanleitung"
+      ],
+      "article_number": "SR-13550",
+      "unit_price": "12.96",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "324.00"
+    },
+    {
+      "qty": "12",
+      "unit": "Stk.",
+      "description": [
+        "Kassette 11-fach 11-34 Z."
+      ],
+      "article_number": "SR-11410",
+      "unit_price": "43.25",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "519.00"
+    },
+    {
+      "qty": "20",
+      "unit": "Stk.",
+      "description": [
+        "Schaltzug-Set Edelstahl, beschichtet,",
+        "kompatibel mit gängigen",
+        "Schaltgruppen, Montageanleitung"
+      ],
+      "article_number": "SR-18044",
+      "unit_price": "9.27",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "185.40"
+    },
+    {
+      "qty": "10",
+      "unit": "Stk.",
+      "description": [
+        "Flaschenhalter Aluminium"
+      ],
+      "article_number": "SR-21002",
+      "unit_price": "7.49",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "74.90"
+    },
+    {
+      "qty": "6",
+      "unit": "Stk.",
+      "description": [
+        "Pedal-Paar Plattform, Aluminium,",
+        "kompatibel mit gängigen",
+        "Schaltgruppen, Montageanleitung"
+      ],
+      "article_number": "SR-19003",
+      "unit_price": "43.00",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "258.00"
+    },
+    {
+      "qty": "6",
+      "unit": "Stk.",
+      "description": [
+        "Bremsscheibe 180 mm, 6-Loch"
+      ],
+      "article_number": "SR-14090",
+      "unit_price": "18.94",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "113.64"
+    },
+    {
+      "qty": "10",
+      "unit": "Stk.",
+      "description": [
+        "Lenkerband, Kork, schwarz,",
+        "kompatibel mit gängigen",
+        "Schaltgruppen, Montageanleitung"
+      ],
+      "article_number": "SR-16020",
+      "unit_price": "10.72",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "107.20"
+    },
+    {
+      "qty": "2",
+      "unit": "Stk.",
+      "description": [
+        "Kette 11-fach, 116 Glieder, mit",
+        "Kettenschloss"
+      ],
+      "article_number": "SR-12001",
+      "unit_price": "18.09",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "36.18"
+    },
+    {
+      "qty": "10",
+      "unit": "Stk.",
+      "description": [
+        "Lichtset Akku StVZO, Front- und",
+        "Rücklicht, Restposten aus",
+        "Saisonware 2026, Rückgabe"
+      ],
+      "article_number": "SR-20500",
+      "unit_price": "38.75",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "387.50"
+    },
+    {
+      "qty": "1",
+      "unit": "Stk.",
+      "description": [
+        "Sattelstütze 31,6 x 400 mm, Carbon"
+      ],
+      "article_number": "SR-17101",
+      "unit_price": "76.25",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "76.25"
+    },
+    {
+      "qty": "12",
+      "unit": "Stk.",
+      "description": [
+        "Faltreifen 29 x 2,35, Tubeless Ready"
+      ],
+      "article_number": "SR-15300",
+      "unit_price": "35.00",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "420.00"
+    },
+    {
+      "qty": "3",
+      "unit": "Std.",
+      "description": [
+        "Werkstattstunde Laufradzentrierung,",
+        "kompatibel mit gängigen",
+        "Schaltgruppen, Montageanleitung"
+      ],
+      "article_number": "SR-19870",
+      "unit_price": "48.75",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "146.25"
+    },
+    {
+      "qty": "6",
+      "unit": "Stk.",
+      "description": [
+        "Kettenblatt 34 Z., 4-Loch, Aluminium",
+        "schwarz eloxiert"
+      ],
+      "article_number": "SR-11020",
+      "unit_price": "27.50",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "165.00"
+    },
+    {
+      "qty": "50",
+      "unit": "Stk.",
+      "description": [
+        "Schlauch 28\", Sclaverandventil 60",
+        "mm, Lieferung erfolgt in",
+        "Einzelverpackung mit EAN-Etikett für"
+      ],
+      "article_number": "SR-15812",
+      "unit_price": "4.81",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "240.50"
+    },
+    {
+      "qty": "5",
+      "unit": "Stk.",
+      "description": [
+        "Scheibenbremsbeläge organisch,",
+        "Satz, Lieferung erfolgt in",
+        "Einzelverpackung mit EAN-Etikett für"
+      ],
+      "article_number": "SR-13550",
+      "unit_price": "12.96",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "64.80"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": null,
+  "discount_days": null,
+  "payment_days": 30,
+  "totals": {
+    "net": "4413.82",
+    "vat": "838.63",
+    "gross": "5252.45"
+  },
+  "totals_printed": {
+    "net": "4413.82",
+    "vat": "838.63",
+    "gross": "5252.45"
+  },
+  "payment": {
+    "discount_date": null,
+    "due_date": "21.11.2026",
+    "discount_amount": null,
+    "discount_base": null
+  },
+  "payment_terms_text": [
+    "Zahlungsziel: 30 Tage"
+  ],
+  "page_count": 2,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14
+      ],
+      "transfer": "2656.50",
+      "carry_forward": null,
+      "summary_present": false
+    },
+    {
+      "page": 2,
+      "position_indices": [
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24
+      ],
+      "transfer": null,
+      "carry_forward": "2656.50",
+      "summary_present": true
+    }
+  ],
+  "erwarteter_status": "ok",
+  "erwartete_hinweise": [],
+  "kosit": null,
+  "verapdf": null,
+  "validierung_hinweis": "lokal nicht validierbar / spätere Phase (KoSIT/veraPDF prüfen die App-Ausgabe, nicht diese PDFs)",
+  "korrekturen": null,
+  "korrekturen_hinweis": "erst beim echten Anlernen messbar",
+  "test_flags": {
+    "address_name_lines": 1,
+    "po_box": false,
+    "multi_line_positions": 16,
+    "shipping_position": false,
+    "page_format": "A4",
+    "payment": "netto",
+    "pruefen": null,
+    "missing_order_number": true,
+    "note": "Hold-out: 2 Seiten, Übertrag",
+    "bearbeiter": "Theresa Gail",
+    "auftragsnummer": "20210221",
+    "versandart": "Postpaket"
+  },
+  "sha256": "c970b38d9652b9bd19f5bbdf9a85e70ca86a9784b8fcabcc7ec1411389a05e4e"
+}

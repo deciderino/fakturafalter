@@ -1,0 +1,174 @@
+{
+  "datei": "Rechnung_006_INV-2026-00342.pdf",
+  "format": "PDF 1.4 (reportlab), A4, Schrift Helvetica (Standard-14, nicht eingebettet)",
+  "familie": "f07_din5008",
+  "quelle": "Q9",
+  "holdout": true,
+  "split": "holdout",
+  "seller": {
+    "name": "Nordlicht Software GmbH",
+    "street": "Holtenauer Straße 88",
+    "postal_code": "24105",
+    "city": "Kiel",
+    "ust_id": "DE298110463",
+    "iban": "DE10 0000 0000 0090 1177 36",
+    "bic": "NORLDEX1KIE",
+    "bank": "Beispielbank Kiel",
+    "email": "buchhaltung@nordlicht-software.example",
+    "register": "HRB 00000 KI",
+    "ceo": "Henrike Jansen"
+  },
+  "buyer": {
+    "name_lines": [
+      "Agentur Lichtblick GmbH"
+    ],
+    "street": "Friedrichstraße 133",
+    "postal_code": "10117",
+    "city": "Berlin",
+    "customer_number": ""
+  },
+  "invoice": {
+    "number": "INV/2026/00342",
+    "date": "09.11.2026",
+    "service_date": "09.11.2026",
+    "order_number": "BE-2026239",
+    "shipping": ""
+  },
+  "druck": {
+    "datum_format": "TT.MM.JJJJ",
+    "schrift": "Helvetica",
+    "seitenformat": "A4"
+  },
+  "BT-72": "09.11.2026",
+  "BT-119": "19.00",
+  "positions": [
+    {
+      "qty": "3",
+      "unit": "Std.",
+      "description": [
+        "Schulung Anwender (online)"
+      ],
+      "article_number": "NL-DL-02",
+      "unit_price": "89.50",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "268.50"
+    },
+    {
+      "qty": "5",
+      "unit": "Stk.",
+      "description": [
+        "Lizenz Terminplaner Pro, 12 Monate"
+      ],
+      "article_number": "NL-LIZ-01",
+      "unit_price": "31.25",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "156.25"
+    },
+    {
+      "qty": "3.5",
+      "unit": "Std.",
+      "description": [
+        "Anpassung Druckvorlagen"
+      ],
+      "article_number": "NL-DL-03",
+      "unit_price": "106.25",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "371.88"
+    },
+    {
+      "qty": "4",
+      "unit": "Std.",
+      "description": [
+        "Projektleitung, Abrechnungszeitraum laut Vertrag,",
+        "Verlängerung automatisch um zwölf Monate"
+      ],
+      "article_number": "NL-DL-04",
+      "unit_price": "120.00",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "480.00"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": null,
+  "discount_days": null,
+  "payment_days": 30,
+  "totals": {
+    "net": "1276.63",
+    "vat": "242.56",
+    "gross": "1519.19"
+  },
+  "totals_printed": {
+    "net": "1276.63",
+    "vat": "242.56",
+    "gross": "1519.19"
+  },
+  "payment": {
+    "discount_date": null,
+    "due_date": "10.10.2026",
+    "discount_amount": null,
+    "discount_base": null
+  },
+  "payment_terms_text": [
+    "Zahlungsbedingungen: 30 Tage"
+  ],
+  "page_count": 1,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "transfer": null,
+      "carry_forward": null,
+      "summary_present": true
+    }
+  ],
+  "erwarteter_status": "fehler",
+  "erwartete_hinweise": [
+    "FEHLER [BT-9] Fälligkeitsdatum (BT-9) 10.10.2026 liegt vor dem Rechnungsdatum."
+  ],
+  "kosit": null,
+  "verapdf": null,
+  "validierung_hinweis": "lokal nicht validierbar / spätere Phase (KoSIT/veraPDF prüfen die App-Ausgabe, nicht diese PDFs)",
+  "korrekturen": null,
+  "korrekturen_hinweis": "erst beim echten Anlernen messbar",
+  "test_flags": {
+    "address_name_lines": 1,
+    "po_box": false,
+    "multi_line_positions": 1,
+    "shipping_position": false,
+    "page_format": "A4",
+    "payment": "netto",
+    "pruefen": null,
+    "missing_order_number": false,
+    "note": "Hold-out FEHLER: Fälligkeitsdatum = Rechnungsdatum − 30 Tage",
+    "quelle": "S00690"
+  },
+  "rolle": "holdout-fehler",
+  "moegliche_folgehinweise": [],
+  "fehlerart": "faelligkeit_vor_datum",
+  "fehler_beschreibung": "Fälligkeitsdatum = Rechnungsdatum − Zahlungsziel, liegt vor dem Rechnungsdatum (Vorzeichenfehler); sonst alles richtig",
+  "falle": null,
+  "falle_beschreibung": null,
+  "fehler_detail": {
+    "faellig_gedruckt": "10.10.2026",
+    "rechnungsdatum": "09.11.2026"
+  },
+  "totals_berechnet": {
+    "net": "1276.63",
+    "vat": "242.56",
+    "gross": "1519.19"
+  },
+  "sha256": "ccb7ec7c6ff738a921d1482de4ee84da1bf9e41cc20d92c29be7b25afb03ad22"
+}

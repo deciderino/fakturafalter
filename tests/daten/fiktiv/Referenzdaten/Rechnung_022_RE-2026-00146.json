@@ -1,0 +1,255 @@
+{
+  "datei": "Rechnung_022_RE-2026-00146.pdf",
+  "format": "PDF/A-2b",
+  "seller": {
+    "name": "Alberon Industriekomponenten GmbH",
+    "street": "Prüfwerkstraße 18",
+    "postal_code": "09111",
+    "city": "Chemnitz",
+    "ust_id": "DE123456789",
+    "iban": "DE89 3704 0044 0532 0130 00",
+    "bic": "COBADEFFXXX",
+    "bank": "Commerzbank AG",
+    "email": "rechnung@alberon.example",
+    "register": "Amtsgericht Chemnitz, HRB 999999",
+    "ceo": "Markus Seidel"
+  },
+  "buyer": {
+    "name_lines": [
+      "Nordhafen Präzisionsbau GmbH"
+    ],
+    "street": "Prüferweg 8",
+    "postal_code": "20095",
+    "city": "Hamburg",
+    "customer_number": "1042"
+  },
+  "invoice": {
+    "number": "RE-2026-00146",
+    "date": "11.09.2026",
+    "service_date": "10.09.2026",
+    "order_number": "AB-2026-0335",
+    "shipping": "GO!"
+  },
+  "positions": [
+    {
+      "qty": 250,
+      "unit": "Stk.",
+      "description": [
+        "Formstück 236705"
+      ],
+      "unit_price": "46.80",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "11700.00"
+    },
+    {
+      "qty": 20,
+      "unit": "Stk.",
+      "description": [
+        "Montagewinkel 297986"
+      ],
+      "unit_price": null,
+      "kind": "without_price",
+      "price_unit": "/1",
+      "total": null
+    },
+    {
+      "qty": 75,
+      "unit": "Stk.",
+      "description": [
+        "Montagewinkel 942740"
+      ],
+      "unit_price": null,
+      "kind": "without_price",
+      "price_unit": "/1",
+      "total": null
+    },
+    {
+      "qty": 1,
+      "unit": "Std.",
+      "description": [
+        "Montageschiene 686190"
+      ],
+      "unit_price": null,
+      "kind": "without_price",
+      "price_unit": "/1",
+      "total": null
+    },
+    {
+      "qty": 1,
+      "unit": "Stk.",
+      "description": [
+        "Gesamtpreis Auftrag 2027-254"
+      ],
+      "unit_price": "600.00",
+      "kind": "flat_rate",
+      "price_unit": "/1",
+      "total": "600.00"
+    },
+    {
+      "qty": 250,
+      "unit": "Stk.",
+      "description": [
+        "Montagewinkel 707815"
+      ],
+      "unit_price": "18.75",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "4687.50"
+    },
+    {
+      "qty": 1,
+      "unit": "Std.",
+      "description": [
+        "Aluminiumgehäuse 225691"
+      ],
+      "unit_price": "1250.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "1250.50"
+    },
+    {
+      "qty": 75,
+      "unit": "Stk.",
+      "description": [
+        "Montagearbeit 493205"
+      ],
+      "unit_price": null,
+      "kind": "without_price",
+      "price_unit": "/1",
+      "total": null
+    },
+    {
+      "qty": 1,
+      "unit": "Stk.",
+      "description": [
+        "Fixpreis Auftrag 2026-820"
+      ],
+      "unit_price": "195.00",
+      "kind": "flat_rate",
+      "price_unit": "/1",
+      "total": "195.00"
+    },
+    {
+      "qty": 50,
+      "unit": "Std.",
+      "description": [
+        "Gehäusedeckel 925546",
+        "Werkstoff EN AW-5083"
+      ],
+      "unit_price": null,
+      "kind": "without_price",
+      "price_unit": "/1",
+      "total": null
+    },
+    {
+      "qty": 50,
+      "unit": "Stk.",
+      "description": [
+        "Abdeckprofil 143386"
+      ],
+      "unit_price": null,
+      "kind": "without_price",
+      "price_unit": "/1",
+      "total": null
+    },
+    {
+      "qty": 1,
+      "unit": "Stk.",
+      "description": [
+        "Pauschalpreis Auftrag 2028-481"
+      ],
+      "unit_price": "1750.00",
+      "kind": "flat_rate",
+      "price_unit": "/1",
+      "total": "1750.00"
+    },
+    {
+      "qty": 2,
+      "unit": "Stk.",
+      "description": [
+        "Gehäusedeckel 24795"
+      ],
+      "unit_price": "65.00",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "130.00"
+    },
+    {
+      "qty": 1000,
+      "unit": "Stk.",
+      "description": [
+        "Adapterplatte 218404"
+      ],
+      "unit_price": "3.90",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "3900.00"
+    },
+    {
+      "qty": 3,
+      "unit": "Stk.",
+      "description": [
+        "Montageschiene 800505"
+      ],
+      "unit_price": "180.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "541.50"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": null,
+  "discount_days": null,
+  "payment_days": 30,
+  "totals": {
+    "net": "24754.50",
+    "vat": "4703.36",
+    "gross": "29457.86"
+  },
+  "payment": {
+    "discount_date": null,
+    "due_date": "11.10.2026",
+    "discount_amount": null
+  },
+  "page_count": 1,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "line_count": 16,
+      "transfer": null,
+      "summary_present": true,
+      "payment_block_present": true
+    }
+  ],
+  "test_flags": {
+    "address_name_lines": 1,
+    "missing_order_number": false,
+    "shipping_empty": false,
+    "discount_applied": false,
+    "blank_unit_flat_rate": false,
+    "without_price_count": 6,
+    "flat_rate_count": 3,
+    "two_three_line_positions": 1,
+    "four_five_line_positions": 0,
+    "has_qty_thousands": true
+  },
+  "sha256": "c14fa5ca8a86b6bc5b2c7c307f67e5a2eb1716ca8d50f7f0926948e1686766e0"
+}

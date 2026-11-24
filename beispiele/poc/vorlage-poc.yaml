@@ -1,0 +1,53 @@
+# PDF-Vorlage für den Proof of Concept – passt zu TM-2026-0042.pdf (erfundene Daten)
+# Das PDF liefert nur das Sichtbild; die Daten kommen aus der CSV. Die Vorlage dient dazu,
+# das PDF zu erkennen, über die Rechnungsnummer mit der CSV zu paaren und Summen gegenzuprüfen.
+# Koordinaten: Punkt (1/72 Zoll), Ursprung OBEN LINKS, A4 = 595 x 842
+vorlage: poc-tischlerei-druck
+version: 1
+beschreibung: "PoC: Rechnungsdruck Tischlerei Muster GmbH (A4, Helvetica)"
+
+erkennung:
+  enthaelt_text: ["Tischlerei Muster GmbH", "Rechnungsnr.:"]
+  seitengroesse: A4
+
+trennung:
+  neue_rechnung_wenn:
+    - feld_wechselt: BT-1
+  pruefe_vollstaendig:
+    muster: 'Seite:\s+(?P<seite>\d+) von (?P<von>\d+)'
+
+felder:
+  BT-1:         {anker: "Rechnungsnr.:", wert: rechts, muster: 'TM-\d{4}-\d{4}', alle_seiten_gleich: true}
+  BT-2:         {anker: "Datum:", wert: rechts, typ: datum, format: "%d.%m.%Y"}
+  kundennummer: {anker: "Kunden-Nr.:", wert: rechts, muster: 'K-\d{4}'}
+  BT-72:        {anker: "Leistungsdatum:", wert: rechts, typ: datum, format: "%d.%m.%Y", optional: true}
+  BT-13:        {anker: "Ihre Bestellung:", wert: rechts, optional: true}
+
+positionen:
+  start_nach_zeile: '^Pos\s+Art\.-Nr\.'
+  ende_vor_zeile: ['Nettobetrag']
+  bereich_bis_top: 740
+  spalten:
+    BT-126:  {links_ab: 45,  bis: 74}
+    BT-155:  {links_ab: 75,  bis: 149}
+    BT-153:  {links_ab: 150, rest_bis_naechste_spalte: true}
+    BT-129:  {rechte_kante: 390, toleranz: 3, typ: zahl}
+    BT-130:  {links_ab: 396, bis: 425, mapping: einheiten}
+    BT-146:  {rechte_kante: 475, toleranz: 3, typ: zahl}
+    gesamt_kontrolle: {rechte_kante: 535, toleranz: 3, typ: zahl, zweck: pruefung}
+    steuer:  {links_ab: 545, bis: 575, mapping: steuer}
+  neue_position_wenn: BT-126 gefuellt
+
+kontrolle:
+  BT-109: {anker: "Nettobetrag", wert: rechts, typ: zahl}
+  BT-112: {anker: "Gesamtbetrag EUR", wert: rechts, typ: zahl}
+
+zahlen: {dezimal: ",", tausender: "."}
+
+mappings:
+  einheiten: {Stk: C62, Std: HUR, m: MTR, psch: LS}
+  steuer:
+    A: {BT-151: S, BT-152: 19}
+    B: {BT-151: S, BT-152: 7}
+
+verkaeufer: {name: Tischlerei Muster GmbH}   # nur, falls das PDF ohne CSV kommt (dann ohnehin Prüfansicht)

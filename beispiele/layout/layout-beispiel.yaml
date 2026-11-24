@@ -1,0 +1,160 @@
+# Layout-Vorlage (Layouteditor, Fakturafalter 0.7.0) – alle Daten fiktiv.
+# Einsetzen als Block „layout:“ in konfiguration.yaml; Pfade relativ zur Konfiguration.
+layout:
+  version: 1
+  raster: 5.0
+  raster_an: true
+  logo: layout/logo.png
+  seite1:
+    bausteine:
+      logo:
+        x: 140.0
+        y: 14.0
+        breite: 50.0
+        hoehe: 20.0
+        ausrichtung: rechts
+        sichtbar: true
+        ebene: 0
+      absender:
+        x: 20.0
+        y: 14.0
+        breite: 115.0
+        hoehe: 20.0
+        schrift: 9.0
+        ausrichtung: links
+      empfaenger:
+        x: 115.0
+        y: 42.0
+        breite: 75.0
+        hoehe: 40.0
+        schrift: 10.0
+        ausrichtung: links
+      kopf:
+        x: 20.0
+        y: 42.0
+        breite: 80.0
+        hoehe: 52.0
+        schrift: 9.0
+      positionen:
+        x: 20.0
+        y: 100.0
+        breite: 170.0
+        hoehe: 120.0
+        schrift: 9.0
+      summen:
+        x: 20.0
+        y: 224.0
+        breite: 85.0
+        hoehe: 34.0
+        schrift: 9.0
+      zahlung:
+        x: 115.0
+        y: 224.0
+        breite: 75.0
+        hoehe: 34.0
+        schrift: 9.0
+        ausrichtung: links
+        sichtbar: true
+        ebene: 1
+      hinweise:
+        x: 20.0
+        y: 260.0
+        breite: 170.0
+        hoehe: 12.0
+        schrift: 7.0
+        ausrichtung: links
+        sichtbar: true
+        ebene: 2
+      fusszeile:
+        x: 20.0
+        y: 276.0
+        breite: 170.0
+        hoehe: 12.0
+        schrift: 7.0
+        ausrichtung: links
+    felder:
+    - art: text
+      kennung: text1
+      x: 20.0
+      y: 244.0
+      breite: 85.0
+      hoehe: 12.0
+      schrift: 9.0
+      ausrichtung: links
+      sichtbar: true
+      ebene: 3
+      text: 'Vielen Dank für Ihren Auftrag!
+
+        Ihr Team der Musterwerk GmbH'
+    - art: bild
+      kennung: bild1
+      x: 160.0
+      y: 240.0
+      breite: 30.0
+      hoehe: 16.0
+      ausrichtung: rechts
+      sichtbar: true
+      ebene: 4
+      datei: layout/logo.png
+    briefpapier: layout/briefpapier-seite1.pdf
+  folgeseite:
+    bausteine:
+      logo:
+        x: 150.0
+        y: 12.0
+        breite: 40.0
+        hoehe: 16.0
+        ausrichtung: rechts
+        sichtbar: true
+        ebene: 0
+      absender:
+        x: 20.0
+        y: 14.0
+        breite: 120.0
+        hoehe: 20.0
+        schrift: 9.0
+        ausrichtung: links
+      kopf:
+        x: 20.0
+        y: 36.0
+        breite: 65.0
+        hoehe: 26.0
+        schrift: 9.0
+      positionen:
+        x: 20.0
+        y: 66.0
+        breite: 170.0
+        hoehe: 154.0
+        schrift: 9.0
+      summen:
+        x: 20.0
+        y: 224.0
+        breite: 85.0
+        hoehe: 34.0
+        schrift: 9.0
+      zahlung:
+        x: 115.0
+        y: 224.0
+        breite: 75.0
+        hoehe: 34.0
+        schrift: 9.0
+        ausrichtung: links
+        sichtbar: true
+        ebene: 1
+      hinweise:
+        x: 20.0
+        y: 260.0
+        breite: 170.0
+        hoehe: 12.0
+        schrift: 7.0
+        ausrichtung: links
+        sichtbar: true
+        ebene: 2
+      fusszeile:
+        x: 20.0
+        y: 276.0
+        breite: 170.0
+        hoehe: 12.0
+        schrift: 7.0
+        ausrichtung: links
+    briefpapier: layout/briefpapier-folgeseite.pdf

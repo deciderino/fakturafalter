@@ -1,0 +1,158 @@
+{
+  "datei": "Rechnung_003_INV-2026-00321.pdf",
+  "format": "PDF 1.4 (reportlab), A4, Schrift Helvetica (Standard-14, nicht eingebettet)",
+  "familie": "f07_din5008",
+  "quelle": "Q9",
+  "holdout": false,
+  "split": "training",
+  "seller": {
+    "name": "Nordlicht Software GmbH",
+    "street": "Holtenauer Straße 88",
+    "postal_code": "24105",
+    "city": "Kiel",
+    "ust_id": "DE298110463",
+    "iban": "DE10 0000 0000 0090 1177 36",
+    "bic": "NORLDEX1KIE",
+    "bank": "Beispielbank Kiel",
+    "email": "buchhaltung@nordlicht-software.example",
+    "register": "HRB 00000 KI",
+    "ceo": "Henrike Jansen"
+  },
+  "buyer": {
+    "name_lines": [
+      "Landratsamt Musterhausen",
+      "Sachgebiet IT"
+    ],
+    "street": "Bahnhofplatz 2",
+    "postal_code": "84028",
+    "city": "Landshut",
+    "customer_number": ""
+  },
+  "invoice": {
+    "number": "INV/2026/00321",
+    "date": "20.10.2026",
+    "service_date": "17.10.2026",
+    "order_number": "BE-2026089",
+    "shipping": ""
+  },
+  "druck": {
+    "datum_format": "TT.MM.JJJJ",
+    "schrift": "Helvetica",
+    "seitenformat": "A4"
+  },
+  "BT-72": "17.10.2026",
+  "BT-119": "19.00",
+  "positions": [
+    {
+      "qty": "1.5",
+      "unit": "Std.",
+      "description": [
+        "Schulung Anwender (online)"
+      ],
+      "article_number": "NL-DL-02",
+      "unit_price": "78.25",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "117.38"
+    },
+    {
+      "qty": "1",
+      "unit": "Std.",
+      "description": [
+        "Anpassung Druckvorlagen"
+      ],
+      "article_number": "NL-DL-03",
+      "unit_price": "96.25",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "96.25"
+    },
+    {
+      "qty": "2",
+      "unit": "Stk.",
+      "description": [
+        "Kartenleser USB für eGK"
+      ],
+      "article_number": "NL-HW-01",
+      "unit_price": "58.50",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "117.00"
+    },
+    {
+      "qty": "2",
+      "unit": "Std.",
+      "description": [
+        "Einrichtung und Datenübernahme, gemäß Ticket",
+        "und Freigabe durch die Praxisleitung"
+      ],
+      "article_number": "NL-DL-01",
+      "unit_price": "87.75",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "175.50"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": null,
+  "discount_days": null,
+  "payment_days": 21,
+  "totals": {
+    "net": "506.13",
+    "vat": "96.16",
+    "gross": "602.29"
+  },
+  "totals_printed": {
+    "net": "506.13",
+    "vat": "96.16",
+    "gross": "602.29"
+  },
+  "payment": {
+    "discount_date": null,
+    "due_date": "10.11.2026",
+    "discount_amount": null,
+    "discount_base": null
+  },
+  "payment_terms_text": [
+    "Zahlungsbedingungen: 21 Tage"
+  ],
+  "page_count": 1,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "transfer": null,
+      "carry_forward": null,
+      "summary_present": true
+    }
+  ],
+  "erwarteter_status": "ok",
+  "erwartete_hinweise": [],
+  "kosit": null,
+  "verapdf": null,
+  "validierung_hinweis": "lokal nicht validierbar / spätere Phase (KoSIT/veraPDF prüfen die App-Ausgabe, nicht diese PDFs)",
+  "korrekturen": null,
+  "korrekturen_hinweis": "erst beim echten Anlernen messbar",
+  "test_flags": {
+    "address_name_lines": 2,
+    "po_box": false,
+    "multi_line_positions": 1,
+    "shipping_position": false,
+    "page_format": "A4",
+    "payment": "netto",
+    "pruefen": null,
+    "missing_order_number": false,
+    "note": "Behörde mit Sachgebiet als 2. Namenszeile",
+    "quelle": "S00578"
+  },
+  "sha256": "0b94bf153dde93cd7f652c7649e849c195a0fd31a994bb37b900a211a7da53cf"
+}

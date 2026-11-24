@@ -1,0 +1,230 @@
+{
+  "datei": "Rechnung_004_RE26-66004.pdf",
+  "format": "PDF 1.4 (reportlab), A4, Schrift Helvetica (Standard-14, nicht eingebettet)",
+  "familie": "f05_versatz",
+  "quelle": "Q5",
+  "holdout": true,
+  "split": "holdout",
+  "seller": {
+    "name": "Kerber Bürobedarf GmbH",
+    "street": "Stadtgraben 17",
+    "postal_code": "94315",
+    "city": "Straubing",
+    "ust_id": "DE139055215",
+    "iban": "DE87 0000 0000 0752 0099 15",
+    "bic": "KERBDEX1STR",
+    "bank": "Beispielbank Niederbayern",
+    "email": "service@kerber-buero.example",
+    "register": "Amtsgericht Straubing HRB 0000",
+    "ceo": "Thomas Kerber"
+  },
+  "buyer": {
+    "name_lines": [
+      "Kita Sonnenblume e. V.",
+      "Vorstand",
+      "z. Hd. Frau Brückner"
+    ],
+    "street": "Gartenweg 2",
+    "postal_code": "34246",
+    "city": "Vellmar",
+    "customer_number": "K10112"
+  },
+  "invoice": {
+    "number": "RE26-66004",
+    "date": "26.10.2026",
+    "service_date": "24.10.2026",
+    "order_number": "",
+    "shipping": ""
+  },
+  "druck": {
+    "datum_format": "TT.MM.JJJJ",
+    "schrift": "Helvetica",
+    "seitenformat": "A4"
+  },
+  "BT-72": "24.10.2026",
+  "BT-119": "19.00",
+  "positions": [
+    {
+      "qty": "10",
+      "unit": "Stk.",
+      "description": [
+        "Recyclingpapier A4 80 g, 500 Blatt"
+      ],
+      "article_number": "100251",
+      "unit_price": "5.00",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "50.00"
+    },
+    {
+      "qty": "1",
+      "unit": "Std.",
+      "description": [
+        "Einrichtung Druckerfreigabe vor Ort"
+      ],
+      "article_number": "190900",
+      "unit_price": "82.50",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "82.50"
+    },
+    {
+      "qty": "100",
+      "unit": "Stk.",
+      "description": [
+        "Kugelschreiber blau, Druckmechanik, FSC-zertifiziert,",
+        "chlorfrei gebleicht"
+      ],
+      "article_number": "120013",
+      "unit_price": "0.56",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "56.00"
+    },
+    {
+      "qty": "5",
+      "unit": "Stk.",
+      "description": [
+        "Trennblätter A4, 100 Stück"
+      ],
+      "article_number": "110520",
+      "unit_price": "4.41",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "22.05"
+    },
+    {
+      "qty": "1",
+      "unit": "Stk.",
+      "description": [
+        "Hängeregistratur A4, 25 Stück"
+      ],
+      "article_number": "170210",
+      "unit_price": "11.30",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "11.30"
+    },
+    {
+      "qty": "10",
+      "unit": "Stk.",
+      "description": [
+        "Archivkarton für 5 Ordner"
+      ],
+      "article_number": "170200",
+      "unit_price": "3.77",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "37.70"
+    },
+    {
+      "qty": "2",
+      "unit": "Stk.",
+      "description": [
+        "Whiteboard-Marker 4er-Set, Lieferung in Teilmengen nach",
+        "Abruf"
+      ],
+      "article_number": "180001",
+      "unit_price": "5.17",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "10.34"
+    },
+    {
+      "qty": "2",
+      "unit": "Stk.",
+      "description": [
+        "Tintenpatronen Multipack 4-farbig"
+      ],
+      "article_number": "140002",
+      "unit_price": "34.75",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "69.50"
+    },
+    {
+      "qty": "3",
+      "unit": "Stk.",
+      "description": [
+        "Etiketten 70 × 37 mm, 2400 Stück"
+      ],
+      "article_number": "160060",
+      "unit_price": "19.03",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "57.09"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": null,
+  "discount_days": null,
+  "payment_days": 10,
+  "totals": {
+    "net": "396.48",
+    "vat": "75.33",
+    "gross": "471.81"
+  },
+  "totals_printed": {
+    "net": "396.48",
+    "vat": "75.33",
+    "gross": "471.81"
+  },
+  "payment": {
+    "discount_date": null,
+    "due_date": "05.11.2026",
+    "discount_amount": null,
+    "discount_base": null
+  },
+  "payment_terms_text": [
+    "Zahlungsziel: 10 Tage"
+  ],
+  "page_count": 1,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "transfer": null,
+      "carry_forward": null,
+      "summary_present": true
+    }
+  ],
+  "erwarteter_status": "ok",
+  "erwartete_hinweise": [],
+  "kosit": null,
+  "verapdf": null,
+  "validierung_hinweis": "lokal nicht validierbar / spätere Phase (KoSIT/veraPDF prüfen die App-Ausgabe, nicht diese PDFs)",
+  "korrekturen": null,
+  "korrekturen_hinweis": "erst beim echten Anlernen messbar",
+  "test_flags": {
+    "address_name_lines": 3,
+    "po_box": false,
+    "multi_line_positions": 2,
+    "shipping_position": false,
+    "page_format": "A4",
+    "payment": "netto",
+    "pruefen": null,
+    "missing_order_number": true,
+    "note": "Hold-out: 3 Namenszeilen",
+    "auftragsnummer": "AU103699"
+  },
+  "sha256": "25061bd9a4f61197867f4a39bd401bc35d8fcc19d0e5424bff4fe496b72f56af"
+}

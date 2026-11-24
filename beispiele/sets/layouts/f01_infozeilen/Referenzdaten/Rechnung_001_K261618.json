@@ -1,0 +1,174 @@
+{
+  "datei": "Rechnung_001_K261618.pdf",
+  "format": "PDF 1.4 (reportlab), A4, Schrift Helvetica (Standard-14, nicht eingebettet)",
+  "familie": "f01_infozeilen",
+  "quelle": "Q1",
+  "holdout": false,
+  "split": "training",
+  "seller": {
+    "name": "Kaltwasser Armaturen GmbH",
+    "street": "Lindenallee 4",
+    "postal_code": "34117",
+    "city": "Kassel",
+    "ust_id": "DE271831041",
+    "iban": "DE30 0000 0000 0041 1700 12",
+    "bic": "KALTDEX1XXX",
+    "bank": "Beispielbank Kassel",
+    "email": "info@kaltwasser.example",
+    "register": "Amtsgericht Kassel HRB 00000",
+    "ceo": "Henrike Kaltwasser"
+  },
+  "buyer": {
+    "name_lines": [
+      "Habicht Gebäudetechnik GmbH"
+    ],
+    "street": "Ostring 14",
+    "postal_code": "44787",
+    "city": "Bochum",
+    "customer_number": "10231"
+  },
+  "invoice": {
+    "number": "K261618",
+    "date": "07.10.2026",
+    "service_date": "07.10.2026",
+    "order_number": "379553",
+    "shipping": "",
+    "date_printed": "07.10.26"
+  },
+  "druck": {
+    "datum_format": "TT.MM.JJ",
+    "schrift": "Helvetica",
+    "seitenformat": "A4"
+  },
+  "BT-72": "07.10.2026",
+  "BT-119": "19.00",
+  "positions": [
+    {
+      "qty": "20",
+      "unit": "Stk.",
+      "description": [
+        "Thermostatkopf weiß, Fühler eingebaut"
+      ],
+      "article_number": "TH-5100-WS",
+      "unit_price": "14.46",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "289.20"
+    },
+    {
+      "qty": "10",
+      "unit": "Stk.",
+      "description": [
+        "Rückflussverhinderer DN20 Rotguss"
+      ],
+      "article_number": "RV-2020-RG",
+      "unit_price": "30.25",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "302.50"
+    },
+    {
+      "qty": "3",
+      "unit": "Stk.",
+      "description": [
+        "Kugelhahn DN15 Messing vernickelt, mit",
+        "Entleerung und Kappe, Gewinde nach DIN EN"
+      ],
+      "article_number": "KH-1015-MS",
+      "unit_price": "9.64",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "28.92"
+    },
+    {
+      "qty": "5",
+      "unit": "Stk.",
+      "description": [
+        "Strangregulierventil DN15"
+      ],
+      "article_number": "SV-6015-MS",
+      "unit_price": "45.50",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "227.50"
+    },
+    {
+      "qty": "1",
+      "unit": "Stk.",
+      "description": [
+        "Versand und Verpackung"
+      ],
+      "article_number": "V-13KG",
+      "unit_price": "11.90",
+      "kind": "shipping",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "11.90"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": "2.00",
+  "discount_days": 10,
+  "payment_days": 30,
+  "totals": {
+    "net": "860.02",
+    "vat": "163.40",
+    "gross": "1023.42"
+  },
+  "totals_printed": {
+    "net": "860.02",
+    "vat": "163.40",
+    "gross": "1023.42"
+  },
+  "payment": {
+    "discount_date": "17.10.2026",
+    "due_date": "06.11.2026",
+    "discount_amount": "20.47",
+    "discount_base": "gross"
+  },
+  "payment_terms_text": [
+    "10 Tage 2% Skonto, 30 Tage ohne Abzug"
+  ],
+  "page_count": 1,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "transfer": null,
+      "carry_forward": null,
+      "summary_present": true
+    }
+  ],
+  "erwarteter_status": "ok",
+  "erwartete_hinweise": [],
+  "kosit": null,
+  "verapdf": null,
+  "validierung_hinweis": "lokal nicht validierbar / spätere Phase (KoSIT/veraPDF prüfen die App-Ausgabe, nicht diese PDFs)",
+  "korrekturen": null,
+  "korrekturen_hinweis": "erst beim echten Anlernen messbar",
+  "test_flags": {
+    "address_name_lines": 1,
+    "po_box": false,
+    "multi_line_positions": 1,
+    "shipping_position": true,
+    "page_format": "A4",
+    "payment": "skonto",
+    "pruefen": null,
+    "missing_order_number": false,
+    "note": "einzeilige Anschrift, 2% Skonto 10 Tage, Versandposition",
+    "bearbeiter": "Ilka Brosowski",
+    "auftragsnummer": "O1829",
+    "komission": "Ersatzteile Pumpenhaus"
+  },
+  "sha256": "2cda4ff2a18773bb6637eb0a414c97553131618bcbe17cb4944b63e65e5508f8"
+}

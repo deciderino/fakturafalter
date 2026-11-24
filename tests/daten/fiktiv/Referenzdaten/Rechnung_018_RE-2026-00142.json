@@ -1,0 +1,164 @@
+{
+  "datei": "Rechnung_018_RE-2026-00142.pdf",
+  "format": "PDF/A-2b",
+  "seller": {
+    "name": "Alberon Industriekomponenten GmbH",
+    "street": "Prüfwerkstraße 18",
+    "postal_code": "09111",
+    "city": "Chemnitz",
+    "ust_id": "DE123456789",
+    "iban": "DE89 3704 0044 0532 0130 00",
+    "bic": "COBADEFFXXX",
+    "bank": "Commerzbank AG",
+    "email": "rechnung@alberon.example",
+    "register": "Amtsgericht Chemnitz, HRB 999999",
+    "ceo": "Markus Seidel"
+  },
+  "buyer": {
+    "name_lines": [
+      "Brückenfeld Profiltechnik AG",
+      "Werkstoffabteilung"
+    ],
+    "street": "Allee der Technik 9",
+    "postal_code": "28195",
+    "city": "Bremen",
+    "customer_number": "42617"
+  },
+  "invoice": {
+    "number": "RE-2026-00142",
+    "date": "04.09.2026",
+    "service_date": "21.08.2026",
+    "order_number": "PO/2026/3608",
+    "shipping": "EXW"
+  },
+  "positions": [
+    {
+      "qty": 125,
+      "unit": "Stk.",
+      "description": [
+        "Bearbeitung 295614",
+        "Kanten nach Zeichnung entgraten",
+        "Sondermaß nach Zeichnung 2026-18",
+        "Ausführung Serie B2",
+        "Prüfmaß 0,02 mm berücksichtigen"
+      ],
+      "unit_price": "14.99",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "1873.75"
+    },
+    {
+      "qty": 3,
+      "unit": "Std.",
+      "description": [
+        "Montagearbeit 680422"
+      ],
+      "unit_price": "65.00",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "195.00"
+    },
+    {
+      "qty": 10000,
+      "unit": "Stk.",
+      "description": [
+        "Distanzhülse 770232",
+        "Sondermaß nach Zeichnung 2026-18"
+      ],
+      "unit_price": "2.35",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "23500.00"
+    },
+    {
+      "qty": 8,
+      "unit": "Stk.",
+      "description": [
+        "Montageschiene 657633"
+      ],
+      "unit_price": "12.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "100.00"
+    },
+    {
+      "qty": 1250,
+      "unit": "Stk.",
+      "description": [
+        "Abdeckprofil 288135"
+      ],
+      "unit_price": "7.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "9375.00"
+    },
+    {
+      "qty": 75,
+      "unit": "Stk.",
+      "description": [
+        "CNC-Nacharbeit 692266"
+      ],
+      "unit_price": "4.75",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "356.25"
+    },
+    {
+      "qty": 15,
+      "unit": "Stk.",
+      "description": [
+        "Aufnahmeflansch 628978"
+      ],
+      "unit_price": "12.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "187.50"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": null,
+  "discount_days": null,
+  "payment_days": 30,
+  "totals": {
+    "net": "35587.50",
+    "vat": "6761.63",
+    "gross": "42349.13"
+  },
+  "payment": {
+    "discount_date": null,
+    "due_date": "04.10.2026",
+    "discount_amount": null
+  },
+  "page_count": 1,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "line_count": 12,
+      "transfer": null,
+      "summary_present": true,
+      "payment_block_present": true
+    }
+  ],
+  "test_flags": {
+    "address_name_lines": 2,
+    "missing_order_number": false,
+    "shipping_empty": false,
+    "discount_applied": false,
+    "blank_unit_flat_rate": false,
+    "without_price_count": 0,
+    "flat_rate_count": 0,
+    "two_three_line_positions": 1,
+    "four_five_line_positions": 1,
+    "has_qty_thousands": true
+  },
+  "sha256": "a30dab3923420838a6a6f761a7d85db86b7d6c7abaad063ff6e9a8da998c5ba6"
+}

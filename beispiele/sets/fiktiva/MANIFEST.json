@@ -1,0 +1,900 @@
+{
+  "set": "fiktiva",
+  "version": "1.0.0",
+  "eingefroren": true,
+  "seed": 264711,
+  "generator": "beispiele/sets/fiktiva/erzeuge.py",
+  "aufruf": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python beispiele/sets/fiktiva/erzeuge.py",
+  "abhaengigkeiten": [
+    "src/fakturafalter/pflichtpruefung.py (Selbstcheck)"
+  ],
+  "umgebung": {
+    "python": "3.13.18",
+    "reportlab": "5.1.0",
+    "pillow": "13.0.0",
+    "pdfplumber": "0.11.10",
+    "hinweis": "Neulauf mit dieser Umgebung ist byte-gleich zu den Hashes unten"
+  },
+  "inhalt_commit": "b6eafd377965fcc0a3ff8c871878b85119bb1ec2",
+  "inhalt_commit_hinweis": "Commit, der Generator und Belege dieser Version enthält; MANIFEST.json selbst liegt in einem eigenen Commit danach",
+  "erzeugt_am": "2026-11-20T08:13:22+00:00",
+  "pfade_relativ_zu": "beispiele/sets/fiktiva/",
+  "rollen": {
+    "anlernen": "Trainings-Split (fehlerfrei): Anlernen/Tunen; der Benchmark lernt mit den ersten --lernen Belegen und misst den Rest",
+    "nachlesen": "mit dem angelernten Profil nachlesen (fehlerfrei)",
+    "holdout": "nur messen, nie tunen (fehlerfrei)",
+    "holdout-fehler": "nur messen; Druck enthält genau einen absichtlichen Fehler (erwarteter_status fehler bzw. prüfen)",
+    "holdout-falle": "nur messen; fachlich korrekt, mit Ablenker für False Positives (erwarteter_status ok)"
+  },
+  "anzahl": {
+    "belege": 30,
+    "anlernen": 16,
+    "holdout": 8,
+    "holdout-falle": 2,
+    "holdout-fehler": 4,
+    "ausserhalb_v1": 0
+  },
+  "hinweis": "Hold-out-JSON in Referenzdaten/holdout/. Fehler- und Fallenbelege 025–030 seit A1 (20.11.2026).",
+  "belege": [
+    {
+      "pdf": "Rechnungen/Rechnung_001_FA-26-10312.pdf",
+      "soll": "Referenzdaten/Rechnung_001_FA-26-10312.json",
+      "rechnungsnummer": "FA-26-10312",
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false,
+      "erwarteter_status": "ok"
+    },
+    {
+      "pdf": "Rechnungen/Rechnung_002_FA-26-10315.pdf",
+      "soll": "Referenzdaten/Rechnung_002_FA-26-10315.json",
+      "rechnungsnummer": "FA-26-10315",
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false,
+      "erwarteter_status": "ok"
+    },
+    {
+      "pdf": "Rechnungen/Rechnung_003_FA-26-10323.pdf",
+      "soll": "Referenzdaten/Rechnung_003_FA-26-10323.json",
+      "rechnungsnummer": "FA-26-10323",
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false,
+      "erwarteter_status": "ok"
+    },
+    {
+      "pdf": "Rechnungen/Rechnung_004_FA-26-10329.pdf",
+      "soll": "Referenzdaten/Rechnung_004_FA-26-10329.json",
+      "rechnungsnummer": "FA-26-10329",
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false,
+      "erwarteter_status": "ok"
+    },
+    {
+      "pdf": "Rechnungen/Rechnung_005_FA-26-10340.pdf",
+      "soll": "Referenzdaten/Rechnung_005_FA-26-10340.json",
+      "rechnungsnummer": "FA-26-10340",
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false,
+      "erwarteter_status": "ok"
+    },
+    {
+      "pdf": "Rechnungen/Rechnung_006_FA-26-10343.pdf",
+      "soll": "Referenzdaten/Rechnung_006_FA-26-10343.json",
+      "rechnungsnummer": "FA-26-10343",
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false,
+      "erwarteter_status": "ok"
+    },
+    {
+      "pdf": "Rechnungen/Rechnung_008_FA-26-10356.pdf",
+      "soll": "Referenzdaten/Rechnung_008_FA-26-10356.json",
+      "rechnungsnummer": "FA-26-10356",
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false,
+      "erwarteter_status": "ok"
+    },
+    {
+      "pdf": "Rechnungen/Rechnung_009_FA-26-10366.pdf",
+      "soll": "Referenzdaten/Rechnung_009_FA-26-10366.json",
+      "rechnungsnummer": "FA-26-10366",
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false,
+      "erwarteter_status": "ok"
+    },
+    {
+      "pdf": "Rechnungen/Rechnung_011_FA-26-10380.pdf",
+      "soll": "Referenzdaten/Rechnung_011_FA-26-10380.json",
+      "rechnungsnummer": "FA-26-10380",
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false,
+      "erwarteter_status": "ok"
+    },
+    {
+      "pdf": "Rechnungen/Rechnung_012_FA-26-10387.pdf",
+      "soll": "Referenzdaten/Rechnung_012_FA-26-10387.json",
+      "rechnungsnummer": "FA-26-10387",
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false,
+      "erwarteter_status": "ok"
+    },
+    {
+      "pdf": "Rechnungen/Rechnung_014_FA-26-10401.pdf",
+      "soll": "Referenzdaten/Rechnung_014_FA-26-10401.json",
+      "rechnungsnummer": "FA-26-10401",
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false,
+      "erwarteter_status": "ok"
+    },
+    {
+      "pdf": "Rechnungen/Rechnung_016_FA-26-10412.pdf",
+      "soll": "Referenzdaten/Rechnung_016_FA-26-10412.json",
+      "rechnungsnummer": "FA-26-10412",
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false,
+      "erwarteter_status": "ok"
+    },
+    {
+      "pdf": "Rechnungen/Rechnung_017_FA-26-10419.pdf",
+      "soll": "Referenzdaten/Rechnung_017_FA-26-10419.json",
+      "rechnungsnummer": "FA-26-10419",
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false,
+      "erwarteter_status": "ok"
+    },
+    {
+      "pdf": "Rechnungen/Rechnung_018_FA-26-10428.pdf",
+      "soll": "Referenzdaten/Rechnung_018_FA-26-10428.json",
+      "rechnungsnummer": "FA-26-10428",
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false,
+      "erwarteter_status": "ok"
+    },
+    {
+      "pdf": "Rechnungen/Rechnung_020_FA-26-10443.pdf",
+      "soll": "Referenzdaten/Rechnung_020_FA-26-10443.json",
+      "rechnungsnummer": "FA-26-10443",
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false,
+      "erwarteter_status": "ok"
+    },
+    {
+      "pdf": "Rechnungen/Rechnung_022_FA-26-10458.pdf",
+      "soll": "Referenzdaten/Rechnung_022_FA-26-10458.json",
+      "rechnungsnummer": "FA-26-10458",
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false,
+      "erwarteter_status": "ok"
+    },
+    {
+      "pdf": "Rechnungen/Rechnung_007_FA-26-10351.pdf",
+      "soll": "Referenzdaten/holdout/Rechnung_007_FA-26-10351.json",
+      "rechnungsnummer": "FA-26-10351",
+      "rolle": "holdout",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false,
+      "erwarteter_status": "ok"
+    },
+    {
+      "pdf": "Rechnungen/Rechnung_010_FA-26-10372.pdf",
+      "soll": "Referenzdaten/holdout/Rechnung_010_FA-26-10372.json",
+      "rechnungsnummer": "FA-26-10372",
+      "rolle": "holdout",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false,
+      "erwarteter_status": "ok"
+    },
+    {
+      "pdf": "Rechnungen/Rechnung_013_FA-26-10396.pdf",
+      "soll": "Referenzdaten/holdout/Rechnung_013_FA-26-10396.json",
+      "rechnungsnummer": "FA-26-10396",
+      "rolle": "holdout",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false,
+      "erwarteter_status": "ok"
+    },
+    {
+      "pdf": "Rechnungen/Rechnung_015_FA-26-10410.pdf",
+      "soll": "Referenzdaten/holdout/Rechnung_015_FA-26-10410.json",
+      "rechnungsnummer": "FA-26-10410",
+      "rolle": "holdout",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false,
+      "erwarteter_status": "ok"
+    },
+    {
+      "pdf": "Rechnungen/Rechnung_019_FA-26-10437.pdf",
+      "soll": "Referenzdaten/holdout/Rechnung_019_FA-26-10437.json",
+      "rechnungsnummer": "FA-26-10437",
+      "rolle": "holdout",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false,
+      "erwarteter_status": "ok"
+    },
+    {
+      "pdf": "Rechnungen/Rechnung_021_FA-26-10449.pdf",
+      "soll": "Referenzdaten/holdout/Rechnung_021_FA-26-10449.json",
+      "rechnungsnummer": "FA-26-10449",
+      "rolle": "holdout",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false,
+      "erwarteter_status": "ok"
+    },
+    {
+      "pdf": "Rechnungen/Rechnung_023_FA-26-10464.pdf",
+      "soll": "Referenzdaten/holdout/Rechnung_023_FA-26-10464.json",
+      "rechnungsnummer": "FA-26-10464",
+      "rolle": "holdout",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false,
+      "erwarteter_status": "ok"
+    },
+    {
+      "pdf": "Rechnungen/Rechnung_024_FA-26-10468.pdf",
+      "soll": "Referenzdaten/holdout/Rechnung_024_FA-26-10468.json",
+      "rechnungsnummer": "FA-26-10468",
+      "rolle": "holdout",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false,
+      "erwarteter_status": "ok"
+    },
+    {
+      "pdf": "Rechnungen/Rechnung_025_FA-26-10475.pdf",
+      "soll": "Referenzdaten/holdout/Rechnung_025_FA-26-10475.json",
+      "rechnungsnummer": "FA-26-10475",
+      "rolle": "holdout-fehler",
+      "fehler": "zeile",
+      "falle": null,
+      "ausserhalb_v1": false,
+      "erwarteter_status": "fehler"
+    },
+    {
+      "pdf": "Rechnungen/Rechnung_026_FA-26-10486.pdf",
+      "soll": "Referenzdaten/holdout/Rechnung_026_FA-26-10486.json",
+      "rechnungsnummer": "FA-26-10486",
+      "rolle": "holdout-fehler",
+      "fehler": "ust_betrag",
+      "falle": null,
+      "ausserhalb_v1": false,
+      "erwarteter_status": "fehler"
+    },
+    {
+      "pdf": "Rechnungen/Rechnung_027_FA-26-10491.pdf",
+      "soll": "Referenzdaten/holdout/Rechnung_027_FA-26-10491.json",
+      "rechnungsnummer": "FA-26-10491",
+      "rolle": "holdout-fehler",
+      "fehler": "iban_pruefziffer",
+      "falle": null,
+      "ausserhalb_v1": false,
+      "erwarteter_status": "fehler"
+    },
+    {
+      "pdf": "Rechnungen/Rechnung_028_FA-26-10496.pdf",
+      "soll": "Referenzdaten/holdout/Rechnung_028_FA-26-10496.json",
+      "rechnungsnummer": "FA-26-10496",
+      "rolle": "holdout-fehler",
+      "fehler": "faelligkeit_vor_datum",
+      "falle": null,
+      "ausserhalb_v1": false,
+      "erwarteter_status": "fehler"
+    },
+    {
+      "pdf": "Rechnungen/Rechnung_029_FA-26-10504.pdf",
+      "soll": "Referenzdaten/holdout/Rechnung_029_FA-26-10504.json",
+      "rechnungsnummer": "FA-26-10504",
+      "rolle": "holdout-falle",
+      "fehler": null,
+      "falle": "lieferschein_nr",
+      "ausserhalb_v1": false,
+      "erwarteter_status": "ok"
+    },
+    {
+      "pdf": "Rechnungen/Rechnung_030_FA-26-10510.pdf",
+      "soll": "Referenzdaten/holdout/Rechnung_030_FA-26-10510.json",
+      "rechnungsnummer": "FA-26-10510",
+      "rolle": "holdout-falle",
+      "fehler": null,
+      "falle": "hinweis_betrag",
+      "ausserhalb_v1": false,
+      "erwarteter_status": "ok"
+    }
+  ],
+  "dateien": [
+    {
+      "pfad": "README.md",
+      "sha256": "d840f2c4470d9ec420377eddcc3f7d3a97969ea42692c41bb2118dd67772d9d4",
+      "bytes": 13137,
+      "art": "doku"
+    },
+    {
+      "pfad": "Rechnungen/Rechnung_001_FA-26-10312.pdf",
+      "sha256": "ff93d5cb4ad2874059c547a3512f9b0e1711c75c490e1e8f99747b1b70625aa2",
+      "bytes": 43176,
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "Rechnungen/Rechnung_002_FA-26-10315.pdf",
+      "sha256": "7919dd2138b822984916cc3ce72fd53bd7fd3f65ecb23f686254e5811b56cf82",
+      "bytes": 43328,
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "Rechnungen/Rechnung_003_FA-26-10323.pdf",
+      "sha256": "18b6089dcc66e792cce3f5a66ace9f6b964c0ac54ab0a6eaf375221373bf0334",
+      "bytes": 43627,
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "Rechnungen/Rechnung_004_FA-26-10329.pdf",
+      "sha256": "5948def033ca135aadeb7d0627bf1bbb28bf165ca98cf55898e707de6d56ecdf",
+      "bytes": 43236,
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "Rechnungen/Rechnung_005_FA-26-10340.pdf",
+      "sha256": "7d8e2771ec41d79b5aa53fb9aa0d6f6322dd8dc332975d98695ea5cff533c087",
+      "bytes": 43439,
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "Rechnungen/Rechnung_006_FA-26-10343.pdf",
+      "sha256": "32ab6780ed5b5a264510b4f901163eb049775c46ed9f1669b7da365f8803cd1b",
+      "bytes": 43350,
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "Rechnungen/Rechnung_007_FA-26-10351.pdf",
+      "sha256": "5aa549a84d4cf00afd72ca38f17a360e57f120922af1f4a2e4328446d1f32875",
+      "bytes": 43714,
+      "rolle": "holdout",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "Rechnungen/Rechnung_008_FA-26-10356.pdf",
+      "sha256": "062f6894f513e36c280d2e04d1b5c18b519550b2646ca2b33f0d441d3039e240",
+      "bytes": 47419,
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "Rechnungen/Rechnung_009_FA-26-10366.pdf",
+      "sha256": "fa03d580ed8b59cd193eca146407951e623463f0fa9078d561bb1cba8970f102",
+      "bytes": 47563,
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "Rechnungen/Rechnung_010_FA-26-10372.pdf",
+      "sha256": "7c546569a73eae37d73bdebe3605668fd40fc05533e7d6c6cd961926fcc75e46",
+      "bytes": 46962,
+      "rolle": "holdout",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "Rechnungen/Rechnung_011_FA-26-10380.pdf",
+      "sha256": "6e5f6baf5bd706750576c99f44ad902af4ac662a8f5c66ad75893c57a8a6e0ad",
+      "bytes": 44378,
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "Rechnungen/Rechnung_012_FA-26-10387.pdf",
+      "sha256": "26cdf00c116db7f56108444bcb7e1b0aed71ce679e06256ad6a6fbb0e846db63",
+      "bytes": 44599,
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "Rechnungen/Rechnung_013_FA-26-10396.pdf",
+      "sha256": "5bf91bf62d5083865a4a695e59c57dd75ad652bbf82dd4c622bc907fbd86e1ba",
+      "bytes": 43474,
+      "rolle": "holdout",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "Rechnungen/Rechnung_014_FA-26-10401.pdf",
+      "sha256": "b679e5afa97bf3111dd77b2f8ba34fe43f82ea47d6f55ab5cecf5b3d32adfb83",
+      "bytes": 51481,
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "Rechnungen/Rechnung_015_FA-26-10410.pdf",
+      "sha256": "d8ee15a095649e771125083780324f05ae26c48150b75268da9e835f0656b8f1",
+      "bytes": 50639,
+      "rolle": "holdout",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "Rechnungen/Rechnung_016_FA-26-10412.pdf",
+      "sha256": "d5be23656f613143a6e6a0fbd2ed3ca723b315eac00448a84239b5dfcf957907",
+      "bytes": 46676,
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "Rechnungen/Rechnung_017_FA-26-10419.pdf",
+      "sha256": "78c080689250d6b8881094cf24cce85fde32c37ac03c0809c3926805ce1be3f1",
+      "bytes": 43331,
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "Rechnungen/Rechnung_018_FA-26-10428.pdf",
+      "sha256": "51b373737ccd570f2e169bd948397701c54674b7d4284b4ccb2788cc740e34fb",
+      "bytes": 48001,
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "Rechnungen/Rechnung_019_FA-26-10437.pdf",
+      "sha256": "dc15673ccefc41d4ff94fec018dd767ed8a430408037bf7923b10dfd77d54fa2",
+      "bytes": 43840,
+      "rolle": "holdout",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "Rechnungen/Rechnung_020_FA-26-10443.pdf",
+      "sha256": "0b9675cd7655787be0f01088d84922a03956096ba2726cad16161ea23a43b81d",
+      "bytes": 46680,
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "Rechnungen/Rechnung_021_FA-26-10449.pdf",
+      "sha256": "d9439b9e18e022387311860df70aa64666c9dc922fee4789af135a4101d76754",
+      "bytes": 43377,
+      "rolle": "holdout",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "Rechnungen/Rechnung_022_FA-26-10458.pdf",
+      "sha256": "2e3dd5cb4c04ede421be27bb5102f7fae8cdab257e7dd7cc0d3a9083e67b510d",
+      "bytes": 44104,
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "Rechnungen/Rechnung_023_FA-26-10464.pdf",
+      "sha256": "a8543ee810dd63dcf23180bddc8d721493beaf0648ab59f3fbdd394edbd325df",
+      "bytes": 47676,
+      "rolle": "holdout",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "Rechnungen/Rechnung_024_FA-26-10468.pdf",
+      "sha256": "53f3d99e2e669456f6b6753a9aef84db303022e9344163ebcba68f778f4d595f",
+      "bytes": 43296,
+      "rolle": "holdout",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "Rechnungen/Rechnung_025_FA-26-10475.pdf",
+      "sha256": "f606943982c48d4e0b20769f68f584677b4a7d335a3a7e68937afdef02ae124c",
+      "bytes": 43562,
+      "rolle": "holdout-fehler",
+      "fehler": "zeile",
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "Rechnungen/Rechnung_026_FA-26-10486.pdf",
+      "sha256": "0fd48f130f163ef2511446541b224dbf118de27c7da7f2871280d3a247b4fa9d",
+      "bytes": 43298,
+      "rolle": "holdout-fehler",
+      "fehler": "ust_betrag",
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "Rechnungen/Rechnung_027_FA-26-10491.pdf",
+      "sha256": "9be7135d8b282726819ce6b971ac5483ab6011eb545451eb3f4d395e23b114f7",
+      "bytes": 46875,
+      "rolle": "holdout-fehler",
+      "fehler": "iban_pruefziffer",
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "Rechnungen/Rechnung_028_FA-26-10496.pdf",
+      "sha256": "f9578d94846ff1c2bfa5c8a0d11c8f296251bb1f8afee88f8818d833564fec99",
+      "bytes": 43213,
+      "rolle": "holdout-fehler",
+      "fehler": "faelligkeit_vor_datum",
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "Rechnungen/Rechnung_029_FA-26-10504.pdf",
+      "sha256": "ad0671251e20ac7c4ac1810780b8cc4a76de679a99c9f56e4466005202917436",
+      "bytes": 43656,
+      "rolle": "holdout-falle",
+      "fehler": null,
+      "falle": "lieferschein_nr",
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "Rechnungen/Rechnung_030_FA-26-10510.pdf",
+      "sha256": "26b30fd4b856219dc4abe149d2a3598c9ca625f66d6301dd05bc799daab68171",
+      "bytes": 43503,
+      "rolle": "holdout-falle",
+      "fehler": null,
+      "falle": "hinweis_betrag",
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "Referenzdaten/Rechnung_001_FA-26-10312.json",
+      "sha256": "788b80dab5a7b93ee311e2b2ae776dffe0ac9d847f1d7f7f81154012ddaa4ccd",
+      "bytes": 3122,
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "Referenzdaten/Rechnung_002_FA-26-10315.json",
+      "sha256": "b7a010594e67c8dcc2b3fae67ec1cf8ccd24c9368feb6d71acdb86a086a8d396",
+      "bytes": 3531,
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "Referenzdaten/Rechnung_003_FA-26-10323.json",
+      "sha256": "63d67613f903ad1100d68d383d3c787aee4b23e8e0516c1ff59506f033d0aee7",
+      "bytes": 3831,
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "Referenzdaten/Rechnung_004_FA-26-10329.json",
+      "sha256": "caaa146858923bc3ca24eab5a74f263da05e72beb70403ef80340532aa57d186",
+      "bytes": 3575,
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "Referenzdaten/Rechnung_005_FA-26-10340.json",
+      "sha256": "6554cf18835c456b79127bbbfd1e3541a9d34420f0f8252e0f4595930d42e93b",
+      "bytes": 4027,
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "Referenzdaten/Rechnung_006_FA-26-10343.json",
+      "sha256": "ec948bcadd1d1bfdc2bc14282efa9ac359e35b71fdd3b4ac68cb1d6a6b71d06d",
+      "bytes": 4629,
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "Referenzdaten/Rechnung_008_FA-26-10356.json",
+      "sha256": "9b93cdeb9f3bda90ca70e6cfa15109b9b11e5b13d46ef97381765f95fa168f7e",
+      "bytes": 10259,
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "Referenzdaten/Rechnung_009_FA-26-10366.json",
+      "sha256": "6552b2c0d2e91bec601b31977100c0d8fabaa540cde46c4d22d8cd7e68104643",
+      "bytes": 10780,
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "Referenzdaten/Rechnung_011_FA-26-10380.json",
+      "sha256": "334522ea045405bb9e7568ac1499a76852e07fe2721e70c5e965a4fa5e0b502c",
+      "bytes": 7361,
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "Referenzdaten/Rechnung_012_FA-26-10387.json",
+      "sha256": "45e74c6a238fc807224e5be51be4f4b782092f2477d027bb0ea1b6c05282132c",
+      "bytes": 6889,
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "Referenzdaten/Rechnung_014_FA-26-10401.json",
+      "sha256": "23bc65d2d1fb01ac66ba4921d6460067634997e30709f3223af3dbe62a93cfd1",
+      "bytes": 17533,
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "Referenzdaten/Rechnung_016_FA-26-10412.json",
+      "sha256": "e05e9ac22b51442895c9df529dec0fa6fa08d5f8a07bcd6edb9752f6fea4e09f",
+      "bytes": 9871,
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "Referenzdaten/Rechnung_017_FA-26-10419.json",
+      "sha256": "8756f1efbd95a86a3ec53d6bc64646318f61011f794c28cab324f37015a3c8f7",
+      "bytes": 3787,
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "Referenzdaten/Rechnung_018_FA-26-10428.json",
+      "sha256": "a4917df519755dc7f03e8f9464fd8c868a8949a16148489c60d254c7072fac12",
+      "bytes": 13910,
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "Referenzdaten/Rechnung_020_FA-26-10443.json",
+      "sha256": "258cf0b225e4a96552486d253cac28ba09f39b5cb2cab52b16ed09a67b1f75fb",
+      "bytes": 9076,
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "Referenzdaten/Rechnung_022_FA-26-10458.json",
+      "sha256": "829e58e206ccd2610543465018610b5204df8817089562e908e2ff33c55956b9",
+      "bytes": 6772,
+      "rolle": "anlernen",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "Referenzdaten/Testfallmatrix.csv",
+      "sha256": "93faea384a1f299eb07cd32cfb195d87e19b3386e50062249df843ebff851f0c",
+      "bytes": 8637,
+      "art": "testfallmatrix"
+    },
+    {
+      "pfad": "Referenzdaten/holdout/Rechnung_007_FA-26-10351.json",
+      "sha256": "f3ff67c39003ba19c15d59bb2ee0400f39fa5f171a44a50e1d717a9dd71f6632",
+      "bytes": 4229,
+      "rolle": "holdout",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "Referenzdaten/holdout/Rechnung_010_FA-26-10372.json",
+      "sha256": "f0d476d683497825faf995b490a57158648ededbb3088ade9dba0e03658a9437",
+      "bytes": 10753,
+      "rolle": "holdout",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "Referenzdaten/holdout/Rechnung_013_FA-26-10396.json",
+      "sha256": "aed8a3e69bc1f2b63521bc0a348caf86afc566499c0a30b7219572552131f278",
+      "bytes": 4072,
+      "rolle": "holdout",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "Referenzdaten/holdout/Rechnung_015_FA-26-10410.json",
+      "sha256": "6e08fa1cfbf7981429d34f327db7e3888746d9573c107bab7e3bbd63dac8de9d",
+      "bytes": 17010,
+      "rolle": "holdout",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "Referenzdaten/holdout/Rechnung_019_FA-26-10437.json",
+      "sha256": "4f0bada7dd4384b17b490852ff3fc08db1b2f2e5429aef7bfb9049b8c3484b9f",
+      "bytes": 4034,
+      "rolle": "holdout",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "Referenzdaten/holdout/Rechnung_021_FA-26-10449.json",
+      "sha256": "a3e57b956564f44dcb33f038c353acb83d298a7e75f3306aac3126e19d4f424f",
+      "bytes": 3610,
+      "rolle": "holdout",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "Referenzdaten/holdout/Rechnung_023_FA-26-10464.json",
+      "sha256": "6d72cd2687ce90e2bda424e1f61f39bcc1a7fde6024400c6580e37dbcbb04cd5",
+      "bytes": 14180,
+      "rolle": "holdout",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "Referenzdaten/holdout/Rechnung_024_FA-26-10468.json",
+      "sha256": "b067b6ea5076c5287f220bc54374436592528a8c7d0ef6bae1565647ebf719a0",
+      "bytes": 3741,
+      "rolle": "holdout",
+      "fehler": null,
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "Referenzdaten/holdout/Rechnung_025_FA-26-10475.json",
+      "sha256": "a032027ff7db731912dfe9620db11bf0025cd781625849c7b08b25eed65957fd",
+      "bytes": 5194,
+      "rolle": "holdout-fehler",
+      "fehler": "zeile",
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "Referenzdaten/holdout/Rechnung_026_FA-26-10486.json",
+      "sha256": "f3de1241fd43b32a4b585cbe5e7b3b4e16e76378320d3a48404ebeb6642f9dab",
+      "bytes": 4563,
+      "rolle": "holdout-fehler",
+      "fehler": "ust_betrag",
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "Referenzdaten/holdout/Rechnung_027_FA-26-10491.json",
+      "sha256": "ca2a3b625a583de3e7d20649e131641a1aa0655583f86614e3b0286dd64675ac",
+      "bytes": 10779,
+      "rolle": "holdout-fehler",
+      "fehler": "iban_pruefziffer",
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "Referenzdaten/holdout/Rechnung_028_FA-26-10496.json",
+      "sha256": "f5611de5cb30f961751f16836b67d7d387ed475a9eb3fcdb5e102d1bf98fc405",
+      "bytes": 4066,
+      "rolle": "holdout-fehler",
+      "fehler": "faelligkeit_vor_datum",
+      "falle": null,
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "Referenzdaten/holdout/Rechnung_029_FA-26-10504.json",
+      "sha256": "3f79649ac913134cb0ed8bb5b31ac81f5909ba7723d24fa23dbc3edca43c9f90",
+      "bytes": 4805,
+      "rolle": "holdout-falle",
+      "fehler": null,
+      "falle": "lieferschein_nr",
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "Referenzdaten/holdout/Rechnung_030_FA-26-10510.json",
+      "sha256": "fde8d65c27f3578023935344b5ac5095db532728443fa9b05d049135438f79ec",
+      "bytes": 5565,
+      "rolle": "holdout-falle",
+      "fehler": null,
+      "falle": "hinweis_betrag",
+      "ausserhalb_v1": false
+    },
+    {
+      "pfad": "erzeuge.py",
+      "sha256": "4776fac0dafca130e3d4cd137ac8fb1eea47bd5f2f24e46036c90f5f40694848",
+      "bytes": 41649,
+      "art": "generator"
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+Rechnungsnummer	Rechnungsdatum	Leistungsmonat	Kunde	Strasse	PLZ	Ort	Leistung	Menge	Einheit	Preis	MwSt
+GL-2026-120	2026-05-02	2026-04	WEG Am Weiher 4-8	Am Weiher 4	79098	Freiburg im Breisgau	Laub aufnehmen und abfahren	1	pauschal	120,00	19
+GL-2026-120	2026-05-02	2026-04	WEG Am Weiher 4-8	Am Weiher 4	79098	Freiburg im Breisgau	Heckenschnitt Liguster	35	m	4,20	19
+GL-2026-120	2026-05-02	2026-04	WEG Am Weiher 4-8	Am Weiher 4	79098	Freiburg im Breisgau	Rasen mähen inkl. Grünschnittentsorgung	350	m²	0,18	19
+GL-2026-120	2026-05-02	2026-04	WEG Am Weiher 4-8	Am Weiher 4	79098	Freiburg im Breisgau	Nachlass Pflegevertrag	-1	pauschal	25,00	19

@@ -1,0 +1,7 @@
+﻿Datei;Split;Rechnungsnummer;Rechnungsdatum;Kundennummer;Namenszeilen;Seiten;Format;Positionen;Mehrzeilig;Versand;Zahlung;Skonto;Netto;USt;Brutto;Status;Notiz;SHA256
+Rechnung_001_INV-2026-00107.pdf;training;INV/2026/00107;12.10.2026;;2;1;A4;3;1;;netto;;612.60;116.39;728.99;ok;Lizenzen und Std., Kundenreferenz als „Referenz“;67c4b7ae38a162cb2f176d4c3ff70880d74d917ca466c051e8208ace75683194
+Rechnung_002_INV-2026-00314.pdf;training;INV/2026/00314;15.10.2026;;1;1;A4;5;2;;netto;;870.50;165.40;1035.90;ok;ohne Referenz, Bezeichnungen mehrzeilig;b54b630efe6c0d4ad6f704fee5dcbd9c33a97404dd16d509dbd84aee3eca2fb7
+Rechnung_003_INV-2026-00321.pdf;training;INV/2026/00321;20.10.2026;;2;1;A4;4;1;;netto;;506.13;96.16;602.29;ok;Behörde mit Sachgebiet als 2. Namenszeile;0b94bf153dde93cd7f652c7649e849c195a0fd31a994bb37b900a211a7da53cf
+Rechnung_004_INV-2026-00228.pdf;holdout;INV/2026/00228;26.10.2026;;3;1;A4;6;2;;netto;;1114.04;211.67;1325.71;ok;Hold-out: 3 Namenszeilen;d412fdfa47316fd473b3f95de74dbb616a6a68f95cd8a609a3cf41b9877866ae
+Rechnung_005_INV-2026-00235.pdf;holdout;INV/2026/00235;02.11.2026;;1;1;A4;4;0;;netto;;1001.16;190.22;1192.38;prüfen;Hold-out PRÜFEN: gedrucktes Gesamt 1,00 € über Netto + USt;84cfffa462b6ff7803352bd8198d128d7191b82dfabb501799b8ecda3997b9b7
+Rechnung_006_INV-2026-00342.pdf;holdout;INV/2026/00342;09.11.2026;;1;1;A4;4;1;;netto;;1276.63;242.56;1519.19;fehler;Hold-out FEHLER: Fälligkeitsdatum = Rechnungsdatum − 30 Tage;ccb7ec7c6ff738a921d1482de4ee84da1bf9e41cc20d92c29be7b25afb03ad22

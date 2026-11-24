@@ -1,0 +1,38 @@
+# Musikschule Klangraum e.V. (erfunden) – UTF-8, Semikolon, Dezimalkomma, Leistungszeitraum von/bis
+# Nur Steuernummer (keine USt-IdNr.); Unterricht steuerfrei nach § 4 Nr. 21 UStG, Noten 7 %.
+profil: musikschule
+datei: {muster: "musikschule_*.csv", trennzeichen: ";"}
+zahlen: {dezimal: ",", tausender: "."}
+datum: {format: "%d.%m.%Y"}
+aufbau: {art: zeile_je_position, rechnung_schluessel: Rechnungsnummer}
+
+felder:
+  kopf:
+    BT-1:  {spalte: Rechnungsnummer}
+    BT-2:  {spalte: Rechnungsdatum, typ: datum}
+    BT-73: {spalte: Leistung von, typ: datum}
+    BT-74: {spalte: Leistung bis, typ: datum}
+    BT-44: {spalte: Name}
+    BT-50: {spalte: Strasse}
+    BT-53: {spalte: PLZ}
+    BT-52: {spalte: Ort}
+  position:
+    BT-153: {spalte: Leistung}
+    BT-129: {spalte: Menge, typ: zahl}
+    BT-130: {spalte: Einheit, mapping: einheiten}
+    BT-146: {spalte: Preis, typ: zahl}
+    steuer: {spalte: Steuersatz, mapping: steuer}
+
+mappings:
+  einheiten: {h: HUR, pauschal: LS, Stk: C62, unbekannt: pruefen}
+  steuer:
+    "0": {BT-151: E, BT-152: 0, BT-120: "Steuerfrei nach § 4 Nr. 21 UStG", BT-121: VATEX-EU-132}
+    "7": {BT-151: S, BT-152: 7}
+    unbekannt: pruefen
+
+verkaeufer:
+  name: Musikschule Klangraum e.V.
+  anschrift: {strasse: Am Ölberg 5, plz: "93047", ort: Regensburg}
+  steuernummer: 21/815/08150
+  register: Amtsgericht Regensburg VR 990004
+zahlung: {iban: DE79000000000008150815}

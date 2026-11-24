@@ -1,0 +1,20 @@
+# Konfiguration für den Proof of Concept (ALLE Daten erfunden)
+# Verkäufer, Bank und Zahlungsbedingungen stehen im Profil (profil-poc.yaml), Käufer in der CSV.
+# Deshalb gibt es hier keinen Block „absender“/„zahlung“ und keinen Kundenstamm.
+
+ordner:                     # relativ zu dieser Datei
+  eingang: ../../laufzeit/poc/eingang
+  ausgang: ../../laufzeit/poc/ausgang
+  erledigt: ../../laufzeit/poc/erledigt
+  fehler: ../../laufzeit/poc/fehler
+  pruefen: ../../laufzeit/poc/pruefen
+
+csv_profile: [profil-poc.yaml]
+pdf_vorlagen: [vorlage-poc.yaml]
+
+optionen:
+  sichtteil: original       # das mitgelieferte PDF wird Sichtteil (Schriften werden eingebettet)
+  xrechnung_zusatz: false   # PoC: nur ZUGFeRD
+  stabil_sekunden: 2
+  paarung_sekunden: 5
+  schwelle: 0.9

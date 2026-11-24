@@ -1,0 +1,4 @@
+Rechnungsnummer;Rechnungsdatum;Leistung von;Leistung bis;Name;Strasse;PLZ;Ort;Leistung;Menge;Einheit;Preis;Steuersatz
+KR-2026-035;03.07.2026;01.06.2026;30.06.2026;Lena Beispiel;Amselweg 7;93047;Regensburg;Musikalische Früherziehung;1;pauschal;28,00;0
+KR-2026-035;03.07.2026;01.06.2026;30.06.2026;Lena Beispiel;Amselweg 7;93047;Regensburg;Einzelunterricht Klavier;3,75;h;48,00;0
+KR-2026-035;03.07.2026;01.06.2026;30.06.2026;Lena Beispiel;Amselweg 7;93047;Regensburg;Gitarrensaiten Satz;1;Stk;9,80;7

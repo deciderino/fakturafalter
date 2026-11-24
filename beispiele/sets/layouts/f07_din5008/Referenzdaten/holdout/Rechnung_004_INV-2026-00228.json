@@ -1,0 +1,189 @@
+{
+  "datei": "Rechnung_004_INV-2026-00228.pdf",
+  "format": "PDF 1.4 (reportlab), A4, Schrift Helvetica (Standard-14, nicht eingebettet)",
+  "familie": "f07_din5008",
+  "quelle": "Q9",
+  "holdout": true,
+  "split": "holdout",
+  "seller": {
+    "name": "Nordlicht Software GmbH",
+    "street": "Holtenauer Straße 88",
+    "postal_code": "24105",
+    "city": "Kiel",
+    "ust_id": "DE298110463",
+    "iban": "DE10 0000 0000 0090 1177 36",
+    "bic": "NORLDEX1KIE",
+    "bank": "Beispielbank Kiel",
+    "email": "buchhaltung@nordlicht-software.example",
+    "register": "HRB 00000 KI",
+    "ceo": "Henrike Jansen"
+  },
+  "buyer": {
+    "name_lines": [
+      "Gesamtschule am Mühlbach",
+      "Schulsekretariat",
+      "z. Hd. Herrn Demir"
+    ],
+    "street": "Mühlbachweg 10",
+    "postal_code": "53111",
+    "city": "Bonn",
+    "customer_number": ""
+  },
+  "invoice": {
+    "number": "INV/2026/00228",
+    "date": "26.10.2026",
+    "service_date": "25.10.2026",
+    "order_number": "BE-2026300",
+    "shipping": ""
+  },
+  "druck": {
+    "datum_format": "TT.MM.JJJJ",
+    "schrift": "Helvetica",
+    "seitenformat": "A4"
+  },
+  "BT-72": "25.10.2026",
+  "BT-119": "19.00",
+  "positions": [
+    {
+      "qty": "2",
+      "unit": "Std.",
+      "description": [
+        "Einrichtung und Datenübernahme"
+      ],
+      "article_number": "NL-DL-01",
+      "unit_price": "97.25",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "194.50"
+    },
+    {
+      "qty": "2",
+      "unit": "Stk.",
+      "description": [
+        "Kartenleser USB für eGK"
+      ],
+      "article_number": "NL-HW-01",
+      "unit_price": "46.50",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "93.00"
+    },
+    {
+      "qty": "1",
+      "unit": "Stk.",
+      "description": [
+        "Zusatzmodul Online-Buchung"
+      ],
+      "article_number": "NL-LIZ-03",
+      "unit_price": "11.29",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "11.29"
+    },
+    {
+      "qty": "1",
+      "unit": "Stk.",
+      "description": [
+        "Supportpaket Premium, Quartal, gemäß Ticket und",
+        "Freigabe durch die Praxisleitung"
+      ],
+      "article_number": "NL-SUP-02",
+      "unit_price": "291.75",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "291.75"
+    },
+    {
+      "qty": "1",
+      "unit": "Stk.",
+      "description": [
+        "Supportpaket Standard, Quartal,",
+        "Abrechnungszeitraum laut Vertrag, Verlängerung",
+        "automatisch um zwölf Monate"
+      ],
+      "article_number": "NL-SUP-01",
+      "unit_price": "176.00",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "176.00"
+    },
+    {
+      "qty": "10",
+      "unit": "Stk.",
+      "description": [
+        "Lizenz Terminplaner Pro, 12 Monate"
+      ],
+      "article_number": "NL-LIZ-01",
+      "unit_price": "34.75",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "347.50"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": null,
+  "discount_days": null,
+  "payment_days": 30,
+  "totals": {
+    "net": "1114.04",
+    "vat": "211.67",
+    "gross": "1325.71"
+  },
+  "totals_printed": {
+    "net": "1114.04",
+    "vat": "211.67",
+    "gross": "1325.71"
+  },
+  "payment": {
+    "discount_date": null,
+    "due_date": "25.11.2026",
+    "discount_amount": null,
+    "discount_base": null
+  },
+  "payment_terms_text": [
+    "Zahlungsbedingungen: 30 Tage"
+  ],
+  "page_count": 1,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "transfer": null,
+      "carry_forward": null,
+      "summary_present": true
+    }
+  ],
+  "erwarteter_status": "ok",
+  "erwartete_hinweise": [],
+  "kosit": null,
+  "verapdf": null,
+  "validierung_hinweis": "lokal nicht validierbar / spätere Phase (KoSIT/veraPDF prüfen die App-Ausgabe, nicht diese PDFs)",
+  "korrekturen": null,
+  "korrekturen_hinweis": "erst beim echten Anlernen messbar",
+  "test_flags": {
+    "address_name_lines": 3,
+    "po_box": false,
+    "multi_line_positions": 2,
+    "shipping_position": false,
+    "page_format": "A4",
+    "payment": "netto",
+    "pruefen": null,
+    "missing_order_number": false,
+    "note": "Hold-out: 3 Namenszeilen",
+    "quelle": "S00650"
+  },
+  "sha256": "d412fdfa47316fd473b3f95de74dbb616a6a68f95cd8a609a3cf41b9877866ae"
+}

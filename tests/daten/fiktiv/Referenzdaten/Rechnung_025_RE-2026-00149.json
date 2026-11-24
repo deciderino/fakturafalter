@@ -1,0 +1,189 @@
+{
+  "datei": "Rechnung_025_RE-2026-00149.pdf",
+  "format": "PDF/A-2b",
+  "seller": {
+    "name": "Alberon Industriekomponenten GmbH",
+    "street": "Prüfwerkstraße 18",
+    "postal_code": "09111",
+    "city": "Chemnitz",
+    "ust_id": "DE123456789",
+    "iban": "DE89 3704 0044 0532 0130 00",
+    "bic": "COBADEFFXXX",
+    "bank": "Commerzbank AG",
+    "email": "rechnung@alberon.example",
+    "register": "Amtsgericht Chemnitz, HRB 999999",
+    "ceo": "Markus Seidel"
+  },
+  "buyer": {
+    "name_lines": [
+      "Bergland Anlagenbau GmbH",
+      "Standort West",
+      "z. Hd. Wareneingang"
+    ],
+    "street": "Werkhof 5",
+    "postal_code": "09599",
+    "city": "Freiberg",
+    "customer_number": "0008341"
+  },
+  "invoice": {
+    "number": "RE-2026-00149",
+    "date": "17.09.2026",
+    "service_date": "12.09.2026",
+    "order_number": "2026_1838-A",
+    "shipping": "GO!"
+  },
+  "positions": [
+    {
+      "qty": 50,
+      "unit": "Stk.",
+      "description": [
+        "Montageschiene 462886"
+      ],
+      "unit_price": "250.00",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "12500.00"
+    },
+    {
+      "qty": 3,
+      "unit": "Std.",
+      "description": [
+        "Führungsbuchse 292347"
+      ],
+      "unit_price": "480.00",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "1440.00"
+    },
+    {
+      "qty": 15,
+      "unit": "Stk.",
+      "description": [
+        "Maschinenbolzen 856299"
+      ],
+      "unit_price": "1250.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "18757.50"
+    },
+    {
+      "qty": 750,
+      "unit": "Stk.",
+      "description": [
+        "Führungsbuchse 35364"
+      ],
+      "unit_price": "18.75",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "14062.50"
+    },
+    {
+      "qty": 1250,
+      "unit": "Stk.",
+      "description": [
+        "Maschinenbolzen 917329"
+      ],
+      "unit_price": "3.90",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "4875.00"
+    },
+    {
+      "qty": 1,
+      "unit": "Stk.",
+      "description": [
+        "Mess- und Prüfarbeit 267055"
+      ],
+      "unit_price": "105.00",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "105.00"
+    },
+    {
+      "qty": 24,
+      "unit": "Std.",
+      "description": [
+        "CNC-Nacharbeit 48637"
+      ],
+      "unit_price": "105.00",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "2520.00"
+    },
+    {
+      "qty": 12,
+      "unit": "Std.",
+      "description": [
+        "Montageschiene 226857",
+        "Ausführung gemäß Zeichnung Rev. B"
+      ],
+      "unit_price": "46.80",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "561.60"
+    },
+    {
+      "qty": 5000,
+      "unit": "Stk.",
+      "description": [
+        "Spannhülse 763211",
+        "Oberfläche harteloxiert 40 µm",
+        "Prüfmaß 0,02 mm berücksichtigen",
+        "Kanten nach Zeichnung entgraten",
+        "Oberfläche eloxiert, natur"
+      ],
+      "unit_price": "3.90",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "19500.00"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": null,
+  "discount_days": null,
+  "payment_days": 30,
+  "totals": {
+    "net": "74321.60",
+    "vat": "14121.10",
+    "gross": "88442.70"
+  },
+  "payment": {
+    "discount_date": null,
+    "due_date": "17.10.2026",
+    "discount_amount": null
+  },
+  "page_count": 1,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "line_count": 14,
+      "transfer": null,
+      "summary_present": true,
+      "payment_block_present": true
+    }
+  ],
+  "test_flags": {
+    "address_name_lines": 3,
+    "missing_order_number": false,
+    "shipping_empty": false,
+    "discount_applied": false,
+    "blank_unit_flat_rate": false,
+    "without_price_count": 0,
+    "flat_rate_count": 0,
+    "two_three_line_positions": 1,
+    "four_five_line_positions": 1,
+    "has_qty_thousands": true
+  },
+  "sha256": "45eb4511fbf043fead2d6ef5596259b916a0d4fe9dbff32cb3f44f53adb3e6c1"
+}

@@ -1,0 +1,8 @@
+# Test-Setup „Industrie“, Modus PDF + CSV (ALLE Daten erfunden).
+# Ein Arbeitsordner; Eingang, Ausgang, Pruefen, Fehler und Erledigt legt die App darin selbst an.
+arbeitsordner: ../../laufzeit/industrie-pdf-csv
+modus: pdf_csv
+csv_profile: [profil-normteile.yaml]
+optionen:
+  sichtteil: original
+  xrechnung_zusatz: false

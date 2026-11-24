@@ -1,0 +1,174 @@
+{
+  "datei": "Rechnung_013_FA-26-10396.pdf",
+  "format": "PDF 1.4 (reportlab, Schriften eingebettet)",
+  "holdout": true,
+  "seller": {
+    "name": "Fiktiva Antriebstechnik GmbH",
+    "street": "Musterring 12",
+    "postal_code": "04179",
+    "city": "Leipzig",
+    "ust_id": "DE314159262",
+    "iban": "DE71 0000 0000 0047 1108 15",
+    "bic": "FIKTDEX1XXX",
+    "bank": "Beispielbank Leipzig",
+    "email": "rechnung@fiktiva.example",
+    "register": "Amtsgericht Leipzig, HRB 000000",
+    "ceo": "Jana Mustermann"
+  },
+  "buyer": {
+    "name_lines": [
+      "Brennecke Verpackungsanlagen GmbH",
+      "Abteilung Rechnungsprüfung"
+    ],
+    "street": "Industriestraße 41",
+    "postal_code": "33609",
+    "city": "Bielefeld",
+    "customer_number": "10427"
+  },
+  "invoice": {
+    "number": "FA-26-10396",
+    "date": "19.10.2026",
+    "service_date": "19.10.2026",
+    "order_number": "",
+    "shipping": "Abholung"
+  },
+  "positions": [
+    {
+      "qty": 4,
+      "unit": "Stk.",
+      "description": [
+        "Kettenrad 1/2\" Z=19 14-4982"
+      ],
+      "unit_price": "38.75",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "155.00"
+    },
+    {
+      "qty": 50,
+      "unit": "Stk.",
+      "description": [
+        "Motorkonsole MK-112 geschweißt 24-3817"
+      ],
+      "unit_price": "124.75",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "6237.50"
+    },
+    {
+      "qty": 4,
+      "unit": "Stk.",
+      "description": [
+        "Schutzhaube Riementrieb 20-6867"
+      ],
+      "unit_price": "156.75",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "627.00"
+    },
+    {
+      "qty": 200,
+      "unit": "",
+      "description": [
+        "Kabelbinder 200x4,8 schwarz 79-9659"
+      ],
+      "unit_price": null,
+      "kind": "without_price",
+      "price_unit": null,
+      "price_unit_qty": null,
+      "min_order": true,
+      "total": null
+    },
+    {
+      "qty": 100,
+      "unit": "",
+      "description": [
+        "Kabelbinder 200x4,8 schwarz 69-5779"
+      ],
+      "unit_price": null,
+      "kind": "without_price",
+      "price_unit": null,
+      "price_unit_qty": null,
+      "min_order": true,
+      "total": null
+    },
+    {
+      "qty": 1,
+      "unit": "",
+      "description": [
+        "Gesamtpreis"
+      ],
+      "unit_price": "95.00",
+      "kind": "flat_rate",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": true,
+      "total": "95.00"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": null,
+  "discount_days": null,
+  "payment_days": 30,
+  "totals": {
+    "net": "7114.50",
+    "vat": "1351.76",
+    "gross": "8466.26"
+  },
+  "payment": {
+    "discount_date": null,
+    "due_date": "18.11.2026",
+    "discount_amount": null,
+    "discount_base": null
+  },
+  "payment_terms_text": [
+    "zahlbar bis 18.11.2026 ohne Abzug"
+  ],
+  "page_count": 1,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "line_count": 6,
+      "transfer": null,
+      "carry_forward": null,
+      "summary_present": true,
+      "payment_block_present": true
+    }
+  ],
+  "test_flags": {
+    "address_name_lines": 2,
+    "address_blank_lines": 2,
+    "address_attention_line": false,
+    "address_department_line": true,
+    "two_line_company_name": false,
+    "missing_order_number": true,
+    "shipping_empty": false,
+    "discount_applied": false,
+    "blank_unit_flat_rate": true,
+    "without_price_count": 2,
+    "flat_rate_count": 1,
+    "min_order": "teil",
+    "price_unit_100_count": 0,
+    "two_three_line_positions": 0,
+    "four_five_line_positions": 0,
+    "has_qty_thousands": false,
+    "carry_forward": false,
+    "last_table_row_index": 8,
+    "note": "Mindestauftrag gemischt, 2 Leerzeilen in der Anschrift"
+  },
+  "sha256": "5bf91bf62d5083865a4a695e59c57dd75ad652bbf82dd4c622bc907fbd86e1ba"
+}

@@ -1,0 +1,801 @@
+{
+  "datei": "Rechnung_014_FA-26-10401.pdf",
+  "format": "PDF 1.4 (reportlab, Schriften eingebettet)",
+  "holdout": false,
+  "seller": {
+    "name": "Fiktiva Antriebstechnik GmbH",
+    "street": "Musterring 12",
+    "postal_code": "04179",
+    "city": "Leipzig",
+    "ust_id": "DE314159262",
+    "iban": "DE71 0000 0000 0047 1108 15",
+    "bic": "FIKTDEX1XXX",
+    "bank": "Beispielbank Leipzig",
+    "email": "rechnung@fiktiva.example",
+    "register": "Amtsgericht Leipzig, HRB 000000",
+    "ceo": "Jana Mustermann"
+  },
+  "buyer": {
+    "name_lines": [
+      "Hollerbach Sondermaschinenbau",
+      "GmbH & Co. KG",
+      "z. Hd. Herrn Okafor"
+    ],
+    "street": "Am Kanalhafen 7",
+    "postal_code": "47059",
+    "city": "Duisburg",
+    "customer_number": "K-20815"
+  },
+  "invoice": {
+    "number": "FA-26-10401",
+    "date": "20.10.2026",
+    "service_date": "20.10.2026",
+    "order_number": "BE-26-676",
+    "shipping": "Abholung"
+  },
+  "positions": [
+    {
+      "qty": 1000,
+      "unit": "Stk.",
+      "description": [
+        "Klemmhebel M8 Kunststoff 59-1955 Ausführung wie",
+        "Muster vom 14.09.2026, Oberfläche schwarz brüniert"
+      ],
+      "unit_price": "4.06",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "4060.00"
+    },
+    {
+      "qty": 4,
+      "unit": "Stk.",
+      "description": [
+        "Getriebeflansch GF-80 32-1923"
+      ],
+      "unit_price": "64.00",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "256.00"
+    },
+    {
+      "qty": 6,
+      "unit": "Stk.",
+      "description": [
+        "Schutzhaube Riementrieb 14-7630 laut Serviceauftrag,",
+        "Arbeiten an Linie 3 einschließlich Probelauf und",
+        "Einweisung des Personals"
+      ],
+      "unit_price": "59.75",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "358.50"
+    },
+    {
+      "qty": 20,
+      "unit": "Stk.",
+      "description": [
+        "Kettenrad 1/2\" Z=19 27-2543"
+      ],
+      "unit_price": "31.25",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "625.00"
+    },
+    {
+      "qty": 4,
+      "unit": "Std.",
+      "description": [
+        "Fahrzeit Monteur"
+      ],
+      "unit_price": "45.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "182.00"
+    },
+    {
+      "qty": 40,
+      "unit": "Stk.",
+      "description": [
+        "Getriebeflansch GF-80 64-5947"
+      ],
+      "unit_price": "191.00",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "7640.00"
+    },
+    {
+      "qty": 400,
+      "unit": "Stk.",
+      "description": [
+        "Zylinderschraube ISO 4762 M6x20 8.8 verzinkt 52-6909"
+      ],
+      "unit_price": "12.86",
+      "kind": "regular",
+      "price_unit": "/100",
+      "price_unit_qty": 100,
+      "min_order": false,
+      "total": "51.44"
+    },
+    {
+      "qty": 250,
+      "unit": "Stk.",
+      "description": [
+        "Zylinderschraube ISO 4762 M6x20 8.8 verzinkt 60-3777"
+      ],
+      "unit_price": "9.29",
+      "kind": "regular",
+      "price_unit": "/100",
+      "price_unit_qty": 100,
+      "min_order": false,
+      "total": "23.23"
+    },
+    {
+      "qty": 3,
+      "unit": "Std.",
+      "description": [
+        "Konstruktionsstunden"
+      ],
+      "unit_price": "87.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "262.50"
+    },
+    {
+      "qty": 4,
+      "unit": "Stk.",
+      "description": [
+        "Motorkonsole MK-112 geschweißt 59-9725"
+      ],
+      "unit_price": "290.75",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "1163.00"
+    },
+    {
+      "qty": 2,
+      "unit": "Std.",
+      "description": [
+        "Konstruktionsstunden"
+      ],
+      "unit_price": "85.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "171.00"
+    },
+    {
+      "qty": 25,
+      "unit": "Stk.",
+      "description": [
+        "Antriebswelle nach Zeichnung 28-1144"
+      ],
+      "unit_price": "191.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "4787.50"
+    },
+    {
+      "qty": 5,
+      "unit": "Stk.",
+      "description": [
+        "Klemmhebel M8 Kunststoff 68-4638"
+      ],
+      "unit_price": "7.67",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "38.35"
+    },
+    {
+      "qty": 24,
+      "unit": "Std.",
+      "description": [
+        "Inbetriebnahme Antriebseinheit"
+      ],
+      "unit_price": "90.75",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "2178.00"
+    },
+    {
+      "qty": 25,
+      "unit": "Stk.",
+      "description": [
+        "Spannsatz SP-30 Ø 30 mm 54-4349"
+      ],
+      "unit_price": "47.75",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "1193.75"
+    },
+    {
+      "qty": 3,
+      "unit": "Std.",
+      "description": [
+        "Fahrzeit Monteur"
+      ],
+      "unit_price": "49.75",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "149.25"
+    },
+    {
+      "qty": 16,
+      "unit": "Std.",
+      "description": [
+        "Programmierung Frequenzumrichter"
+      ],
+      "unit_price": "82.75",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "1324.00"
+    },
+    {
+      "qty": 8,
+      "unit": "Std.",
+      "description": [
+        "Programmierung Frequenzumrichter"
+      ],
+      "unit_price": "82.75",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "662.00"
+    },
+    {
+      "qty": 12,
+      "unit": "Std.",
+      "description": [
+        "Konstruktionsstunden"
+      ],
+      "unit_price": "83.25",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "999.00"
+    },
+    {
+      "qty": 8,
+      "unit": "Std.",
+      "description": [
+        "Programmierung Frequenzumrichter"
+      ],
+      "unit_price": "82.75",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "662.00"
+    },
+    {
+      "qty": 750,
+      "unit": "Stk.",
+      "description": [
+        "Zylinderschraube ISO 4762 M6x20 8.8 verzinkt 85-3390"
+      ],
+      "unit_price": "8.61",
+      "kind": "regular",
+      "price_unit": "/100",
+      "price_unit_qty": 100,
+      "min_order": false,
+      "total": "64.58"
+    },
+    {
+      "qty": 6,
+      "unit": "Stk.",
+      "description": [
+        "Lagerbock LB-40 Stahl verzinkt 24-3734"
+      ],
+      "unit_price": "42.00",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "252.00"
+    },
+    {
+      "qty": 12,
+      "unit": "Stk.",
+      "description": [
+        "Schutzhaube Riementrieb 18-1506"
+      ],
+      "unit_price": "132.25",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "1587.00"
+    },
+    {
+      "qty": 150,
+      "unit": "Stk.",
+      "description": [
+        "Zylinderschraube ISO 4762 M6x20 8.8 verzinkt 72-1219"
+      ],
+      "unit_price": "12.21",
+      "kind": "regular",
+      "price_unit": "/100",
+      "price_unit_qty": 100,
+      "min_order": false,
+      "total": "18.32"
+    },
+    {
+      "qty": 16,
+      "unit": "Std.",
+      "description": [
+        "Montagearbeit vor Ort"
+      ],
+      "unit_price": "60.25",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "964.00"
+    },
+    {
+      "qty": 4,
+      "unit": "Stk.",
+      "description": [
+        "Lagerdeckel LD-62 17-4819"
+      ],
+      "unit_price": "10.98",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "43.92"
+    },
+    {
+      "qty": 3,
+      "unit": "Std.",
+      "description": [
+        "Fehlersuche und Instandsetzung"
+      ],
+      "unit_price": "67.75",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "203.25"
+    },
+    {
+      "qty": 20,
+      "unit": "Stk.",
+      "description": [
+        "Spannsatz SP-30 Ø 30 mm 17-6322"
+      ],
+      "unit_price": "45.00",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "900.00"
+    },
+    {
+      "qty": 12,
+      "unit": "Std.",
+      "description": [
+        "Montagearbeit vor Ort"
+      ],
+      "unit_price": "70.75",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "849.00"
+    },
+    {
+      "qty": 500,
+      "unit": "Stk.",
+      "description": [
+        "Scheibe ISO 7089 8 verzinkt 41-7286"
+      ],
+      "unit_price": "2.29",
+      "kind": "regular",
+      "price_unit": "/100",
+      "price_unit_qty": 100,
+      "min_order": false,
+      "total": "11.45"
+    },
+    {
+      "qty": 16,
+      "unit": "Std.",
+      "description": [
+        "Fehlersuche und Instandsetzung"
+      ],
+      "unit_price": "75.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "1208.00"
+    },
+    {
+      "qty": 4,
+      "unit": "Stk.",
+      "description": [
+        "Lagerbock LB-40 Stahl verzinkt 13-4979"
+      ],
+      "unit_price": "37.25",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "149.00"
+    },
+    {
+      "qty": 3,
+      "unit": "Std.",
+      "description": [
+        "Konstruktionsstunden"
+      ],
+      "unit_price": "83.75",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "251.25"
+    },
+    {
+      "qty": 250,
+      "unit": "Stk.",
+      "description": [
+        "Passfeder DIN 6885 A 8x7x40 12-9534"
+      ],
+      "unit_price": "22.25",
+      "kind": "regular",
+      "price_unit": "/100",
+      "price_unit_qty": 100,
+      "min_order": false,
+      "total": "55.63"
+    },
+    {
+      "qty": 4,
+      "unit": "Stk.",
+      "description": [
+        "Antriebswelle nach Zeichnung 61-8962"
+      ],
+      "unit_price": "198.25",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "793.00"
+    },
+    {
+      "qty": 150,
+      "unit": "Stk.",
+      "description": [
+        "O-Ring 20x2 NBR 70 22-6173"
+      ],
+      "unit_price": "16.75",
+      "kind": "regular",
+      "price_unit": "/100",
+      "price_unit_qty": 100,
+      "min_order": false,
+      "total": "25.13"
+    },
+    {
+      "qty": 2,
+      "unit": "Stk.",
+      "description": [
+        "Wellenkupplung WK-25 elastisch 47-5254"
+      ],
+      "unit_price": "61.00",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "122.00"
+    },
+    {
+      "qty": 6,
+      "unit": "Stk.",
+      "description": [
+        "Lagerdeckel LD-62 49-4238"
+      ],
+      "unit_price": "8.39",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "50.34"
+    },
+    {
+      "qty": 8,
+      "unit": "Std.",
+      "description": [
+        "Konstruktionsstunden"
+      ],
+      "unit_price": "86.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "692.00"
+    },
+    {
+      "qty": 400,
+      "unit": "Stk.",
+      "description": [
+        "Zylinderstift ISO 8734 6x24 12-8628"
+      ],
+      "unit_price": "13.15",
+      "kind": "regular",
+      "price_unit": "/100",
+      "price_unit_qty": 100,
+      "min_order": false,
+      "total": "52.60"
+    },
+    {
+      "qty": 200,
+      "unit": "Stk.",
+      "description": [
+        "Sicherungsring DIN 471 20x1,2 88-2092"
+      ],
+      "unit_price": "18.11",
+      "kind": "regular",
+      "price_unit": "/100",
+      "price_unit_qty": 100,
+      "min_order": false,
+      "total": "36.22"
+    },
+    {
+      "qty": 8,
+      "unit": "Std.",
+      "description": [
+        "Inbetriebnahme Antriebseinheit"
+      ],
+      "unit_price": "93.25",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "746.00"
+    },
+    {
+      "qty": 40,
+      "unit": "Stk.",
+      "description": [
+        "Lagerdeckel LD-62 82-1637"
+      ],
+      "unit_price": "10.28",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "411.20"
+    },
+    {
+      "qty": 150,
+      "unit": "Stk.",
+      "description": [
+        "O-Ring 20x2 NBR 70 17-4479"
+      ],
+      "unit_price": "14.50",
+      "kind": "regular",
+      "price_unit": "/100",
+      "price_unit_qty": 100,
+      "min_order": false,
+      "total": "21.75"
+    },
+    {
+      "qty": 40,
+      "unit": "Std.",
+      "description": [
+        "Montagearbeit vor Ort"
+      ],
+      "unit_price": "59.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "2380.00"
+    },
+    {
+      "qty": 10,
+      "unit": "Stk.",
+      "description": [
+        "Motorkonsole MK-112 geschweißt 45-1880"
+      ],
+      "unit_price": "225.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "2255.00"
+    },
+    {
+      "qty": 4,
+      "unit": "Std.",
+      "description": [
+        "Montagearbeit vor Ort"
+      ],
+      "unit_price": "64.00",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "256.00"
+    },
+    {
+      "qty": 300,
+      "unit": "Stk.",
+      "description": [
+        "Zylinderschraube ISO 4762 M6x20 8.8 verzinkt 13-7731"
+      ],
+      "unit_price": "12.87",
+      "kind": "regular",
+      "price_unit": "/100",
+      "price_unit_qty": 100,
+      "min_order": false,
+      "total": "38.61"
+    },
+    {
+      "qty": 12,
+      "unit": "Stk.",
+      "description": [
+        "Schutzhaube Riementrieb 44-8852"
+      ],
+      "unit_price": "154.25",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "1851.00"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": "3.00",
+  "discount_days": 10,
+  "payment_days": 30,
+  "totals": {
+    "net": "43074.77",
+    "vat": "8184.21",
+    "gross": "51258.98"
+  },
+  "payment": {
+    "discount_date": "30.10.2026",
+    "due_date": "19.11.2026",
+    "discount_amount": "1537.77",
+    "discount_base": "gross"
+  },
+  "payment_terms_text": [
+    "zahlbar bis 30.10.26 bei 3 % Skonto (1.537,77 €)",
+    "bis 19.11.2026 ohne Abzug"
+  ],
+  "page_count": 3,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "line_count": 18,
+      "transfer": "22990.27",
+      "carry_forward": null,
+      "summary_present": false,
+      "payment_block_present": true
+    },
+    {
+      "page": 2,
+      "position_indices": [
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37
+      ],
+      "line_count": 22,
+      "transfer": "34284.05",
+      "carry_forward": "22990.27",
+      "summary_present": false,
+      "payment_block_present": false
+    },
+    {
+      "page": 3,
+      "position_indices": [
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49
+      ],
+      "line_count": 12,
+      "transfer": null,
+      "carry_forward": "34284.05",
+      "summary_present": true,
+      "payment_block_present": false
+    }
+  ],
+  "test_flags": {
+    "address_name_lines": 3,
+    "address_blank_lines": 1,
+    "address_attention_line": true,
+    "address_department_line": false,
+    "two_line_company_name": true,
+    "missing_order_number": false,
+    "shipping_empty": false,
+    "discount_applied": true,
+    "blank_unit_flat_rate": false,
+    "without_price_count": 0,
+    "flat_rate_count": 0,
+    "min_order": null,
+    "price_unit_100_count": 11,
+    "two_three_line_positions": 2,
+    "four_five_line_positions": 0,
+    "has_qty_thousands": true,
+    "carry_forward": true,
+    "last_table_row_index": 15,
+    "note": "3 Seiten, Übertrag und Vortrag, Skonto"
+  },
+  "sha256": "b679e5afa97bf3111dd77b2f8ba34fe43f82ea47d6f55ab5cecf5b3d32adfb83"
+}

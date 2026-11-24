@@ -1,0 +1,409 @@
+{
+  "datei": "Rechnung_020_FA-26-10443.pdf",
+  "format": "PDF 1.4 (reportlab, Schriften eingebettet)",
+  "holdout": false,
+  "seller": {
+    "name": "Fiktiva Antriebstechnik GmbH",
+    "street": "Musterring 12",
+    "postal_code": "04179",
+    "city": "Leipzig",
+    "ust_id": "DE314159262",
+    "iban": "DE71 0000 0000 0047 1108 15",
+    "bic": "FIKTDEX1XXX",
+    "bank": "Beispielbank Leipzig",
+    "email": "rechnung@fiktiva.example",
+    "register": "Amtsgericht Leipzig, HRB 000000",
+    "ceo": "Jana Mustermann"
+  },
+  "buyer": {
+    "name_lines": [
+      "Seewald Präzisionsdreherei e. K.",
+      "Abteilung Konstruktion"
+    ],
+    "street": "Bachgasse 2",
+    "postal_code": "79098",
+    "city": "Freiburg im Breisgau",
+    "customer_number": "52260"
+  },
+  "invoice": {
+    "number": "FA-26-10443",
+    "date": "26.10.2026",
+    "service_date": "26.10.2026",
+    "order_number": "4500688521",
+    "shipping": "Spedition"
+  },
+  "positions": [
+    {
+      "qty": 12,
+      "unit": "Stk.",
+      "description": [
+        "Antriebswelle nach Zeichnung 79-4567"
+      ],
+      "unit_price": "152.00",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "1824.00"
+    },
+    {
+      "qty": 6,
+      "unit": "Stk.",
+      "description": [
+        "Distanzbuchse 20x30x15 40-7112"
+      ],
+      "unit_price": "1.23",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "7.38"
+    },
+    {
+      "qty": 1,
+      "unit": "Stk.",
+      "description": [
+        "Zahnriemenscheibe T10 Z=32 19-9324"
+      ],
+      "unit_price": "74.25",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "74.25"
+    },
+    {
+      "qty": 6,
+      "unit": "Stk.",
+      "description": [
+        "Schutzhaube Riementrieb 70-8755"
+      ],
+      "unit_price": "97.00",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "582.00"
+    },
+    {
+      "qty": 40,
+      "unit": "Stk.",
+      "description": [
+        "Getriebeflansch GF-80 44-9543"
+      ],
+      "unit_price": "181.00",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "7240.00"
+    },
+    {
+      "qty": 4,
+      "unit": "Stk.",
+      "description": [
+        "Zahnriemenscheibe T10 Z=32 88-7798"
+      ],
+      "unit_price": "34.00",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "136.00"
+    },
+    {
+      "qty": 2,
+      "unit": "Stk.",
+      "description": [
+        "Lagerbock LB-40 Stahl verzinkt 34-6134"
+      ],
+      "unit_price": "39.25",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "78.50"
+    },
+    {
+      "qty": 5,
+      "unit": "Stk.",
+      "description": [
+        "Schutzhaube Riementrieb 46-1121"
+      ],
+      "unit_price": "149.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "747.50"
+    },
+    {
+      "qty": 5,
+      "unit": "Stk.",
+      "description": [
+        "Antriebswelle nach Zeichnung 61-9485"
+      ],
+      "unit_price": "212.25",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "1061.25"
+    },
+    {
+      "qty": 10,
+      "unit": "Stk.",
+      "description": [
+        "Lagerbock LB-40 Stahl verzinkt 84-8538"
+      ],
+      "unit_price": "27.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "275.00"
+    },
+    {
+      "qty": 2,
+      "unit": "Stk.",
+      "description": [
+        "Spannsatz SP-30 Ø 30 mm 81-4708"
+      ],
+      "unit_price": "41.00",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "82.00"
+    },
+    {
+      "qty": 50,
+      "unit": "",
+      "description": [
+        "Passscheibe 10x16x0,5 34-1388"
+      ],
+      "unit_price": null,
+      "kind": "without_price",
+      "price_unit": null,
+      "price_unit_qty": null,
+      "min_order": true,
+      "total": null
+    },
+    {
+      "qty": 50,
+      "unit": "",
+      "description": [
+        "Spannstift ISO 8752 4x20 79-5399"
+      ],
+      "unit_price": null,
+      "kind": "without_price",
+      "price_unit": null,
+      "price_unit_qty": null,
+      "min_order": true,
+      "total": null
+    },
+    {
+      "qty": 25,
+      "unit": "",
+      "description": [
+        "Stellring 12 mm verzinkt 83-1289"
+      ],
+      "unit_price": null,
+      "kind": "without_price",
+      "price_unit": null,
+      "price_unit_qty": null,
+      "min_order": true,
+      "total": null
+    },
+    {
+      "qty": 25,
+      "unit": "",
+      "description": [
+        "Stellring 12 mm verzinkt 66-5556"
+      ],
+      "unit_price": null,
+      "kind": "without_price",
+      "price_unit": null,
+      "price_unit_qty": null,
+      "min_order": true,
+      "total": null
+    },
+    {
+      "qty": 1,
+      "unit": "",
+      "description": [
+        "Mindestauftragswert"
+      ],
+      "unit_price": "95.00",
+      "kind": "flat_rate",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": true,
+      "total": "95.00"
+    },
+    {
+      "qty": 10,
+      "unit": "Stk.",
+      "description": [
+        "Kettenrad 1/2\" Z=19 36-8720"
+      ],
+      "unit_price": "24.75",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "247.50"
+    },
+    {
+      "qty": 4,
+      "unit": "Stk.",
+      "description": [
+        "Schutzhaube Riementrieb 17-5124"
+      ],
+      "unit_price": "115.75",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "463.00"
+    },
+    {
+      "qty": 50,
+      "unit": "Stk.",
+      "description": [
+        "Wellenkupplung WK-25 elastisch 58-9347"
+      ],
+      "unit_price": "47.75",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "2387.50"
+    },
+    {
+      "qty": 1,
+      "unit": "Stk.",
+      "description": [
+        "Wellenkupplung WK-25 elastisch 33-4417"
+      ],
+      "unit_price": "115.00",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "115.00"
+    },
+    {
+      "qty": 25,
+      "unit": "Stk.",
+      "description": [
+        "Distanzbuchse 20x30x15 21-7830"
+      ],
+      "unit_price": "2.70",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "67.50"
+    },
+    {
+      "qty": 20,
+      "unit": "Stk.",
+      "description": [
+        "Getriebeflansch GF-80 61-7907"
+      ],
+      "unit_price": "203.75",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "4075.00"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": "2.00",
+  "discount_days": 10,
+  "payment_days": 30,
+  "totals": {
+    "net": "19558.38",
+    "vat": "3716.09",
+    "gross": "23274.47"
+  },
+  "payment": {
+    "discount_date": "05.11.2026",
+    "due_date": "25.11.2026",
+    "discount_amount": "465.49",
+    "discount_base": "gross"
+  },
+  "payment_terms_text": [
+    "zahlbar bis 05.11.26 bei 2 % Skonto (465,49 €)",
+    "bis 25.11.2026 ohne Abzug"
+  ],
+  "page_count": 2,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18
+      ],
+      "line_count": 18,
+      "transfer": "12913.38",
+      "carry_forward": null,
+      "summary_present": false,
+      "payment_block_present": true
+    },
+    {
+      "page": 2,
+      "position_indices": [
+        19,
+        20,
+        21,
+        22
+      ],
+      "line_count": 4,
+      "transfer": null,
+      "carry_forward": null,
+      "summary_present": true,
+      "payment_block_present": false
+    }
+  ],
+  "test_flags": {
+    "address_name_lines": 2,
+    "address_blank_lines": 1,
+    "address_attention_line": false,
+    "address_department_line": true,
+    "two_line_company_name": false,
+    "missing_order_number": false,
+    "shipping_empty": false,
+    "discount_applied": true,
+    "blank_unit_flat_rate": true,
+    "without_price_count": 4,
+    "flat_rate_count": 1,
+    "min_order": "teil",
+    "price_unit_100_count": 0,
+    "two_three_line_positions": 0,
+    "four_five_line_positions": 0,
+    "has_qty_thousands": false,
+    "carry_forward": false,
+    "last_table_row_index": 6,
+    "note": "2 Seiten, Mindestauftrag-Gruppe"
+  },
+  "sha256": "0b9675cd7655787be0f01088d84922a03956096ba2726cad16161ea23a43b81d"
+}

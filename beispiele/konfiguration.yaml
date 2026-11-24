@@ -1,0 +1,39 @@
+# Beispiel-Konfiguration – ALLE Daten erfunden (Muster GmbH, Beispiel-Domains, Fantasie-IBAN)
+absender:
+  name: Muster GmbH
+  anschrift: {strasse: Musterstraße 1, plz: "12345", ort: Musterstadt, land: DE}
+  ust_id: DE123456788
+  steuernummer: ""
+  elektronische_adresse: rechnung@muster-gmbh.example     # BT-34 (Pflicht bei XRechnung)
+  kontakt: {name: Erika Beispiel, telefon: "+49 000 0000000", email: buchhaltung@muster-gmbh.example}
+  register: Amtsgericht Musterstadt HRB 00000
+
+zahlung:
+  art: "58"                                  # SEPA-Überweisung
+  iban: DE36 0000 0000 0000 0000 00          # erfunden, nur Prüfziffer korrekt
+  bic: ""
+  kontoinhaber: Muster GmbH
+  glaeubiger_id: DE98ZZZ09999999999          # BT-90, Test-Gläubiger-ID (nur für SEPA-Lastschrift)
+  bedingungen: "Zahlbar innerhalb {zahlungsziel_tage} Tagen ohne Abzug."
+  ziel_tage: 14
+
+bemerkungen:
+  - {text: "Muster GmbH · Geschäftsführung: Max Beispiel · Amtsgericht Musterstadt HRB 00000", code: REG}
+
+ordner:                     # relativ zu dieser Datei
+  eingang: ../laufzeit/eingang
+  ausgang: ../laufzeit/ausgang
+  erledigt: ../laufzeit/erledigt
+  fehler: ../laufzeit/fehler
+  pruefen: ../laufzeit/pruefen
+
+csv_profile: [profil-variante-a.json, profil-variante-b.yaml, profil-variante-c.yaml, profil-variante-d.yaml]
+pdf_vorlagen: [vorlage-wawi-druck.yaml]
+
+optionen:
+  sichtteil: original       # original = Druckseiten übernehmen (Schriften werden eingebettet) | neu
+  xrechnung_zusatz: true    # zusätzlich XRechnung-CII-XML, wenn der Kundenstamm XRECHNUNG_* verlangt
+  stabil_sekunden: 2
+  paarung_sekunden: 5
+  schwelle: 0.9
+  nach_erstellung_pruefen: true   # lokal prüfen (Mustang + KoSIT, im Paket enthalten); ungültig -> fehler/

@@ -1,0 +1,59 @@
+# CSV-Zuordnungsprofil – passt zu variante-d_rabatt_gutschrift_lastschrift.csv (erfundene Daten)
+# Zeigt: Rabatt in % je Position, Rabatt-/Zuschlagszeilen (Spalte Zeilenart), Gutschrift über die Belegart
+# (negative Beträge werden positiv übernommen), SEPA-Lastschrift (Zahlart + Mandat + IBAN des Kunden),
+# Bezug auf die ursprüngliche Rechnung und Vorauszahlung.
+profil: rabatt-gutschrift-lastschrift
+version: 1
+beschreibung: "Eine Zeile je Position, UTF-8, Semikolon, Dezimalkomma; Rabatt, Gutschrift, Lastschrift"
+
+datei:
+  muster: "*.csv"
+  kodierung: auto
+  trennzeichen: ";"
+  textbegrenzer: '"'
+  kopfzeile: true
+
+zahlen:  {dezimal: ",", tausender: "."}
+datum:   {format: "%d.%m.%Y"}
+
+aufbau:
+  art: zeile_je_position
+  rechnung_schluessel: Belegnummer
+  kopf_muss_gleich_sein: [Datum, Kunde, Belegart]
+
+felder:
+  kopf:
+    BT-1:          {spalte: Belegnummer}
+    BT-2:          {spalte: Datum, typ: datum}
+    BT-72:         {spalte: Leistung, typ: datum, optional: true}
+    kundennummer:  {spalte: Kunde}
+    belegart:      {spalte: Belegart}                          # Rechnung / Gutschrift / Korrektur -> BT-3
+    BT-25:         {spalte: "Bezug auf", optional: true}       # Rechnungsbezug (BG-3)
+    BT-26:         {spalte: "Bezug vom", typ: datum, optional: true}
+    zahlungsart:   {spalte: Zahlart, optional: true}           # Überweisung / Lastschrift -> BT-81
+    BT-89:         {spalte: Mandat, optional: true}            # Mandatsreferenz
+    BT-91:         {spalte: "IBAN Kunde", optional: true}      # belastetes Konto
+    BT-113:        {spalte: Vorauszahlung, typ: zahl, optional: true}
+    BT-5:          {fest: EUR}
+  position:
+    BT-126:        {spalte: Pos}
+    zeilenart:     {spalte: Zeilenart, optional: true}         # leer = Position, Rabatt / Zuschlag = Belegebene
+    BT-155:        {spalte: Artikel, optional: true}
+    BT-153:        {spalte: Text}
+    BT-129:        {spalte: Menge, typ: zahl}
+    BT-130:        {spalte: ME, mapping: einheiten, optional: true}
+    BT-146:        {spalte: Preis, typ: zahl}
+    BT-138:        {spalte: "Rabatt %", typ: prozent, optional: true}
+    steuer:        {spalte: USt, mapping: steuer}
+
+mappings:
+  einheiten: {"Stk": C62, "Std": HUR, "pausch": LS, unbekannt: pruefen}
+  steuer:
+    "1": {BT-151: S, BT-152: 19}
+    "2": {BT-151: S, BT-152: 7}
+    unbekannt: pruefen
+
+kundenstamm:
+  datei: kundenstamm.csv
+  schluessel: kundennummer
+  fehlt: pruefen

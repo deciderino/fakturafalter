@@ -1,0 +1,144 @@
+{
+  "datei": "Rechnung_005_202610095.pdf",
+  "format": "PDF 1.4 (reportlab), A4, Schrift Helvetica (Standard-14, nicht eingebettet)",
+  "familie": "f04_kontaktblock",
+  "quelle": "Q3",
+  "holdout": true,
+  "split": "holdout",
+  "seller": {
+    "name": "Grünwerk Gartenplanung GmbH",
+    "street": "Wilhelmshöher Allee 210",
+    "postal_code": "34119",
+    "city": "Kassel",
+    "ust_id": "DE271044173",
+    "iban": "DE81 0000 0000 0310 0441 70",
+    "bic": "GRUEDEX1KSL",
+    "bank": "Beispielbank Nordhessen",
+    "email": "rechnung@gruenwerk.example",
+    "register": "Amtsgericht Kassel HRB 00000",
+    "ceo": "Lotte Grünewald"
+  },
+  "buyer": {
+    "name_lines": [
+      "Gasthaus Zur Linde",
+      "Inh. Peter Hausmann"
+    ],
+    "street": "Lindenplatz 1",
+    "postal_code": "79100",
+    "city": "Freiburg im Breisgau",
+    "customer_number": "D-20042"
+  },
+  "invoice": {
+    "number": "202610095",
+    "date": "19.10.2026",
+    "service_date": "",
+    "order_number": "",
+    "shipping": ""
+  },
+  "druck": {
+    "datum_format": "TT.MM.JJJJ",
+    "schrift": "Helvetica",
+    "seitenformat": "A4"
+  },
+  "BT-72": null,
+  "BT-119": "19.00",
+  "positions": [
+    {
+      "qty": "80",
+      "unit": "Stk.",
+      "description": [
+        "Rasenansaat inkl. Bodenvorbereitung, je m²"
+      ],
+      "article_number": "GP-210",
+      "unit_price": "3.40",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "272.00"
+    },
+    {
+      "qty": "60",
+      "unit": "Stk.",
+      "description": [
+        "Hainbuche Heckenpflanze 100–125 cm"
+      ],
+      "article_number": "GP-300",
+      "unit_price": "9.69",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "581.40"
+    },
+    {
+      "qty": "1.5",
+      "unit": "Std.",
+      "description": [
+        "Baustellentermin vor Ort"
+      ],
+      "article_number": "GP-120",
+      "unit_price": "63.25",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "94.88"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": null,
+  "discount_days": null,
+  "payment_days": 14,
+  "totals": {
+    "net": "948.28",
+    "vat": "180.17",
+    "gross": "1128.45"
+  },
+  "totals_printed": {
+    "net": "948.28",
+    "vat": "180.17",
+    "gross": "1128.45"
+  },
+  "payment": {
+    "discount_date": null,
+    "due_date": "02.11.2026",
+    "discount_amount": null,
+    "discount_base": null
+  },
+  "payment_terms_text": [
+    "Bitte begleichen Sie den offenen Betrag bis zum 02.11.2026 an die unten aufgeführte Bankverbindung."
+  ],
+  "page_count": 1,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3
+      ],
+      "transfer": null,
+      "carry_forward": null,
+      "summary_present": true
+    }
+  ],
+  "erwarteter_status": "prüfen",
+  "erwartete_hinweise": [
+    "PRUEFEN [BT-72] Leistungsdatum fehlt (Pflichtangabe nach § 14 Abs. 4 Nr. 6 UStG; kein Liefer- oder Leistungsdatum und kein Hinweis „Rechnungsdatum = Leistungsdatum“ gedruckt)"
+  ],
+  "kosit": null,
+  "verapdf": null,
+  "validierung_hinweis": "lokal nicht validierbar / spätere Phase (KoSIT/veraPDF prüfen die App-Ausgabe, nicht diese PDFs)",
+  "korrekturen": null,
+  "korrekturen_hinweis": "erst beim echten Anlernen messbar",
+  "test_flags": {
+    "address_name_lines": 2,
+    "po_box": false,
+    "multi_line_positions": 0,
+    "shipping_position": false,
+    "page_format": "A4",
+    "payment": "fest",
+    "pruefen": "ohne_leistungsdatum",
+    "missing_order_number": true,
+    "note": "Hold-out PRÜFEN: Satz „Das Rechnungsdatum entspricht dem Leistungsdatum“ fehlt, kein BT-72"
+  },
+  "sha256": "b9103a5780e46b1ef4567ee5464e3db8ba4f3ecbd6dbcbc9e00c1536f9569278"
+}

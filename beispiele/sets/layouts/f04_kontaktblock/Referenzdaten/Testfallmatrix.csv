@@ -1,0 +1,7 @@
+﻿Datei;Split;Rechnungsnummer;Rechnungsdatum;Kundennummer;Namenszeilen;Seiten;Format;Positionen;Mehrzeilig;Versand;Zahlung;Skonto;Netto;USt;Brutto;Status;Notiz;SHA256
+Rechnung_001_202610091.pdf;training;202610091;08.10.2026;K10045;2;1;A4;4;1;;fest;;304.75;57.90;362.65;ok;Planungsleistung in Std., festes Zahldatum wie in der Vorlage;79f6c2dcb5ce0971f4620cd28c21294cadab7e604bf62658d4adb6bf02cac9e9
+Rechnung_002_202610092.pdf;training;202610092;12.10.2026;K10077;1;1;A4;6;2;;skonto;2;2840.80;539.75;3380.55;ok;Waren und Std. gemischt, Skontosatz vor dem Zahlsatz;097d15a1d19a196c3dc5e569fc80a83d889bff4732eaace313c237fd782f1a4a
+Rechnung_003_202610043.pdf;training;202610043;14.10.2026;K10112;3;1;A4;5;2;;fest;;792.10;150.50;942.60;ok;3 Namenszeilen, Bezeichnungen mehrzeilig;a7e2a628754d5ce4c0337528e5606d165abb178eb72a31e39aff4391e48af948
+Rechnung_004_202610044.pdf;holdout;202610044;16.10.2026;D-20031;1;1;A4;8;3;;fest;;1292.50;245.58;1538.08;ok;Hold-out: 8 Positionen, Mengen mit Komma;9a106905ea4d7477db212a8f9376755a25c6655a0277bc81cd5aa5894c90d01b
+Rechnung_005_202610095.pdf;holdout;202610095;19.10.2026;D-20042;2;1;A4;3;0;;fest;;948.28;180.17;1128.45;prüfen;Hold-out PRÜFEN: Satz „Das Rechnungsdatum entspricht dem Leistungsdatum“ fehlt, kein BT-72;b9103a5780e46b1ef4567ee5464e3db8ba4f3ecbd6dbcbc9e00c1536f9569278
+Rechnung_006_ohne-Nummer.pdf;holdout;;26.10.2026;K10077;1;1;A4;4;1;;fest;;1268.75;241.06;1509.81;fehler;Hold-out FEHLER: Rechnungsnummer nicht gedruckt;fcf61ccc8a06ce60eec14ad9612dea8b3fb6c3d5e186bc608f32d4bf4c3d3dbd

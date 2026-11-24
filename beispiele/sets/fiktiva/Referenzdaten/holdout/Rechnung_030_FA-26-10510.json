@@ -1,0 +1,232 @@
+{
+  "datei": "Rechnung_030_FA-26-10510.pdf",
+  "format": "PDF 1.4 (reportlab, Schriften eingebettet)",
+  "holdout": true,
+  "seller": {
+    "name": "Fiktiva Antriebstechnik GmbH",
+    "street": "Musterring 12",
+    "postal_code": "04179",
+    "city": "Leipzig",
+    "ust_id": "DE314159262",
+    "iban": "DE71 0000 0000 0047 1108 15",
+    "bic": "FIKTDEX1XXX",
+    "bank": "Beispielbank Leipzig",
+    "email": "rechnung@fiktiva.example",
+    "register": "Amtsgericht Leipzig, HRB 000000",
+    "ceo": "Jana Mustermann"
+  },
+  "buyer": {
+    "name_lines": [
+      "Oderbruch Fördertechnik GmbH"
+    ],
+    "street": "Gewerbepark 12",
+    "postal_code": "15344",
+    "city": "Strausberg",
+    "customer_number": "31002"
+  },
+  "invoice": {
+    "number": "FA-26-10510",
+    "date": "10.11.2026",
+    "service_date": "10.11.2026",
+    "order_number": "4500109317",
+    "shipping": "Abholung"
+  },
+  "positions": [
+    {
+      "qty": 4,
+      "unit": "Stk.",
+      "description": [
+        "Lagerbock LB-40 Stahl verzinkt 49-9769"
+      ],
+      "unit_price": "23.75",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "95.00"
+    },
+    {
+      "qty": 20,
+      "unit": "Stk.",
+      "description": [
+        "Distanzbuchse 20x30x15 24-6325"
+      ],
+      "unit_price": "5.04",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "100.80"
+    },
+    {
+      "qty": 40,
+      "unit": "Stk.",
+      "description": [
+        "Klemmhebel M8 Kunststoff 49-6730"
+      ],
+      "unit_price": "5.23",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "209.20"
+    },
+    {
+      "qty": 20,
+      "unit": "Stk.",
+      "description": [
+        "Lagerbock LB-40 Stahl verzinkt 85-5512"
+      ],
+      "unit_price": "45.25",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "905.00"
+    },
+    {
+      "qty": 200,
+      "unit": "",
+      "description": [
+        "Blindniet 4x10 Alu 53-9965"
+      ],
+      "unit_price": null,
+      "kind": "without_price",
+      "price_unit": null,
+      "price_unit_qty": null,
+      "min_order": true,
+      "total": null
+    },
+    {
+      "qty": 25,
+      "unit": "",
+      "description": [
+        "Gummipuffer 20x15 M6 38-5020"
+      ],
+      "unit_price": null,
+      "kind": "without_price",
+      "price_unit": null,
+      "price_unit_qty": null,
+      "min_order": true,
+      "total": null
+    },
+    {
+      "qty": 10,
+      "unit": "",
+      "description": [
+        "Kabelbinder 200x4,8 schwarz 16-4585"
+      ],
+      "unit_price": null,
+      "kind": "without_price",
+      "price_unit": null,
+      "price_unit_qty": null,
+      "min_order": true,
+      "total": null
+    },
+    {
+      "qty": 25,
+      "unit": "",
+      "description": [
+        "Gummipuffer 20x15 M6 71-7825"
+      ],
+      "unit_price": null,
+      "kind": "without_price",
+      "price_unit": null,
+      "price_unit_qty": null,
+      "min_order": true,
+      "total": null
+    },
+    {
+      "qty": 1,
+      "unit": "",
+      "description": [
+        "Gesamtpreis lt. Angebot 26-118"
+      ],
+      "unit_price": "120.00",
+      "kind": "flat_rate",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": true,
+      "total": "120.00"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": "2.00",
+  "discount_days": 10,
+  "payment_days": 30,
+  "totals": {
+    "net": "1430.00",
+    "vat": "271.70",
+    "gross": "1701.70"
+  },
+  "payment": {
+    "discount_date": "20.11.2026",
+    "due_date": "10.12.2026",
+    "discount_amount": "34.03",
+    "discount_base": "gross"
+  },
+  "payment_terms_text": [
+    "zahlbar bis 20.11.26 bei 2 % Skonto (34,03 €)",
+    "bis 10.12.2026 ohne Abzug"
+  ],
+  "page_count": 1,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "line_count": 9,
+      "transfer": null,
+      "carry_forward": null,
+      "summary_present": true,
+      "payment_block_present": true
+    }
+  ],
+  "test_flags": {
+    "address_name_lines": 1,
+    "address_blank_lines": 1,
+    "address_attention_line": false,
+    "address_department_line": false,
+    "two_line_company_name": false,
+    "missing_order_number": false,
+    "shipping_empty": false,
+    "discount_applied": true,
+    "blank_unit_flat_rate": true,
+    "without_price_count": 4,
+    "flat_rate_count": 1,
+    "min_order": "teil",
+    "price_unit_100_count": 0,
+    "two_three_line_positions": 0,
+    "four_five_line_positions": 0,
+    "has_qty_thousands": false,
+    "carry_forward": false,
+    "last_table_row_index": 11,
+    "note": "FALLE: Hinweis mit anderem Betrag unter den Zahlungsbedingungen"
+  },
+  "rolle": "holdout-falle",
+  "erwarteter_status": "ok",
+  "erwartete_hinweise": [],
+  "moegliche_folgehinweise": [],
+  "fehlerart": null,
+  "fehler_beschreibung": null,
+  "falle": "hinweis_betrag",
+  "falle_beschreibung": "Hinweiszeile mit einem anderen Betrag unter den Zahlungsbedingungen (Bestellwert für frachtfreie Lieferung); weder Summe noch Skonto",
+  "falle_detail": {
+    "hinweis": "Hinweis: Ab einem Bestellwert von 250,00 € netto liefern wir frachtfrei."
+  },
+  "totals_berechnet": {
+    "net": "1430.00",
+    "vat": "271.70",
+    "gross": "1701.70"
+  },
+  "sha256": "26b30fd4b856219dc4abe149d2a3598c9ca625f66d6301dd05bc799daab68171"
+}

@@ -1,0 +1,164 @@
+{
+  "datei": "Rechnung_028_FA-26-10496.pdf",
+  "format": "PDF 1.4 (reportlab, Schriften eingebettet)",
+  "holdout": true,
+  "seller": {
+    "name": "Fiktiva Antriebstechnik GmbH",
+    "street": "Musterring 12",
+    "postal_code": "04179",
+    "city": "Leipzig",
+    "ust_id": "DE314159262",
+    "iban": "DE71 0000 0000 0047 1108 15",
+    "bic": "FIKTDEX1XXX",
+    "bank": "Beispielbank Leipzig",
+    "email": "rechnung@fiktiva.example",
+    "register": "Amtsgericht Leipzig, HRB 000000",
+    "ceo": "Jana Mustermann"
+  },
+  "buyer": {
+    "name_lines": [
+      "Rheinauen Galvanik GmbH"
+    ],
+    "street": "Am Altrhein 1a",
+    "postal_code": "67059",
+    "city": "Ludwigshafen am Rhein",
+    "customer_number": "K-21330"
+  },
+  "invoice": {
+    "number": "FA-26-10496",
+    "date": "05.11.2026",
+    "service_date": "05.11.2026",
+    "order_number": "",
+    "shipping": "Abholung"
+  },
+  "positions": [
+    {
+      "qty": 50,
+      "unit": "Stk.",
+      "description": [
+        "Spannsatz SP-30 Ø 30 mm 53-8369"
+      ],
+      "unit_price": "28.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "1425.00"
+    },
+    {
+      "qty": 1,
+      "unit": "Stk.",
+      "description": [
+        "Schutzhaube Riementrieb 63-2705"
+      ],
+      "unit_price": "144.25",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "144.25"
+    },
+    {
+      "qty": 1,
+      "unit": "Stk.",
+      "description": [
+        "Distanzbuchse 20x30x15 24-2495"
+      ],
+      "unit_price": "3.74",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "3.74"
+    },
+    {
+      "qty": 5,
+      "unit": "Stk.",
+      "description": [
+        "Lagerdeckel LD-62 40-3458"
+      ],
+      "unit_price": "10.95",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "54.75"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": null,
+  "discount_days": null,
+  "payment_days": null,
+  "totals": {
+    "net": "1627.74",
+    "vat": "309.27",
+    "gross": "1937.01"
+  },
+  "payment": {
+    "discount_date": null,
+    "due_date": "05.12.2025",
+    "discount_amount": null,
+    "discount_base": null
+  },
+  "payment_terms_text": [
+    "zahlbar bis 05.12.2025 ohne Abzug"
+  ],
+  "page_count": 1,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "line_count": 4,
+      "transfer": null,
+      "carry_forward": null,
+      "summary_present": true,
+      "payment_block_present": true
+    }
+  ],
+  "test_flags": {
+    "address_name_lines": 1,
+    "address_blank_lines": 1,
+    "address_attention_line": false,
+    "address_department_line": false,
+    "two_line_company_name": false,
+    "missing_order_number": true,
+    "shipping_empty": false,
+    "discount_applied": false,
+    "blank_unit_flat_rate": false,
+    "without_price_count": 0,
+    "flat_rate_count": 0,
+    "min_order": null,
+    "price_unit_100_count": 0,
+    "two_three_line_positions": 0,
+    "four_five_line_positions": 0,
+    "has_qty_thousands": false,
+    "carry_forward": false,
+    "last_table_row_index": 6,
+    "note": "FEHLER: Zahldatum mit Vorjahr, liegt vor dem RE-Datum"
+  },
+  "rolle": "holdout-fehler",
+  "erwarteter_status": "fehler",
+  "erwartete_hinweise": [
+    "FEHLER [BT-9] Fälligkeitsdatum (BT-9) 05.12.2025 liegt vor dem Rechnungsdatum."
+  ],
+  "moegliche_folgehinweise": [],
+  "fehlerart": "faelligkeit_vor_datum",
+  "fehler_beschreibung": "Zahldatum „zahlbar bis …“ mit Vorjahr, liegt damit vor dem RE-Datum; sonst alles richtig",
+  "falle": null,
+  "falle_beschreibung": null,
+  "fehler_detail": {
+    "faellig_gedruckt": "05.12.2025",
+    "rechnungsdatum": "05.11.2026"
+  },
+  "totals_berechnet": {
+    "net": "1627.74",
+    "vat": "309.27",
+    "gross": "1937.01"
+  },
+  "sha256": "f9578d94846ff1c2bfa5c8a0d11c8f296251bb1f8afee88f8818d833564fec99"
+}

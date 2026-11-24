@@ -1,0 +1,204 @@
+{
+  "datei": "Rechnung_005_103905.pdf",
+  "format": "PDF 1.4 (reportlab), A4, Schrift Times (Standard-14, nicht eingebettet)",
+  "familie": "f08_bildkopf",
+  "quelle": "Q10",
+  "holdout": true,
+  "split": "holdout",
+  "seller": {
+    "name": "Weserblick Elektrotechnik GmbH",
+    "street": "Am Speicher XI 7",
+    "postal_code": "28217",
+    "city": "Bremen",
+    "ust_id": "DE314775200",
+    "iban": "DE81 0000 0000 0045 1200 98",
+    "bic": "WESBDEX1BRE",
+    "bank": "Beispielbank Bremen",
+    "email": "rechnungen@weserblick-elektro.example",
+    "register": "Amtsgericht Bremen HRB 00000 HB",
+    "ceo": "Gesa Thormählen"
+  },
+  "buyer": {
+    "name_lines": [
+      "Ladenbau Schwarzwald GmbH",
+      "Einkauf",
+      "z. Hd. Herrn Faller"
+    ],
+    "street": "Gewerbestraße 30",
+    "postal_code": "78112",
+    "city": "St. Georgen im Schwarzwald",
+    "customer_number": "D-20058"
+  },
+  "invoice": {
+    "number": "103905",
+    "date": "02.11.2026",
+    "service_date": "30.10.2026",
+    "order_number": "",
+    "shipping": ""
+  },
+  "druck": {
+    "datum_format": "TT.MM.JJJJ",
+    "schrift": "Times",
+    "seitenformat": "A4"
+  },
+  "BT-72": "30.10.2026",
+  "BT-119": "19.00",
+  "positions": [
+    {
+      "qty": "10",
+      "unit": "Stk.",
+      "description": [
+        "Abzweigdose IP65 mit Klemmen"
+      ],
+      "article_number": "1929-S",
+      "unit_price": "4.11",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "41.10"
+    },
+    {
+      "qty": "2",
+      "unit": "Std.",
+      "description": [
+        "Montagehelfer"
+      ],
+      "article_number": "HELFER",
+      "unit_price": "46.25",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "92.50"
+    },
+    {
+      "qty": "10",
+      "unit": "Stk.",
+      "description": [
+        "LED-Hallenleuchte 150 W, inklusive Prüfung und",
+        "Dokumentation nach DIN VDE 0100-600"
+      ],
+      "article_number": "1900-S",
+      "unit_price": "135.00",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "1350.00"
+    },
+    {
+      "qty": "4",
+      "unit": "Stk.",
+      "description": [
+        "Kabeltrommel 25 m, IP44, laut Leistungsverzeichnis",
+        "Pos. 3.2, Abnahme durch Bauleitung"
+      ],
+      "article_number": "1896-S",
+      "unit_price": "64.75",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "259.00"
+    },
+    {
+      "qty": "2",
+      "unit": "Stk.",
+      "description": [
+        "Unterverteilung 3-reihig, Aufputz"
+      ],
+      "article_number": "1925-W",
+      "unit_price": "156.00",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "312.00"
+    },
+    {
+      "qty": "4",
+      "unit": "Std.",
+      "description": [
+        "Montage Elektrofachkraft"
+      ],
+      "article_number": "MONTAGE",
+      "unit_price": "65.25",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "261.00"
+    },
+    {
+      "qty": "1",
+      "unit": "Stk.",
+      "description": [
+        "Anfahrtspauschale Stadtgebiet, Lieferung auf",
+        "Baustelle, Entsorgung der Verpackung"
+      ],
+      "article_number": "ANFAHRT",
+      "unit_price": "38.50",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "38.50"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": "3.00",
+  "discount_days": 10,
+  "payment_days": 30,
+  "totals": {
+    "net": "2354.10",
+    "vat": "447.28",
+    "gross": "2801.38"
+  },
+  "totals_printed": {
+    "net": "2354.10",
+    "vat": "447.28",
+    "gross": "2801.38"
+  },
+  "payment": {
+    "discount_date": "12.11.2026",
+    "due_date": "02.12.2026",
+    "discount_amount": "84.04",
+    "discount_base": "gross"
+  },
+  "payment_terms_text": [
+    "3 % Skonto 10 Tage, 30 Tage netto"
+  ],
+  "page_count": 1,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "transfer": null,
+      "carry_forward": null,
+      "summary_present": true
+    }
+  ],
+  "erwarteter_status": "ok",
+  "erwartete_hinweise": [],
+  "kosit": null,
+  "verapdf": null,
+  "validierung_hinweis": "lokal nicht validierbar / spätere Phase (KoSIT/veraPDF prüfen die App-Ausgabe, nicht diese PDFs)",
+  "korrekturen": null,
+  "korrekturen_hinweis": "erst beim echten Anlernen messbar",
+  "test_flags": {
+    "address_name_lines": 3,
+    "po_box": false,
+    "multi_line_positions": 3,
+    "shipping_position": false,
+    "page_format": "A4",
+    "payment": "skonto",
+    "pruefen": null,
+    "missing_order_number": true,
+    "note": "Hold-out: ohne Referenz, mehrzeilige Bezeichnungen",
+    "uebertrag_gedruckt": false,
+    "kopf_fuss_als_bild": true
+  },
+  "sha256": "478b83fc4ac39fa5a6070c5ef749c232aaab16b204cf10d8e885799e86f22640"
+}

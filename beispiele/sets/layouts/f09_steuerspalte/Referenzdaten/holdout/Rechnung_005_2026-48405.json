@@ -1,0 +1,194 @@
+{
+  "datei": "Rechnung_005_2026-48405.pdf",
+  "format": "PDF 1.4 (reportlab), A4, Schrift Courier (Standard-14, nicht eingebettet)",
+  "familie": "f09_steuerspalte",
+  "quelle": "Q8",
+  "holdout": true,
+  "split": "holdout",
+  "seller": {
+    "name": "Lüders Kaffeerösterei GmbH",
+    "street": "Sandtorkai 31",
+    "postal_code": "20457",
+    "city": "Hamburg",
+    "ust_id": "DE118236049",
+    "iban": "DE39 0000 0000 0037 7661 20",
+    "bic": "LUEDDEX1HAM",
+    "bank": "Beispielbank Hamburg",
+    "email": "rechnung@lueders-kaffee.example",
+    "register": "Amtsgericht Hamburg HRB 000000",
+    "ceo": "Jens Lüders"
+  },
+  "buyer": {
+    "name_lines": [
+      "Buchhandlung Seitenweise",
+      "Inh. Jana Roth"
+    ],
+    "street": "Hauptstraße 52",
+    "postal_code": "69117",
+    "city": "Heidelberg",
+    "customer_number": "7020"
+  },
+  "invoice": {
+    "number": "2026-48405",
+    "date": "22.10.2026",
+    "service_date": "19.10.2026",
+    "order_number": "B53099",
+    "shipping": ""
+  },
+  "druck": {
+    "datum_format": "TT.MM.JJJJ",
+    "schrift": "Courier",
+    "seitenformat": "A4"
+  },
+  "BT-72": "19.10.2026",
+  "BT-119": [
+    "7.00",
+    "19.00"
+  ],
+  "positions": [
+    {
+      "qty": "2",
+      "unit": "Stk.",
+      "description": [
+        "Coffee-to-go-Becher 300 ml, 1000",
+        "Stück"
+      ],
+      "article_number": "ZB-2040",
+      "unit_price": "65.75",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "131.50",
+      "vat_rate": "19.00"
+    },
+    {
+      "qty": "4",
+      "unit": "Stk.",
+      "description": [
+        "Bio-Tee Darjeeling lose 250 g"
+      ],
+      "article_number": "KF-1020",
+      "unit_price": "8.67",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "34.68",
+      "vat_rate": "7.00"
+    },
+    {
+      "qty": "3",
+      "unit": "Stk.",
+      "description": [
+        "Reinigungstabletten, Dose 100 Stück"
+      ],
+      "article_number": "ZB-2020",
+      "unit_price": "11.63",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "34.89",
+      "vat_rate": "19.00"
+    },
+    {
+      "qty": "10",
+      "unit": "Stk.",
+      "description": [
+        "Röstkaffee Crema, ganze Bohne 1 kg"
+      ],
+      "article_number": "KF-1002",
+      "unit_price": "16.94",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "169.40",
+      "vat_rate": "7.00"
+    },
+    {
+      "qty": "10",
+      "unit": "Stk.",
+      "description": [
+        "Röstkaffee Espresso, ganze Bohne 1 kg"
+      ],
+      "article_number": "KF-1001",
+      "unit_price": "19.46",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "194.60",
+      "vat_rate": "7.00"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": "3.00",
+  "discount_days": 10,
+  "payment_days": 30,
+  "totals": {
+    "net": "565.07",
+    "vat": "59.52",
+    "gross": "624.59"
+  },
+  "totals_printed": {
+    "net": "565.07",
+    "vat": "59.62",
+    "gross": "624.69"
+  },
+  "payment": {
+    "discount_date": "01.11.2026",
+    "due_date": "21.11.2026",
+    "discount_amount": "18.74",
+    "discount_base": "gross"
+  },
+  "payment_terms_text": [
+    "Zahlbar innerhalb 30 Tagen netto bis 21.11.2026, 3% Skonto innerhalb 10 Tagen bis 01.11.2026"
+  ],
+  "page_count": 1,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "transfer": null,
+      "carry_forward": null,
+      "summary_present": true
+    }
+  ],
+  "erwarteter_status": "prüfen",
+  "erwartete_hinweise": [
+    "PRUEFEN [BT-110] Kontrollwert der Quelle ≠ berechnet (gedruckte USt 0,10 € über Netto × Satz, Brutto folgt der gedruckten USt)"
+  ],
+  "kosit": null,
+  "verapdf": null,
+  "validierung_hinweis": "lokal nicht validierbar / spätere Phase (KoSIT/veraPDF prüfen die App-Ausgabe, nicht diese PDFs)",
+  "korrekturen": null,
+  "korrekturen_hinweis": "erst beim echten Anlernen messbar",
+  "test_flags": {
+    "address_name_lines": 2,
+    "po_box": false,
+    "multi_line_positions": 1,
+    "shipping_position": false,
+    "page_format": "A4",
+    "payment": "skonto",
+    "pruefen": "ust",
+    "missing_order_number": false,
+    "note": "Hold-out PRÜFEN: Steuerbetrag 0,10 € über Netto × Satz, Brutto folgt"
+  },
+  "vat_rate_hinweis": "vat_rate bleibt 19.00 für tools/benchmark.py (kennt nur einen Satz); maßgeblich sind BT-119 und vat_breakdown",
+  "vat_breakdown": [
+    {
+      "rate": "7.00",
+      "net": "398.68",
+      "vat": "27.91"
+    },
+    {
+      "rate": "19.00",
+      "net": "166.39",
+      "vat": "31.61"
+    }
+  ],
+  "sha256": "871e51401e72f979e4d07c0493ae647d1597a856a639054b3683e49baa18e103"
+}

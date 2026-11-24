@@ -1,0 +1,115 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "fakturafalter"
+version = "0.9.4"
+description = "Fakturafalter: PDF + CSV aus Alt-WaWi/ERP lokal zu ZUGFeRD (EN 16931, PDF/A-3) und XRechnung CII"
+requires-python = ">=3.11"
+license = "Apache-2.0"
+license-files = ["LICENSE", "NOTICE"]
+readme = "README.md"
+keywords = ["ZUGFeRD", "XRechnung", "Factur-X", "EN16931", "E-Rechnung", "PDF/A-3"]
+dependencies = [
+  "pdfplumber>=0.11",   # MIT (pdfminer.six MIT, pypdfium2 Apache-2.0/BSD-3)
+  "pikepdf>=9",         # MPL-2.0 (qpdf Apache-2.0)
+  "reportlab>=4",       # BSD
+  "lxml>=5",            # BSD-3
+  "PyYAML>=6",          # MIT
+  "fonttools>=4.50",    # MIT
+  "watchdog>=4",        # Apache-2.0
+]
+
+[project.gui-scripts]
+fakturafalter-gui = "fakturafalter.gui.app:main"
+
+[project.optional-dependencies]
+gui = ["PySide6-Essentials>=6.7",   # LGPL-3.0 (dynamisch gelinkt)
+       "ruamel.yaml>=0.18"]          # MIT – Konfiguration speichern, Kommentare bleiben erhalten
+test = ["pytest>=8"]
+
+[project.scripts]
+fakturafalter = "fakturafalter.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+fakturafalter = ["ressourcen/*", "ressourcen/schriften/*", "ressourcen/start/*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = ["validierung: echte lokale Prüfung nach Erstellung (braucht Java, Mustang und KoSIT)"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+extend-exclude = ["skizzen"]   # Entwurfsskripte für Skizzen, kein Programmcode
+
+[tool.ruff.lint]
+# Sanft: Fehler (F), Stil (E) und Import-Reihenfolge (I). Zeilenlänge regelt der Formatierer; lange Texte und
+# kurze Namen wie „l“ bleiben erlaubt.
+select = ["E", "F", "I"]
+ignore = ["E501", "E731", "E741"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["F811"]          # Fixtures werden aus test_gui importiert und als Parameter benutzt
+
+[tool.ruff.format]
+# Formatiert sind bisher die Bereiche GUI, Ausgabe, Pipeline und PDF-Erkennung. Die übrigen Dateien
+# folgen, wenn ihr Bereich sie ohnehin anfasst; bis dahin lässt „ruff format“ sie aus.
+exclude = [
+    "beispiele/industrie/erzeuge_beispiele.py",
+    "beispiele/pdf-erkennung/erzeuge_beispiele.py",
+    "beispiele/poc/erzeuge_demo_pdf.py",
+    "beispiele/sets/fiktiva/erzeuge.py",
+    "beispiele/sets/kommentarzeilen/erzeuge.py",
+    "beispiele/sets/layouts/_rahmen.py",
+    "beispiele/sets/layouts/erzeuge.py",
+    "beispiele/sets/layouts/f01_infozeilen/familie.py",
+    "beispiele/sets/layouts/f02_briefkopf/familie.py",
+    "beispiele/sets/layouts/f03_seitenleiste/familie.py",
+    "beispiele/sets/layouts/f04_kontaktblock/familie.py",
+    "beispiele/sets/layouts/f05_versatz/familie.py",
+    "beispiele/sets/layouts/f06_schreibmaschine/familie.py",
+    "beispiele/sets/layouts/f07_din5008/familie.py",
+    "beispiele/sets/layouts/f08_bildkopf/familie.py",
+    "beispiele/sets/layouts/f09_steuerspalte/familie.py",
+    "beispiele/sets/layouts/f10_satztabelle/familie.py",
+    "packaging/icon.py",
+    "packaging/lizenzen.py",
+    "packaging/smoke.py",
+    "packaging/start.py",
+    "packaging/windows/build.py",
+    "src/fakturafalter/__init__.py",
+    "src/fakturafalter/__main__.py",
+    "src/fakturafalter/beispielrechnung.py",
+    "src/fakturafalter/cli.py",
+    "src/fakturafalter/codelisten.py",
+    "src/fakturafalter/csv_einrichtung.py",
+    "src/fakturafalter/dateien.py",
+    "src/fakturafalter/konfig.py",
+    "src/fakturafalter/layout.py",
+    "src/fakturafalter/logdatei.py",
+    "src/fakturafalter/pflichtpruefung.py",
+    "src/fakturafalter/rechnen.py",
+    "src/fakturafalter/ueberwachung.py",
+    "tests/conftest.py",
+    "tests/erp_roh.py",
+    "tests/test_csv_einrichtung.py",
+    "tests/test_dezimal_spaetdruck.py",
+    "tests/test_gegenstueck.py",
+    "tests/test_kleinigkeiten_061.py",
+    "tests/test_kleinigkeiten_062.py",
+    "tests/test_konfig.py",
+    "tests/test_pflichtpruefung.py",
+    "tests/test_poc.py",
+    "tests/test_rechnen.py",
+    "tests/voll.py",
+    "tools/kopffeld_messung.py",
+    "tools/kopffeld_set.py",
+    "tools/layout_beispiel.py",
+    "tools/uebersicht.py",
+    "tools/vergleich.py",
+]

@@ -1,0 +1,327 @@
+{
+  "datei": "Rechnung_011_FA-26-10380.pdf",
+  "format": "PDF 1.4 (reportlab, Schriften eingebettet)",
+  "holdout": false,
+  "seller": {
+    "name": "Fiktiva Antriebstechnik GmbH",
+    "street": "Musterring 12",
+    "postal_code": "04179",
+    "city": "Leipzig",
+    "ust_id": "DE314159262",
+    "iban": "DE71 0000 0000 0047 1108 15",
+    "bic": "FIKTDEX1XXX",
+    "bank": "Beispielbank Leipzig",
+    "email": "rechnung@fiktiva.example",
+    "register": "Amtsgericht Leipzig, HRB 000000",
+    "ceo": "Jana Mustermann"
+  },
+  "buyer": {
+    "name_lines": [
+      "Rheinauen Galvanik GmbH"
+    ],
+    "street": "Am Altrhein 1a",
+    "postal_code": "67059",
+    "city": "Ludwigshafen am Rhein",
+    "customer_number": "K-21330"
+  },
+  "invoice": {
+    "number": "FA-26-10380",
+    "date": "14.10.2026",
+    "service_date": "14.10.2026",
+    "order_number": "4500256782",
+    "shipping": "Lieferung frei Haus"
+  },
+  "positions": [
+    {
+      "qty": 6,
+      "unit": "Stk.",
+      "description": [
+        "Getriebeflansch GF-80 65-1027"
+      ],
+      "unit_price": "92.00",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "552.00"
+    },
+    {
+      "qty": 2,
+      "unit": "Stk.",
+      "description": [
+        "Getriebeflansch GF-80 47-7358"
+      ],
+      "unit_price": "99.00",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "198.00"
+    },
+    {
+      "qty": 20,
+      "unit": "Stk.",
+      "description": [
+        "Motorkonsole MK-112 geschweißt 33-9205"
+      ],
+      "unit_price": "90.75",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "1815.00"
+    },
+    {
+      "qty": 12,
+      "unit": "Stk.",
+      "description": [
+        "Schutzhaube Riementrieb 44-1948"
+      ],
+      "unit_price": "153.25",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "1839.00"
+    },
+    {
+      "qty": 10,
+      "unit": "Stk.",
+      "description": [
+        "Motorkonsole MK-112 geschweißt 36-1372"
+      ],
+      "unit_price": "312.25",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "3122.50"
+    },
+    {
+      "qty": 40,
+      "unit": "Stk.",
+      "description": [
+        "Antriebswelle nach Zeichnung 57-5752"
+      ],
+      "unit_price": "405.00",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "16200.00"
+    },
+    {
+      "qty": 2,
+      "unit": "Stk.",
+      "description": [
+        "Klemmhebel M8 Kunststoff 30-3628"
+      ],
+      "unit_price": "2.70",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "5.40"
+    },
+    {
+      "qty": 1,
+      "unit": "Stk.",
+      "description": [
+        "Zahnriemenscheibe T10 Z=32 44-2245"
+      ],
+      "unit_price": "50.25",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "50.25"
+    },
+    {
+      "qty": 5,
+      "unit": "Stk.",
+      "description": [
+        "Spannsatz SP-30 Ø 30 mm 59-1001"
+      ],
+      "unit_price": "30.00",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "150.00"
+    },
+    {
+      "qty": 20,
+      "unit": "Stk.",
+      "description": [
+        "Schutzhaube Riementrieb 74-5917"
+      ],
+      "unit_price": "149.75",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "2995.00"
+    },
+    {
+      "qty": 40,
+      "unit": "Stk.",
+      "description": [
+        "Schutzhaube Riementrieb 72-8315"
+      ],
+      "unit_price": "57.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "2300.00"
+    },
+    {
+      "qty": 6,
+      "unit": "Stk.",
+      "description": [
+        "Motorkonsole MK-112 geschweißt 51-1782"
+      ],
+      "unit_price": "263.75",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "1582.50"
+    },
+    {
+      "qty": 4,
+      "unit": "Stk.",
+      "description": [
+        "Lagerdeckel LD-62 53-8990"
+      ],
+      "unit_price": "17.62",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "70.48"
+    },
+    {
+      "qty": 25,
+      "unit": "Stk.",
+      "description": [
+        "Antriebswelle nach Zeichnung 12-1567"
+      ],
+      "unit_price": "186.25",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "4656.25"
+    },
+    {
+      "qty": 50,
+      "unit": "Stk.",
+      "description": [
+        "Kettenrad 1/2\" Z=19 56-8846"
+      ],
+      "unit_price": "18.08",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "904.00"
+    },
+    {
+      "qty": 4,
+      "unit": "Stk.",
+      "description": [
+        "Motorkonsole MK-112 geschweißt 79-3303"
+      ],
+      "unit_price": "196.00",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "784.00"
+    },
+    {
+      "qty": 25,
+      "unit": "Stk.",
+      "description": [
+        "Lagerbock LB-40 Stahl verzinkt 87-3749"
+      ],
+      "unit_price": "50.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "1262.50"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": null,
+  "discount_days": null,
+  "payment_days": 30,
+  "totals": {
+    "net": "38486.88",
+    "vat": "7312.51",
+    "gross": "45799.39"
+  },
+  "payment": {
+    "discount_date": null,
+    "due_date": "13.11.2026",
+    "discount_amount": null,
+    "discount_base": null
+  },
+  "payment_terms_text": [
+    "zahlbar bis 13.11.2026 ohne Abzug"
+  ],
+  "page_count": 1,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
+      ],
+      "line_count": 17,
+      "transfer": null,
+      "carry_forward": null,
+      "summary_present": true,
+      "payment_block_present": true
+    }
+  ],
+  "test_flags": {
+    "address_name_lines": 1,
+    "address_blank_lines": 1,
+    "address_attention_line": false,
+    "address_department_line": false,
+    "two_line_company_name": false,
+    "missing_order_number": false,
+    "shipping_empty": false,
+    "discount_applied": false,
+    "blank_unit_flat_rate": false,
+    "without_price_count": 0,
+    "flat_rate_count": 0,
+    "min_order": null,
+    "price_unit_100_count": 0,
+    "two_three_line_positions": 0,
+    "four_five_line_positions": 0,
+    "has_qty_thousands": false,
+    "carry_forward": false,
+    "last_table_row_index": 19,
+    "note": "einseitig knapp am Seitenende (Netto-Zeile 643,5 pt)"
+  },
+  "sha256": "6e5f6baf5bd706750576c99f44ad902af4ac662a8f5c66ad75893c57a8a6e0ad"
+}

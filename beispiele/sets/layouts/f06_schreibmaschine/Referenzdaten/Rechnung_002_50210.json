@@ -1,0 +1,245 @@
+{
+  "datei": "Rechnung_002_50210.pdf",
+  "format": "PDF 1.4 (reportlab), A4, Schrift Courier (Standard-14, nicht eingebettet)",
+  "familie": "f06_schreibmaschine",
+  "quelle": "Q6",
+  "holdout": false,
+  "split": "training",
+  "seller": {
+    "name": "Holzwerkstatt Brenneisen GmbH",
+    "street": "Am Sägewerk 4",
+    "postal_code": "79822",
+    "city": "Titisee-Neustadt",
+    "ust_id": "DE142906131",
+    "iban": "DE75 0000 0000 0004 4182 30",
+    "bic": "BRENDEX1TNS",
+    "bank": "Beispielsparkasse Hochschwarzwald",
+    "email": "buero@brenneisen-holz.example",
+    "register": "Amtsgericht Freiburg i. Br. HRB 000000",
+    "ceo": "Markus Brenneisen"
+  },
+  "buyer": {
+    "name_lines": [
+      "Gasthaus Zur Linde",
+      "Inh. Peter Hausmann"
+    ],
+    "street": "Lindenplatz 1",
+    "postal_code": "79100",
+    "city": "Freiburg im Breisgau",
+    "customer_number": "D-20042"
+  },
+  "invoice": {
+    "number": "50210",
+    "date": "14.10.2026",
+    "service_date": "11.10.2026",
+    "order_number": "",
+    "shipping": ""
+  },
+  "druck": {
+    "datum_format": "TT.MM.JJJJ",
+    "schrift": "Courier",
+    "seitenformat": "A4"
+  },
+  "BT-72": "11.10.2026",
+  "BT-119": "19.00",
+  "positions": [
+    {
+      "qty": "24",
+      "unit": "Stk.",
+      "description": [
+        "Möbelgriff Edelstahl 128 mm, Oberfläche",
+        "zweimal geölt und zwischengeschliffen"
+      ],
+      "article_number": "TS-1030",
+      "unit_price": "7.37",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "176.88"
+    },
+    {
+      "qty": "6",
+      "unit": "Std.",
+      "description": [
+        "Montage vor Ort"
+      ],
+      "article_number": "TS-2001",
+      "unit_price": "54.00",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "324.00"
+    },
+    {
+      "qty": "2",
+      "unit": "Stk.",
+      "description": [
+        "Thekenfront Multiplex, lackiert"
+      ],
+      "article_number": "TS-1002",
+      "unit_price": "656.25",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "1312.50"
+    },
+    {
+      "qty": "3",
+      "unit": "Std.",
+      "description": [
+        "Aufmaß und Planung"
+      ],
+      "article_number": "TS-2002",
+      "unit_price": "60.00",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "180.00"
+    },
+    {
+      "qty": "8",
+      "unit": "Stk.",
+      "description": [
+        "Schubkastenführung Vollauszug"
+      ],
+      "article_number": "TS-1020",
+      "unit_price": "27.25",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "218.00"
+    },
+    {
+      "qty": "2",
+      "unit": "Stk.",
+      "description": [
+        "Wandregal Lärche geölt, 120 cm"
+      ],
+      "article_number": "TS-1011",
+      "unit_price": "111.00",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "222.00"
+    },
+    {
+      "qty": "2",
+      "unit": "Stk.",
+      "description": [
+        "Arbeitsplatte Eiche massiv 40 mm, je",
+        "lfm"
+      ],
+      "article_number": "TS-1001",
+      "unit_price": "251.25",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "502.50"
+    },
+    {
+      "qty": "1",
+      "unit": "Stk.",
+      "description": [
+        "Entsorgung Altmöbel, Pauschale"
+      ],
+      "article_number": "TS-2020",
+      "unit_price": "90.25",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "90.25"
+    },
+    {
+      "qty": "40",
+      "unit": "Stk.",
+      "description": [
+        "Topfband 110°, Clip"
+      ],
+      "article_number": "TS-1021",
+      "unit_price": "4.14",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "165.60"
+    },
+    {
+      "qty": "2",
+      "unit": "Stk.",
+      "description": [
+        "Anfahrt Montagefahrzeug, inklusive",
+        "Befestigungsmaterial und Abdeckkappen"
+      ],
+      "article_number": "TS-2010",
+      "unit_price": "46.75",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "93.50"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": null,
+  "discount_days": null,
+  "payment_days": 30,
+  "totals": {
+    "net": "3285.23",
+    "vat": "624.19",
+    "gross": "3909.42"
+  },
+  "totals_printed": {
+    "net": "3285.23",
+    "vat": "624.19",
+    "gross": "3909.42"
+  },
+  "payment": {
+    "discount_date": null,
+    "due_date": "13.11.2026",
+    "discount_amount": null,
+    "discount_base": null
+  },
+  "payment_terms_text": [
+    "Zahlung: 30 Tage netto"
+  ],
+  "page_count": 1,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "transfer": null,
+      "carry_forward": null,
+      "summary_present": true
+    }
+  ],
+  "erwarteter_status": "ok",
+  "erwartete_hinweise": [],
+  "kosit": null,
+  "verapdf": null,
+  "validierung_hinweis": "lokal nicht validierbar / spätere Phase (KoSIT/veraPDF prüfen die App-Ausgabe, nicht diese PDFs)",
+  "korrekturen": null,
+  "korrekturen_hinweis": "erst beim echten Anlernen messbar",
+  "test_flags": {
+    "address_name_lines": 2,
+    "po_box": false,
+    "multi_line_positions": 3,
+    "shipping_position": false,
+    "page_format": "A4",
+    "payment": "netto",
+    "pruefen": null,
+    "missing_order_number": true,
+    "note": "Gruppen-Zwischensumme mitten in der Tabelle",
+    "gruppen_zwischensumme": true,
+    "auftragsnummer": "14879"
+  },
+  "sha256": "7b9d75a760abbb4db0e84181ac41ddf1ea8a64e3ec3bedb4f431b13f9e41c4e6"
+}

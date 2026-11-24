@@ -1,0 +1,222 @@
+{
+  "datei": "Rechnung_035_RE-2026-00159.pdf",
+  "format": "PDF/A-2b",
+  "seller": {
+    "name": "Alberon Industriekomponenten GmbH",
+    "street": "Prüfwerkstraße 18",
+    "postal_code": "09111",
+    "city": "Chemnitz",
+    "ust_id": "DE123456789",
+    "iban": "DE89 3704 0044 0532 0130 00",
+    "bic": "COBADEFFXXX",
+    "bank": "Commerzbank AG",
+    "email": "rechnung@alberon.example",
+    "register": "Amtsgericht Chemnitz, HRB 999999",
+    "ceo": "Markus Seidel"
+  },
+  "buyer": {
+    "name_lines": [
+      "Odertal Vorrichtungsbau GmbH"
+    ],
+    "street": "Wiesenbogen 3",
+    "postal_code": "07545",
+    "city": "Gera",
+    "customer_number": "100825"
+  },
+  "invoice": {
+    "number": "RE-2026-00159",
+    "date": "05.10.2026",
+    "service_date": "25.09.2026",
+    "order_number": "013-4212",
+    "shipping": "UPS"
+  },
+  "positions": [
+    {
+      "qty": 40,
+      "unit": "Stk.",
+      "description": [
+        "Aufnahmeflansch 286427"
+      ],
+      "unit_price": "14.99",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "599.60"
+    },
+    {
+      "qty": 18,
+      "unit": "Std.",
+      "description": [
+        "Kupplungsstück 777855"
+      ],
+      "unit_price": null,
+      "kind": "without_price",
+      "price_unit": "/1",
+      "total": null
+    },
+    {
+      "qty": 50,
+      "unit": "Stk.",
+      "description": [
+        "Gehäusedeckel 186907"
+      ],
+      "unit_price": null,
+      "kind": "without_price",
+      "price_unit": "/1",
+      "total": null
+    },
+    {
+      "qty": 1,
+      "unit": "",
+      "description": [
+        "Fixpreis Auftrag 2029-369"
+      ],
+      "unit_price": "1120.50",
+      "kind": "flat_rate",
+      "price_unit": "/1",
+      "total": "1120.50"
+    },
+    {
+      "qty": 500,
+      "unit": "Stk.",
+      "description": [
+        "Spannhülse 305632",
+        "Oberfläche nach Kundenstandard"
+      ],
+      "unit_price": null,
+      "kind": "without_price",
+      "price_unit": "/1",
+      "total": null
+    },
+    {
+      "qty": 24,
+      "unit": "Std.",
+      "description": [
+        "CNC-Nacharbeit 777658",
+        "Materialzustand T6, gratfrei"
+      ],
+      "unit_price": null,
+      "kind": "without_price",
+      "price_unit": "/1",
+      "total": null
+    },
+    {
+      "qty": 1,
+      "unit": "Stk.",
+      "description": [
+        "Pauschalpreis Auftrag 2027-642"
+      ],
+      "unit_price": "120.00",
+      "kind": "flat_rate",
+      "price_unit": "/1",
+      "total": "120.00"
+    },
+    {
+      "qty": 10000,
+      "unit": "Stk.",
+      "description": [
+        "Gehäuseboden 537708"
+      ],
+      "unit_price": "12.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "125000.00"
+    },
+    {
+      "qty": 8,
+      "unit": "Stk.",
+      "description": [
+        "Nachbearbeitung 142307"
+      ],
+      "unit_price": "89.90",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "719.20"
+    },
+    {
+      "qty": 10,
+      "unit": "Stk.",
+      "description": [
+        "Kupplungsstück 290390"
+      ],
+      "unit_price": "46.80",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "468.00"
+    },
+    {
+      "qty": 3,
+      "unit": "Std.",
+      "description": [
+        "CNC-Nacharbeit 45189"
+      ],
+      "unit_price": "2.35",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "7.05"
+    },
+    {
+      "qty": 100,
+      "unit": "Stk.",
+      "description": [
+        "Distanzhülse 644369",
+        "Oberfläche eloxiert, natur",
+        "inkl. Sichtprüfung nach Vorgabe"
+      ],
+      "unit_price": "1.20",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "120.00"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": "3.00",
+  "discount_days": 10,
+  "payment_days": 30,
+  "totals": {
+    "net": "128154.35",
+    "vat": "24349.33",
+    "gross": "152503.68"
+  },
+  "payment": {
+    "discount_date": "15.10.2026",
+    "due_date": "04.11.2026",
+    "discount_amount": "4575.11"
+  },
+  "page_count": 1,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "line_count": 16,
+      "transfer": null,
+      "summary_present": true,
+      "payment_block_present": true
+    }
+  ],
+  "test_flags": {
+    "address_name_lines": 1,
+    "missing_order_number": false,
+    "shipping_empty": false,
+    "discount_applied": true,
+    "blank_unit_flat_rate": true,
+    "without_price_count": 4,
+    "flat_rate_count": 2,
+    "two_three_line_positions": 3,
+    "four_five_line_positions": 0,
+    "has_qty_thousands": true
+  },
+  "sha256": "8f5734c2cc1ee81fbf62aa4dfb6809e5f4fa2720d9243b0610541944212b381e"
+}

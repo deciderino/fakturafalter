@@ -1,0 +1,196 @@
+{
+  "datei": "Rechnung_033_RE-2026-00157.pdf",
+  "format": "PDF/A-2b",
+  "seller": {
+    "name": "Alberon Industriekomponenten GmbH",
+    "street": "Prüfwerkstraße 18",
+    "postal_code": "09111",
+    "city": "Chemnitz",
+    "ust_id": "DE123456789",
+    "iban": "DE89 3704 0044 0532 0130 00",
+    "bic": "COBADEFFXXX",
+    "bank": "Commerzbank AG",
+    "email": "rechnung@alberon.example",
+    "register": "Amtsgericht Chemnitz, HRB 999999",
+    "ceo": "Markus Seidel"
+  },
+  "buyer": {
+    "name_lines": [
+      "Felsenwerk Präzisionssysteme GmbH"
+    ],
+    "street": "Lagerplatz 6",
+    "postal_code": "99084",
+    "city": "Erfurt",
+    "customer_number": "30041"
+  },
+  "invoice": {
+    "number": "RE-2026-00157",
+    "date": "01.10.2026",
+    "service_date": "27.09.2026",
+    "order_number": "15335624",
+    "shipping": "Selbstabholung"
+  },
+  "positions": [
+    {
+      "qty": 5000,
+      "unit": "Stk.",
+      "description": [
+        "Adapterplatte 279573"
+      ],
+      "unit_price": "4.75",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "23750.00"
+    },
+    {
+      "qty": 24,
+      "unit": "Std.",
+      "description": [
+        "Gehäuseboden 360908"
+      ],
+      "unit_price": "46.80",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "1123.20"
+    },
+    {
+      "qty": 1250,
+      "unit": "Stk.",
+      "description": [
+        "Mess- und Prüfarbeit 184520"
+      ],
+      "unit_price": "7.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "9375.00"
+    },
+    {
+      "qty": 5000,
+      "unit": "Stk.",
+      "description": [
+        "Maschinenbolzen 696811",
+        "Oberfläche nach Kundenstandard"
+      ],
+      "unit_price": "35.00",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "175000.00"
+    },
+    {
+      "qty": 200,
+      "unit": "Stk.",
+      "description": [
+        "Kupplungsstück 268955"
+      ],
+      "unit_price": "4.75",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "950.00"
+    },
+    {
+      "qty": 40,
+      "unit": "Stk.",
+      "description": [
+        "Adapterplatte 277251"
+      ],
+      "unit_price": "0.85",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "34.00"
+    },
+    {
+      "qty": 2,
+      "unit": "Stk.",
+      "description": [
+        "Montageschiene 697561"
+      ],
+      "unit_price": "1799.99",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "3599.98"
+    },
+    {
+      "qty": 12,
+      "unit": "Stk.",
+      "description": [
+        "Trägerplatte 144861"
+      ],
+      "unit_price": "65.00",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "780.00"
+    },
+    {
+      "qty": 125,
+      "unit": "Stk.",
+      "description": [
+        "Bearbeitung 305859",
+        "Materialzustand T6, gratfrei"
+      ],
+      "unit_price": "65.00",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "8125.00"
+    },
+    {
+      "qty": 500,
+      "unit": "Stk.",
+      "description": [
+        "Gehäusedeckel 764207"
+      ],
+      "unit_price": "3.90",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "1950.00"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": "4.00",
+  "discount_days": 10,
+  "payment_days": 30,
+  "totals": {
+    "net": "224687.18",
+    "vat": "42690.56",
+    "gross": "267377.74"
+  },
+  "payment": {
+    "discount_date": "11.10.2026",
+    "due_date": "31.10.2026",
+    "discount_amount": "10695.11"
+  },
+  "page_count": 1,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "line_count": 12,
+      "transfer": null,
+      "summary_present": true,
+      "payment_block_present": true
+    }
+  ],
+  "test_flags": {
+    "address_name_lines": 1,
+    "missing_order_number": false,
+    "shipping_empty": false,
+    "discount_applied": true,
+    "blank_unit_flat_rate": false,
+    "without_price_count": 0,
+    "flat_rate_count": 0,
+    "two_three_line_positions": 2,
+    "four_five_line_positions": 0,
+    "has_qty_thousands": true
+  },
+  "sha256": "8ce27c7200e0e316241f3bbf7a30743bbd6b957e1ee8a1614112c9637c1c2022"
+}

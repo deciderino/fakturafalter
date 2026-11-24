@@ -1,0 +1,174 @@
+{
+  "datei": "Rechnung_032_RE-2026-00156.pdf",
+  "format": "PDF/A-2b",
+  "seller": {
+    "name": "Alberon Industriekomponenten GmbH",
+    "street": "Prüfwerkstraße 18",
+    "postal_code": "09111",
+    "city": "Chemnitz",
+    "ust_id": "DE123456789",
+    "iban": "DE89 3704 0044 0532 0130 00",
+    "bic": "COBADEFFXXX",
+    "bank": "Commerzbank AG",
+    "email": "rechnung@alberon.example",
+    "register": "Amtsgericht Chemnitz, HRB 999999",
+    "ceo": "Markus Seidel"
+  },
+  "buyer": {
+    "name_lines": [
+      "Falkensee Komponentenbau GmbH",
+      "Einkauf Nord"
+    ],
+    "street": "Präzisionsweg 29",
+    "postal_code": "34117",
+    "city": "Kassel",
+    "customer_number": "103887"
+  },
+  "invoice": {
+    "number": "RE-2026-00156",
+    "date": "30.09.2026",
+    "service_date": "30.09.2026",
+    "order_number": "725-5955",
+    "shipping": "Selbstabholung"
+  },
+  "positions": [
+    {
+      "qty": 5,
+      "unit": "Stk.",
+      "description": [
+        "Montagewinkel 283566"
+      ],
+      "unit_price": "2.35",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "11.75"
+    },
+    {
+      "qty": 1,
+      "unit": "Std.",
+      "description": [
+        "Schutzblende 781065",
+        "Sondermaß nach Zeichnung 2026-18"
+      ],
+      "unit_price": "18.75",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "18.75"
+    },
+    {
+      "qty": 125,
+      "unit": "Stk.",
+      "description": [
+        "Spannhülse 428026",
+        "Oberfläche nach Kundenstandard"
+      ],
+      "unit_price": "1799.99",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "224998.75"
+    },
+    {
+      "qty": 10,
+      "unit": "Stk.",
+      "description": [
+        "Montageschiene 253418",
+        "inkl. Sichtprüfung nach Vorgabe"
+      ],
+      "unit_price": "3.90",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "39.00"
+    },
+    {
+      "qty": 15,
+      "unit": "Stk.",
+      "description": [
+        "Distanzhülse 613183"
+      ],
+      "unit_price": "1.20",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "18.00"
+    },
+    {
+      "qty": 5000,
+      "unit": "Stk.",
+      "description": [
+        "Montageschiene 120754"
+      ],
+      "unit_price": "7.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "37500.00"
+    },
+    {
+      "qty": 8,
+      "unit": "Std.",
+      "description": [
+        "Gehäuseboden 233155"
+      ],
+      "unit_price": "46.80",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "374.40"
+    },
+    {
+      "qty": 1,
+      "unit": "Stk.",
+      "description": [
+        "Halterungsplatte 712832"
+      ],
+      "unit_price": "46.80",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "46.80"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": null,
+  "discount_days": null,
+  "payment_days": 30,
+  "totals": {
+    "net": "263007.45",
+    "vat": "49971.42",
+    "gross": "312978.87"
+  },
+  "payment": {
+    "discount_date": null,
+    "due_date": "30.10.2026",
+    "discount_amount": null
+  },
+  "page_count": 1,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "line_count": 11,
+      "transfer": null,
+      "summary_present": true,
+      "payment_block_present": true
+    }
+  ],
+  "test_flags": {
+    "address_name_lines": 2,
+    "missing_order_number": false,
+    "shipping_empty": false,
+    "discount_applied": false,
+    "blank_unit_flat_rate": false,
+    "without_price_count": 0,
+    "flat_rate_count": 0,
+    "two_three_line_positions": 3,
+    "four_five_line_positions": 0,
+    "has_qty_thousands": true
+  },
+  "sha256": "284dcbd7ebb1fc587946837ea388bce541a985fea3b65572ba2239bc36df7c11"
+}

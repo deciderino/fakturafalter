@@ -1,0 +1,483 @@
+{
+  "datei": "Rechnung_027_FA-26-10491.pdf",
+  "format": "PDF 1.4 (reportlab, Schriften eingebettet)",
+  "holdout": true,
+  "seller": {
+    "name": "Fiktiva Antriebstechnik GmbH",
+    "street": "Musterring 12",
+    "postal_code": "04179",
+    "city": "Leipzig",
+    "ust_id": "DE314159262",
+    "iban": "DE17 0000 0000 0047 1108 15",
+    "bic": "FIKTDEX1XXX",
+    "bank": "Beispielbank Leipzig",
+    "email": "rechnung@fiktiva.example",
+    "register": "Amtsgericht Leipzig, HRB 000000",
+    "ceo": "Jana Mustermann"
+  },
+  "buyer": {
+    "name_lines": [
+      "Landtechnik Eilers GmbH",
+      "z. Hd. Herrn Okafor"
+    ],
+    "street": "Deichweg 30",
+    "postal_code": "26789",
+    "city": "Leer (Ostfriesland)",
+    "customer_number": "61907"
+  },
+  "invoice": {
+    "number": "FA-26-10491",
+    "date": "05.11.2026",
+    "service_date": "05.11.2026",
+    "order_number": "BE-26-300",
+    "shipping": ""
+  },
+  "positions": [
+    {
+      "qty": 25,
+      "unit": "Stk.",
+      "description": [
+        "Lagerdeckel LD-62 81-7045"
+      ],
+      "unit_price": "12.82",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "320.50"
+    },
+    {
+      "qty": 10,
+      "unit": "Stk.",
+      "description": [
+        "Kettenrad 1/2\" Z=19 24-5914"
+      ],
+      "unit_price": "31.25",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "312.50"
+    },
+    {
+      "qty": 5,
+      "unit": "Stk.",
+      "description": [
+        "Klemmhebel M8 Kunststoff 18-8514"
+      ],
+      "unit_price": "7.61",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "38.05"
+    },
+    {
+      "qty": 6,
+      "unit": "Stk.",
+      "description": [
+        "Kettenrad 1/2\" Z=19 27-3940"
+      ],
+      "unit_price": "14.59",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "87.54"
+    },
+    {
+      "qty": 6,
+      "unit": "Std.",
+      "description": [
+        "Konstruktionsstunden"
+      ],
+      "unit_price": "83.75",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "502.50"
+    },
+    {
+      "qty": 3,
+      "unit": "Std.",
+      "description": [
+        "Konstruktionsstunden"
+      ],
+      "unit_price": "74.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "223.50"
+    },
+    {
+      "qty": 300,
+      "unit": "Stk.",
+      "description": [
+        "Sicherungsring DIN 471 20x1,2 59-5827"
+      ],
+      "unit_price": "17.11",
+      "kind": "regular",
+      "price_unit": "/100",
+      "price_unit_qty": 100,
+      "min_order": false,
+      "total": "51.33"
+    },
+    {
+      "qty": 150,
+      "unit": "Stk.",
+      "description": [
+        "Sechskantmutter ISO 4032 M8 verzinkt 20-1459"
+      ],
+      "unit_price": "5.46",
+      "kind": "regular",
+      "price_unit": "/100",
+      "price_unit_qty": 100,
+      "min_order": false,
+      "total": "8.19"
+    },
+    {
+      "qty": 20,
+      "unit": "Stk.",
+      "description": [
+        "Zahnriemenscheibe T10 Z=32 16-3672"
+      ],
+      "unit_price": "88.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "1770.00"
+    },
+    {
+      "qty": 2,
+      "unit": "Std.",
+      "description": [
+        "Fahrzeit Monteur"
+      ],
+      "unit_price": "59.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "119.00"
+    },
+    {
+      "qty": 16,
+      "unit": "Std.",
+      "description": [
+        "Fahrzeit Monteur"
+      ],
+      "unit_price": "58.75",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "940.00"
+    },
+    {
+      "qty": 4,
+      "unit": "Stk.",
+      "description": [
+        "Getriebeflansch GF-80 70-2301"
+      ],
+      "unit_price": "133.00",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "532.00"
+    },
+    {
+      "qty": 5,
+      "unit": "Stk.",
+      "description": [
+        "Kettenrad 1/2\" Z=19 82-7428"
+      ],
+      "unit_price": "34.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "172.50"
+    },
+    {
+      "qty": 8,
+      "unit": "Std.",
+      "description": [
+        "Inbetriebnahme Antriebseinheit"
+      ],
+      "unit_price": "88.25",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "706.00"
+    },
+    {
+      "qty": 4,
+      "unit": "Stk.",
+      "description": [
+        "Lagerbock LB-40 Stahl verzinkt 63-5101"
+      ],
+      "unit_price": "59.00",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "236.00"
+    },
+    {
+      "qty": 5,
+      "unit": "Stk.",
+      "description": [
+        "Antriebswelle nach Zeichnung 47-9948"
+      ],
+      "unit_price": "386.75",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "1933.75"
+    },
+    {
+      "qty": 500,
+      "unit": "Stk.",
+      "description": [
+        "Sicherungsring DIN 471 20x1,2 19-6532"
+      ],
+      "unit_price": "17.02",
+      "kind": "regular",
+      "price_unit": "/100",
+      "price_unit_qty": 100,
+      "min_order": false,
+      "total": "85.10"
+    },
+    {
+      "qty": 2,
+      "unit": "Std.",
+      "description": [
+        "Fehlersuche und Instandsetzung"
+      ],
+      "unit_price": "76.00",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "152.00"
+    },
+    {
+      "qty": 2,
+      "unit": "Stk.",
+      "description": [
+        "Lagerdeckel LD-62 69-2896"
+      ],
+      "unit_price": "16.24",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "32.48"
+    },
+    {
+      "qty": 10,
+      "unit": "Stk.",
+      "description": [
+        "Spannsatz SP-30 Ø 30 mm 76-9616"
+      ],
+      "unit_price": "25.00",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "250.00"
+    },
+    {
+      "qty": 24,
+      "unit": "Std.",
+      "description": [
+        "Konstruktionsstunden"
+      ],
+      "unit_price": "75.25",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "1806.00"
+    },
+    {
+      "qty": 40,
+      "unit": "Std.",
+      "description": [
+        "Montagearbeit vor Ort"
+      ],
+      "unit_price": "60.00",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "2400.00"
+    },
+    {
+      "qty": 8,
+      "unit": "Std.",
+      "description": [
+        "Montagearbeit vor Ort"
+      ],
+      "unit_price": "69.00",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "552.00"
+    },
+    {
+      "qty": 16,
+      "unit": "Std.",
+      "description": [
+        "Konstruktionsstunden"
+      ],
+      "unit_price": "80.75",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "1292.00"
+    },
+    {
+      "qty": 10,
+      "unit": "Stk.",
+      "description": [
+        "Zahnriemenscheibe T10 Z=32 10-8736"
+      ],
+      "unit_price": "41.75",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "417.50"
+    },
+    {
+      "qty": 20,
+      "unit": "Stk.",
+      "description": [
+        "Zahnriemenscheibe T10 Z=32 10-4080"
+      ],
+      "unit_price": "31.75",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "635.00"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": null,
+  "discount_days": null,
+  "payment_days": 30,
+  "totals": {
+    "net": "15575.44",
+    "vat": "2959.33",
+    "gross": "18534.77"
+  },
+  "payment": {
+    "discount_date": null,
+    "due_date": "05.12.2026",
+    "discount_amount": null,
+    "discount_base": null
+  },
+  "payment_terms_text": [
+    "zahlbar bis 05.12.2026 ohne Abzug"
+  ],
+  "page_count": 2,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18
+      ],
+      "line_count": 18,
+      "transfer": "8190.46",
+      "carry_forward": null,
+      "summary_present": false,
+      "payment_block_present": true
+    },
+    {
+      "page": 2,
+      "position_indices": [
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26
+      ],
+      "line_count": 8,
+      "transfer": null,
+      "carry_forward": null,
+      "summary_present": true,
+      "payment_block_present": false
+    }
+  ],
+  "test_flags": {
+    "address_name_lines": 2,
+    "address_blank_lines": 1,
+    "address_attention_line": true,
+    "address_department_line": false,
+    "two_line_company_name": false,
+    "missing_order_number": false,
+    "shipping_empty": true,
+    "discount_applied": false,
+    "blank_unit_flat_rate": false,
+    "without_price_count": 0,
+    "flat_rate_count": 0,
+    "min_order": null,
+    "price_unit_100_count": 3,
+    "two_three_line_positions": 0,
+    "four_five_line_positions": 0,
+    "has_qty_thousands": false,
+    "carry_forward": false,
+    "last_table_row_index": 10,
+    "note": "FEHLER: IBAN im Fuß mit vertauschter Prüfziffer (2 Seiten)"
+  },
+  "rolle": "holdout-fehler",
+  "erwarteter_status": "fehler",
+  "erwartete_hinweise": [
+    "FEHLER [BT-84] IBAN (BT-84) „DE17 0000 0000 0047 1108 15“ ist ungültig (Prüfsumme oder Länge stimmt nicht)."
+  ],
+  "moegliche_folgehinweise": [],
+  "fehlerart": "iban_pruefziffer",
+  "fehler_beschreibung": "IBAN im Fuß mit vertauschten Prüfziffern (MOD 97 ungültig); sonst alles richtig",
+  "falle": null,
+  "falle_beschreibung": null,
+  "fehler_detail": {
+    "gedruckt": "DE17 0000 0000 0047 1108 15",
+    "richtig": "DE71 0000 0000 0047 1108 15"
+  },
+  "totals_berechnet": {
+    "net": "15575.44",
+    "vat": "2959.33",
+    "gross": "18534.77"
+  },
+  "sha256": "9be7135d8b282726819ce6b971ac5483ab6011eb545451eb3f4d395e23b114f7"
+}

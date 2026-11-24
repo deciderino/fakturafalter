@@ -1,0 +1,25 @@
+Fakturafalter
+Copyright 2026 Fakturafalter-Mitwirkende
+
+Lizenziert unter der Apache License, Version 2.0 (siehe LICENSE).
+Freie Software ohne Gewähr und ohne Support.
+
+Dieses Produkt enthält bzw. nutzt Komponenten Dritter:
+
+- Liberation Fonts (Sans, Serif, Mono) – SIL Open Font License 1.1
+  (src/fakturafalter/ressourcen/schriften/LIZENZ-Liberation.txt)
+- sRGB-ICC-Profil, erzeugt mit LittleCMS über Pillow – MIT
+- PySide6 / Qt for Python (optional, Oberfläche) – LGPL-3.0, dynamisch gelinkt
+- pikepdf (MPL-2.0) mit qpdf (Apache-2.0)
+- pdfplumber, pdfminer.six (MIT); pypdfium2 / PDFium (Apache-2.0 bzw. BSD-3)
+- reportlab (BSD), lxml (BSD-3), PyYAML (MIT), fontTools (MIT), watchdog (Apache-2.0)
+- Pillow (MIT-CMU/HPND), cryptography (Apache-2.0 oder BSD)
+
+Prüfwerkzeuge (Mustang-CLI mit veraPDF, KoSIT-Validator, XRechnung-Konfiguration
+und eine Java-Laufzeit auf Basis von Eclipse Temurin) liegen nicht im
+Quell-Repository. Die offiziellen Installationspakete (Linux-AppImage und
+portables Windows-ZIP) legen sie in den Ordner „werkzeuge“ neben das Programm.
+Lizenzen und das schriftliche Quellangebot für die Java-Laufzeit stehen in den
+Paketen unter lizenzen/werkzeuge/, im Quellbaum unter
+packaging/lizenzen/werkzeuge/ (siehe besonders PRUEFWERKZEUGE.txt). Wer selbst
+prüft, kann die Werkzeuge auch getrennt bereitstellen.

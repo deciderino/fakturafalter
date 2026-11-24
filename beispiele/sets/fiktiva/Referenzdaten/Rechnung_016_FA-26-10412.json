@@ -1,0 +1,438 @@
+{
+  "datei": "Rechnung_016_FA-26-10412.pdf",
+  "format": "PDF 1.4 (reportlab, Schriften eingebettet)",
+  "holdout": false,
+  "seller": {
+    "name": "Fiktiva Antriebstechnik GmbH",
+    "street": "Musterring 12",
+    "postal_code": "04179",
+    "city": "Leipzig",
+    "ust_id": "DE314159262",
+    "iban": "DE71 0000 0000 0047 1108 15",
+    "bic": "FIKTDEX1XXX",
+    "bank": "Beispielbank Leipzig",
+    "email": "rechnung@fiktiva.example",
+    "register": "Amtsgericht Leipzig, HRB 000000",
+    "ceo": "Jana Mustermann"
+  },
+  "buyer": {
+    "name_lines": [
+      "Oderbruch Fördertechnik GmbH",
+      "Abteilung Einkauf",
+      "z. Hd. Frau Brandt"
+    ],
+    "street": "Gewerbepark 12",
+    "postal_code": "15344",
+    "city": "Strausberg",
+    "customer_number": "31002"
+  },
+  "invoice": {
+    "number": "FA-26-10412",
+    "date": "22.10.2026",
+    "service_date": "22.10.2026",
+    "order_number": "",
+    "shipping": "Abholung"
+  },
+  "positions": [
+    {
+      "qty": 250,
+      "unit": "Stk.",
+      "description": [
+        "Sicherungsring DIN 471 20x1,2 43-3205"
+      ],
+      "unit_price": "10.48",
+      "kind": "regular",
+      "price_unit": "/100",
+      "price_unit_qty": 100,
+      "min_order": false,
+      "total": "26.20"
+    },
+    {
+      "qty": 750,
+      "unit": "Stk.",
+      "description": [
+        "Zylinderstift ISO 8734 6x24 19-6757"
+      ],
+      "unit_price": "15.51",
+      "kind": "regular",
+      "price_unit": "/100",
+      "price_unit_qty": 100,
+      "min_order": false,
+      "total": "116.33"
+    },
+    {
+      "qty": 150,
+      "unit": "Stk.",
+      "description": [
+        "Sicherungsring DIN 471 20x1,2 14-1013"
+      ],
+      "unit_price": "8.54",
+      "kind": "regular",
+      "price_unit": "/100",
+      "price_unit_qty": 100,
+      "min_order": false,
+      "total": "12.81"
+    },
+    {
+      "qty": 400,
+      "unit": "Stk.",
+      "description": [
+        "Scheibe ISO 7089 8 verzinkt 16-7329"
+      ],
+      "unit_price": "1.97",
+      "kind": "regular",
+      "price_unit": "/100",
+      "price_unit_qty": 100,
+      "min_order": false,
+      "total": "7.88"
+    },
+    {
+      "qty": 400,
+      "unit": "Stk.",
+      "description": [
+        "Scheibe ISO 7089 8 verzinkt 84-2919"
+      ],
+      "unit_price": "4.20",
+      "kind": "regular",
+      "price_unit": "/100",
+      "price_unit_qty": 100,
+      "min_order": false,
+      "total": "16.80"
+    },
+    {
+      "qty": 200,
+      "unit": "Stk.",
+      "description": [
+        "Gewindestift ISO 4026 M5x8 16-1730"
+      ],
+      "unit_price": "6.92",
+      "kind": "regular",
+      "price_unit": "/100",
+      "price_unit_qty": 100,
+      "min_order": false,
+      "total": "13.84"
+    },
+    {
+      "qty": 750,
+      "unit": "Stk.",
+      "description": [
+        "Scheibe ISO 7089 8 verzinkt 48-2767"
+      ],
+      "unit_price": "2.72",
+      "kind": "regular",
+      "price_unit": "/100",
+      "price_unit_qty": 100,
+      "min_order": false,
+      "total": "20.40"
+    },
+    {
+      "qty": 200,
+      "unit": "Stk.",
+      "description": [
+        "Zylinderschraube ISO 4762 M6x20 8.8 verzinkt 48-9583"
+      ],
+      "unit_price": "6.23",
+      "kind": "regular",
+      "price_unit": "/100",
+      "price_unit_qty": 100,
+      "min_order": false,
+      "total": "12.46"
+    },
+    {
+      "qty": 250,
+      "unit": "Stk.",
+      "description": [
+        "Scheibe ISO 7089 8 verzinkt 74-8014"
+      ],
+      "unit_price": "3.10",
+      "kind": "regular",
+      "price_unit": "/100",
+      "price_unit_qty": 100,
+      "min_order": false,
+      "total": "7.75"
+    },
+    {
+      "qty": 200,
+      "unit": "Stk.",
+      "description": [
+        "Zylinderstift ISO 8734 6x24 55-3150"
+      ],
+      "unit_price": "18.15",
+      "kind": "regular",
+      "price_unit": "/100",
+      "price_unit_qty": 100,
+      "min_order": false,
+      "total": "36.30"
+    },
+    {
+      "qty": 300,
+      "unit": "Stk.",
+      "description": [
+        "Sicherungsring DIN 471 20x1,2 63-8578"
+      ],
+      "unit_price": "10.78",
+      "kind": "regular",
+      "price_unit": "/100",
+      "price_unit_qty": 100,
+      "min_order": false,
+      "total": "32.34"
+    },
+    {
+      "qty": 150,
+      "unit": "Stk.",
+      "description": [
+        "O-Ring 20x2 NBR 70 56-9873"
+      ],
+      "unit_price": "23.25",
+      "kind": "regular",
+      "price_unit": "/100",
+      "price_unit_qty": 100,
+      "min_order": false,
+      "total": "34.88"
+    },
+    {
+      "qty": 400,
+      "unit": "Stk.",
+      "description": [
+        "Sicherungsring DIN 471 20x1,2 37-4572"
+      ],
+      "unit_price": "14.75",
+      "kind": "regular",
+      "price_unit": "/100",
+      "price_unit_qty": 100,
+      "min_order": false,
+      "total": "59.00"
+    },
+    {
+      "qty": 750,
+      "unit": "Stk.",
+      "description": [
+        "Sechskantmutter ISO 4032 M8 verzinkt 16-1594"
+      ],
+      "unit_price": "3.09",
+      "kind": "regular",
+      "price_unit": "/100",
+      "price_unit_qty": 100,
+      "min_order": false,
+      "total": "23.18"
+    },
+    {
+      "qty": 400,
+      "unit": "Stk.",
+      "description": [
+        "Sicherungsring DIN 471 20x1,2 48-3445"
+      ],
+      "unit_price": "17.19",
+      "kind": "regular",
+      "price_unit": "/100",
+      "price_unit_qty": 100,
+      "min_order": false,
+      "total": "68.76"
+    },
+    {
+      "qty": 400,
+      "unit": "Stk.",
+      "description": [
+        "Zylinderschraube ISO 4762 M6x20 8.8 verzinkt 78-8773"
+      ],
+      "unit_price": "8.74",
+      "kind": "regular",
+      "price_unit": "/100",
+      "price_unit_qty": 100,
+      "min_order": false,
+      "total": "34.96"
+    },
+    {
+      "qty": 750,
+      "unit": "Stk.",
+      "description": [
+        "Passfeder DIN 6885 A 8x7x40 51-9840"
+      ],
+      "unit_price": "32.00",
+      "kind": "regular",
+      "price_unit": "/100",
+      "price_unit_qty": 100,
+      "min_order": false,
+      "total": "240.00"
+    },
+    {
+      "qty": 500,
+      "unit": "Stk.",
+      "description": [
+        "Scheibe ISO 7089 8 verzinkt 40-2588"
+      ],
+      "unit_price": "1.50",
+      "kind": "regular",
+      "price_unit": "/100",
+      "price_unit_qty": 100,
+      "min_order": false,
+      "total": "7.50"
+    },
+    {
+      "qty": 750,
+      "unit": "Stk.",
+      "description": [
+        "Sechskantmutter ISO 4032 M8 verzinkt 57-5059"
+      ],
+      "unit_price": "6.71",
+      "kind": "regular",
+      "price_unit": "/100",
+      "price_unit_qty": 100,
+      "min_order": false,
+      "total": "50.33"
+    },
+    {
+      "qty": 250,
+      "unit": "Stk.",
+      "description": [
+        "Zylinderschraube ISO 4762 M6x20 8.8 verzinkt 70-3214"
+      ],
+      "unit_price": "5.14",
+      "kind": "regular",
+      "price_unit": "/100",
+      "price_unit_qty": 100,
+      "min_order": false,
+      "total": "12.85"
+    },
+    {
+      "qty": 150,
+      "unit": "Stk.",
+      "description": [
+        "Scheibe ISO 7089 8 verzinkt 12-1113"
+      ],
+      "unit_price": "2.04",
+      "kind": "regular",
+      "price_unit": "/100",
+      "price_unit_qty": 100,
+      "min_order": false,
+      "total": "3.06"
+    },
+    {
+      "qty": 300,
+      "unit": "Stk.",
+      "description": [
+        "O-Ring 20x2 NBR 70 16-8479"
+      ],
+      "unit_price": "13.41",
+      "kind": "regular",
+      "price_unit": "/100",
+      "price_unit_qty": 100,
+      "min_order": false,
+      "total": "40.23"
+    },
+    {
+      "qty": 400,
+      "unit": "Stk.",
+      "description": [
+        "O-Ring 20x2 NBR 70 42-3866"
+      ],
+      "unit_price": "10.30",
+      "kind": "regular",
+      "price_unit": "/100",
+      "price_unit_qty": 100,
+      "min_order": false,
+      "total": "41.20"
+    },
+    {
+      "qty": 750,
+      "unit": "Stk.",
+      "description": [
+        "Sicherungsring DIN 471 20x1,2 37-2535"
+      ],
+      "unit_price": "8.01",
+      "kind": "regular",
+      "price_unit": "/100",
+      "price_unit_qty": 100,
+      "min_order": false,
+      "total": "60.08"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": "2.00",
+  "discount_days": 10,
+  "payment_days": 30,
+  "totals": {
+    "net": "979.14",
+    "vat": "186.04",
+    "gross": "1165.18"
+  },
+  "payment": {
+    "discount_date": "01.11.2026",
+    "due_date": "21.11.2026",
+    "discount_amount": "23.30",
+    "discount_base": "gross"
+  },
+  "payment_terms_text": [
+    "zahlbar bis 01.11.26 bei 2 % Skonto (23,30 €)",
+    "bis 21.11.2026 ohne Abzug"
+  ],
+  "page_count": 2,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18
+      ],
+      "line_count": 18,
+      "transfer": "771.39",
+      "carry_forward": null,
+      "summary_present": false,
+      "payment_block_present": true
+    },
+    {
+      "page": 2,
+      "position_indices": [
+        19,
+        20,
+        21,
+        22,
+        23,
+        24
+      ],
+      "line_count": 6,
+      "transfer": null,
+      "carry_forward": null,
+      "summary_present": true,
+      "payment_block_present": false
+    }
+  ],
+  "test_flags": {
+    "address_name_lines": 3,
+    "address_blank_lines": 1,
+    "address_attention_line": true,
+    "address_department_line": true,
+    "two_line_company_name": false,
+    "missing_order_number": true,
+    "shipping_empty": false,
+    "discount_applied": true,
+    "blank_unit_flat_rate": false,
+    "without_price_count": 0,
+    "flat_rate_count": 0,
+    "min_order": null,
+    "price_unit_100_count": 24,
+    "two_three_line_positions": 0,
+    "four_five_line_positions": 0,
+    "has_qty_thousands": false,
+    "carry_forward": false,
+    "last_table_row_index": 8,
+    "note": "2 Seiten, nur /100"
+  },
+  "sha256": "d5be23656f613143a6e6a0fbd2ed3ca723b315eac00448a84239b5dfcf957907"
+}

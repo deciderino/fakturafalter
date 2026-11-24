@@ -1,0 +1,5 @@
+Rechnungsnr;Datum;Lieferdatum;Kunde;Strasse;PLZ;Ort;Artikel;Menge;Einheit;Einzelpreis;USt-Satz
+SK-2026-0416;18.10.2026;17.10.2026;Hotel Am Stadtpark GmbH;Parkallee 18;31135;Hildesheim;Kaffee Bohne Hausröstung;1,75;kg;24,90;7
+SK-2026-0416;18.10.2026;17.10.2026;Hotel Am Stadtpark GmbH;Parkallee 18;31135;Hildesheim;Apfelkuchen Blech;1,75;kg;11,80;7
+SK-2026-0416;18.10.2026;17.10.2026;Hotel Am Stadtpark GmbH;Parkallee 18;31135;Hildesheim;Brotkorb Leihgebühr;24;Stk;2,50;19
+SK-2026-0416;18.10.2026;17.10.2026;Hotel Am Stadtpark GmbH;Parkallee 18;31135;Hildesheim;Lieferpauschale Innenstadt;40;Stk;6,00;19

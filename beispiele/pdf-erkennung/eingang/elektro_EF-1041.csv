@@ -1,0 +1,6 @@
+belegnr,belegdatum,leistungsdatum,kunde,strasse,plz,ort,menge,einheit,bezeichnung,preis,ust
+EF-1041,05.10.2026,03.10.2026,Wohnbau Nordring GmbH,Nordring 14,44787,Bochum,2,m,Kabelkanal 40x60 mm,7.20,19
+EF-1041,05.10.2026,03.10.2026,Wohnbau Nordring GmbH,Nordring 14,44787,Bochum,4.5,h,Arbeitszeit Elektromeister,68.00,19
+EF-1041,05.10.2026,03.10.2026,Wohnbau Nordring GmbH,Nordring 14,44787,Bochum,1,Stk,Fehlerstromschutzschalter 40 A 30 mA vierpolig,64.80,19
+EF-1041,05.10.2026,03.10.2026,Wohnbau Nordring GmbH,Nordring 14,44787,Bochum,3,Stk,Schalterprogramm reinweiﬂ Wechselschalter mit Rahmen einfach,12.40,19
+EF-1041,05.10.2026,03.10.2026,Wohnbau Nordring GmbH,Nordring 14,44787,Bochum,2,h,Arbeitszeit Geselle,54.50,19

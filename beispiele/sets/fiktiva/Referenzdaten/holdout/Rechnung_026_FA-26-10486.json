@@ -1,0 +1,179 @@
+{
+  "datei": "Rechnung_026_FA-26-10486.pdf",
+  "format": "PDF 1.4 (reportlab, Schriften eingebettet)",
+  "holdout": true,
+  "seller": {
+    "name": "Fiktiva Antriebstechnik GmbH",
+    "street": "Musterring 12",
+    "postal_code": "04179",
+    "city": "Leipzig",
+    "ust_id": "DE314159262",
+    "iban": "DE71 0000 0000 0047 1108 15",
+    "bic": "FIKTDEX1XXX",
+    "bank": "Beispielbank Leipzig",
+    "email": "rechnung@fiktiva.example",
+    "register": "Amtsgericht Leipzig, HRB 000000",
+    "ceo": "Jana Mustermann"
+  },
+  "buyer": {
+    "name_lines": [
+      "Mühlhausener Kunststofftechnik",
+      "Beispiel GmbH"
+    ],
+    "street": "Ziegeleiweg 19",
+    "postal_code": "99974",
+    "city": "Mühlhausen",
+    "customer_number": "0012044"
+  },
+  "invoice": {
+    "number": "FA-26-10486",
+    "date": "03.11.2026",
+    "service_date": "03.11.2026",
+    "order_number": "4500190231",
+    "shipping": "DHL"
+  },
+  "positions": [
+    {
+      "qty": 12,
+      "unit": "Stk.",
+      "description": [
+        "Wellenkupplung WK-25 elastisch 75-4907"
+      ],
+      "unit_price": "46.00",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "552.00"
+    },
+    {
+      "qty": 10,
+      "unit": "Stk.",
+      "description": [
+        "Schutzhaube Riementrieb 33-9283"
+      ],
+      "unit_price": "152.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "1525.00"
+    },
+    {
+      "qty": 4,
+      "unit": "Stk.",
+      "description": [
+        "Antriebswelle nach Zeichnung 64-3286"
+      ],
+      "unit_price": "460.00",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "1840.00"
+    },
+    {
+      "qty": 10,
+      "unit": "Stk.",
+      "description": [
+        "Getriebeflansch GF-80 46-5312"
+      ],
+      "unit_price": "99.75",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "997.50"
+    },
+    {
+      "qty": 40,
+      "unit": "Stk.",
+      "description": [
+        "Klemmhebel M8 Kunststoff 13-2360"
+      ],
+      "unit_price": "5.35",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "214.00"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": "2.00",
+  "discount_days": 10,
+  "payment_days": 30,
+  "totals": {
+    "net": "5128.50",
+    "vat": "820.56",
+    "gross": "5949.06"
+  },
+  "payment": {
+    "discount_date": "13.11.2026",
+    "due_date": "03.12.2026",
+    "discount_amount": "118.98",
+    "discount_base": "gross"
+  },
+  "payment_terms_text": [
+    "zahlbar bis 13.11.26 bei 2 % Skonto (118,98 €)",
+    "bis 03.12.2026 ohne Abzug"
+  ],
+  "page_count": 1,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "line_count": 5,
+      "transfer": null,
+      "carry_forward": null,
+      "summary_present": true,
+      "payment_block_present": true
+    }
+  ],
+  "test_flags": {
+    "address_name_lines": 2,
+    "address_blank_lines": 1,
+    "address_attention_line": false,
+    "address_department_line": false,
+    "two_line_company_name": true,
+    "missing_order_number": false,
+    "shipping_empty": false,
+    "discount_applied": true,
+    "blank_unit_flat_rate": false,
+    "without_price_count": 0,
+    "flat_rate_count": 0,
+    "min_order": null,
+    "price_unit_100_count": 0,
+    "two_three_line_positions": 0,
+    "four_five_line_positions": 0,
+    "has_qty_thousands": false,
+    "carry_forward": false,
+    "last_table_row_index": 7,
+    "note": "FEHLER: MwSt. mit 16 % gerechnet, Beschriftung 19 %"
+  },
+  "rolle": "holdout-fehler",
+  "erwarteter_status": "fehler",
+  "erwartete_hinweise": [
+    "PRUEFEN [BT-110] Kontrollwert der Quelle ≠ berechnet (gedruckte MwSt. 820,56 € = 16 %, richtig 19 % = 974,42 €)"
+  ],
+  "moegliche_folgehinweise": [
+    "PRUEFEN [BT-112] Kontrollwert der Quelle ≠ berechnet (Brutto folgt der gedruckten MwSt.)"
+  ],
+  "fehlerart": "ust_betrag",
+  "fehler_beschreibung": "MwSt.-Betrag mit 16 % statt 19 % gerechnet (Beschriftung „MwSt. 19 %“); Brutto = Netto + gedruckte MwSt., Skonto vom gedruckten Brutto",
+  "falle": null,
+  "falle_beschreibung": null,
+  "fehler_detail": {},
+  "totals_berechnet": {
+    "net": "5128.50",
+    "vat": "974.42",
+    "gross": "6102.92"
+  },
+  "sha256": "0fd48f130f163ef2511446541b224dbf118de27c7da7f2871280d3a247b4fa9d"
+}

@@ -1,0 +1,209 @@
+{
+  "datei": "Rechnung_030_RE-2026-00154.pdf",
+  "format": "PDF/A-2b",
+  "seller": {
+    "name": "Alberon Industriekomponenten GmbH",
+    "street": "Prüfwerkstraße 18",
+    "postal_code": "09111",
+    "city": "Chemnitz",
+    "ust_id": "DE123456789",
+    "iban": "DE89 3704 0044 0532 0130 00",
+    "bic": "COBADEFFXXX",
+    "bank": "Commerzbank AG",
+    "email": "rechnung@alberon.example",
+    "register": "Amtsgericht Chemnitz, HRB 999999",
+    "ceo": "Markus Seidel"
+  },
+  "buyer": {
+    "name_lines": [
+      "Waldstrom Fahrzeugtechnik GmbH",
+      "Materialwirtschaft"
+    ],
+    "street": "Eichenhof 17",
+    "postal_code": "90402",
+    "city": "Nürnberg",
+    "customer_number": "07014"
+  },
+  "invoice": {
+    "number": "RE-2026-00154",
+    "date": "26.09.2026",
+    "service_date": "25.09.2026",
+    "order_number": "",
+    "shipping": "GO!"
+  },
+  "positions": [
+    {
+      "qty": 1,
+      "unit": "Stk.",
+      "description": [
+        "Spannhülse 67242"
+      ],
+      "unit_price": "1250.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "1250.50"
+    },
+    {
+      "qty": 1250,
+      "unit": "Stk.",
+      "description": [
+        "Schutzblende 818219"
+      ],
+      "unit_price": null,
+      "kind": "without_price",
+      "price_unit": "/1",
+      "total": null
+    },
+    {
+      "qty": 15,
+      "unit": "Stk.",
+      "description": [
+        "Mess- und Prüfarbeit 998710"
+      ],
+      "unit_price": null,
+      "kind": "without_price",
+      "price_unit": "/1",
+      "total": null
+    },
+    {
+      "qty": 1,
+      "unit": "Stk.",
+      "description": [
+        "Pauschalpreis Auftrag 2029-235"
+      ],
+      "unit_price": "850.00",
+      "kind": "flat_rate",
+      "price_unit": "/1",
+      "total": "850.00"
+    },
+    {
+      "qty": 1,
+      "unit": "Stk.",
+      "description": [
+        "Maschinenbolzen 71966"
+      ],
+      "unit_price": "1799.99",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "1799.99"
+    },
+    {
+      "qty": 5000,
+      "unit": "Stk.",
+      "description": [
+        "Formstück 186529"
+      ],
+      "unit_price": "35.00",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "175000.00"
+    },
+    {
+      "qty": 5000,
+      "unit": "Stk.",
+      "description": [
+        "Maschinenbolzen 532376"
+      ],
+      "unit_price": "0.85",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "4250.00"
+    },
+    {
+      "qty": 2500,
+      "unit": "Stk.",
+      "description": [
+        "Montageschiene 24314"
+      ],
+      "unit_price": "7.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "18750.00"
+    },
+    {
+      "qty": 125,
+      "unit": "Stk.",
+      "description": [
+        "Formstück 347186",
+        "Bohrungen gegen Beschichtung schützen"
+      ],
+      "unit_price": "0.85",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "106.25"
+    },
+    {
+      "qty": 5,
+      "unit": "Stk.",
+      "description": [
+        "Mess- und Prüfarbeit 520498"
+      ],
+      "unit_price": "3.90",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "19.50"
+    },
+    {
+      "qty": 25,
+      "unit": "Stk.",
+      "description": [
+        "Passstift 625001",
+        "inkl. Sichtprüfung nach Vorgabe"
+      ],
+      "unit_price": "480.00",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "12000.00"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": null,
+  "discount_days": null,
+  "payment_days": 30,
+  "totals": {
+    "net": "214026.24",
+    "vat": "40664.99",
+    "gross": "254691.23"
+  },
+  "payment": {
+    "discount_date": null,
+    "due_date": "26.10.2026",
+    "discount_amount": null
+  },
+  "page_count": 1,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "line_count": 13,
+      "transfer": null,
+      "summary_present": true,
+      "payment_block_present": true
+    }
+  ],
+  "test_flags": {
+    "address_name_lines": 2,
+    "missing_order_number": true,
+    "shipping_empty": false,
+    "discount_applied": false,
+    "blank_unit_flat_rate": false,
+    "without_price_count": 2,
+    "flat_rate_count": 1,
+    "two_three_line_positions": 2,
+    "four_five_line_positions": 0,
+    "has_qty_thousands": true
+  },
+  "sha256": "8155c96b44ba24821c5c83589e73b5be48d9c40e134cb6341c2836ed37714650"
+}

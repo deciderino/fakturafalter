@@ -1,0 +1,186 @@
+{
+  "datei": "Rechnung_024_RE-2026-00148.pdf",
+  "format": "PDF/A-2b",
+  "seller": {
+    "name": "Alberon Industriekomponenten GmbH",
+    "street": "Prüfwerkstraße 18",
+    "postal_code": "09111",
+    "city": "Chemnitz",
+    "ust_id": "DE123456789",
+    "iban": "DE89 3704 0044 0532 0130 00",
+    "bic": "COBADEFFXXX",
+    "bank": "Commerzbank AG",
+    "email": "rechnung@alberon.example",
+    "register": "Amtsgericht Chemnitz, HRB 999999",
+    "ceo": "Markus Seidel"
+  },
+  "buyer": {
+    "name_lines": [
+      "Lichtbogen Gerätebau AG"
+    ],
+    "street": "Feldrain 12",
+    "postal_code": "01067",
+    "city": "Dresden",
+    "customer_number": "81036"
+  },
+  "invoice": {
+    "number": "RE-2026-00148",
+    "date": "15.09.2026",
+    "service_date": "15.09.2026",
+    "order_number": "807-2375",
+    "shipping": ""
+  },
+  "positions": [
+    {
+      "qty": 20,
+      "unit": "Stk.",
+      "description": [
+        "Mess- und Prüfarbeit 410428",
+        "Ausführung Serie B2"
+      ],
+      "unit_price": "250.00",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "5000.00"
+    },
+    {
+      "qty": 1,
+      "unit": "Stk.",
+      "description": [
+        "Nachbearbeitung 753653"
+      ],
+      "unit_price": null,
+      "kind": "without_price",
+      "price_unit": "/1",
+      "total": null
+    },
+    {
+      "qty": 5000,
+      "unit": "Stk.",
+      "description": [
+        "Spannhülse 14952"
+      ],
+      "unit_price": null,
+      "kind": "without_price",
+      "price_unit": "/1",
+      "total": null
+    },
+    {
+      "qty": 1,
+      "unit": "Std.",
+      "description": [
+        "Bearbeitung 230545",
+        "Materialzustand T6, gratfrei"
+      ],
+      "unit_price": null,
+      "kind": "without_price",
+      "price_unit": "/1",
+      "total": null
+    },
+    {
+      "qty": 1,
+      "unit": "Stk.",
+      "description": [
+        "Mindestauftrag Auftrag 2027-475"
+      ],
+      "unit_price": "450.00",
+      "kind": "flat_rate",
+      "price_unit": "/1",
+      "total": "450.00"
+    },
+    {
+      "qty": 40,
+      "unit": "Stk.",
+      "description": [
+        "Montageschiene 666573"
+      ],
+      "unit_price": "35.00",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "1400.00"
+    },
+    {
+      "qty": 125,
+      "unit": "Stk.",
+      "description": [
+        "Gehäuseboden 662631",
+        "Gewinde M5 und Passungen prüfen"
+      ],
+      "unit_price": "35.00",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "4375.00"
+    },
+    {
+      "qty": 10,
+      "unit": "Stk.",
+      "description": [
+        "Passstift 389180"
+      ],
+      "unit_price": "46.80",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "468.00"
+    },
+    {
+      "qty": 100,
+      "unit": "Stk.",
+      "description": [
+        "Trägerplatte 881770",
+        "Oberfläche harteloxiert 40 µm"
+      ],
+      "unit_price": "0.85",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "85.00"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": "4.00",
+  "discount_days": 10,
+  "payment_days": 30,
+  "totals": {
+    "net": "11778.00",
+    "vat": "2237.82",
+    "gross": "14015.82"
+  },
+  "payment": {
+    "discount_date": "25.09.2026",
+    "due_date": "15.10.2026",
+    "discount_amount": "560.63"
+  },
+  "page_count": 1,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "line_count": 13,
+      "transfer": null,
+      "summary_present": true,
+      "payment_block_present": true
+    }
+  ],
+  "test_flags": {
+    "address_name_lines": 1,
+    "missing_order_number": false,
+    "shipping_empty": true,
+    "discount_applied": true,
+    "blank_unit_flat_rate": false,
+    "without_price_count": 3,
+    "flat_rate_count": 1,
+    "two_three_line_positions": 4,
+    "four_five_line_positions": 0,
+    "has_qty_thousands": true
+  },
+  "sha256": "e7f606dd1b0659db886a1fcfdb29019084e8b03d7fffb0f037fd53ab563e2498"
+}

@@ -1,0 +1,131 @@
+{
+  "datei": "Rechnung_001_FA-26-10312.pdf",
+  "format": "PDF 1.4 (reportlab, Schriften eingebettet)",
+  "holdout": false,
+  "seller": {
+    "name": "Fiktiva Antriebstechnik GmbH",
+    "street": "Musterring 12",
+    "postal_code": "04179",
+    "city": "Leipzig",
+    "ust_id": "DE314159262",
+    "iban": "DE71 0000 0000 0047 1108 15",
+    "bic": "FIKTDEX1XXX",
+    "bank": "Beispielbank Leipzig",
+    "email": "rechnung@fiktiva.example",
+    "register": "Amtsgericht Leipzig, HRB 000000",
+    "ceo": "Jana Mustermann"
+  },
+  "buyer": {
+    "name_lines": [
+      "Brennecke Verpackungsanlagen GmbH"
+    ],
+    "street": "Industriestraße 41",
+    "postal_code": "33609",
+    "city": "Bielefeld",
+    "customer_number": "10427"
+  },
+  "invoice": {
+    "number": "FA-26-10312",
+    "date": "01.10.2026",
+    "service_date": "01.10.2026",
+    "order_number": "4700422864",
+    "shipping": ""
+  },
+  "positions": [
+    {
+      "qty": 5,
+      "unit": "Stk.",
+      "description": [
+        "Distanzbuchse 20x30x15 24-5502"
+      ],
+      "unit_price": "2.06",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "10.30"
+    },
+    {
+      "qty": 1,
+      "unit": "Stk.",
+      "description": [
+        "Wellenkupplung WK-25 elastisch 36-8965"
+      ],
+      "unit_price": "115.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "115.50"
+    },
+    {
+      "qty": 50,
+      "unit": "Stk.",
+      "description": [
+        "Kettenrad 1/2\" Z=19 26-9899"
+      ],
+      "unit_price": "15.41",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "770.50"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": null,
+  "discount_days": null,
+  "payment_days": 30,
+  "totals": {
+    "net": "896.30",
+    "vat": "170.30",
+    "gross": "1066.60"
+  },
+  "payment": {
+    "discount_date": null,
+    "due_date": "31.10.2026",
+    "discount_amount": null,
+    "discount_base": null
+  },
+  "payment_terms_text": [
+    "zahlbar bis 31.10.2026 ohne Abzug"
+  ],
+  "page_count": 1,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3
+      ],
+      "line_count": 3,
+      "transfer": null,
+      "carry_forward": null,
+      "summary_present": true,
+      "payment_block_present": true
+    }
+  ],
+  "test_flags": {
+    "address_name_lines": 1,
+    "address_blank_lines": 1,
+    "address_attention_line": false,
+    "address_department_line": false,
+    "two_line_company_name": false,
+    "missing_order_number": false,
+    "shipping_empty": true,
+    "discount_applied": false,
+    "blank_unit_flat_rate": false,
+    "without_price_count": 0,
+    "flat_rate_count": 0,
+    "min_order": null,
+    "price_unit_100_count": 0,
+    "two_three_line_positions": 0,
+    "four_five_line_positions": 0,
+    "has_qty_thousands": false,
+    "carry_forward": false,
+    "last_table_row_index": 5,
+    "note": "einfach"
+  },
+  "sha256": "ff93d5cb4ad2874059c547a3512f9b0e1711c75c490e1e8f99747b1b70625aa2"
+}

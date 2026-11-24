@@ -1,0 +1,6 @@
+belegnr,belegdatum,leistungsdatum,kunde,strasse,plz,ort,menge,einheit,bezeichnung,preis,ust
+EF-1042,08.10.2026,06.10.2026,Praxis Dr. Beispiel,Hellweg 3,44787,Bochum,2,m,"Mantelleitung NYM-J 3x1,5 mm² grau, Ring 50 m, verlegt auf Putz inklusive Schellen",1.85,19
+EF-1042,08.10.2026,06.10.2026,Praxis Dr. Beispiel,Hellweg 3,44787,Bochum,4.5,h,Arbeitszeit Elektromeister,68.00,19
+EF-1042,08.10.2026,06.10.2026,Praxis Dr. Beispiel,Hellweg 3,44787,Bochum,8,Stk,Fehlerstromschutzschalter 40 A 30 mA vierpolig,64.80,19
+EF-1042,08.10.2026,06.10.2026,Praxis Dr. Beispiel,Hellweg 3,44787,Bochum,3,h,Arbeitszeit Geselle,54.50,19
+EF-1042,08.10.2026,06.10.2026,Praxis Dr. Beispiel,Hellweg 3,44787,Bochum,4.5,m,"Mantelleitung NYM-J 3x1,5 mm² grau, Ring 50 m, verlegt auf Putz inklusive Schellen",1.85,19

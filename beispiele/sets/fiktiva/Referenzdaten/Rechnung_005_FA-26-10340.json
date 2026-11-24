@@ -1,0 +1,173 @@
+{
+  "datei": "Rechnung_005_FA-26-10340.pdf",
+  "format": "PDF 1.4 (reportlab, Schriften eingebettet)",
+  "holdout": false,
+  "seller": {
+    "name": "Fiktiva Antriebstechnik GmbH",
+    "street": "Musterring 12",
+    "postal_code": "04179",
+    "city": "Leipzig",
+    "ust_id": "DE314159262",
+    "iban": "DE71 0000 0000 0047 1108 15",
+    "bic": "FIKTDEX1XXX",
+    "bank": "Beispielbank Leipzig",
+    "email": "rechnung@fiktiva.example",
+    "register": "Amtsgericht Leipzig, HRB 000000",
+    "ceo": "Jana Mustermann"
+  },
+  "buyer": {
+    "name_lines": [
+      "Kremer & Sohn Anlagenbau GmbH"
+    ],
+    "street": "Hafenstraße 88",
+    "postal_code": "28217",
+    "city": "Bremen",
+    "customer_number": "K-20977"
+  },
+  "invoice": {
+    "number": "FA-26-10340",
+    "date": "08.10.2026",
+    "service_date": "08.10.2026",
+    "order_number": "BE-26-384",
+    "shipping": "Lieferung frei Haus"
+  },
+  "positions": [
+    {
+      "qty": 2500,
+      "unit": "Stk.",
+      "description": [
+        "Getriebeflansch GF-80 67-5884"
+      ],
+      "unit_price": "7.52",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "18800.00"
+    },
+    {
+      "qty": 4,
+      "unit": "Stk.",
+      "description": [
+        "Kettenrad 1/2\" Z=19 20-1828"
+      ],
+      "unit_price": "29.75",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "119.00"
+    },
+    {
+      "qty": 1,
+      "unit": "Stk.",
+      "description": [
+        "Kettenrad 1/2\" Z=19 58-6633"
+      ],
+      "unit_price": "33.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "33.50"
+    },
+    {
+      "qty": 50,
+      "unit": "Stk.",
+      "description": [
+        "Getriebeflansch GF-80 74-3045"
+      ],
+      "unit_price": "79.25",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "3962.50"
+    },
+    {
+      "qty": 1,
+      "unit": "Stk.",
+      "description": [
+        "Motorkonsole MK-112 geschweißt 80-3035"
+      ],
+      "unit_price": "101.25",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "101.25"
+    },
+    {
+      "qty": 2,
+      "unit": "Stk.",
+      "description": [
+        "Klemmhebel M8 Kunststoff 77-3973"
+      ],
+      "unit_price": "5.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "11.00"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": null,
+  "discount_days": null,
+  "payment_days": 30,
+  "totals": {
+    "net": "23027.25",
+    "vat": "4375.18",
+    "gross": "27402.43"
+  },
+  "payment": {
+    "discount_date": null,
+    "due_date": "07.11.2026",
+    "discount_amount": null,
+    "discount_base": null
+  },
+  "payment_terms_text": [
+    "zahlbar bis 07.11.2026 ohne Abzug"
+  ],
+  "page_count": 1,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "line_count": 6,
+      "transfer": null,
+      "carry_forward": null,
+      "summary_present": true,
+      "payment_block_present": true
+    }
+  ],
+  "test_flags": {
+    "address_name_lines": 1,
+    "address_blank_lines": 1,
+    "address_attention_line": false,
+    "address_department_line": false,
+    "two_line_company_name": false,
+    "missing_order_number": false,
+    "shipping_empty": false,
+    "discount_applied": false,
+    "blank_unit_flat_rate": false,
+    "without_price_count": 0,
+    "flat_rate_count": 0,
+    "min_order": null,
+    "price_unit_100_count": 0,
+    "two_three_line_positions": 0,
+    "four_five_line_positions": 0,
+    "has_qty_thousands": true,
+    "carry_forward": false,
+    "last_table_row_index": 8,
+    "note": "Tausenderpunkt Menge"
+  },
+  "sha256": "7d8e2771ec41d79b5aa53fb9aa0d6f6322dd8dc332975d98695ea5cff533c087"
+}

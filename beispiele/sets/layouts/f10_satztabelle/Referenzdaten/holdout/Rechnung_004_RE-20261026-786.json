@@ -1,0 +1,222 @@
+{
+  "datei": "Rechnung_004_RE-20261026-786.pdf",
+  "format": "PDF 1.4 (reportlab), A4, Schrift Helvetica (Standard-14, nicht eingebettet)",
+  "familie": "f10_satztabelle",
+  "quelle": "Q7",
+  "holdout": true,
+  "split": "holdout",
+  "seller": {
+    "name": "Leselust Medienvertrieb GmbH",
+    "street": "Kohlgartenstraße 18",
+    "postal_code": "04315",
+    "city": "Leipzig",
+    "ust_id": "DE136605974",
+    "iban": "DE46 0000 0000 0086 0553 10",
+    "bic": "LESEDEX1LEJ",
+    "bank": "Beispielbank Leipzig",
+    "email": "info@leselust-medien.example",
+    "register": "HRB 000000",
+    "ceo": "Ingrid Fohlmann"
+  },
+  "buyer": {
+    "name_lines": [
+      "Kunsthandwerk Ilse Marbach"
+    ],
+    "street": "Kirchgasse 9",
+    "postal_code": "07743",
+    "city": "Jena",
+    "customer_number": "30240"
+  },
+  "invoice": {
+    "number": "RE-20261026/786",
+    "date": "26.10.2026",
+    "service_date": "20.10.2026",
+    "order_number": "AB672",
+    "shipping": ""
+  },
+  "druck": {
+    "datum_format": "TT.MM.JJJJ",
+    "schrift": "Helvetica",
+    "seitenformat": "A4"
+  },
+  "BT-72": "20.10.2026",
+  "BT-119": [
+    "7.00",
+    "19.00"
+  ],
+  "positions": [
+    {
+      "qty": "50",
+      "unit": "Stk.",
+      "description": [
+        "Geschenkpapier: Rolle 2 m, sortiert"
+      ],
+      "article_number": "P-13",
+      "unit_price": "3.05",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "152.50",
+      "vat_rate": "19.00"
+    },
+    {
+      "qty": "1",
+      "unit": "Std.",
+      "description": [
+        "Regalberatung (Stunden): Sortimentsplanung vor Ort"
+      ],
+      "article_number": "D-22",
+      "unit_price": "75.25",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "75.25",
+      "vat_rate": "19.00"
+    },
+    {
+      "qty": "10",
+      "unit": "Stk.",
+      "description": [
+        "Füllhalter: Schulfüller mit Patronen"
+      ],
+      "article_number": "P-12",
+      "unit_price": "14.56",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "145.60",
+      "vat_rate": "19.00"
+    },
+    {
+      "qty": "10",
+      "unit": "Stk.",
+      "description": [
+        "Wörterbuch Deutsch–Englisch, Schulausgabe, Remission",
+        "ausgeschlossen, Sonderbestellung"
+      ],
+      "article_number": "B-04",
+      "unit_price": "25.00",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "250.00",
+      "vat_rate": "7.00"
+    },
+    {
+      "qty": "100",
+      "unit": "Stk.",
+      "description": [
+        "Notizbücher: A5 kariert, 96 Blatt, Remission ausgeschlossen,",
+        "Sonderbestellung"
+      ],
+      "article_number": "P-11",
+      "unit_price": "4.48",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "448.00",
+      "vat_rate": "19.00"
+    },
+    {
+      "qty": "5",
+      "unit": "Stk.",
+      "description": [
+        "Hörbuch: Klassiker für Kinder, 3 CDs"
+      ],
+      "article_number": "B-05",
+      "unit_price": "15.10",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "75.50",
+      "vat_rate": "7.00"
+    },
+    {
+      "qty": "1",
+      "unit": "Std.",
+      "description": [
+        "Autorenlesung (Stunden): Lesung mit Gespräch"
+      ],
+      "article_number": "D-21",
+      "unit_price": "152.50",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "152.50",
+      "vat_rate": "19.00"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": null,
+  "discount_days": null,
+  "payment_days": 14,
+  "totals": {
+    "net": "1299.35",
+    "vat": "207.82",
+    "gross": "1507.17"
+  },
+  "totals_printed": {
+    "net": "1299.35",
+    "vat": "207.82",
+    "gross": "1507.17"
+  },
+  "payment": {
+    "discount_date": null,
+    "due_date": "09.11.2026",
+    "discount_amount": null,
+    "discount_base": null
+  },
+  "payment_terms_text": [
+    "Bitte überweisen bis 09.11.2026."
+  ],
+  "page_count": 1,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "transfer": null,
+      "carry_forward": null,
+      "summary_present": true
+    }
+  ],
+  "erwarteter_status": "ok",
+  "erwartete_hinweise": [],
+  "kosit": null,
+  "verapdf": null,
+  "validierung_hinweis": "lokal nicht validierbar / spätere Phase (KoSIT/veraPDF prüfen die App-Ausgabe, nicht diese PDFs)",
+  "korrekturen": null,
+  "korrekturen_hinweis": "erst beim echten Anlernen messbar",
+  "test_flags": {
+    "address_name_lines": 1,
+    "po_box": false,
+    "multi_line_positions": 2,
+    "shipping_position": false,
+    "page_format": "A4",
+    "payment": "fest",
+    "pruefen": null,
+    "missing_order_number": false,
+    "note": "Hold-out: mehrzeilige Produkte"
+  },
+  "vat_rate_hinweis": "vat_rate bleibt 19.00 für tools/benchmark.py (kennt nur einen Satz); maßgeblich sind BT-119 und vat_breakdown",
+  "vat_breakdown": [
+    {
+      "rate": "7.00",
+      "net": "325.50",
+      "vat": "22.79"
+    },
+    {
+      "rate": "19.00",
+      "net": "973.85",
+      "vat": "185.03"
+    }
+  ],
+  "sha256": "f842bf96e2a61def5c319ec09f2bd61fcf42ddb69ce314af2cab82be76c510c4"
+}

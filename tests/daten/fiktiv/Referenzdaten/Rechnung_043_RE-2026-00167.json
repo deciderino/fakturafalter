@@ -1,0 +1,425 @@
+{
+  "datei": "Rechnung_043_RE-2026-00167.pdf",
+  "format": "PDF/A-2b",
+  "seller": {
+    "name": "Alberon Industriekomponenten GmbH",
+    "street": "Prüfwerkstraße 18",
+    "postal_code": "09111",
+    "city": "Chemnitz",
+    "ust_id": "DE123456789",
+    "iban": "DE89 3704 0044 0532 0130 00",
+    "bic": "COBADEFFXXX",
+    "bank": "Commerzbank AG",
+    "email": "rechnung@alberon.example",
+    "register": "Amtsgericht Chemnitz, HRB 999999",
+    "ceo": "Markus Seidel"
+  },
+  "buyer": {
+    "name_lines": [
+      "Kronwald Automation GmbH",
+      "Bereich Fertigung"
+    ],
+    "street": "Montagestraße 41",
+    "postal_code": "04103",
+    "city": "Leipzig",
+    "customer_number": "00851"
+  },
+  "invoice": {
+    "number": "RE-2026-00167",
+    "date": "20.10.2026",
+    "service_date": "15.10.2026",
+    "order_number": "PO/2026/8923",
+    "shipping": "EXW"
+  },
+  "positions": [
+    {
+      "qty": 8,
+      "unit": "Stk.",
+      "description": [
+        "Wellenhalter 438810"
+      ],
+      "unit_price": "7.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "60.00"
+    },
+    {
+      "qty": 1,
+      "unit": "Stk.",
+      "description": [
+        "Passstift 618398"
+      ],
+      "unit_price": "2.35",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "2.35"
+    },
+    {
+      "qty": 125,
+      "unit": "Stk.",
+      "description": [
+        "Mess- und Prüfarbeit 908736"
+      ],
+      "unit_price": "180.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "22562.50"
+    },
+    {
+      "qty": 500,
+      "unit": "Stk.",
+      "description": [
+        "Befestigungswinkel 316086"
+      ],
+      "unit_price": "35.00",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "17500.00"
+    },
+    {
+      "qty": 50,
+      "unit": "Stk.",
+      "description": [
+        "Mess- und Prüfarbeit 239783"
+      ],
+      "unit_price": "65.00",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "3250.00"
+    },
+    {
+      "qty": 1000,
+      "unit": "Stk.",
+      "description": [
+        "Spannhülse 519041"
+      ],
+      "unit_price": null,
+      "kind": "without_price",
+      "price_unit": "/1",
+      "total": null
+    },
+    {
+      "qty": 1,
+      "unit": "Stk.",
+      "description": [
+        "Fixpreis Auftrag 2026-397"
+      ],
+      "unit_price": "120.00",
+      "kind": "flat_rate",
+      "price_unit": "/1",
+      "total": "120.00"
+    },
+    {
+      "qty": 1,
+      "unit": "Stk.",
+      "description": [
+        "CNC-Nacharbeit 109425"
+      ],
+      "unit_price": "180.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "180.50"
+    },
+    {
+      "qty": 12,
+      "unit": "Std.",
+      "description": [
+        "Nachbearbeitung 966385"
+      ],
+      "unit_price": "1799.99",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "21599.88"
+    },
+    {
+      "qty": 125,
+      "unit": "Stk.",
+      "description": [
+        "Bearbeitung 357836"
+      ],
+      "unit_price": "2.35",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "293.75"
+    },
+    {
+      "qty": 40,
+      "unit": "Stk.",
+      "description": [
+        "Kupplungsstück 80373"
+      ],
+      "unit_price": "89.90",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "3596.00"
+    },
+    {
+      "qty": 2500,
+      "unit": "Stk.",
+      "description": [
+        "Aufnahmeflansch 995952",
+        "inkl. Sichtprüfung nach Vorgabe"
+      ],
+      "unit_price": "2.35",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "5875.00"
+    },
+    {
+      "qty": 12,
+      "unit": "Stk.",
+      "description": [
+        "Passstift 653243"
+      ],
+      "unit_price": "2.35",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "28.20"
+    },
+    {
+      "qty": 10000,
+      "unit": "Stk.",
+      "description": [
+        "Kupplungsstück 750021"
+      ],
+      "unit_price": "18.75",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "187500.00"
+    },
+    {
+      "qty": 5000,
+      "unit": "Stk.",
+      "description": [
+        "Befestigungswinkel 24236",
+        "Werkstoff EN AW-5083"
+      ],
+      "unit_price": "14.99",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "74950.00"
+    },
+    {
+      "qty": 8,
+      "unit": "Stk.",
+      "description": [
+        "Schutzblende 666233"
+      ],
+      "unit_price": "18.75",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "150.00"
+    },
+    {
+      "qty": 2,
+      "unit": "Stk.",
+      "description": [
+        "Maschinenbolzen 710763"
+      ],
+      "unit_price": "480.00",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "960.00"
+    },
+    {
+      "qty": 1,
+      "unit": "Stk.",
+      "description": [
+        "Gehäuseboden 663837"
+      ],
+      "unit_price": null,
+      "kind": "without_price",
+      "price_unit": "/1",
+      "total": null
+    },
+    {
+      "qty": 1,
+      "unit": "Stk.",
+      "description": [
+        "Pauschalpreis Auftrag 2026-453"
+      ],
+      "unit_price": "4250.00",
+      "kind": "flat_rate",
+      "price_unit": "/1",
+      "total": "4250.00"
+    },
+    {
+      "qty": 10000,
+      "unit": "Stk.",
+      "description": [
+        "Schutzblende 845222"
+      ],
+      "unit_price": "3.90",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "39000.00"
+    },
+    {
+      "qty": 2500,
+      "unit": "Stk.",
+      "description": [
+        "Schutzblende 696768",
+        "Oberfläche harteloxiert 40 µm",
+        "inkl. Sichtprüfung nach Vorgabe",
+        "Kanten nach Zeichnung entgraten"
+      ],
+      "unit_price": "2.35",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "5875.00"
+    },
+    {
+      "qty": 500,
+      "unit": "Stk.",
+      "description": [
+        "Kupplungsstück 519504"
+      ],
+      "unit_price": "4.75",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "2375.00"
+    },
+    {
+      "qty": 8,
+      "unit": "Stk.",
+      "description": [
+        "Montagearbeit 870304"
+      ],
+      "unit_price": "3.90",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "31.20"
+    },
+    {
+      "qty": 500,
+      "unit": "Stk.",
+      "description": [
+        "Aufnahmeflansch 984291"
+      ],
+      "unit_price": "3.90",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "1950.00"
+    },
+    {
+      "qty": 50,
+      "unit": "Stk.",
+      "description": [
+        "Passstift 406861"
+      ],
+      "unit_price": "1.20",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "60.00"
+    },
+    {
+      "qty": 10,
+      "unit": "Stk.",
+      "description": [
+        "Maschinenbolzen 223935"
+      ],
+      "unit_price": "2.35",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "23.50"
+    },
+    {
+      "qty": 18,
+      "unit": "Std.",
+      "description": [
+        "Montageschiene 969718"
+      ],
+      "unit_price": "250.00",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "4500.00"
+    },
+    {
+      "qty": 50,
+      "unit": "Stk.",
+      "description": [
+        "CNC-Nacharbeit 636098"
+      ],
+      "unit_price": "46.80",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "2340.00"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": null,
+  "discount_days": null,
+  "payment_days": 30,
+  "totals": {
+    "net": "399032.88",
+    "vat": "75816.25",
+    "gross": "474849.13"
+  },
+  "payment": {
+    "discount_date": null,
+    "due_date": "19.11.2026",
+    "discount_amount": null
+  },
+  "page_count": 2,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
+      ],
+      "line_count": 19,
+      "transfer": "338628.18",
+      "summary_present": false,
+      "payment_block_present": true
+    },
+    {
+      "page": 2,
+      "position_indices": [
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28
+      ],
+      "line_count": 14,
+      "transfer": null,
+      "summary_present": true,
+      "payment_block_present": false
+    }
+  ],
+  "test_flags": {
+    "address_name_lines": 2,
+    "missing_order_number": false,
+    "shipping_empty": false,
+    "discount_applied": false,
+    "blank_unit_flat_rate": false,
+    "without_price_count": 2,
+    "flat_rate_count": 2,
+    "two_three_line_positions": 2,
+    "four_five_line_positions": 1,
+    "has_qty_thousands": true
+  },
+  "sha256": "d6e9627ab8d7e8b86b1df278710dbf3f1e56d55c2cd357edbdf741fd7110bf69"
+}

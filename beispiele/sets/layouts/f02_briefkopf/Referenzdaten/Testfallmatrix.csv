@@ -1,0 +1,7 @@
+﻿Datei;Split;Rechnungsnummer;Rechnungsdatum;Kundennummer;Namenszeilen;Seiten;Format;Positionen;Mehrzeilig;Versand;Zahlung;Skonto;Netto;USt;Brutto;Status;Notiz;SHA256
+Rechnung_001_2026-0417.pdf;training;2026-0417;08.10.2026;2026-118;1;1;A4;3;0;;netto;;1922.63;365.30;2287.93;ok;Leistungen in Std., 14 Tage ab Rechnungseingang;097ca8e8ec54c609c43abe01040736155bb0889924ea9b3c250fb45249af56b9
+Rechnung_002_2026-0426.pdf;training;2026-0426;15.10.2026;2026-121;2;1;A4;4;2;;skonto;2;1835.25;348.70;2183.95;ok;Firmenname zweizeilig, Skonto in Tagen;255505aac4f1f643dfbd562d53b356dc91b9113d40baa40386f333b3b6b3d729
+Rechnung_003_2026-0432.pdf;training;2026-0432;20.10.2026;2026-097;3;1;A4;3;1;;fest;;971.75;184.63;1156.38;ok;3 Namenszeilen, festes Zahldatum ausgeschrieben;06a24685e4470196f1fc6a8dd6f4541a36c296eeee402b63e4096146e892490c
+Rechnung_004_2026-0434.pdf;holdout;2026-0434;22.10.2026;2026-130;1;1;A5;2;0;;netto;;2130.75;404.84;2535.59;ok;Hold-out: A5 (Koordinaten × 0,7071, Schrift ≥ 7 pt);bd21aaf87326aa13140d140e14b35598975107ecea70c3c6bce3a49bb2b51613
+Rechnung_005_2026-0444.pdf;holdout;2026-0444;29.10.2026;50012;2;1;A4;4;1;;skonto;3;2936.00;557.84;3494.84;prüfen;Hold-out PRÜFEN: gedruckter Gesamtbetrag 1,00 € über Netto + USt;b26cce5bb87fc053b856b4e5bd862cc09751da85a70b17406ea1c6a5e1573be7
+Rechnung_006_2026-0450.pdf;holdout;2026-0450;02.11.2026;2026-121;2;1;A4;3;1;;netto;;2190.75;416.24;2606.99;fehler;Hold-out FEHLER: IBAN im Fuß mit vertauschten Prüfziffern;0c07cbb4eb2528eaa1509af674bf31c98c8bea107f36cbac590e693652a9251a

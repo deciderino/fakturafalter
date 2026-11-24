@@ -1,0 +1,4 @@
+#!/bin/sh
+# AppImage-Einstieg: startet das gebündelte (PyInstaller onedir) Fakturafalter.
+HERE="$(dirname "$(readlink -f "$0")")"
+exec "$HERE/usr/lib/Fakturafalter/fakturafalter" "$@"

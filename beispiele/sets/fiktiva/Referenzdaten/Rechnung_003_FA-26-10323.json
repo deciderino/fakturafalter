@@ -1,0 +1,161 @@
+{
+  "datei": "Rechnung_003_FA-26-10323.pdf",
+  "format": "PDF 1.4 (reportlab, Schriften eingebettet)",
+  "holdout": false,
+  "seller": {
+    "name": "Fiktiva Antriebstechnik GmbH",
+    "street": "Musterring 12",
+    "postal_code": "04179",
+    "city": "Leipzig",
+    "ust_id": "DE314159262",
+    "iban": "DE71 0000 0000 0047 1108 15",
+    "bic": "FIKTDEX1XXX",
+    "bank": "Beispielbank Leipzig",
+    "email": "rechnung@fiktiva.example",
+    "register": "Amtsgericht Leipzig, HRB 000000",
+    "ceo": "Jana Mustermann"
+  },
+  "buyer": {
+    "name_lines": [
+      "Werkzeugbau Lindqvist KG",
+      "Abteilung Instandhaltung",
+      "z. Hd. Herrn Okafor"
+    ],
+    "street": "Talweg 3",
+    "postal_code": "72764",
+    "city": "Reutlingen",
+    "customer_number": "0008815"
+  },
+  "invoice": {
+    "number": "FA-26-10323",
+    "date": "07.10.2026",
+    "service_date": "07.10.2026",
+    "order_number": "",
+    "shipping": "Lieferung frei Haus"
+  },
+  "positions": [
+    {
+      "qty": 150,
+      "unit": "Stk.",
+      "description": [
+        "Sechskantmutter ISO 4032 M8 verzinkt 48-6894"
+      ],
+      "unit_price": "7.54",
+      "kind": "regular",
+      "price_unit": "/100",
+      "price_unit_qty": 100,
+      "min_order": false,
+      "total": "11.31"
+    },
+    {
+      "qty": 250,
+      "unit": "Stk.",
+      "description": [
+        "Sicherungsring DIN 471 20x1,2 88-1795"
+      ],
+      "unit_price": "17.85",
+      "kind": "regular",
+      "price_unit": "/100",
+      "price_unit_qty": 100,
+      "min_order": false,
+      "total": "44.63"
+    },
+    {
+      "qty": 25,
+      "unit": "Stk.",
+      "description": [
+        "Motorkonsole MK-112 geschweißt 83-7505"
+      ],
+      "unit_price": "239.00",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "5975.00"
+    },
+    {
+      "qty": 4,
+      "unit": "Stk.",
+      "description": [
+        "Distanzbuchse 20x30x15 25-6997"
+      ],
+      "unit_price": "4.39",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "17.56"
+    },
+    {
+      "qty": 50,
+      "unit": "Stk.",
+      "description": [
+        "Spannsatz SP-30 Ø 30 mm 82-5771"
+      ],
+      "unit_price": "33.25",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "1662.50"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": null,
+  "discount_days": null,
+  "payment_days": 30,
+  "totals": {
+    "net": "7711.00",
+    "vat": "1465.09",
+    "gross": "9176.09"
+  },
+  "payment": {
+    "discount_date": null,
+    "due_date": "06.11.2026",
+    "discount_amount": null,
+    "discount_base": null
+  },
+  "payment_terms_text": [
+    "zahlbar bis 06.11.2026 ohne Abzug"
+  ],
+  "page_count": 1,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "line_count": 5,
+      "transfer": null,
+      "carry_forward": null,
+      "summary_present": true,
+      "payment_block_present": true
+    }
+  ],
+  "test_flags": {
+    "address_name_lines": 3,
+    "address_blank_lines": 1,
+    "address_attention_line": true,
+    "address_department_line": true,
+    "two_line_company_name": false,
+    "missing_order_number": true,
+    "shipping_empty": false,
+    "discount_applied": false,
+    "blank_unit_flat_rate": false,
+    "without_price_count": 0,
+    "flat_rate_count": 0,
+    "min_order": null,
+    "price_unit_100_count": 2,
+    "two_three_line_positions": 0,
+    "four_five_line_positions": 0,
+    "has_qty_thousands": false,
+    "carry_forward": false,
+    "last_table_row_index": 7,
+    "note": "3 Namenszeilen mit Abteilung und z. Hd."
+  },
+  "sha256": "18b6089dcc66e792cce3f5a66ace9f6b964c0ac54ab0a6eaf375221373bf0334"
+}

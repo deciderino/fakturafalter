@@ -1,0 +1,7 @@
+belegnr,belegdatum,leistungsdatum,kunde,strasse,plz,ort,menge,einheit,bezeichnung,preis,ust
+EF-1048,26.10.2026,24.10.2026,Praxis Dr. Beispiel,Hellweg 3,44787,Bochum,40,m,Kabelkanal 40x60 mm,7.20,19
+EF-1048,26.10.2026,24.10.2026,Praxis Dr. Beispiel,Hellweg 3,44787,Bochum,8,Stk,Schalterprogramm reinweiﬂ Wechselschalter mit Rahmen einfach,12.40,19
+EF-1048,26.10.2026,24.10.2026,Praxis Dr. Beispiel,Hellweg 3,44787,Bochum,6,Stk,Fehlerstromschutzschalter 40 A 30 mA vierpolig,64.80,19
+EF-1048,26.10.2026,24.10.2026,Praxis Dr. Beispiel,Hellweg 3,44787,Bochum,7,Stk,"LED-Panel 60x60 cm neutralweiﬂ 4000 K, Einbau in Rasterdecke",79.00,19
+EF-1048,26.10.2026,24.10.2026,Praxis Dr. Beispiel,Hellweg 3,44787,Bochum,6,Stk,Fehlerstromschutzschalter 40 A 30 mA vierpolig,64.80,19
+EF-1048,26.10.2026,24.10.2026,Praxis Dr. Beispiel,Hellweg 3,44787,Bochum,25,h,Arbeitszeit Geselle,54.50,19

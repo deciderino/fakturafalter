@@ -1,0 +1,159 @@
+{
+  "datei": "Rechnung_001_103701.pdf",
+  "format": "PDF 1.4 (reportlab), A4, Schrift Times (Standard-14, nicht eingebettet)",
+  "familie": "f08_bildkopf",
+  "quelle": "Q10",
+  "holdout": true,
+  "split": "holdout",
+  "seller": {
+    "name": "Weserblick Elektrotechnik GmbH",
+    "street": "Am Speicher XI 7",
+    "postal_code": "28217",
+    "city": "Bremen",
+    "ust_id": "DE314775200",
+    "iban": "DE81 0000 0000 0045 1200 98",
+    "bic": "WESBDEX1BRE",
+    "bank": "Beispielbank Bremen",
+    "email": "rechnungen@weserblick-elektro.example",
+    "register": "Amtsgericht Bremen HRB 00000 HB",
+    "ceo": "Gesa Thormählen"
+  },
+  "buyer": {
+    "name_lines": [
+      "Elektro Wittkowski GmbH & Co. KG",
+      "Kreditorenbuchhaltung"
+    ],
+    "street": "Hafenstraße 41",
+    "postal_code": "26725",
+    "city": "Emden",
+    "customer_number": "30227"
+  },
+  "invoice": {
+    "number": "103701",
+    "date": "07.10.2026",
+    "service_date": "06.10.2026",
+    "order_number": "4500945455",
+    "shipping": ""
+  },
+  "druck": {
+    "datum_format": "TT.MM.JJJJ",
+    "schrift": "Times",
+    "seitenformat": "A4"
+  },
+  "BT-72": "06.10.2026",
+  "BT-119": "19.00",
+  "positions": [
+    {
+      "qty": "10",
+      "unit": "Stk.",
+      "description": [
+        "Kabelkanal 40 × 60, 2 m, laut Leistungsverzeichnis",
+        "Pos. 3.2, Abnahme durch Bauleitung"
+      ],
+      "article_number": "1960-S",
+      "unit_price": "7.15",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "71.50"
+    },
+    {
+      "qty": "2",
+      "unit": "Stk.",
+      "description": [
+        "Installationskabel NYM-J 3×1,5, Ring 50 m"
+      ],
+      "article_number": "1920-S",
+      "unit_price": "58.75",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "117.50"
+    },
+    {
+      "qty": "4",
+      "unit": "Stk.",
+      "description": [
+        "Kabeltrommel 25 m, IP44"
+      ],
+      "article_number": "1896-S",
+      "unit_price": "48.25",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "193.00"
+    },
+    {
+      "qty": "1",
+      "unit": "Stk.",
+      "description": [
+        "Unterverteilung 3-reihig, Aufputz"
+      ],
+      "article_number": "1925-W",
+      "unit_price": "157.00",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "157.00"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": null,
+  "discount_days": null,
+  "payment_days": 14,
+  "totals": {
+    "net": "539.00",
+    "vat": "102.41",
+    "gross": "641.41"
+  },
+  "totals_printed": {
+    "net": "539.00",
+    "vat": "102.41",
+    "gross": "641.41"
+  },
+  "payment": {
+    "discount_date": null,
+    "due_date": "21.10.2026",
+    "discount_amount": null,
+    "discount_base": null
+  },
+  "payment_terms_text": [
+    "14 Tage netto"
+  ],
+  "page_count": 1,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "transfer": null,
+      "carry_forward": null,
+      "summary_present": true
+    }
+  ],
+  "erwarteter_status": "ok",
+  "erwartete_hinweise": [],
+  "kosit": null,
+  "verapdf": null,
+  "validierung_hinweis": "lokal nicht validierbar / spätere Phase (KoSIT/veraPDF prüfen die App-Ausgabe, nicht diese PDFs)",
+  "korrekturen": null,
+  "korrekturen_hinweis": "erst beim echten Anlernen messbar",
+  "test_flags": {
+    "address_name_lines": 2,
+    "po_box": false,
+    "multi_line_positions": 1,
+    "shipping_position": false,
+    "page_format": "A4",
+    "payment": "netto",
+    "pruefen": null,
+    "missing_order_number": false,
+    "note": "Hold-out: Kopf/Fuß als Bild, Ihre Referenz",
+    "uebertrag_gedruckt": false,
+    "kopf_fuss_als_bild": true
+  },
+  "sha256": "8ea32472d7947f0923c9ea8963d002700deb125933b0d7c8406c6189f018bb60"
+}

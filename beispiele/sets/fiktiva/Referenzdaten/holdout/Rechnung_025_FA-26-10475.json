@@ -1,0 +1,210 @@
+{
+  "datei": "Rechnung_025_FA-26-10475.pdf",
+  "format": "PDF 1.4 (reportlab, Schriften eingebettet)",
+  "holdout": true,
+  "seller": {
+    "name": "Fiktiva Antriebstechnik GmbH",
+    "street": "Musterring 12",
+    "postal_code": "04179",
+    "city": "Leipzig",
+    "ust_id": "DE314159262",
+    "iban": "DE71 0000 0000 0047 1108 15",
+    "bic": "FIKTDEX1XXX",
+    "bank": "Beispielbank Leipzig",
+    "email": "rechnung@fiktiva.example",
+    "register": "Amtsgericht Leipzig, HRB 000000",
+    "ceo": "Jana Mustermann"
+  },
+  "buyer": {
+    "name_lines": [
+      "Kremer & Sohn Anlagenbau GmbH",
+      "Abteilung Einkauf"
+    ],
+    "street": "Hafenstraße 88",
+    "postal_code": "28217",
+    "city": "Bremen",
+    "customer_number": "K-20977"
+  },
+  "invoice": {
+    "number": "FA-26-10475",
+    "date": "02.11.2026",
+    "service_date": "02.11.2026",
+    "order_number": "4700516845",
+    "shipping": ""
+  },
+  "positions": [
+    {
+      "qty": 2,
+      "unit": "Stk.",
+      "description": [
+        "Wellenkupplung WK-25 elastisch 75-5440"
+      ],
+      "unit_price": "111.25",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "222.50"
+    },
+    {
+      "qty": 200,
+      "unit": "Stk.",
+      "description": [
+        "Gewindestift ISO 4026 M5x8 43-9262"
+      ],
+      "unit_price": "11.32",
+      "kind": "regular",
+      "price_unit": "/100",
+      "price_unit_qty": 100,
+      "min_order": false,
+      "total": "26.24"
+    },
+    {
+      "qty": 5,
+      "unit": "Stk.",
+      "description": [
+        "Motorkonsole MK-112 geschweißt 52-5188"
+      ],
+      "unit_price": "260.75",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "1303.75"
+    },
+    {
+      "qty": 25,
+      "unit": "Stk.",
+      "description": [
+        "Distanzbuchse 20x30x15 61-2039"
+      ],
+      "unit_price": "4.75",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "118.75"
+    },
+    {
+      "qty": 25,
+      "unit": "Stk.",
+      "description": [
+        "Motorkonsole MK-112 geschweißt 38-9400"
+      ],
+      "unit_price": "276.00",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "6900.00"
+    },
+    {
+      "qty": 16,
+      "unit": "Std.",
+      "description": [
+        "Programmierung Frequenzumrichter"
+      ],
+      "unit_price": "91.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "1464.00"
+    },
+    {
+      "qty": 5,
+      "unit": "Stk.",
+      "description": [
+        "Antriebswelle nach Zeichnung 73-7321"
+      ],
+      "unit_price": "188.00",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "940.00"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": null,
+  "discount_days": null,
+  "payment_days": 30,
+  "totals": {
+    "net": "10975.24",
+    "vat": "2085.30",
+    "gross": "13060.54"
+  },
+  "payment": {
+    "discount_date": null,
+    "due_date": "02.12.2026",
+    "discount_amount": null,
+    "discount_base": null
+  },
+  "payment_terms_text": [
+    "zahlbar bis 02.12.2026 ohne Abzug"
+  ],
+  "page_count": 1,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "line_count": 7,
+      "transfer": null,
+      "carry_forward": null,
+      "summary_present": true,
+      "payment_block_present": true
+    }
+  ],
+  "test_flags": {
+    "address_name_lines": 2,
+    "address_blank_lines": 1,
+    "address_attention_line": false,
+    "address_department_line": true,
+    "two_line_company_name": false,
+    "missing_order_number": false,
+    "shipping_empty": true,
+    "discount_applied": false,
+    "blank_unit_flat_rate": false,
+    "without_price_count": 0,
+    "flat_rate_count": 0,
+    "min_order": null,
+    "price_unit_100_count": 1,
+    "two_three_line_positions": 0,
+    "four_five_line_positions": 0,
+    "has_qty_thousands": false,
+    "carry_forward": false,
+    "last_table_row_index": 9,
+    "note": "FEHLER: Zahlendreher im Gesamtpreis einer Position"
+  },
+  "rolle": "holdout-fehler",
+  "erwarteter_status": "fehler",
+  "erwartete_hinweise": [
+    "PRUEFEN [BT-131] Pos 2: Menge × Preis ÷ Preiseinheit = 22,64 €, gedruckt 26,24 €"
+  ],
+  "moegliche_folgehinweise": [
+    "PRUEFEN [BT-109] Kontrollwert der Quelle ≠ berechnet (gedrucktes Netto enthält den falschen Zeilenbetrag)"
+  ],
+  "fehlerart": "zeile",
+  "fehler_beschreibung": "Menge × Preis / PE ≠ gedruckter Gesamtpreis einer Position (Zahlendreher); Netto, MwSt. und Brutto sind aus den gedruckten Zeilenbeträgen richtig weitergerechnet",
+  "falle": null,
+  "falle_beschreibung": null,
+  "fehler_detail": {
+    "position": 2,
+    "gedruckt": "26.24",
+    "berechnet": "22.64"
+  },
+  "totals_berechnet": {
+    "net": "10971.64",
+    "vat": "2084.61",
+    "gross": "13056.25"
+  },
+  "sha256": "f606943982c48d4e0b20769f68f584677b4a7d335a3a7e68937afdef02ae124c"
+}

@@ -1,0 +1,188 @@
+{
+  "datei": "Rechnung_007_40711.pdf",
+  "format": "PDF 1.4 (reportlab), A4, Schrift Courier (Standard-14, nicht eingebettet)",
+  "familie": "f06_schreibmaschine",
+  "quelle": "Q6",
+  "holdout": true,
+  "split": "holdout",
+  "seller": {
+    "name": "Holzwerkstatt Brenneisen GmbH",
+    "street": "Am Sägewerk 4",
+    "postal_code": "79822",
+    "city": "Titisee-Neustadt",
+    "ust_id": "DE142906131",
+    "iban": "DE75 0000 0000 0004 4182 30",
+    "bic": "BRENDEX1TNS",
+    "bank": "Beispielsparkasse Hochschwarzwald",
+    "email": "buero@brenneisen-holz.example",
+    "register": "Amtsgericht Freiburg i. Br. HRB 000000",
+    "ceo": "Markus Brenneisen"
+  },
+  "buyer": {
+    "name_lines": [
+      "Ladenbau Schwarzwald GmbH",
+      "Einkauf",
+      "z. Hd. Herrn Faller"
+    ],
+    "street": "Gewerbestraße 30",
+    "postal_code": "78112",
+    "city": "St. Georgen im Schwarzwald",
+    "customer_number": "D-20058"
+  },
+  "invoice": {
+    "number": "40711",
+    "date": "04.11.2026",
+    "service_date": "04.11.2026",
+    "order_number": "",
+    "shipping": ""
+  },
+  "druck": {
+    "datum_format": "TT.MM.JJJJ",
+    "schrift": "Courier",
+    "seitenformat": "A4"
+  },
+  "BT-72": "04.11.2026",
+  "BT-119": "19.00",
+  "positions": [
+    {
+      "qty": "2",
+      "unit": "Stk.",
+      "description": [
+        "Wandregal Lärche geölt, 120 cm"
+      ],
+      "article_number": "TS-1011",
+      "unit_price": "108.00",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "216.00"
+    },
+    {
+      "qty": "24",
+      "unit": "Stk.",
+      "description": [
+        "Möbelgriff Edelstahl 128 mm, Oberfläche",
+        "zweimal geölt und zwischengeschliffen"
+      ],
+      "article_number": "TS-1030",
+      "unit_price": "5.60",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "134.40"
+    },
+    {
+      "qty": "1",
+      "unit": "Stk.",
+      "description": [
+        "Anfahrt Montagefahrzeug"
+      ],
+      "article_number": "TS-2010",
+      "unit_price": "37.50",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "37.50"
+    },
+    {
+      "qty": "10",
+      "unit": "Stk.",
+      "description": [
+        "Sockelleiste Eiche, je lfm, Oberfläche",
+        "zweimal geölt und zwischengeschliffen"
+      ],
+      "article_number": "TS-1040",
+      "unit_price": "10.52",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "105.20"
+    },
+    {
+      "qty": "8",
+      "unit": "Stk.",
+      "description": [
+        "Schubkastenführung Vollauszug"
+      ],
+      "article_number": "TS-1020",
+      "unit_price": "33.25",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "266.00"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": "2.00",
+  "discount_days": 14,
+  "payment_days": 30,
+  "totals": {
+    "net": "759.10",
+    "vat": "144.23",
+    "gross": "903.33"
+  },
+  "totals_printed": {
+    "net": "759.10",
+    "vat": "144.23",
+    "gross": "903.33"
+  },
+  "payment": {
+    "discount_date": "18.11.2026",
+    "due_date": "04.12.2026",
+    "discount_amount": "18.07",
+    "discount_base": "gross"
+  },
+  "payment_terms_text": [
+    "Zahlung: 14 Tage 2,0%; 30 Tage netto"
+  ],
+  "page_count": 1,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "transfer": null,
+      "carry_forward": null,
+      "summary_present": true
+    }
+  ],
+  "erwarteter_status": "ok",
+  "erwartete_hinweise": [],
+  "kosit": null,
+  "verapdf": null,
+  "validierung_hinweis": "lokal nicht validierbar / spätere Phase (KoSIT/veraPDF prüfen die App-Ausgabe, nicht diese PDFs)",
+  "korrekturen": null,
+  "korrekturen_hinweis": "erst beim echten Anlernen messbar",
+  "test_flags": {
+    "address_name_lines": 3,
+    "po_box": false,
+    "multi_line_positions": 2,
+    "shipping_position": false,
+    "page_format": "A4",
+    "payment": "skonto",
+    "pruefen": null,
+    "missing_order_number": true,
+    "note": "Hold-out FALLE: Auftragsdatum direkt über dem Rechnungsdatum",
+    "auftragsnummer": "12864"
+  },
+  "rolle": "holdout-falle",
+  "moegliche_folgehinweise": [],
+  "fehlerart": null,
+  "fehler_beschreibung": null,
+  "falle": "zweites_datum",
+  "falle_beschreibung": "zusätzliches „Auftragsdatum“ direkt über dem Rechnungsdatum (früheres Datum)",
+  "falle_detail": {
+    "auftragsdatum": "23.10.2026"
+  },
+  "totals_berechnet": {
+    "net": "759.10",
+    "vat": "144.23",
+    "gross": "903.33"
+  },
+  "sha256": "01a606ee3fa269221aa093680196e34ae1b4bf82dbe94dc5ba7d2dfa028b0383"
+}

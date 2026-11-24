@@ -1,0 +1,186 @@
+{
+  "datei": "Rechnung_010_RE-2026-00134.pdf",
+  "format": "PDF/A-2b",
+  "seller": {
+    "name": "Alberon Industriekomponenten GmbH",
+    "street": "Prüfwerkstraße 18",
+    "postal_code": "09111",
+    "city": "Chemnitz",
+    "ust_id": "DE123456789",
+    "iban": "DE89 3704 0044 0532 0130 00",
+    "bic": "COBADEFFXXX",
+    "bank": "Commerzbank AG",
+    "email": "rechnung@alberon.example",
+    "register": "Amtsgericht Chemnitz, HRB 999999",
+    "ceo": "Markus Seidel"
+  },
+  "buyer": {
+    "name_lines": [
+      "Waldstrom Fahrzeugtechnik GmbH",
+      "Materialwirtschaft"
+    ],
+    "street": "Eichenhof 17",
+    "postal_code": "90402",
+    "city": "Nürnberg",
+    "customer_number": "07014"
+  },
+  "invoice": {
+    "number": "RE-2026-00134",
+    "date": "20.08.2026",
+    "service_date": "13.08.2026",
+    "order_number": "09564768",
+    "shipping": "DHL"
+  },
+  "positions": [
+    {
+      "qty": 1,
+      "unit": "Stk.",
+      "description": [
+        "Maschinenbolzen 719465"
+      ],
+      "unit_price": "7.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "7.50"
+    },
+    {
+      "qty": 40,
+      "unit": "Stk.",
+      "description": [
+        "Gehäuseboden 587660"
+      ],
+      "unit_price": "1250.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "50020.00"
+    },
+    {
+      "qty": 75,
+      "unit": "Stk.",
+      "description": [
+        "Aluminiumgehäuse 103715",
+        "Bohrungen gegen Beschichtung schützen",
+        "Oberfläche harteloxiert 40 µm"
+      ],
+      "unit_price": "1799.99",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "134999.25"
+    },
+    {
+      "qty": 1250,
+      "unit": "Stk.",
+      "description": [
+        "Montagewinkel 88696"
+      ],
+      "unit_price": "2.35",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "2937.50"
+    },
+    {
+      "qty": 8,
+      "unit": "Stk.",
+      "description": [
+        "Distanzhülse 648770"
+      ],
+      "unit_price": null,
+      "kind": "without_price",
+      "price_unit": "/1",
+      "total": null
+    },
+    {
+      "qty": 75,
+      "unit": "Stk.",
+      "description": [
+        "Spannhülse 216042"
+      ],
+      "unit_price": null,
+      "kind": "without_price",
+      "price_unit": "/1",
+      "total": null
+    },
+    {
+      "qty": 250,
+      "unit": "Stk.",
+      "description": [
+        "Montagearbeit 413854",
+        "Kanten nach Zeichnung entgraten"
+      ],
+      "unit_price": null,
+      "kind": "without_price",
+      "price_unit": "/1",
+      "total": null
+    },
+    {
+      "qty": 2500,
+      "unit": "Stk.",
+      "description": [
+        "Spannhülse 906699"
+      ],
+      "unit_price": null,
+      "kind": "without_price",
+      "price_unit": "/1",
+      "total": null
+    },
+    {
+      "qty": 1,
+      "unit": "",
+      "description": [
+        "Mindestauftrag Auftrag 2028-580"
+      ],
+      "unit_price": "850.00",
+      "kind": "flat_rate",
+      "price_unit": "/1",
+      "total": "850.00"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": null,
+  "discount_days": null,
+  "payment_days": 30,
+  "totals": {
+    "net": "188814.25",
+    "vat": "35874.71",
+    "gross": "224688.96"
+  },
+  "payment": {
+    "discount_date": null,
+    "due_date": "19.09.2026",
+    "discount_amount": null
+  },
+  "page_count": 1,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "line_count": 12,
+      "transfer": null,
+      "summary_present": true,
+      "payment_block_present": true
+    }
+  ],
+  "test_flags": {
+    "address_name_lines": 2,
+    "missing_order_number": false,
+    "shipping_empty": false,
+    "discount_applied": false,
+    "blank_unit_flat_rate": true,
+    "without_price_count": 4,
+    "flat_rate_count": 1,
+    "two_three_line_positions": 2,
+    "four_five_line_positions": 0,
+    "has_qty_thousands": true
+  },
+  "sha256": "2922acb8efccc9481ac1c8055d6fc406fb8cf1f27b5ca9be477dfbd44b0ffd98"
+}

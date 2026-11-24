@@ -1,0 +1,35 @@
+# Metallbau Kessler GmbH (erfunden) – Windows-1252, Semikolon, Dezimalkomma, Datum TT.MM.JJ,
+# Käufer über die Kundennummer aus kundenstamm-metallbau.csv
+profil: metallbau
+datei: {muster: "metallbau_*.csv", trennzeichen: ";"}
+zahlen: {dezimal: ",", tausender: "."}
+datum: {format: "%d.%m.%y"}
+aufbau: {art: zeile_je_position, rechnung_schluessel: ReNr}
+
+felder:
+  kopf:
+    BT-1:  {spalte: ReNr}
+    BT-2:  {spalte: ReDatum, typ: datum}
+    BT-72: {spalte: LiefDatum, typ: datum}
+    kundennummer: {spalte: KdNr}
+  position:
+    BT-155: {spalte: ArtNr}
+    BT-153: {spalte: Text}
+    BT-129: {spalte: Menge, typ: zahl}
+    BT-130: {spalte: ME, mapping: einheiten}
+    BT-146: {spalte: Preis, typ: zahl}
+    steuer: {spalte: MwSt, mapping: steuer}
+
+mappings:
+  einheiten: {kg: KGM, m: MTR, Stk: C62, unbekannt: pruefen}
+  steuer: {"19": {BT-151: S, BT-152: 19}, unbekannt: pruefen}
+
+kundenstamm: {datei: kundenstamm-metallbau.csv}
+
+verkaeufer:
+  name: Metallbau Kessler GmbH
+  anschrift: {strasse: Ambossweg 9, plz: "58097", ort: Hagen}
+  ust_id: DE800800808
+  steuernummer: 321/5710/4321
+  register: Amtsgericht Hagen HRB 990006
+zahlung: {iban: DE07000000000000580970}

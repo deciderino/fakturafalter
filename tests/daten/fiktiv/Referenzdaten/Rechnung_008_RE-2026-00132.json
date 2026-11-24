@@ -1,0 +1,138 @@
+{
+  "datei": "Rechnung_008_RE-2026-00132.pdf",
+  "format": "PDF/A-2b",
+  "seller": {
+    "name": "Alberon Industriekomponenten GmbH",
+    "street": "Prüfwerkstraße 18",
+    "postal_code": "09111",
+    "city": "Chemnitz",
+    "ust_id": "DE123456789",
+    "iban": "DE89 3704 0044 0532 0130 00",
+    "bic": "COBADEFFXXX",
+    "bank": "Commerzbank AG",
+    "email": "rechnung@alberon.example",
+    "register": "Amtsgericht Chemnitz, HRB 999999",
+    "ceo": "Markus Seidel"
+  },
+  "buyer": {
+    "name_lines": [
+      "Steinbrück Maschinenbau GmbH",
+      "Abteilung Mechanik",
+      "Werk 2"
+    ],
+    "street": "Kupferbogen 11",
+    "postal_code": "02625",
+    "city": "Bautzen",
+    "customer_number": "9725"
+  },
+  "invoice": {
+    "number": "RE-2026-00132",
+    "date": "16.08.2026",
+    "service_date": "16.08.2026",
+    "order_number": "",
+    "shipping": ""
+  },
+  "positions": [
+    {
+      "qty": 3,
+      "unit": "Stk.",
+      "description": [
+        "Aluminiumgehäuse 465983"
+      ],
+      "unit_price": "14.99",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "44.97"
+    },
+    {
+      "qty": 5000,
+      "unit": "Stk.",
+      "description": [
+        "CNC-Nacharbeit 737360",
+        "Oberfläche eloxiert, natur"
+      ],
+      "unit_price": "7.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "37500.00"
+    },
+    {
+      "qty": 18,
+      "unit": "Std.",
+      "description": [
+        "Formstück 8624",
+        "inkl. Sichtprüfung nach Vorgabe"
+      ],
+      "unit_price": "89.90",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "1618.20"
+    },
+    {
+      "qty": 12,
+      "unit": "Stk.",
+      "description": [
+        "Distanzhülse 410396"
+      ],
+      "unit_price": "3.90",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "46.80"
+    },
+    {
+      "qty": 12,
+      "unit": "Stk.",
+      "description": [
+        "Schutzblende 453650"
+      ],
+      "unit_price": "12.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "150.00"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": null,
+  "discount_days": null,
+  "payment_days": 30,
+  "totals": {
+    "net": "39359.97",
+    "vat": "7478.39",
+    "gross": "46838.36"
+  },
+  "payment": {
+    "discount_date": null,
+    "due_date": "15.09.2026",
+    "discount_amount": null
+  },
+  "page_count": 1,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "line_count": 7,
+      "transfer": null,
+      "summary_present": true,
+      "payment_block_present": true
+    }
+  ],
+  "test_flags": {
+    "address_name_lines": 3,
+    "missing_order_number": true,
+    "shipping_empty": true,
+    "discount_applied": false,
+    "blank_unit_flat_rate": false,
+    "without_price_count": 0,
+    "flat_rate_count": 0,
+    "two_three_line_positions": 2,
+    "four_five_line_positions": 0,
+    "has_qty_thousands": true
+  },
+  "sha256": "7b76687e2796ad878ca52a882a4afa80acdbac6701f67d938d41792d998a5ab5"
+}

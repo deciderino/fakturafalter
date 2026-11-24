@@ -1,0 +1,137 @@
+{
+  "datei": "Rechnung_016_RE-2026-00140.pdf",
+  "format": "PDF/A-2b",
+  "seller": {
+    "name": "Alberon Industriekomponenten GmbH",
+    "street": "Prüfwerkstraße 18",
+    "postal_code": "09111",
+    "city": "Chemnitz",
+    "ust_id": "DE123456789",
+    "iban": "DE89 3704 0044 0532 0130 00",
+    "bic": "COBADEFFXXX",
+    "bank": "Commerzbank AG",
+    "email": "rechnung@alberon.example",
+    "register": "Amtsgericht Chemnitz, HRB 999999",
+    "ceo": "Markus Seidel"
+  },
+  "buyer": {
+    "name_lines": [
+      "Havelstern Hydraulik GmbH",
+      "Fertigung"
+    ],
+    "street": "Rohrweg 20",
+    "postal_code": "14467",
+    "city": "Potsdam",
+    "customer_number": "50124"
+  },
+  "invoice": {
+    "number": "RE-2026-00140",
+    "date": "31.08.2026",
+    "service_date": "31.08.2026",
+    "order_number": "08975758",
+    "shipping": ""
+  },
+  "positions": [
+    {
+      "qty": 100,
+      "unit": "Stk.",
+      "description": [
+        "Kupplungsstück 793241"
+      ],
+      "unit_price": "250.00",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "25000.00"
+    },
+    {
+      "qty": 50,
+      "unit": "Stk.",
+      "description": [
+        "Führungsbuchse 419010",
+        "Oberfläche eloxiert, natur",
+        "Ausführung Serie B2"
+      ],
+      "unit_price": "65.00",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "3250.00"
+    },
+    {
+      "qty": 100,
+      "unit": "Stk.",
+      "description": [
+        "Montagearbeit 336284"
+      ],
+      "unit_price": "1250.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "125050.00"
+    },
+    {
+      "qty": 5,
+      "unit": "Stk.",
+      "description": [
+        "Gehäuseboden 549204"
+      ],
+      "unit_price": "4.75",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "23.75"
+    },
+    {
+      "qty": 25,
+      "unit": "Stk.",
+      "description": [
+        "Schutzblende 202820"
+      ],
+      "unit_price": "1250.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "31262.50"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": "3.00",
+  "discount_days": 10,
+  "payment_days": 30,
+  "totals": {
+    "net": "184586.25",
+    "vat": "35071.39",
+    "gross": "219657.64"
+  },
+  "payment": {
+    "discount_date": "10.09.2026",
+    "due_date": "30.09.2026",
+    "discount_amount": "6589.73"
+  },
+  "page_count": 1,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "line_count": 7,
+      "transfer": null,
+      "summary_present": true,
+      "payment_block_present": true
+    }
+  ],
+  "test_flags": {
+    "address_name_lines": 2,
+    "missing_order_number": false,
+    "shipping_empty": true,
+    "discount_applied": true,
+    "blank_unit_flat_rate": false,
+    "without_price_count": 0,
+    "flat_rate_count": 0,
+    "two_three_line_positions": 1,
+    "four_five_line_positions": 0,
+    "has_qty_thousands": false
+  },
+  "sha256": "e14ab0a1d7d4abbd36a2ef1ba3c47b2f8bbdbd538d8899e092ee66230de8a4d8"
+}

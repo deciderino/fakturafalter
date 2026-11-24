@@ -1,0 +1,223 @@
+{
+  "datei": "Rechnung_028_RE-2026-00152.pdf",
+  "format": "PDF/A-2b",
+  "seller": {
+    "name": "Alberon Industriekomponenten GmbH",
+    "street": "Prüfwerkstraße 18",
+    "postal_code": "09111",
+    "city": "Chemnitz",
+    "ust_id": "DE123456789",
+    "iban": "DE89 3704 0044 0532 0130 00",
+    "bic": "COBADEFFXXX",
+    "bank": "Commerzbank AG",
+    "email": "rechnung@alberon.example",
+    "register": "Amtsgericht Chemnitz, HRB 999999",
+    "ceo": "Markus Seidel"
+  },
+  "buyer": {
+    "name_lines": [
+      "Steinbrück Maschinenbau GmbH",
+      "Abteilung Mechanik",
+      "Werk 2"
+    ],
+    "street": "Kupferbogen 11",
+    "postal_code": "02625",
+    "city": "Bautzen",
+    "customer_number": "9725"
+  },
+  "invoice": {
+    "number": "RE-2026-00152",
+    "date": "22.09.2026",
+    "service_date": "22.09.2026",
+    "order_number": "06996054",
+    "shipping": "EXW"
+  },
+  "positions": [
+    {
+      "qty": 500,
+      "unit": "Stk.",
+      "description": [
+        "Formstück 863103",
+        "Werkstoff EN AW-5083"
+      ],
+      "unit_price": "2.35",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "1175.00"
+    },
+    {
+      "qty": 10000,
+      "unit": "Stk.",
+      "description": [
+        "Aluminiumgehäuse 709672"
+      ],
+      "unit_price": null,
+      "kind": "without_price",
+      "price_unit": "/1",
+      "total": null
+    },
+    {
+      "qty": 500,
+      "unit": "Stk.",
+      "description": [
+        "Trägerplatte 940131"
+      ],
+      "unit_price": null,
+      "kind": "without_price",
+      "price_unit": "/1",
+      "total": null
+    },
+    {
+      "qty": 30,
+      "unit": "Std.",
+      "description": [
+        "Gehäusedeckel 375597"
+      ],
+      "unit_price": null,
+      "kind": "without_price",
+      "price_unit": "/1",
+      "total": null
+    },
+    {
+      "qty": 750,
+      "unit": "Stk.",
+      "description": [
+        "Mess- und Prüfarbeit 68860"
+      ],
+      "unit_price": null,
+      "kind": "without_price",
+      "price_unit": "/1",
+      "total": null
+    },
+    {
+      "qty": 1,
+      "unit": "",
+      "description": [
+        "Fixpreis Auftrag 2029-829"
+      ],
+      "unit_price": "250.00",
+      "kind": "flat_rate",
+      "price_unit": "/1",
+      "total": "250.00"
+    },
+    {
+      "qty": 25,
+      "unit": "Stk.",
+      "description": [
+        "Wellenhalter 81295"
+      ],
+      "unit_price": "7.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "187.50"
+    },
+    {
+      "qty": 2500,
+      "unit": "Stk.",
+      "description": [
+        "Gehäusedeckel 964397"
+      ],
+      "unit_price": "3.90",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "9750.00"
+    },
+    {
+      "qty": 4,
+      "unit": "Std.",
+      "description": [
+        "Nachbearbeitung 370941"
+      ],
+      "unit_price": "1.20",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "4.80"
+    },
+    {
+      "qty": 2500,
+      "unit": "Stk.",
+      "description": [
+        "Maschinenbolzen 911240",
+        "Gewinde M5 und Passungen prüfen"
+      ],
+      "unit_price": "14.99",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "37475.00"
+    },
+    {
+      "qty": 25,
+      "unit": "Stk.",
+      "description": [
+        "Passstift 252709"
+      ],
+      "unit_price": "480.00",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "12000.00"
+    },
+    {
+      "qty": 4,
+      "unit": "Std.",
+      "description": [
+        "Halterungsplatte 676651",
+        "Oberfläche harteloxiert 40 µm"
+      ],
+      "unit_price": "180.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "722.00"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": "4.00",
+  "discount_days": 10,
+  "payment_days": 30,
+  "totals": {
+    "net": "61564.30",
+    "vat": "11697.22",
+    "gross": "73261.52"
+  },
+  "payment": {
+    "discount_date": "02.10.2026",
+    "due_date": "22.10.2026",
+    "discount_amount": "2930.46"
+  },
+  "page_count": 1,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "line_count": 15,
+      "transfer": null,
+      "summary_present": true,
+      "payment_block_present": true
+    }
+  ],
+  "test_flags": {
+    "address_name_lines": 3,
+    "missing_order_number": false,
+    "shipping_empty": false,
+    "discount_applied": true,
+    "blank_unit_flat_rate": true,
+    "without_price_count": 4,
+    "flat_rate_count": 1,
+    "two_three_line_positions": 3,
+    "four_five_line_positions": 0,
+    "has_qty_thousands": true
+  },
+  "sha256": "067000a4728b0d436730b526fd5fb79f591cfa6cd1fdf205ea4219c4bacb9fa2"
+}

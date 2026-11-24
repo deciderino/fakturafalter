@@ -1,0 +1,8 @@
+﻿Datei;Split;Rechnungsnummer;Rechnungsdatum;Kundennummer;Namenszeilen;Seiten;Format;Positionen;Mehrzeilig;Versand;Zahlung;Skonto;Netto;USt;Brutto;Status;Notiz;SHA256
+Rechnung_001_50110.pdf;training;50110;12.10.2026;D-20031;1;1;A4;4;1;;skonto;2;1361.50;258.69;1620.19;ok;"Zahlung wie im Muster: 30 Tage 2,0%; 60 Tage netto";9a2321a1a4b875f169690a5b762e2e7a8061ef1e1baecd76a5b6a66ea3cc6453
+Rechnung_002_50210.pdf;training;50210;14.10.2026;D-20042;2;1;A4;10;3;;netto;;3285.23;624.19;3909.42;ok;Gruppen-Zwischensumme mitten in der Tabelle;7b9d75a760abbb4db0e84181ac41ddf1ea8a64e3ec3bedb4f431b13f9e41c4e6
+Rechnung_003_40310.pdf;training;40310;19.10.2026;D-20058;3;2;A4;30;6;;skonto;3;7035.30;1336.71;8372.01;ok;3 Namenszeilen, 2 Seiten mit Übertrag;cefb7d57fa5e8373f5e4071d97a2f3286b173eb35a868e35c017e40da7b496f6
+Rechnung_004_50410.pdf;holdout;50410;26.10.2026;C00318;1;1;A4;8;3;;netto;;1964.65;373.28;2337.93;ok;Hold-out: Gruppen-Zwischensumme, mehrzeilige Bezeichnungen;56995043b3f402b449f4ec04a5bc1ac9baa934f8a1f23c78d364a551c7d6c955
+Rechnung_005_60510.pdf;holdout;60510;28.10.2026;4788;2;1;A4;5;0;;skonto;2;727.21;138.17;865.38;ok;Hold-out: einfach, Skonto;b80937a921191c21182cf1fd11344b9aadb26a61e7a8626ea5da528add7873a0
+Rechnung_006_60611.pdf;holdout;60611;02.11.2026;D-20042;2;1;A4;6;1;;netto;;2585.36;491.22;3706.58;fehler;Hold-out FEHLER: Zahlendreher im Endbetrag (≠ Netto + USt);4b8edefea916b4ae28947e2bd4dd08799d90f921a07a4115f311f9420d7a4264
+Rechnung_007_40711.pdf;holdout;40711;04.11.2026;D-20058;3;1;A4;5;2;;skonto;2;759.10;144.23;903.33;ok;Hold-out FALLE: Auftragsdatum direkt über dem Rechnungsdatum;01a606ee3fa269221aa093680196e34ae1b4bf82dbe94dc5ba7d2dfa028b0383

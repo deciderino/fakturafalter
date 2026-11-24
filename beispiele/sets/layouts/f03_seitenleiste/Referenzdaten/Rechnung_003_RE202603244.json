@@ -1,0 +1,225 @@
+{
+  "datei": "Rechnung_003_RE202603244.pdf",
+  "format": "PDF 1.4 (reportlab), A4, Schrift Helvetica (Standard-14, nicht eingebettet)",
+  "familie": "f03_seitenleiste",
+  "quelle": "Q4",
+  "holdout": false,
+  "split": "training",
+  "seller": {
+    "name": "Seeberger Radsport-Teile GmbH",
+    "street": "Gewerbering 27",
+    "postal_code": "86899",
+    "city": "Landsberg am Lech",
+    "ust_id": "DE130722955",
+    "iban": "DE02 0000 0000 0868 9900 50",
+    "bic": "SEEBDEX1LAL",
+    "bank": "Beispiel-Sparkasse Landsberg",
+    "email": "buchhaltung@seeberger-rad.example",
+    "register": "Amtsgericht Augsburg HRB 00000",
+    "ceo": "Korbinian Seeberger"
+  },
+  "buyer": {
+    "name_lines": [
+      "Velo-Kontor Hamburg GmbH",
+      "Wareneingang",
+      "z. Hd. Herrn Petersen"
+    ],
+    "street": "Billstraße 140",
+    "postal_code": "20539",
+    "city": "Hamburg",
+    "customer_number": "101215"
+  },
+  "invoice": {
+    "number": "RE202603244",
+    "date": "19.10.2026",
+    "service_date": "13.10.2026",
+    "order_number": "",
+    "shipping": ""
+  },
+  "druck": {
+    "datum_format": "TT.MM.JJJJ",
+    "schrift": "Helvetica",
+    "seitenformat": "A4"
+  },
+  "BT-72": "13.10.2026",
+  "BT-119": "19.00",
+  "positions": [
+    {
+      "qty": "1",
+      "unit": "Stk.",
+      "description": [
+        "Kettenblatt 34 Z., 4-Loch, Aluminium",
+        "schwarz eloxiert"
+      ],
+      "article_number": "SR-11020",
+      "unit_price": "38.00",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "38.00"
+    },
+    {
+      "qty": "20",
+      "unit": "Stk.",
+      "description": [
+        "Schlauch 28\", Sclaverandventil 60",
+        "mm"
+      ],
+      "article_number": "SR-15812",
+      "unit_price": "4.05",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "81.00"
+    },
+    {
+      "qty": "5",
+      "unit": "Stk.",
+      "description": [
+        "Schaltzug-Set Edelstahl, beschichtet,",
+        "kompatibel mit gängigen",
+        "Schaltgruppen, Montageanleitung"
+      ],
+      "article_number": "SR-18044",
+      "unit_price": "8.01",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "40.05"
+    },
+    {
+      "qty": "5",
+      "unit": "Stk.",
+      "description": [
+        "Kette 11-fach, 116 Glieder, mit",
+        "Kettenschloss"
+      ],
+      "article_number": "SR-12001",
+      "unit_price": "22.75",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "113.75"
+    },
+    {
+      "qty": "12",
+      "unit": "Stk.",
+      "description": [
+        "Faltreifen 29 x 2,35, Tubeless",
+        "Ready, Restposten aus Saisonware",
+        "2026, Rückgabe ausgeschlossen"
+      ],
+      "article_number": "SR-15300",
+      "unit_price": "44.50",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "534.00"
+    },
+    {
+      "qty": "2",
+      "unit": "Stk.",
+      "description": [
+        "Sattelstütze 31,6 x 400 mm, Carbon"
+      ],
+      "article_number": "SR-17101",
+      "unit_price": "114.00",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "228.00"
+    },
+    {
+      "qty": "2",
+      "unit": "Std.",
+      "description": [
+        "Werkstattstunde Laufradzentrierung,",
+        "kompatibel mit gängigen",
+        "Schaltgruppen, Montageanleitung"
+      ],
+      "article_number": "SR-19870",
+      "unit_price": "54.50",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "109.00"
+    },
+    {
+      "qty": "25",
+      "unit": "Stk.",
+      "description": [
+        "Flaschenhalter Aluminium"
+      ],
+      "article_number": "SR-21002",
+      "unit_price": "5.27",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "131.75"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": null,
+  "discount_days": null,
+  "payment_days": 14,
+  "totals": {
+    "net": "1275.55",
+    "vat": "242.35",
+    "gross": "1517.90"
+  },
+  "totals_printed": {
+    "net": "1275.55",
+    "vat": "242.35",
+    "gross": "1517.90"
+  },
+  "payment": {
+    "discount_date": null,
+    "due_date": "02.11.2026",
+    "discount_amount": null,
+    "discount_base": null
+  },
+  "payment_terms_text": [
+    "Zahlungsziel: 14 Tage"
+  ],
+  "page_count": 1,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "transfer": null,
+      "carry_forward": null,
+      "summary_present": true
+    }
+  ],
+  "erwarteter_status": "ok",
+  "erwartete_hinweise": [],
+  "kosit": null,
+  "verapdf": null,
+  "validierung_hinweis": "lokal nicht validierbar / spätere Phase (KoSIT/veraPDF prüfen die App-Ausgabe, nicht diese PDFs)",
+  "korrekturen": null,
+  "korrekturen_hinweis": "erst beim echten Anlernen messbar",
+  "test_flags": {
+    "address_name_lines": 3,
+    "po_box": false,
+    "multi_line_positions": 6,
+    "shipping_position": false,
+    "page_format": "A4",
+    "payment": "netto",
+    "pruefen": null,
+    "missing_order_number": true,
+    "note": "3 Namenszeilen, Zahlungsziel 14 Tage",
+    "bearbeiter": "Lorenz Huber",
+    "auftragsnummer": "20211632",
+    "versandart": "Spedition"
+  },
+  "sha256": "5e7545b072f07121c0cc9c3fa27c54408581524f8fe257725ed90a248bb22cfb"
+}

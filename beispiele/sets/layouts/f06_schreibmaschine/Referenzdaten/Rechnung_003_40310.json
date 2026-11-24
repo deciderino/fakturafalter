@@ -1,0 +1,536 @@
+{
+  "datei": "Rechnung_003_40310.pdf",
+  "format": "PDF 1.4 (reportlab), A4, Schrift Courier (Standard-14, nicht eingebettet)",
+  "familie": "f06_schreibmaschine",
+  "quelle": "Q6",
+  "holdout": false,
+  "split": "training",
+  "seller": {
+    "name": "Holzwerkstatt Brenneisen GmbH",
+    "street": "Am Sägewerk 4",
+    "postal_code": "79822",
+    "city": "Titisee-Neustadt",
+    "ust_id": "DE142906131",
+    "iban": "DE75 0000 0000 0004 4182 30",
+    "bic": "BRENDEX1TNS",
+    "bank": "Beispielsparkasse Hochschwarzwald",
+    "email": "buero@brenneisen-holz.example",
+    "register": "Amtsgericht Freiburg i. Br. HRB 000000",
+    "ceo": "Markus Brenneisen"
+  },
+  "buyer": {
+    "name_lines": [
+      "Ladenbau Schwarzwald GmbH",
+      "Einkauf",
+      "z. Hd. Herrn Faller"
+    ],
+    "street": "Gewerbestraße 30",
+    "postal_code": "78112",
+    "city": "St. Georgen im Schwarzwald",
+    "customer_number": "D-20058"
+  },
+  "invoice": {
+    "number": "40310",
+    "date": "19.10.2026",
+    "service_date": "13.10.2026",
+    "order_number": "",
+    "shipping": ""
+  },
+  "druck": {
+    "datum_format": "TT.MM.JJJJ",
+    "schrift": "Courier",
+    "seitenformat": "A4"
+  },
+  "BT-72": "13.10.2026",
+  "BT-119": "19.00",
+  "positions": [
+    {
+      "qty": "5",
+      "unit": "Std.",
+      "description": [
+        "Werkstattarbeit Zuschnitt und Kanten"
+      ],
+      "article_number": "TS-2003",
+      "unit_price": "54.00",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "270.00"
+    },
+    {
+      "qty": "1",
+      "unit": "Stk.",
+      "description": [
+        "Hartwachsöl 0,75 l"
+      ],
+      "article_number": "TS-1050",
+      "unit_price": "30.25",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "30.25"
+    },
+    {
+      "qty": "2",
+      "unit": "Std.",
+      "description": [
+        "Aufmaß und Planung, Oberfläche zweimal",
+        "geölt und zwischengeschliffen"
+      ],
+      "article_number": "TS-2002",
+      "unit_price": "67.75",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "135.50"
+    },
+    {
+      "qty": "3",
+      "unit": "Stk.",
+      "description": [
+        "Arbeitsplatte Eiche massiv 40 mm, je",
+        "lfm"
+      ],
+      "article_number": "TS-1001",
+      "unit_price": "209.75",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "629.25"
+    },
+    {
+      "qty": "20",
+      "unit": "Stk.",
+      "description": [
+        "Topfband 110°, Clip"
+      ],
+      "article_number": "TS-1021",
+      "unit_price": "4.69",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "93.80"
+    },
+    {
+      "qty": "6",
+      "unit": "Stk.",
+      "description": [
+        "Möbelgriff Edelstahl 128 mm"
+      ],
+      "article_number": "TS-1030",
+      "unit_price": "5.13",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "30.78"
+    },
+    {
+      "qty": "4",
+      "unit": "Stk.",
+      "description": [
+        "Regalboden Buche 25 mm, 80 cm"
+      ],
+      "article_number": "TS-1010",
+      "unit_price": "54.00",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "216.00"
+    },
+    {
+      "qty": "8",
+      "unit": "Std.",
+      "description": [
+        "Montage vor Ort"
+      ],
+      "article_number": "TS-2001",
+      "unit_price": "54.75",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "438.00"
+    },
+    {
+      "qty": "8",
+      "unit": "Stk.",
+      "description": [
+        "Schubkastenführung Vollauszug"
+      ],
+      "article_number": "TS-1020",
+      "unit_price": "35.25",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "282.00"
+    },
+    {
+      "qty": "1",
+      "unit": "Stk.",
+      "description": [
+        "Wandregal Lärche geölt, 120 cm"
+      ],
+      "article_number": "TS-1011",
+      "unit_price": "103.50",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "103.50"
+    },
+    {
+      "qty": "2",
+      "unit": "Stk.",
+      "description": [
+        "Anfahrt Montagefahrzeug"
+      ],
+      "article_number": "TS-2010",
+      "unit_price": "36.00",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "72.00"
+    },
+    {
+      "qty": "1",
+      "unit": "Stk.",
+      "description": [
+        "Thekenfront Multiplex, lackiert"
+      ],
+      "article_number": "TS-1002",
+      "unit_price": "637.25",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "637.25"
+    },
+    {
+      "qty": "1",
+      "unit": "Stk.",
+      "description": [
+        "Entsorgung Altmöbel, Pauschale"
+      ],
+      "article_number": "TS-2020",
+      "unit_price": "73.75",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "73.75"
+    },
+    {
+      "qty": "10",
+      "unit": "Stk.",
+      "description": [
+        "Sockelleiste Eiche, je lfm, nach Aufmaß",
+        "vom Kundentermin, Kanten gefast"
+      ],
+      "article_number": "TS-1040",
+      "unit_price": "8.88",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "88.80"
+    },
+    {
+      "qty": "8",
+      "unit": "Std.",
+      "description": [
+        "Werkstattarbeit Zuschnitt und Kanten"
+      ],
+      "article_number": "TS-2003",
+      "unit_price": "54.00",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "432.00"
+    },
+    {
+      "qty": "3",
+      "unit": "Stk.",
+      "description": [
+        "Hartwachsöl 0,75 l"
+      ],
+      "article_number": "TS-1050",
+      "unit_price": "30.25",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "90.75"
+    },
+    {
+      "qty": "4",
+      "unit": "Std.",
+      "description": [
+        "Aufmaß und Planung"
+      ],
+      "article_number": "TS-2002",
+      "unit_price": "67.75",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "271.00"
+    },
+    {
+      "qty": "3",
+      "unit": "Stk.",
+      "description": [
+        "Arbeitsplatte Eiche massiv 40 mm, je",
+        "lfm"
+      ],
+      "article_number": "TS-1001",
+      "unit_price": "209.75",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "629.25"
+    },
+    {
+      "qty": "10",
+      "unit": "Stk.",
+      "description": [
+        "Topfband 110°, Clip"
+      ],
+      "article_number": "TS-1021",
+      "unit_price": "4.69",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "46.90"
+    },
+    {
+      "qty": "24",
+      "unit": "Stk.",
+      "description": [
+        "Möbelgriff Edelstahl 128 mm"
+      ],
+      "article_number": "TS-1030",
+      "unit_price": "5.13",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "123.12"
+    },
+    {
+      "qty": "4",
+      "unit": "Stk.",
+      "description": [
+        "Regalboden Buche 25 mm, 80 cm"
+      ],
+      "article_number": "TS-1010",
+      "unit_price": "54.00",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "216.00"
+    },
+    {
+      "qty": "4",
+      "unit": "Std.",
+      "description": [
+        "Montage vor Ort, inklusive",
+        "Befestigungsmaterial und Abdeckkappen"
+      ],
+      "article_number": "TS-2001",
+      "unit_price": "54.75",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "219.00"
+    },
+    {
+      "qty": "12",
+      "unit": "Stk.",
+      "description": [
+        "Schubkastenführung Vollauszug"
+      ],
+      "article_number": "TS-1020",
+      "unit_price": "35.25",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "423.00"
+    },
+    {
+      "qty": "1",
+      "unit": "Stk.",
+      "description": [
+        "Wandregal Lärche geölt, 120 cm"
+      ],
+      "article_number": "TS-1011",
+      "unit_price": "103.50",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "103.50"
+    },
+    {
+      "qty": "2",
+      "unit": "Stk.",
+      "description": [
+        "Anfahrt Montagefahrzeug"
+      ],
+      "article_number": "TS-2010",
+      "unit_price": "36.00",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "72.00"
+    },
+    {
+      "qty": "1",
+      "unit": "Stk.",
+      "description": [
+        "Thekenfront Multiplex, lackiert"
+      ],
+      "article_number": "TS-1002",
+      "unit_price": "637.25",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "637.25"
+    },
+    {
+      "qty": "1",
+      "unit": "Stk.",
+      "description": [
+        "Entsorgung Altmöbel, Pauschale"
+      ],
+      "article_number": "TS-2020",
+      "unit_price": "73.75",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "73.75"
+    },
+    {
+      "qty": "30",
+      "unit": "Stk.",
+      "description": [
+        "Sockelleiste Eiche, je lfm, nach Aufmaß",
+        "vom Kundentermin, Kanten gefast"
+      ],
+      "article_number": "TS-1040",
+      "unit_price": "8.88",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "266.40"
+    },
+    {
+      "qty": "5",
+      "unit": "Std.",
+      "description": [
+        "Werkstattarbeit Zuschnitt und Kanten"
+      ],
+      "article_number": "TS-2003",
+      "unit_price": "54.00",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "270.00"
+    },
+    {
+      "qty": "2",
+      "unit": "Stk.",
+      "description": [
+        "Hartwachsöl 0,75 l"
+      ],
+      "article_number": "TS-1050",
+      "unit_price": "30.25",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "60.50"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": "3.00",
+  "discount_days": 8,
+  "payment_days": 30,
+  "totals": {
+    "net": "7035.30",
+    "vat": "1336.71",
+    "gross": "8372.01"
+  },
+  "totals_printed": {
+    "net": "7035.30",
+    "vat": "1336.71",
+    "gross": "8372.01"
+  },
+  "payment": {
+    "discount_date": "27.10.2026",
+    "due_date": "18.11.2026",
+    "discount_amount": "251.16",
+    "discount_base": "gross"
+  },
+  "payment_terms_text": [
+    "Zahlung: 8 Tage 3,0%; 30 Tage netto"
+  ],
+  "page_count": 2,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21
+      ],
+      "transfer": "4909.90",
+      "carry_forward": null,
+      "summary_present": false
+    },
+    {
+      "page": 2,
+      "position_indices": [
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30
+      ],
+      "transfer": null,
+      "carry_forward": "4909.90",
+      "summary_present": true
+    }
+  ],
+  "erwarteter_status": "ok",
+  "erwartete_hinweise": [],
+  "kosit": null,
+  "verapdf": null,
+  "validierung_hinweis": "lokal nicht validierbar / spätere Phase (KoSIT/veraPDF prüfen die App-Ausgabe, nicht diese PDFs)",
+  "korrekturen": null,
+  "korrekturen_hinweis": "erst beim echten Anlernen messbar",
+  "test_flags": {
+    "address_name_lines": 3,
+    "po_box": false,
+    "multi_line_positions": 6,
+    "shipping_position": false,
+    "page_format": "A4",
+    "payment": "skonto",
+    "pruefen": null,
+    "missing_order_number": true,
+    "note": "3 Namenszeilen, 2 Seiten mit Übertrag",
+    "auftragsnummer": "13877"
+  },
+  "sha256": "cefb7d57fa5e8373f5e4071d97a2f3286b173eb35a868e35c017e40da7b496f6"
+}

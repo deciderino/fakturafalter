@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=Fakturafalter
+Comment=PDF und CSV aus der Warenwirtschaft lokal zu ZUGFeRD und XRechnung
+Comment[en]=Turn PDF and CSV from your ERP into ZUGFeRD and XRechnung, locally
+Exec=fakturafalter
+Icon=fakturafalter
+Terminal=false
+Categories=Office;Finance;
+StartupWMClass=fakturafalter

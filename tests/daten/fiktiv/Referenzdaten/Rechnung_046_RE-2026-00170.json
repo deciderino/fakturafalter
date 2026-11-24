@@ -1,0 +1,557 @@
+{
+  "datei": "Rechnung_046_RE-2026-00170.pdf",
+  "format": "PDF/A-2b",
+  "seller": {
+    "name": "Alberon Industriekomponenten GmbH",
+    "street": "Prüfwerkstraße 18",
+    "postal_code": "09111",
+    "city": "Chemnitz",
+    "ust_id": "DE123456789",
+    "iban": "DE89 3704 0044 0532 0130 00",
+    "bic": "COBADEFFXXX",
+    "bank": "Commerzbank AG",
+    "email": "rechnung@alberon.example",
+    "register": "Amtsgericht Chemnitz, HRB 999999",
+    "ceo": "Markus Seidel"
+  },
+  "buyer": {
+    "name_lines": [
+      "Elmbach Metalltechnik GmbH"
+    ],
+    "street": "Schmiedeweg 39",
+    "postal_code": "08056",
+    "city": "Zwickau",
+    "customer_number": "25903"
+  },
+  "invoice": {
+    "number": "RE-2026-00170",
+    "date": "26.10.2026",
+    "service_date": "20.10.2026",
+    "order_number": "",
+    "shipping": "GO!"
+  },
+  "positions": [
+    {
+      "qty": 24,
+      "unit": "Std.",
+      "description": [
+        "CNC-Nacharbeit 40539",
+        "Sondermaß nach Zeichnung 2026-18",
+        "Oberfläche eloxiert, natur",
+        "nach Zeichnung A-572, EN AW-6082"
+      ],
+      "unit_price": "18.75",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "450.00"
+    },
+    {
+      "qty": 6,
+      "unit": "Std.",
+      "description": [
+        "Wellenhalter 729295"
+      ],
+      "unit_price": "0.85",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "5.10"
+    },
+    {
+      "qty": 100,
+      "unit": "Stk.",
+      "description": [
+        "Mess- und Prüfarbeit 87874"
+      ],
+      "unit_price": "0.85",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "85.00"
+    },
+    {
+      "qty": 200,
+      "unit": "Stk.",
+      "description": [
+        "Kupplungsstück 887424"
+      ],
+      "unit_price": "3.90",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "780.00"
+    },
+    {
+      "qty": 5000,
+      "unit": "Stk.",
+      "description": [
+        "Formstück 961254"
+      ],
+      "unit_price": "12.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "62500.00"
+    },
+    {
+      "qty": 24,
+      "unit": "Std.",
+      "description": [
+        "CNC-Nacharbeit 278333"
+      ],
+      "unit_price": "35.00",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "840.00"
+    },
+    {
+      "qty": 10000,
+      "unit": "Stk.",
+      "description": [
+        "Abdeckprofil 727037"
+      ],
+      "unit_price": null,
+      "kind": "without_price",
+      "price_unit": "/1",
+      "total": null
+    },
+    {
+      "qty": 5000,
+      "unit": "Stk.",
+      "description": [
+        "Trägerplatte 990988"
+      ],
+      "unit_price": null,
+      "kind": "without_price",
+      "price_unit": "/1",
+      "total": null
+    },
+    {
+      "qty": 50,
+      "unit": "Std.",
+      "description": [
+        "Trägerplatte 711728"
+      ],
+      "unit_price": null,
+      "kind": "without_price",
+      "price_unit": "/1",
+      "total": null
+    },
+    {
+      "qty": 50,
+      "unit": "Stk.",
+      "description": [
+        "Bearbeitung 875569"
+      ],
+      "unit_price": null,
+      "kind": "without_price",
+      "price_unit": "/1",
+      "total": null
+    },
+    {
+      "qty": 1,
+      "unit": "",
+      "description": [
+        "Gesamtpreis Auftrag 2029-226"
+      ],
+      "unit_price": "195.00",
+      "kind": "flat_rate",
+      "price_unit": "/1",
+      "total": "195.00"
+    },
+    {
+      "qty": 1,
+      "unit": "Stk.",
+      "description": [
+        "Nachbearbeitung 955676"
+      ],
+      "unit_price": "4.75",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "4.75"
+    },
+    {
+      "qty": 750,
+      "unit": "Stk.",
+      "description": [
+        "Bearbeitung 829871"
+      ],
+      "unit_price": "0.85",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "637.50"
+    },
+    {
+      "qty": 125,
+      "unit": "Stk.",
+      "description": [
+        "Aluminiumgehäuse 36587"
+      ],
+      "unit_price": "105.00",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "13125.00"
+    },
+    {
+      "qty": 4,
+      "unit": "Std.",
+      "description": [
+        "Montagearbeit 456602"
+      ],
+      "unit_price": "1.20",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "4.80"
+    },
+    {
+      "qty": 2,
+      "unit": "Stk.",
+      "description": [
+        "Montagearbeit 550448",
+        "nach Zeichnung A-572, EN AW-6082",
+        "Kanten nach Zeichnung entgraten",
+        "Werkstoff EN AW-5083",
+        "Gewinde M5 und Passungen prüfen"
+      ],
+      "unit_price": "18.75",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "37.50"
+    },
+    {
+      "qty": 20,
+      "unit": "Stk.",
+      "description": [
+        "Distanzhülse 173443"
+      ],
+      "unit_price": "3.90",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "78.00"
+    },
+    {
+      "qty": 75,
+      "unit": "Stk.",
+      "description": [
+        "CNC-Nacharbeit 848896"
+      ],
+      "unit_price": "1.20",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "90.00"
+    },
+    {
+      "qty": 24,
+      "unit": "Std.",
+      "description": [
+        "Spannhülse 744584"
+      ],
+      "unit_price": "46.80",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "1123.20"
+    },
+    {
+      "qty": 2500,
+      "unit": "Stk.",
+      "description": [
+        "Nachbearbeitung 270605"
+      ],
+      "unit_price": "1.20",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "3000.00"
+    },
+    {
+      "qty": 75,
+      "unit": "Stk.",
+      "description": [
+        "Halterungsplatte 725592"
+      ],
+      "unit_price": "7.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "562.50"
+    },
+    {
+      "qty": 10,
+      "unit": "Stk.",
+      "description": [
+        "Abdeckprofil 808727"
+      ],
+      "unit_price": "12.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "125.00"
+    },
+    {
+      "qty": 10,
+      "unit": "Stk.",
+      "description": [
+        "Montagearbeit 642371"
+      ],
+      "unit_price": "250.00",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "2500.00"
+    },
+    {
+      "qty": 25,
+      "unit": "Stk.",
+      "description": [
+        "Montagearbeit 994347"
+      ],
+      "unit_price": null,
+      "kind": "without_price",
+      "price_unit": "/1",
+      "total": null
+    },
+    {
+      "qty": 1250,
+      "unit": "Stk.",
+      "description": [
+        "CNC-Nacharbeit 231221"
+      ],
+      "unit_price": null,
+      "kind": "without_price",
+      "price_unit": "/1",
+      "total": null
+    },
+    {
+      "qty": 20,
+      "unit": "Stk.",
+      "description": [
+        "Aluminiumgehäuse 385259"
+      ],
+      "unit_price": null,
+      "kind": "without_price",
+      "price_unit": "/1",
+      "total": null
+    },
+    {
+      "qty": 40,
+      "unit": "Stk.",
+      "description": [
+        "Formstück 95915"
+      ],
+      "unit_price": null,
+      "kind": "without_price",
+      "price_unit": "/1",
+      "total": null
+    },
+    {
+      "qty": 1,
+      "unit": "Stk.",
+      "description": [
+        "Fixpreis Auftrag 2029-725"
+      ],
+      "unit_price": "1750.00",
+      "kind": "flat_rate",
+      "price_unit": "/1",
+      "total": "1750.00"
+    },
+    {
+      "qty": 1000,
+      "unit": "Stk.",
+      "description": [
+        "Bearbeitung 687261"
+      ],
+      "unit_price": "4.75",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "4750.00"
+    },
+    {
+      "qty": 12,
+      "unit": "Std.",
+      "description": [
+        "Passstift 300692"
+      ],
+      "unit_price": null,
+      "kind": "without_price",
+      "price_unit": "/1",
+      "total": null
+    },
+    {
+      "qty": 1,
+      "unit": "",
+      "description": [
+        "Mindestauftrag Auftrag 2027-168"
+      ],
+      "unit_price": "1120.50",
+      "kind": "flat_rate",
+      "price_unit": "/1",
+      "total": "1120.50"
+    },
+    {
+      "qty": 30,
+      "unit": "Std.",
+      "description": [
+        "Trägerplatte 128534"
+      ],
+      "unit_price": "18.75",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "562.50"
+    },
+    {
+      "qty": 4,
+      "unit": "Std.",
+      "description": [
+        "Schutzblende 6219"
+      ],
+      "unit_price": "14.99",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "59.96"
+    },
+    {
+      "qty": 2,
+      "unit": "Std.",
+      "description": [
+        "Maschinenbolzen 870033"
+      ],
+      "unit_price": "480.00",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "960.00"
+    },
+    {
+      "qty": 5,
+      "unit": "Stk.",
+      "description": [
+        "Mess- und Prüfarbeit 489307"
+      ],
+      "unit_price": "7.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "37.50"
+    },
+    {
+      "qty": 5000,
+      "unit": "Stk.",
+      "description": [
+        "Distanzhülse 926949"
+      ],
+      "unit_price": "3.90",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "19500.00"
+    },
+    {
+      "qty": 3,
+      "unit": "Stk.",
+      "description": [
+        "Montageschiene 493205",
+        "nach Zeichnung A-572, EN AW-6082",
+        "Sondermaß nach Zeichnung 2026-18"
+      ],
+      "unit_price": "250.00",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "750.00"
+    },
+    {
+      "qty": 25,
+      "unit": "Stk.",
+      "description": [
+        "Trägerplatte 999295"
+      ],
+      "unit_price": "14.99",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "374.75"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": null,
+  "discount_days": null,
+  "payment_days": 30,
+  "totals": {
+    "net": "116008.56",
+    "vat": "22041.63",
+    "gross": "138050.19"
+  },
+  "payment": {
+    "discount_date": null,
+    "due_date": "25.11.2026",
+    "discount_amount": null
+  },
+  "page_count": 3,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "line_count": 18,
+      "transfer": "78627.15",
+      "summary_present": false,
+      "payment_block_present": true
+    },
+    {
+      "page": 2,
+      "position_indices": [
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34
+      ],
+      "line_count": 23,
+      "transfer": "95346.31",
+      "summary_present": false,
+      "payment_block_present": false
+    },
+    {
+      "page": 3,
+      "position_indices": [
+        35,
+        36,
+        37,
+        38
+      ],
+      "line_count": 6,
+      "transfer": null,
+      "summary_present": true,
+      "payment_block_present": false
+    }
+  ],
+  "test_flags": {
+    "address_name_lines": 1,
+    "missing_order_number": true,
+    "shipping_empty": false,
+    "discount_applied": false,
+    "blank_unit_flat_rate": true,
+    "without_price_count": 9,
+    "flat_rate_count": 3,
+    "two_three_line_positions": 1,
+    "four_five_line_positions": 2,
+    "has_qty_thousands": true
+  },
+  "sha256": "b940d53ff9c6cd7c6e8eff1c99417a121f6c020206dd64fb66cee2e70e3fa9c4"
+}

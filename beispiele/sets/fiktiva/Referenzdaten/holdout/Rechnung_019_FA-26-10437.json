@@ -1,0 +1,164 @@
+{
+  "datei": "Rechnung_019_FA-26-10437.pdf",
+  "format": "PDF 1.4 (reportlab, Schriften eingebettet)",
+  "holdout": true,
+  "seller": {
+    "name": "Fiktiva Antriebstechnik GmbH",
+    "street": "Musterring 12",
+    "postal_code": "04179",
+    "city": "Leipzig",
+    "ust_id": "DE314159262",
+    "iban": "DE71 0000 0000 0047 1108 15",
+    "bic": "FIKTDEX1XXX",
+    "bank": "Beispielbank Leipzig",
+    "email": "rechnung@fiktiva.example",
+    "register": "Amtsgericht Leipzig, HRB 000000",
+    "ceo": "Jana Mustermann"
+  },
+  "buyer": {
+    "name_lines": [
+      "Mühlhausener Kunststofftechnik",
+      "Beispiel GmbH"
+    ],
+    "street": "Ziegeleiweg 19",
+    "postal_code": "99974",
+    "city": "Mühlhausen",
+    "customer_number": "0012044"
+  },
+  "invoice": {
+    "number": "FA-26-10437",
+    "date": "23.10.2026",
+    "service_date": "23.10.2026",
+    "order_number": "4700150001",
+    "shipping": "Abholung"
+  },
+  "positions": [
+    {
+      "qty": 4,
+      "unit": "Stk.",
+      "description": [
+        "Lagerbock LB-40 Stahl verzinkt 28-9469 Bohrung H7",
+        "Ø 20 mm mit Passfedernut DIN 6885,",
+        "Gewindebohrungen 4x M6 auf Teilkreis 70 mm"
+      ],
+      "unit_price": "48.00",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "192.00"
+    },
+    {
+      "qty": 5,
+      "unit": "Stk.",
+      "description": [
+        "Motorkonsole MK-112 geschweißt 22-4138 inkl.",
+        "Prüfprotokoll und Werkszeugnis 2.2 nach EN 10204"
+      ],
+      "unit_price": "260.25",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "1301.25"
+    },
+    {
+      "qty": 4,
+      "unit": "Stk.",
+      "description": [
+        "Lagerbock LB-40 Stahl verzinkt 40-8197 inkl.",
+        "Prüfprotokoll und Werkszeugnis 2.2 nach EN 10204"
+      ],
+      "unit_price": "32.00",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "128.00"
+    },
+    {
+      "qty": 6,
+      "unit": "Stk.",
+      "description": [
+        "Schutzhaube Riementrieb 56-4679"
+      ],
+      "unit_price": "78.25",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "469.50"
+    },
+    {
+      "qty": 40,
+      "unit": "Stk.",
+      "description": [
+        "Zahnriemenscheibe T10 Z=32 28-3532"
+      ],
+      "unit_price": "86.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "3460.00"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": null,
+  "discount_days": null,
+  "payment_days": 30,
+  "totals": {
+    "net": "5550.75",
+    "vat": "1054.64",
+    "gross": "6605.39"
+  },
+  "payment": {
+    "discount_date": null,
+    "due_date": "22.11.2026",
+    "discount_amount": null,
+    "discount_base": null
+  },
+  "payment_terms_text": [
+    "zahlbar bis 22.11.2026 ohne Abzug"
+  ],
+  "page_count": 1,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "line_count": 9,
+      "transfer": null,
+      "carry_forward": null,
+      "summary_present": true,
+      "payment_block_present": true
+    }
+  ],
+  "test_flags": {
+    "address_name_lines": 2,
+    "address_blank_lines": 1,
+    "address_attention_line": false,
+    "address_department_line": false,
+    "two_line_company_name": true,
+    "missing_order_number": false,
+    "shipping_empty": false,
+    "discount_applied": false,
+    "blank_unit_flat_rate": false,
+    "without_price_count": 0,
+    "flat_rate_count": 0,
+    "min_order": null,
+    "price_unit_100_count": 0,
+    "two_three_line_positions": 3,
+    "four_five_line_positions": 0,
+    "has_qty_thousands": false,
+    "carry_forward": false,
+    "last_table_row_index": 11,
+    "note": "lange umbrechende Bezeichnungen"
+  },
+  "sha256": "dc15673ccefc41d4ff94fec018dd767ed8a430408037bf7923b10dfd77d54fa2"
+}

@@ -1,0 +1,158 @@
+{
+  "datei": "Rechnung_005_INV-2026-00235.pdf",
+  "format": "PDF 1.4 (reportlab), A4, Schrift Helvetica (Standard-14, nicht eingebettet)",
+  "familie": "f07_din5008",
+  "quelle": "Q9",
+  "holdout": true,
+  "split": "holdout",
+  "seller": {
+    "name": "Nordlicht Software GmbH",
+    "street": "Holtenauer Straße 88",
+    "postal_code": "24105",
+    "city": "Kiel",
+    "ust_id": "DE298110463",
+    "iban": "DE10 0000 0000 0090 1177 36",
+    "bic": "NORLDEX1KIE",
+    "bank": "Beispielbank Kiel",
+    "email": "buchhaltung@nordlicht-software.example",
+    "register": "HRB 00000 KI",
+    "ceo": "Henrike Jansen"
+  },
+  "buyer": {
+    "name_lines": [
+      "Weingut Hohenrain GbR"
+    ],
+    "street": "Rheinstraße 70",
+    "postal_code": "65375",
+    "city": "Oestrich-Winkel",
+    "customer_number": ""
+  },
+  "invoice": {
+    "number": "INV/2026/00235",
+    "date": "02.11.2026",
+    "service_date": "01.11.2026",
+    "order_number": "",
+    "shipping": ""
+  },
+  "druck": {
+    "datum_format": "TT.MM.JJJJ",
+    "schrift": "Helvetica",
+    "seitenformat": "A4"
+  },
+  "BT-72": "01.11.2026",
+  "BT-119": "19.00",
+  "positions": [
+    {
+      "qty": "3",
+      "unit": "Std.",
+      "description": [
+        "Schulung Anwender (online)"
+      ],
+      "article_number": "NL-DL-02",
+      "unit_price": "80.00",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "240.00"
+    },
+    {
+      "qty": "4",
+      "unit": "Std.",
+      "description": [
+        "Einrichtung und Datenübernahme"
+      ],
+      "article_number": "NL-DL-01",
+      "unit_price": "109.50",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "438.00"
+    },
+    {
+      "qty": "3.5",
+      "unit": "Std.",
+      "description": [
+        "Anpassung Druckvorlagen"
+      ],
+      "article_number": "NL-DL-03",
+      "unit_price": "89.25",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "312.38"
+    },
+    {
+      "qty": "1",
+      "unit": "Stk.",
+      "description": [
+        "Zusatzmodul Online-Buchung"
+      ],
+      "article_number": "NL-LIZ-03",
+      "unit_price": "10.78",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "10.78"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": null,
+  "discount_days": null,
+  "payment_days": 14,
+  "totals": {
+    "net": "1001.16",
+    "vat": "190.22",
+    "gross": "1191.38"
+  },
+  "totals_printed": {
+    "net": "1001.16",
+    "vat": "190.22",
+    "gross": "1192.38"
+  },
+  "payment": {
+    "discount_date": null,
+    "due_date": "16.11.2026",
+    "discount_amount": null,
+    "discount_base": null
+  },
+  "payment_terms_text": [
+    "Zahlungsbedingungen: 14 Tage"
+  ],
+  "page_count": 1,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "transfer": null,
+      "carry_forward": null,
+      "summary_present": true
+    }
+  ],
+  "erwarteter_status": "prüfen",
+  "erwartete_hinweise": [
+    "PRUEFEN [BT-112] Kontrollwert der Quelle ≠ berechnet (gedrucktes Brutto 1,00 € über Netto + USt)"
+  ],
+  "kosit": null,
+  "verapdf": null,
+  "validierung_hinweis": "lokal nicht validierbar / spätere Phase (KoSIT/veraPDF prüfen die App-Ausgabe, nicht diese PDFs)",
+  "korrekturen": null,
+  "korrekturen_hinweis": "erst beim echten Anlernen messbar",
+  "test_flags": {
+    "address_name_lines": 1,
+    "po_box": false,
+    "multi_line_positions": 0,
+    "shipping_position": false,
+    "page_format": "A4",
+    "payment": "netto",
+    "pruefen": "brutto",
+    "missing_order_number": true,
+    "note": "Hold-out PRÜFEN: gedrucktes Gesamt 1,00 € über Netto + USt",
+    "quelle": "S00606"
+  },
+  "sha256": "84cfffa462b6ff7803352bd8198d128d7191b82dfabb501799b8ecda3997b9b7"
+}

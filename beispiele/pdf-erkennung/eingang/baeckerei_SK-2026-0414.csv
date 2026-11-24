@@ -1,0 +1,7 @@
+Rechnungsnr;Datum;Lieferdatum;Kunde;Strasse;PLZ;Ort;Artikel;Menge;Einheit;Einzelpreis;USt-Satz
+SK-2026-0414;10.10.2026;09.10.2026;Kantine Werkhof eG;Industriestraße 40;31137;Hildesheim;Butterhörnchen;30;Stk;0,95;7
+SK-2026-0414;10.10.2026;09.10.2026;Kantine Werkhof eG;Industriestraße 40;31137;Hildesheim;Dinkelbrötchen;40;Stk;0,55;7
+SK-2026-0414;10.10.2026;09.10.2026;Kantine Werkhof eG;Industriestraße 40;31137;Hildesheim;Quarkbällchen;2,5;kg;9,60;7
+SK-2026-0414;10.10.2026;09.10.2026;Kantine Werkhof eG;Industriestraße 40;31137;Hildesheim;Apfelkuchen Blech;2,5;kg;11,80;7
+SK-2026-0414;10.10.2026;09.10.2026;Kantine Werkhof eG;Industriestraße 40;31137;Hildesheim;Lieferpauschale Innenstadt;60;Stk;6,00;19
+SK-2026-0414;10.10.2026;09.10.2026;Kantine Werkhof eG;Industriestraße 40;31137;Hildesheim;Brotkorb Leihgebühr;60;Stk;2,50;19

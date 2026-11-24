@@ -1,0 +1,20 @@
+Muster GmbH * Musterstraﬂe 1 * 12345 Musterstadt
+
+Probe Kleinbetrieb e.K.                 Rechnungsnr.:  RE-2026-0103
+Probegasse 3                            Datum:         07.10.2026
+12347 Musterstadt                       Kunden-Nr.:    K-1003
+                                        Seite:         1 von 1
+
+R E C H N U N G
+
+Pos Art.-Nr.  Bezeichnung                    Menge ME        Einzelpr.    Gesamt St
+----------------------------------------------------------------------------------
+  1 D-001     Wartungspauschale Heizung          1 psch.        120,00    120,00 A
+  2 D-002     Anfahrt Zone 1                     1 psch.         25,00     25,00 A
+----------------------------------------------------------------------------------
+Nettobetrag                                                              145,00
+A MwSt 19 % auf 145,00                                                    27,55
+Gesamtbetrag EUR                                                         172,55
+
+Zahlbar innerhalb 14 Tagen ohne Abzug.
+

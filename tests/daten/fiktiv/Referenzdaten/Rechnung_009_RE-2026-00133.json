@@ -1,0 +1,176 @@
+{
+  "datei": "Rechnung_009_RE-2026-00133.pdf",
+  "format": "PDF/A-2b",
+  "seller": {
+    "name": "Alberon Industriekomponenten GmbH",
+    "street": "Prüfwerkstraße 18",
+    "postal_code": "09111",
+    "city": "Chemnitz",
+    "ust_id": "DE123456789",
+    "iban": "DE89 3704 0044 0532 0130 00",
+    "bic": "COBADEFFXXX",
+    "bank": "Commerzbank AG",
+    "email": "rechnung@alberon.example",
+    "register": "Amtsgericht Chemnitz, HRB 999999",
+    "ceo": "Markus Seidel"
+  },
+  "buyer": {
+    "name_lines": [
+      "Hochfeld Spezialteile GmbH"
+    ],
+    "street": "Industrieallee 4",
+    "postal_code": "08523",
+    "city": "Plauen",
+    "customer_number": "1058472"
+  },
+  "invoice": {
+    "number": "RE-2026-00133",
+    "date": "18.08.2026",
+    "service_date": "13.08.2026",
+    "order_number": "550-4549",
+    "shipping": "UPS"
+  },
+  "positions": [
+    {
+      "qty": 5000,
+      "unit": "Stk.",
+      "description": [
+        "Montagearbeit 679907",
+        "Ausführung gemäß Zeichnung Rev. B",
+        "Ausführung Serie B2"
+      ],
+      "unit_price": "14.99",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "74950.00"
+    },
+    {
+      "qty": 10,
+      "unit": "Stk.",
+      "description": [
+        "Halterungsplatte 294737"
+      ],
+      "unit_price": "12.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "125.00"
+    },
+    {
+      "qty": 500,
+      "unit": "Stk.",
+      "description": [
+        "Montagewinkel 239331"
+      ],
+      "unit_price": "12.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "6250.00"
+    },
+    {
+      "qty": 40,
+      "unit": "Stk.",
+      "description": [
+        "Formstück 346603"
+      ],
+      "unit_price": "1250.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "50020.00"
+    },
+    {
+      "qty": 25,
+      "unit": "Stk.",
+      "description": [
+        "Maschinenbolzen 865119",
+        "Bohrungen gegen Beschichtung schützen",
+        "nach Zeichnung A-572, EN AW-6082"
+      ],
+      "unit_price": "2.35",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "58.75"
+    },
+    {
+      "qty": 3,
+      "unit": "Stk.",
+      "description": [
+        "Aufnahmeflansch 459880"
+      ],
+      "unit_price": "480.00",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "1440.00"
+    },
+    {
+      "qty": 125,
+      "unit": "Stk.",
+      "description": [
+        "Spannhülse 135596"
+      ],
+      "unit_price": "1250.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "156312.50"
+    },
+    {
+      "qty": 40,
+      "unit": "Stk.",
+      "description": [
+        "Montageschiene 109685",
+        "Bohrungen gegen Beschichtung schützen",
+        "Kanten nach Zeichnung entgraten"
+      ],
+      "unit_price": "14.99",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "599.60"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": "4.00",
+  "discount_days": 10,
+  "payment_days": 30,
+  "totals": {
+    "net": "289755.85",
+    "vat": "55053.61",
+    "gross": "344809.46"
+  },
+  "payment": {
+    "discount_date": "28.08.2026",
+    "due_date": "17.09.2026",
+    "discount_amount": "13792.38"
+  },
+  "page_count": 1,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "line_count": 14,
+      "transfer": null,
+      "summary_present": true,
+      "payment_block_present": true
+    }
+  ],
+  "test_flags": {
+    "address_name_lines": 1,
+    "missing_order_number": false,
+    "shipping_empty": false,
+    "discount_applied": true,
+    "blank_unit_flat_rate": false,
+    "without_price_count": 0,
+    "flat_rate_count": 0,
+    "two_three_line_positions": 3,
+    "four_five_line_positions": 0,
+    "has_qty_thousands": true
+  },
+  "sha256": "1e4c651ce0c13f07c9bf11011cc682ce9ba290b52582a27750da86890412a25f"
+}

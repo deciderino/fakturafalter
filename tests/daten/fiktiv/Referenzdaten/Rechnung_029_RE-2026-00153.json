@@ -1,0 +1,184 @@
+{
+  "datei": "Rechnung_029_RE-2026-00153.pdf",
+  "format": "PDF/A-2b",
+  "seller": {
+    "name": "Alberon Industriekomponenten GmbH",
+    "street": "Prüfwerkstraße 18",
+    "postal_code": "09111",
+    "city": "Chemnitz",
+    "ust_id": "DE123456789",
+    "iban": "DE89 3704 0044 0532 0130 00",
+    "bic": "COBADEFFXXX",
+    "bank": "Commerzbank AG",
+    "email": "rechnung@alberon.example",
+    "register": "Amtsgericht Chemnitz, HRB 999999",
+    "ceo": "Markus Seidel"
+  },
+  "buyer": {
+    "name_lines": [
+      "Hochfeld Spezialteile GmbH"
+    ],
+    "street": "Industrieallee 4",
+    "postal_code": "08523",
+    "city": "Plauen",
+    "customer_number": "1058472"
+  },
+  "invoice": {
+    "number": "RE-2026-00153",
+    "date": "24.09.2026",
+    "service_date": "03.09.2026",
+    "order_number": "",
+    "shipping": "UPS"
+  },
+  "positions": [
+    {
+      "qty": 750,
+      "unit": "Stk.",
+      "description": [
+        "Nachbearbeitung 284435"
+      ],
+      "unit_price": "35.00",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "26250.00"
+    },
+    {
+      "qty": 75,
+      "unit": "Stk.",
+      "description": [
+        "Führungsbuchse 49125"
+      ],
+      "unit_price": "12.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "937.50"
+    },
+    {
+      "qty": 8,
+      "unit": "Std.",
+      "description": [
+        "Abdeckprofil 394837"
+      ],
+      "unit_price": null,
+      "kind": "without_price",
+      "price_unit": "/1",
+      "total": null
+    },
+    {
+      "qty": 12,
+      "unit": "Std.",
+      "description": [
+        "Kupplungsstück 974630",
+        "inkl. Sichtprüfung nach Vorgabe"
+      ],
+      "unit_price": null,
+      "kind": "without_price",
+      "price_unit": "/1",
+      "total": null
+    },
+    {
+      "qty": 1,
+      "unit": "Stk.",
+      "description": [
+        "Gesamtpreis Auftrag 2029-499"
+      ],
+      "unit_price": "85.00",
+      "kind": "flat_rate",
+      "price_unit": "/1",
+      "total": "85.00"
+    },
+    {
+      "qty": 20,
+      "unit": "Stk.",
+      "description": [
+        "Schutzblende 464942"
+      ],
+      "unit_price": "12.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "250.00"
+    },
+    {
+      "qty": 10,
+      "unit": "Stk.",
+      "description": [
+        "Führungsbuchse 678725"
+      ],
+      "unit_price": null,
+      "kind": "without_price",
+      "price_unit": "/1",
+      "total": null
+    },
+    {
+      "qty": 40,
+      "unit": "Stk.",
+      "description": [
+        "Führungsbuchse 491395",
+        "Ausführung Serie B2"
+      ],
+      "unit_price": null,
+      "kind": "without_price",
+      "price_unit": "/1",
+      "total": null
+    },
+    {
+      "qty": 1,
+      "unit": "Stk.",
+      "description": [
+        "Mindestauftrag Auftrag 2027-190"
+      ],
+      "unit_price": "350.00",
+      "kind": "flat_rate",
+      "price_unit": "/1",
+      "total": "350.00"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": null,
+  "discount_days": null,
+  "payment_days": 30,
+  "totals": {
+    "net": "27872.50",
+    "vat": "5295.78",
+    "gross": "33168.28"
+  },
+  "payment": {
+    "discount_date": null,
+    "due_date": "24.10.2026",
+    "discount_amount": null
+  },
+  "page_count": 1,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "line_count": 11,
+      "transfer": null,
+      "summary_present": true,
+      "payment_block_present": true
+    }
+  ],
+  "test_flags": {
+    "address_name_lines": 1,
+    "missing_order_number": true,
+    "shipping_empty": false,
+    "discount_applied": false,
+    "blank_unit_flat_rate": false,
+    "without_price_count": 4,
+    "flat_rate_count": 2,
+    "two_three_line_positions": 2,
+    "four_five_line_positions": 0,
+    "has_qty_thousands": false
+  },
+  "sha256": "8b1aa0d4325fe0da83f06192aae7dc219ce3064dd33df1824917e2be1b75eaeb"
+}

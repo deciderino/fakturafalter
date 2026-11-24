@@ -1,0 +1,49 @@
+Mitgelieferte Prüfwerkzeuge (Ordner „werkzeuge“ neben dem Programm)
+===================================================================
+
+Fakturafalter startet diese Programme als eigene Prozesse (Java), um erzeugte E-Rechnungen lokal
+zu prüfen. Sie sind unverändert übernommen (bis auf den kleinen Helfer fakturafalter-pruefdienst.jar,
+Apache-2.0, Quelltext in packaging/werkzeuge/Pruefdienst.java) und werden nur gemeinsam verteilt
+(„mere aggregation“); Fakturafalter selbst bleibt Apache-2.0.
+
+Komponente                         Version      Lizenz                         Text in diesem Ordner
+---------------------------------  -----------  -----------------------------  ------------------------------------
+Eclipse Temurin (OpenJDK), per     21.0.13+9    GPL-2.0 mit Classpath-          werkzeuge/jre/legal/ (je Modul)
+  jlink verkleinerte Laufzeit                    Exception (+ Drittanbieter
+                                                in legal/java.base/)
+Mustang (Mustang-CLI)              2.26.0       Apache-2.0                     Mustang-LICENSE.txt, Mustang-NOTICE.txt
+  enthält u.a. veraPDF             (gebündelt)  MPL-2.0 (veraPDF ist dual       MPL-2.0.txt
+                                                GPL-3.0+/MPL-2.0+; genutzt
+                                                wird MPL-2.0)
+  enthält Saxon-HE, Rhino          (gebündelt)  MPL-2.0                        MPL-2.0.txt
+  enthält PDFBox, FOP, ph-*, …     (gebündelt)  Apache-2.0 u.a.                jar-Lizenzen/Mustang/
+KoSIT-Prüftool (validator)         1.6.3        Apache-2.0                     Apache-2.0.txt, jar-Lizenzen/KoSIT/
+  enthält Saxon-HE 12.9            (gebündelt)  MPL-2.0                        MPL-2.0.txt
+KoSIT-Prüfkonfiguration XRechnung  3.0.2        Apache-2.0                     KoSIT-XRechnung-Konfiguration-LICENSE.txt
+  (2026-08-31), Ordner kosit-xr/
+  enthält XRechnung-Schematron                  Apache-2.0                     XRechnung-Schematron-LICENSE.txt
+  enthält EN-16931-Schematron                   EUPL-1.2                       EN16931-Schematron-EUPL-1.2.txt
+  (CEN/TC 434)
+
+Quelltexte
+----------
+- Eclipse Temurin 21.0.13+9 (GPL-2.0 mit Classpath-Exception):
+  Quelltext-Archiv  https://github.com/adoptium/temurin21-binaries/releases/download/jdk-21.0.13%2B9/OpenJDK21U-jdk-sources_21.0.13_9.tar.gz
+  Repository/Tag    https://github.com/adoptium/jdk21u/tree/jdk-21.0.13+9
+  Die Laufzeit wurde nur mit jlink (Modulauswahl, --strip-debug, ohne man-Seiten/Header) verkleinert.
+  Schriftliches Angebot: Auf Anfrage stellen die Herausgeber dieses Pakets den vollständigen
+  entsprechenden Quelltext der mitgelieferten Java-Laufzeit für mindestens drei Jahre ab Verteilung
+  zum Selbstkostenpreis auf einem üblichen Datenträger bzw. zum Download bereit.
+- Mustang:            https://github.com/ZUGFeRD/mustangproject (Tag core-2.26.0)
+- veraPDF (MPL-2.0):  https://github.com/veraPDF/veraPDF-library
+- Saxon-HE (MPL-2.0): https://github.com/Saxonica/Saxon-HE
+- Rhino (MPL-2.0):    https://github.com/mozilla/rhino
+- KoSIT-Prüftool:     https://github.com/itplr-kosit/validator (Tag v1.6.3)
+- Prüfkonfiguration:  https://github.com/itplr-kosit/validator-configuration-xrechnung
+- XRechnung-Schematron: https://github.com/itplr-kosit/xrechnung-schematron
+- EN-16931-Schematron (EUPL-1.2, Art. 5): https://github.com/ConnectingEurope/eInvoicing-EN16931 ;
+  die mitgelieferten XSLT-/Schematron-Dateien in werkzeuge/kosit-xr/resources/ sind selbst Quelltext.
+- Die UN/CEFACT-CII-Schemata (kosit-xr/resources/xsd) stammen aus der KoSIT-Prüfkonfiguration.
+
+Keine der Komponenten steht unter AGPL. Fakturafalter nutzt keine Online-Prüfdienste und lädt zur
+Laufzeit nichts nach.

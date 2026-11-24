@@ -1,0 +1,33 @@
+FakturaFalter 0.4.5 – 50 fiktive Testrechnungen
+===================================================
+
+Rechnungen/: 50 eigenständige DIN-A4-PDF-Dateien, Ghostscript-PDF/A-2b-Export.
+Referenzdaten/Sollwerte_gesamt.json: Alle vollständigen Sollwerte, inklusive Seitenaufteilung.
+Referenzdaten/Rechnung_*.json: Einzelne Sollwerte je Testdatei.
+Referenzdaten/Testfallmatrix.csv: Übersicht mit Semikolontrennung und UTF-8-BOM (Excel).
+
+Aufbau:
+- Alle Rechnungen verwenden dieselbe kompakte Druckvorlage der freigegebenen Musterrechnung.
+- Fester Absender: Alberon Industriekomponenten GmbH, einschließlich der auf der Vorlage
+  verwendeten Beispiel-IBAN DE89 3704 0044 0532 0130 00 (MOD-97 gültig).
+- Empfängeranschrift: 1–3 Namenszeilen, Straße, exakt eine Leerzeile, PLZ Ort.
+- Rechnungskopf mit Kundennummer (immer), Bestellnummer und Versandart (optional).
+- Positionstabelle: Menge, ME, Bezeichnung, Preis, /1, Gesamtpreis; keine Positionsnummer.
+- Unberechnete Positionen: beide Preisfelder leer, /1 sichtbar.
+- Pauschalpositionen: Menge 1; teilweise ohne Mengeneinheit.
+- Mehrseitige Rechnungen: laufende Positionen, kumulierter Netto-Übertrag am Ende
+  jeder Nicht-Endseite, kein Vortrag auf Folgeseiten, Summen nur auf Endseite.
+- Zahlungsbedingungen nur Seite 1; 30 Tage netto, optional 2–4 % Skonto bei 10 Tagen.
+- Netto + 19 % MwSt. = Rechnungsbetrag; ausschließlich positive Preise/Mengen.
+- Keine zufällige Verschiebung von Textblöcken oder Koordinaten.
+- 35 einseitige, 10 zweiseitige, 5 dreiseitige Rechnungen.
+- Die ersten fünf Rechnungen sind bewusst einfache Ein-Seiten-Fälle ohne Sonderpositionen.
+
+Prüfung:
+- Automatisch überprüft: Seitenzahl, Textvorkommen, Seitenüberträge, Zahlungsblock,
+  Rechnungsbetrag, Rechnungsnummer, eingebettete Schriftarten und XMP-PDF/A-Kennung.
+- PDF/A-Ausgabe erfolgte mit Ghostscript unter Einbettung eines sRGB-Farbprofils.
+- Eine unabhängige ISO-Konformitätsprüfung mit veraPDF wurde hier nicht durchgeführt.
+
+WICHTIG: Rein fiktive Rechnungen, ohne Zahlungsaufforderung. Bankverbindung ist
+         eine öffentlich bekannte Beispiel-IBAN mit formaler Prüfziffer.

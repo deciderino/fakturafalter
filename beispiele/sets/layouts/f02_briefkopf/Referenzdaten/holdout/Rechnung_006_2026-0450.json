@@ -1,0 +1,162 @@
+{
+  "datei": "Rechnung_006_2026-0450.pdf",
+  "format": "PDF 1.4 (reportlab), A4, Schrift Times-Roman (Standard-14, nicht eingebettet)",
+  "familie": "f02_briefkopf",
+  "quelle": "Q2",
+  "holdout": true,
+  "split": "holdout",
+  "seller": {
+    "name": "Ingenieurbüro Brandauer GmbH",
+    "street": "Am Klosterhof 9",
+    "postal_code": "37073",
+    "city": "Göttingen",
+    "ust_id": "DE315590279",
+    "iban": "DE69 0000 0000 0270 7300 91",
+    "bic": "BRANDEX1GOE",
+    "bank": "Beispiel-Volksbank Göttingen",
+    "email": "info@ib-brandauer.example",
+    "register": "Amtsgericht Göttingen HRB 00000",
+    "ceo": "Dipl.-Ing. Jakob Brandauer"
+  },
+  "buyer": {
+    "name_lines": [
+      "Hotel Seeblick Inh. M. Grüner",
+      "Verwaltung"
+    ],
+    "street": "Uferpromenade 12",
+    "postal_code": "88131",
+    "city": "Lindau (Bodensee)",
+    "customer_number": "2026-121"
+  },
+  "invoice": {
+    "number": "2026-0450",
+    "date": "02.11.2026",
+    "service_date": "30.10.2026",
+    "order_number": "",
+    "shipping": "",
+    "date_printed": "2. November 2026"
+  },
+  "druck": {
+    "datum_format": "ausgeschrieben („3. November 2026“)",
+    "schrift": "Times-Roman",
+    "seitenformat": "A4"
+  },
+  "BT-72": "30.10.2026",
+  "BT-119": "19.00",
+  "positions": [
+    {
+      "qty": "1",
+      "unit": "Stk.",
+      "description": [
+        "Statische Vorbemessung Deckendurchbruch, einschließlich",
+        "Protokoll und Fotodokumentation"
+      ],
+      "article_number": "",
+      "unit_price": "888.75",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "888.75"
+    },
+    {
+      "qty": "8",
+      "unit": "Std.",
+      "description": [
+        "Bauüberwachung vor Ort"
+      ],
+      "article_number": "",
+      "unit_price": "80.25",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "642.00"
+    },
+    {
+      "qty": "2",
+      "unit": "Stk.",
+      "description": [
+        "Thermografie-Messung Gebäudehülle"
+      ],
+      "article_number": "",
+      "unit_price": "330.00",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "660.00"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": null,
+  "discount_days": null,
+  "payment_days": 14,
+  "totals": {
+    "net": "2190.75",
+    "vat": "416.24",
+    "gross": "2606.99"
+  },
+  "totals_printed": {
+    "net": "2190.75",
+    "vat": "416.24",
+    "gross": "2606.99"
+  },
+  "payment": {
+    "discount_date": null,
+    "due_date": "16.11.2026",
+    "discount_amount": null,
+    "discount_base": null
+  },
+  "payment_terms_text": [
+    "Zahlung innerhalb von 14 Tagen ab Rechnungseingang ohne Abzüge an die unten angegebene",
+    "Bankverbindung."
+  ],
+  "page_count": 1,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3
+      ],
+      "transfer": null,
+      "carry_forward": null,
+      "summary_present": true
+    }
+  ],
+  "erwarteter_status": "fehler",
+  "erwartete_hinweise": [
+    "FEHLER [BT-84] IBAN (BT-84) „DE69 0000 0000 0270 7300 91“ ist ungültig (Prüfsumme oder Länge stimmt nicht)."
+  ],
+  "kosit": null,
+  "verapdf": null,
+  "validierung_hinweis": "lokal nicht validierbar / spätere Phase (KoSIT/veraPDF prüfen die App-Ausgabe, nicht diese PDFs)",
+  "korrekturen": null,
+  "korrekturen_hinweis": "erst beim echten Anlernen messbar",
+  "test_flags": {
+    "address_name_lines": 2,
+    "po_box": false,
+    "multi_line_positions": 1,
+    "shipping_position": false,
+    "page_format": "A4",
+    "payment": "netto",
+    "pruefen": null,
+    "missing_order_number": true,
+    "note": "Hold-out FEHLER: IBAN im Fuß mit vertauschten Prüfziffern"
+  },
+  "rolle": "holdout-fehler",
+  "moegliche_folgehinweise": [],
+  "fehlerart": "iban_pruefziffer",
+  "fehler_beschreibung": "IBAN des Verkäufers mit vertauschten Prüfziffern (MOD 97 ungültig); sonst alles richtig",
+  "falle": null,
+  "falle_beschreibung": null,
+  "fehler_detail": {
+    "gedruckt": "DE69 0000 0000 0270 7300 91",
+    "richtig": "DE96 0000 0000 0270 7300 91"
+  },
+  "totals_berechnet": {
+    "net": "2190.75",
+    "vat": "416.24",
+    "gross": "2606.99"
+  },
+  "sha256": "0c07cbb4eb2528eaa1509af674bf31c98c8bea107f36cbac590e693652a9251a"
+}

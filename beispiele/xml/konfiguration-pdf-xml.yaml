@@ -1,0 +1,7 @@
+# Test-Setup „PDF + XML“ (ALLE Daten erfunden): Druck der Normteile Brückner GmbH und die zugehörige
+# ZUGFeRD-XML (CII, EN 16931) mit gleichem Namen. Fakturafalter bettet die XML in die PDF ein (PDF/A-3).
+arbeitsordner: ../../laufzeit/pdf-xml
+modus: pdf_xml
+optionen:
+  sichtteil: original
+  xrechnung_zusatz: false

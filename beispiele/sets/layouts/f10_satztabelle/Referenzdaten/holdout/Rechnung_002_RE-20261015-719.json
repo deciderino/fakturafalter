@@ -1,0 +1,177 @@
+{
+  "datei": "Rechnung_002_RE-20261015-719.pdf",
+  "format": "PDF 1.4 (reportlab), A4, Schrift Helvetica (Standard-14, nicht eingebettet)",
+  "familie": "f10_satztabelle",
+  "quelle": "Q7",
+  "holdout": true,
+  "split": "holdout",
+  "seller": {
+    "name": "Leselust Medienvertrieb GmbH",
+    "street": "Kohlgartenstraße 18",
+    "postal_code": "04315",
+    "city": "Leipzig",
+    "ust_id": "DE136605974",
+    "iban": "DE46 0000 0000 0086 0553 10",
+    "bic": "LESEDEX1LEJ",
+    "bank": "Beispielbank Leipzig",
+    "email": "info@leselust-medien.example",
+    "register": "HRB 000000",
+    "ceo": "Ingrid Fohlmann"
+  },
+  "buyer": {
+    "name_lines": [
+      "Gesamtschule am Mühlbach",
+      "Schulsekretariat",
+      "z. Hd. Herrn Demir"
+    ],
+    "street": "Mühlbachweg 10",
+    "postal_code": "53111",
+    "city": "Bonn",
+    "customer_number": "7033"
+  },
+  "invoice": {
+    "number": "RE-20261015/719",
+    "date": "15.10.2026",
+    "service_date": "09.10.2026",
+    "order_number": "AB440",
+    "shipping": ""
+  },
+  "druck": {
+    "datum_format": "TT.MM.JJJJ",
+    "schrift": "Helvetica",
+    "seitenformat": "A4"
+  },
+  "BT-72": "09.10.2026",
+  "BT-119": [
+    "7.00",
+    "19.00"
+  ],
+  "positions": [
+    {
+      "qty": "2",
+      "unit": "Stk.",
+      "description": [
+        "Hörbuch: Klassiker für Kinder, 3 CDs"
+      ],
+      "article_number": "B-05",
+      "unit_price": "21.50",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "43.00",
+      "vat_rate": "7.00"
+    },
+    {
+      "qty": "25",
+      "unit": "Stk.",
+      "description": [
+        "Geschenkpapier: Rolle 2 m, sortiert"
+      ],
+      "article_number": "P-13",
+      "unit_price": "2.94",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "73.50",
+      "vat_rate": "19.00"
+    },
+    {
+      "qty": "30",
+      "unit": "Stk.",
+      "description": [
+        "Füllhalter: Schulfüller mit Patronen"
+      ],
+      "article_number": "P-12",
+      "unit_price": "12.78",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "383.40",
+      "vat_rate": "19.00"
+    },
+    {
+      "qty": "25",
+      "unit": "Stk.",
+      "description": [
+        "Roman: Nebel über der Elster, Taschenbuch"
+      ],
+      "article_number": "B-03",
+      "unit_price": "12.19",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "304.75",
+      "vat_rate": "7.00"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": null,
+  "discount_days": null,
+  "payment_days": 30,
+  "totals": {
+    "net": "804.65",
+    "vat": "111.15",
+    "gross": "915.80"
+  },
+  "totals_printed": {
+    "net": "804.65",
+    "vat": "111.15",
+    "gross": "915.80"
+  },
+  "payment": {
+    "discount_date": null,
+    "due_date": "14.11.2026",
+    "discount_amount": null,
+    "discount_base": null
+  },
+  "payment_terms_text": [
+    "Bitte überweisen bis 14.11.2026."
+  ],
+  "page_count": 1,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "transfer": null,
+      "carry_forward": null,
+      "summary_present": true
+    }
+  ],
+  "erwarteter_status": "ok",
+  "erwartete_hinweise": [],
+  "kosit": null,
+  "verapdf": null,
+  "validierung_hinweis": "lokal nicht validierbar / spätere Phase (KoSIT/veraPDF prüfen die App-Ausgabe, nicht diese PDFs)",
+  "korrekturen": null,
+  "korrekturen_hinweis": "erst beim echten Anlernen messbar",
+  "test_flags": {
+    "address_name_lines": 3,
+    "po_box": false,
+    "multi_line_positions": 0,
+    "shipping_position": false,
+    "page_format": "A4",
+    "payment": "fest",
+    "pruefen": null,
+    "missing_order_number": false,
+    "note": "Hold-out: Kunde mit drei Namenszeilen"
+  },
+  "vat_rate_hinweis": "vat_rate bleibt 19.00 für tools/benchmark.py (kennt nur einen Satz); maßgeblich sind BT-119 und vat_breakdown",
+  "vat_breakdown": [
+    {
+      "rate": "7.00",
+      "net": "347.75",
+      "vat": "24.34"
+    },
+    {
+      "rate": "19.00",
+      "net": "456.90",
+      "vat": "86.81"
+    }
+  ],
+  "sha256": "45410e7fdf783868aa5b8457a7ff584f75b97ecac01283603c7b85fece9881ea"
+}

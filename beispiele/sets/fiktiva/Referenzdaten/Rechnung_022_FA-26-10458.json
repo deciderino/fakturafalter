@@ -1,0 +1,300 @@
+{
+  "datei": "Rechnung_022_FA-26-10458.pdf",
+  "format": "PDF 1.4 (reportlab, Schriften eingebettet)",
+  "holdout": false,
+  "seller": {
+    "name": "Fiktiva Antriebstechnik GmbH",
+    "street": "Musterring 12",
+    "postal_code": "04179",
+    "city": "Leipzig",
+    "ust_id": "DE314159262",
+    "iban": "DE71 0000 0000 0047 1108 15",
+    "bic": "FIKTDEX1XXX",
+    "bank": "Beispielbank Leipzig",
+    "email": "rechnung@fiktiva.example",
+    "register": "Amtsgericht Leipzig, HRB 000000",
+    "ceo": "Jana Mustermann"
+  },
+  "buyer": {
+    "name_lines": [
+      "Landtechnik Eilers GmbH",
+      "Abteilung Einkauf"
+    ],
+    "street": "Deichweg 30",
+    "postal_code": "26789",
+    "city": "Leer (Ostfriesland)",
+    "customer_number": "61907"
+  },
+  "invoice": {
+    "number": "FA-26-10458",
+    "date": "29.10.2026",
+    "service_date": "29.10.2026",
+    "order_number": "4700472672",
+    "shipping": "Lieferung frei Haus"
+  },
+  "positions": [
+    {
+      "qty": 150,
+      "unit": "Stk.",
+      "description": [
+        "Sechskantmutter ISO 4032 M8 verzinkt 65-3253"
+      ],
+      "unit_price": "5.36",
+      "kind": "regular",
+      "price_unit": "/100",
+      "price_unit_qty": 100,
+      "min_order": false,
+      "total": "8.04"
+    },
+    {
+      "qty": 12,
+      "unit": "Stk.",
+      "description": [
+        "Spannsatz SP-30 Ø 30 mm 16-8553"
+      ],
+      "unit_price": "45.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "546.00"
+    },
+    {
+      "qty": 12,
+      "unit": "Stk.",
+      "description": [
+        "Wellenkupplung WK-25 elastisch 20-4665"
+      ],
+      "unit_price": "60.25",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "723.00"
+    },
+    {
+      "qty": 250,
+      "unit": "Stk.",
+      "description": [
+        "Scheibe ISO 7089 8 verzinkt 30-5860"
+      ],
+      "unit_price": "2.93",
+      "kind": "regular",
+      "price_unit": "/100",
+      "price_unit_qty": 100,
+      "min_order": false,
+      "total": "7.33"
+    },
+    {
+      "qty": 25,
+      "unit": "Stk.",
+      "description": [
+        "Getriebeflansch GF-80 41-3310"
+      ],
+      "unit_price": "181.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "4537.50"
+    },
+    {
+      "qty": 24,
+      "unit": "Std.",
+      "description": [
+        "Fehlersuche und Instandsetzung"
+      ],
+      "unit_price": "81.75",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "1962.00"
+    },
+    {
+      "qty": 10,
+      "unit": "Stk.",
+      "description": [
+        "Spannsatz SP-30 Ø 30 mm 70-5612"
+      ],
+      "unit_price": "38.25",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "382.50"
+    },
+    {
+      "qty": 50,
+      "unit": "Stk.",
+      "description": [
+        "Lagerbock LB-40 Stahl verzinkt 14-7002"
+      ],
+      "unit_price": "43.00",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "2150.00"
+    },
+    {
+      "qty": 4,
+      "unit": "Stk.",
+      "description": [
+        "Antriebswelle nach Zeichnung 80-5480"
+      ],
+      "unit_price": "423.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "1694.00"
+    },
+    {
+      "qty": 4,
+      "unit": "Stk.",
+      "description": [
+        "Lagerbock LB-40 Stahl verzinkt 76-3312"
+      ],
+      "unit_price": "36.00",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "144.00"
+    },
+    {
+      "qty": 40,
+      "unit": "Std.",
+      "description": [
+        "Montagearbeit vor Ort"
+      ],
+      "unit_price": "65.75",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "2630.00"
+    },
+    {
+      "qty": 10,
+      "unit": "Stk.",
+      "description": [
+        "Lagerdeckel LD-62 69-6689"
+      ],
+      "unit_price": "17.13",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "171.30"
+    },
+    {
+      "qty": 4,
+      "unit": "Stk.",
+      "description": [
+        "Wellenkupplung WK-25 elastisch 36-8567"
+      ],
+      "unit_price": "84.75",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "339.00"
+    },
+    {
+      "qty": 3,
+      "unit": "Std.",
+      "description": [
+        "Inbetriebnahme Antriebseinheit"
+      ],
+      "unit_price": "77.00",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "231.00"
+    },
+    {
+      "qty": 500,
+      "unit": "Stk.",
+      "description": [
+        "Passfeder DIN 6885 A 8x7x40 50-1129"
+      ],
+      "unit_price": "40.75",
+      "kind": "regular",
+      "price_unit": "/100",
+      "price_unit_qty": 100,
+      "min_order": false,
+      "total": "203.75"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": null,
+  "discount_days": null,
+  "payment_days": 30,
+  "totals": {
+    "net": "15729.42",
+    "vat": "2988.59",
+    "gross": "18718.01"
+  },
+  "payment": {
+    "discount_date": null,
+    "due_date": "28.11.2026",
+    "discount_amount": null,
+    "discount_base": null
+  },
+  "payment_terms_text": [
+    "zahlbar bis 28.11.2026 ohne Abzug"
+  ],
+  "page_count": 1,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "line_count": 15,
+      "transfer": null,
+      "carry_forward": null,
+      "summary_present": true,
+      "payment_block_present": true
+    }
+  ],
+  "test_flags": {
+    "address_name_lines": 2,
+    "address_blank_lines": 1,
+    "address_attention_line": false,
+    "address_department_line": true,
+    "two_line_company_name": false,
+    "missing_order_number": false,
+    "shipping_empty": false,
+    "discount_applied": false,
+    "blank_unit_flat_rate": false,
+    "without_price_count": 0,
+    "flat_rate_count": 0,
+    "min_order": null,
+    "price_unit_100_count": 3,
+    "two_three_line_positions": 0,
+    "four_five_line_positions": 0,
+    "has_qty_thousands": false,
+    "carry_forward": false,
+    "last_table_row_index": 17,
+    "note": "einseitig, Netto-Zeile 619,7 pt"
+  },
+  "sha256": "2e3dd5cb4c04ede421be27bb5102f7fae8cdab257e7dd7cc0d3a9083e67b510d"
+}

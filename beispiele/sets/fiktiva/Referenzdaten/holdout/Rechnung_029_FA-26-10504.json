@@ -1,0 +1,191 @@
+{
+  "datei": "Rechnung_029_FA-26-10504.pdf",
+  "format": "PDF 1.4 (reportlab, Schriften eingebettet)",
+  "holdout": true,
+  "seller": {
+    "name": "Fiktiva Antriebstechnik GmbH",
+    "street": "Musterring 12",
+    "postal_code": "04179",
+    "city": "Leipzig",
+    "ust_id": "DE314159262",
+    "iban": "DE71 0000 0000 0047 1108 15",
+    "bic": "FIKTDEX1XXX",
+    "bank": "Beispielbank Leipzig",
+    "email": "rechnung@fiktiva.example",
+    "register": "Amtsgericht Leipzig, HRB 000000",
+    "ceo": "Jana Mustermann"
+  },
+  "buyer": {
+    "name_lines": [
+      "Elbtal Steuerungsbau GmbH",
+      "Abteilung Rechnungsprüfung"
+    ],
+    "street": "Werkstättenstraße 120",
+    "postal_code": "01159",
+    "city": "Dresden",
+    "customer_number": "70014"
+  },
+  "invoice": {
+    "number": "FA-26-10504",
+    "date": "09.11.2026",
+    "service_date": "09.11.2026",
+    "order_number": "4500182845",
+    "shipping": ""
+  },
+  "positions": [
+    {
+      "qty": 300,
+      "unit": "Stk.",
+      "description": [
+        "Gewindestift ISO 4026 M5x8 36-8113"
+      ],
+      "unit_price": "9.94",
+      "kind": "regular",
+      "price_unit": "/100",
+      "price_unit_qty": 100,
+      "min_order": false,
+      "total": "29.82"
+    },
+    {
+      "qty": 400,
+      "unit": "Stk.",
+      "description": [
+        "Sechskantmutter ISO 4032 M8 verzinkt 67-3170"
+      ],
+      "unit_price": "7.35",
+      "kind": "regular",
+      "price_unit": "/100",
+      "price_unit_qty": 100,
+      "min_order": false,
+      "total": "29.40"
+    },
+    {
+      "qty": 500,
+      "unit": "Stk.",
+      "description": [
+        "Zylinderschraube ISO 4762 M6x20 8.8 verzinkt 81-6250"
+      ],
+      "unit_price": "6.83",
+      "kind": "regular",
+      "price_unit": "/100",
+      "price_unit_qty": 100,
+      "min_order": false,
+      "total": "34.15"
+    },
+    {
+      "qty": 500,
+      "unit": "Stk.",
+      "description": [
+        "Gewindestift ISO 4026 M5x8 36-1334"
+      ],
+      "unit_price": "9.13",
+      "kind": "regular",
+      "price_unit": "/100",
+      "price_unit_qty": 100,
+      "min_order": false,
+      "total": "45.65"
+    },
+    {
+      "qty": 200,
+      "unit": "Stk.",
+      "description": [
+        "Passfeder DIN 6885 A 8x7x40 60-7108"
+      ],
+      "unit_price": "46.25",
+      "kind": "regular",
+      "price_unit": "/100",
+      "price_unit_qty": 100,
+      "min_order": false,
+      "total": "92.50"
+    },
+    {
+      "qty": 250,
+      "unit": "Stk.",
+      "description": [
+        "Zylinderschraube ISO 4762 M6x20 8.8 verzinkt 69-9497"
+      ],
+      "unit_price": "13.79",
+      "kind": "regular",
+      "price_unit": "/100",
+      "price_unit_qty": 100,
+      "min_order": false,
+      "total": "34.48"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": "3.00",
+  "discount_days": 10,
+  "payment_days": 30,
+  "totals": {
+    "net": "266.00",
+    "vat": "50.54",
+    "gross": "316.54"
+  },
+  "payment": {
+    "discount_date": "19.11.2026",
+    "due_date": "09.12.2026",
+    "discount_amount": "9.50",
+    "discount_base": "gross"
+  },
+  "payment_terms_text": [
+    "zahlbar bis 19.11.26 bei 3 % Skonto (9,50 €)",
+    "bis 09.12.2026 ohne Abzug"
+  ],
+  "page_count": 1,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "line_count": 6,
+      "transfer": null,
+      "carry_forward": null,
+      "summary_present": true,
+      "payment_block_present": true
+    }
+  ],
+  "test_flags": {
+    "address_name_lines": 2,
+    "address_blank_lines": 1,
+    "address_attention_line": false,
+    "address_department_line": true,
+    "two_line_company_name": false,
+    "missing_order_number": false,
+    "shipping_empty": true,
+    "discount_applied": true,
+    "blank_unit_flat_rate": false,
+    "without_price_count": 0,
+    "flat_rate_count": 0,
+    "min_order": null,
+    "price_unit_100_count": 6,
+    "two_three_line_positions": 0,
+    "four_five_line_positions": 0,
+    "has_qty_thousands": false,
+    "carry_forward": false,
+    "last_table_row_index": 8,
+    "note": "FALLE: Lieferschein-Nr. im Format der Rechnungsnummer direkt darunter"
+  },
+  "rolle": "holdout-falle",
+  "erwarteter_status": "ok",
+  "erwartete_hinweise": [],
+  "moegliche_folgehinweise": [],
+  "fehlerart": null,
+  "fehler_beschreibung": null,
+  "falle": "lieferschein_nr",
+  "falle_beschreibung": "zusätzliche Kopfzeile „Lieferschein-Nr.:“ mit einer Nummer im Format der Rechnungsnummer (LS-26-… statt FA-26-…) direkt unter der Rechnungsnummer; BT-1 bleibt die Rechnungsnummer",
+  "falle_detail": {
+    "lieferschein_nr": "LS-26-10495"
+  },
+  "totals_berechnet": {
+    "net": "266.00",
+    "vat": "50.54",
+    "gross": "316.54"
+  },
+  "sha256": "ad0671251e20ac7c4ac1810780b8cc4a76de679a99c9f56e4466005202917436"
+}

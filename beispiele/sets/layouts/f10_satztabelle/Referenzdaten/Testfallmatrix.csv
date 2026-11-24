@@ -1,0 +1,6 @@
+﻿Datei;Split;Rechnungsnummer;Rechnungsdatum;Kundennummer;Namenszeilen;Seiten;Format;Positionen;Mehrzeilig;Versand;Zahlung;Skonto;Netto;USt;Brutto;Status;Notiz;SHA256
+Rechnung_001_RE-20261012-530.pdf;holdout;RE-20261012/530;12.10.2026;7001;1;1;A4;5;1;;fest;;993.09;142.36;1135.45;ok;Hold-out: 7/19 %, Bücher und Papeterie;a67003fca3ebb6171554957fc12cd993b1b83d509616a953f41fe3e89e33d6c5
+Rechnung_002_RE-20261015-719.pdf;holdout;RE-20261015/719;15.10.2026;7033;3;1;A4;4;0;;fest;;804.65;111.15;915.80;ok;Hold-out: Kunde mit drei Namenszeilen;45410e7fdf783868aa5b8457a7ff584f75b97ecac01283603c7b85fece9881ea
+Rechnung_003_RE-20261019-500.pdf;holdout;RE-20261019/500;19.10.2026;C00318;1;1;A4;3;0;;skonto;2;247.53;35.81;283.34;ok;Hold-out: ohne Bestellnummer, Skonto;e7b67b00976a4860d7f774502cf6edc86e83d47a3e8d44484db774333ea5d5bc
+Rechnung_004_RE-20261026-786.pdf;holdout;RE-20261026/786;26.10.2026;30240;1;1;A4;7;2;;fest;;1299.35;207.82;1507.17;ok;Hold-out: mehrzeilige Produkte;f842bf96e2a61def5c319ec09f2bd61fcf42ddb69ce314af2cab82be76c510c4
+Rechnung_005_RE-20261102-551.pdf;holdout;RE-20261102/551;02.11.2026;4788;2;1;A4;4;0;;fest;;1353.40;167.15;1520.55;ok;Hold-out: mit Dienstleistung in Stunden;3440e602e5dabda1f79203b1fbb3f3dc0523d1bba98799d3a7c0f6b83020cb2d

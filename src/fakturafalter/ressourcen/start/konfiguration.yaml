@@ -1,0 +1,36 @@
+# Startkonfiguration – wird beim ersten Start kopiert. Absender bitte in den Einstellungen eintragen.
+# Die mitgelieferten Profile/Vorlagen/Kundenstamm sind BEISPIELE (erfundene Daten) und an die eigene
+# Warenwirtschaft anzupassen.
+absender:
+  name: ""
+  anschrift: {strasse: "", plz: "", ort: "", land: DE}
+  ust_id: ""
+  steuernummer: ""
+  elektronische_adresse: ""
+  kontakt: {name: "", telefon: "", email: ""}
+  register: ""
+zahlung:
+  art: "58"
+  iban: ""
+  bic: ""
+  kontoinhaber: ""
+  bedingungen: "Zahlbar innerhalb {zahlungsziel_tage} Tagen ohne Abzug."
+  ziel_tage: 14
+bemerkungen: []
+ordner: {}
+modus: csv
+csv_profile: [profil-variante-a.json, profil-variante-b.yaml, profil-variante-c.yaml]
+pdf_vorlagen: [vorlage-wawi-druck.yaml]
+optionen:
+  pdf_verwenden: false
+  sichtteil: original
+  xrechnung_zusatz: true
+  stabil_sekunden: 2
+  paarung_sekunden: 5
+  schwelle: 0.9
+  polling: false
+oberflaeche:
+  sprache: de
+  thema: system
+  minimiert_starten: false
+  schliessen_in_tray: true

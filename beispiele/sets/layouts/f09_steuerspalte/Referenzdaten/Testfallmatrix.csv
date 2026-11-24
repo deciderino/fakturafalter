@@ -1,0 +1,6 @@
+﻿Datei;Split;Rechnungsnummer;Rechnungsdatum;Kundennummer;Namenszeilen;Seiten;Format;Positionen;Mehrzeilig;Versand;Zahlung;Skonto;Netto;USt;Brutto;Status;Notiz;SHA256
+Rechnung_001_2026-48001.pdf;training;2026-48001;07.10.2026;30252;3;1;A4;5;2;;skonto;3;594.15;54.94;649.09;ok;gemischt 7/19 %, eine USt-Zeile, Skonto mit Datum;b1751e94535dc059c7eb087f1428ecedf90b3ddd71b345caa25d8d05c497901e
+Rechnung_002_2026-47002.pdf;training;2026-47002;12.10.2026;7001;1;1;A4;4;1;;netto;;228.81;36.01;264.82;ok;gemischt 7/19 %, ohne Bestellnummer;d0d5ef74d36eb195c05f1da2d8077d513e56f2eeb7a758a467a2721ea1b7fe31
+Rechnung_003_2026-48803.pdf;training;2026-48803;15.10.2026;7012;1;1;A4;7;2;;skonto;2;2921.27;521.34;3442.61;ok;gemischt 7/19 %, mehrzeilige Bezeichnungen;4de5af3ba13549c02e7a861f28b4168e46d2a9a898e7fc1dc6a4f33e009f86bf
+Rechnung_004_2026-47604.pdf;holdout;2026-47604;20.10.2026;K10045;2;1;A4;6;1;;netto;;3125.55;532.77;3658.32;ok;Hold-out: gemischt 7/19 %;6dd3eaf6548758816d95544bc2bd5d8d86f81dda751ec90f80f02bb41c7ba504
+Rechnung_005_2026-48405.pdf;holdout;2026-48405;22.10.2026;7020;2;1;A4;5;1;;skonto;3;565.07;59.62;624.69;prüfen;Hold-out PRÜFEN: Steuerbetrag 0,10 € über Netto × Satz, Brutto folgt;871e51401e72f979e4d07c0493ae647d1597a856a639054b3683e49baa18e103

@@ -1,0 +1,149 @@
+{
+  "datei": "Rechnung_021_FA-26-10449.pdf",
+  "format": "PDF 1.4 (reportlab, Schriften eingebettet)",
+  "holdout": true,
+  "seller": {
+    "name": "Fiktiva Antriebstechnik GmbH",
+    "street": "Musterring 12",
+    "postal_code": "04179",
+    "city": "Leipzig",
+    "ust_id": "DE314159262",
+    "iban": "DE71 0000 0000 0047 1108 15",
+    "bic": "FIKTDEX1XXX",
+    "bank": "Beispielbank Leipzig",
+    "email": "rechnung@fiktiva.example",
+    "register": "Amtsgericht Leipzig, HRB 000000",
+    "ceo": "Jana Mustermann"
+  },
+  "buyer": {
+    "name_lines": [
+      "Vogtland Textilmaschinen GmbH",
+      "Abteilung Instandhaltung"
+    ],
+    "street": "Spinnereistraße 14",
+    "postal_code": "08523",
+    "city": "Plauen",
+    "customer_number": "0003391"
+  },
+  "invoice": {
+    "number": "FA-26-10449",
+    "date": "27.10.2026",
+    "service_date": "27.10.2026",
+    "order_number": "BE-26-714",
+    "shipping": ""
+  },
+  "positions": [
+    {
+      "qty": 8,
+      "unit": "Std.",
+      "description": [
+        "Inbetriebnahme Antriebseinheit laut Serviceauftrag,",
+        "Arbeiten an Linie 3 einschließlich Probelauf und",
+        "Einweisung des Personals"
+      ],
+      "unit_price": "90.25",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "722.00"
+    },
+    {
+      "qty": 12,
+      "unit": "Std.",
+      "description": [
+        "Inbetriebnahme Antriebseinheit"
+      ],
+      "unit_price": "79.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "954.00"
+    },
+    {
+      "qty": 6,
+      "unit": "Std.",
+      "description": [
+        "Konstruktionsstunden"
+      ],
+      "unit_price": "81.25",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "487.50"
+    },
+    {
+      "qty": 16,
+      "unit": "Std.",
+      "description": [
+        "Konstruktionsstunden"
+      ],
+      "unit_price": "68.75",
+      "kind": "regular",
+      "price_unit": "/1",
+      "price_unit_qty": 1,
+      "min_order": false,
+      "total": "1100.00"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": "3.00",
+  "discount_days": 14,
+  "payment_days": 30,
+  "totals": {
+    "net": "3263.50",
+    "vat": "620.07",
+    "gross": "3883.57"
+  },
+  "payment": {
+    "discount_date": "10.11.2026",
+    "due_date": "26.11.2026",
+    "discount_amount": "116.51",
+    "discount_base": "gross"
+  },
+  "payment_terms_text": [
+    "zahlbar bis 10.11.26 bei 3 % Skonto (116,51 €)",
+    "bis 26.11.2026 ohne Abzug"
+  ],
+  "page_count": 1,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "line_count": 6,
+      "transfer": null,
+      "carry_forward": null,
+      "summary_present": true,
+      "payment_block_present": true
+    }
+  ],
+  "test_flags": {
+    "address_name_lines": 2,
+    "address_blank_lines": 1,
+    "address_attention_line": false,
+    "address_department_line": true,
+    "two_line_company_name": false,
+    "missing_order_number": false,
+    "shipping_empty": true,
+    "discount_applied": true,
+    "blank_unit_flat_rate": false,
+    "without_price_count": 0,
+    "flat_rate_count": 0,
+    "min_order": null,
+    "price_unit_100_count": 0,
+    "two_three_line_positions": 1,
+    "four_five_line_positions": 0,
+    "has_qty_thousands": false,
+    "carry_forward": false,
+    "last_table_row_index": 8,
+    "note": "nur Stunden, Skonto"
+  },
+  "sha256": "d9439b9e18e022387311860df70aa64666c9dc922fee4789af135a4101d76754"
+}

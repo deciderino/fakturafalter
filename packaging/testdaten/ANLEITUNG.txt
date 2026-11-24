@@ -1,0 +1,177 @@
+Fakturafalter 0.9.4 – Testdaten
+===============================
+
+Alle Firmen, Personen, Rechnungen und Kontonummern sind erfunden.
+
+Kernfunktion zum Ausprobieren: ZUGFeRD (EN 16931, PDF/A-3) aus CSV oder XML,
+ohne dass ein Druck-PDF nötig ist. Der Layout-Editor gestaltet die Sichtseite.
+Die Prüfung (Mustang/KoSIT) läuft lokal. Nur PDF bleibt in den späteren Tests
+unterstützt, ist aber nicht der empfohlene Weg.
+
+Inhalt
+------
+beispiele/industrie/       Normteile Brückner GmbH (Schrauben-Großhandel), 8 Rechnungen als PDF + CSV,
+                           Preise teils „pro 100 Stk“ (Preiseinheit). Zwei fertige Konfigurationen:
+                             konfiguration-pdf-csv.yaml   CSV plus Original-PDF (Haken an)
+                             konfiguration-nur-pdf.yaml   Nur PDF, Anlern-Assistent (nicht empfohlen)
+beispiele/xml/             Druck NB-26-1001 mit ZUGFeRD-XML (CII) gleichen Namens, konfiguration-pdf-xml.yaml
+beispiele/pdf-erkennung/   Sechs Handwerksbetriebe mit unterschiedlichen Layouts (PDF + CSV)
+beispiele/xml-eingang/     XRechnungen (UBL/CII) mit Rabatt, Zuschlag, Gutschrift, Lastschrift, Anzahlung
+beispiele/layout/          Layouteditor: Beispiel-Vorlage, Fantasie-Logo, Briefpapier für Seite 1 und Folgeseiten
+beispiele/                 Weitere CSV-/Text-Varianten aus Alt-Warenwirtschaften (Variante D: Rabatt,
+                           Gutschrift, Lastschrift)
+
+Arbeitsordner der Test-Konfigurationen: laufzeit/ in diesem Ordner (wird beim Start angelegt).
+
+
+Test 1: Ersteinrichtung (ohne Vorwissen)
+----------------------------------------
+1. Fakturafalter zum ersten Mal starten (ohne -c). Der Assistent „Fakturafalter einrichten“ öffnet sich.
+2. Ordner: Arbeitsordner lassen oder „Ändern…“.
+3. Absender: „Aus Datei importieren…“ → beispiele/industrie/absender-normteile.csv
+   oder „Aus einer Rechnung (PDF) übernehmen…“ → eine PDF aus beispiele/industrie/eingang/.
+4. Woher kommen die Daten: **CSV** wählen (nicht „Nur PDF“), „CSV einrichten…“ → weiter wie Test 3.
+5. Fertig: „Eingang öffnen“ – dort die CSV ablegen.
+
+
+Test 2: nur CSV oder nur XML (ohne PDF)
+---------------------------------------
+Einstellungen → Eingangsformat „CSV“ bzw. „XML“, Haken „Zusätzlich das PDF der Rechnung
+verwenden“ aus. Nur die CSV (z. B. beispiele/variante-a_positionen_utf8.csv) oder eine XML
+aus beispiele/xml-eingang/ in den Eingang legen.
+Erwartet: ZUGFeRD-PDF im Ausgang, Sichtseite neu gebaut, Prüfung „gültig“.
+
+
+Test 3: CSV-Assistent
+---------------------
+1. Einstellungen → Eingang & Vorlagen → „CSV“ → „Neue CSV einrichten…“.
+2. Datei: beispiele/variante-a_positionen_utf8.csv wählen, Namen eintragen → Weiter
+   (der Knopf darf nach Datei und Name nicht ausgegraut bleiben).
+3. Format: Trennzeichen, Zeichensatz und Dezimalzeichen sind erkannt; Vorschau ansehen, ggf. umstellen.
+4. Vorschau: über jeder Spalte steht, wofür sie genommen wird – ein Feld umstellen und zurückstellen.
+   Steuerwerte, deren Bedeutung nicht sicher ist, bleiben auf „prüfen“.
+5. Probe: zeigt je Rechnung „bereit“ oder „braucht Prüfung“ (nichts wird erzeugt) → Speichern.
+6. Fertig. Die neue Zuordnung steht als Karte unter „CSV-Zuordnungen“ und lässt sich mit „Ändern…“ öffnen.
+   Zusätzlich: Während die Einstellungen offen sind, ruht die Überwachung; danach läuft sie weiter,
+   wenn sie vorher an war.
+
+
+Test 4: CSV plus Original-PDF
+-----------------------------
+Programm mit -c beispiele/industrie/konfiguration-pdf-csv.yaml starten, alle Dateien (PDF und CSV) aus
+beispiele/industrie/eingang/ nach laufzeit/industrie-pdf-csv/Eingang kopieren.
+Erwartet: 8 × „Fertig“, Prüfung „gültig“, Ergebnis in laufzeit/industrie-pdf-csv/Ausgang.
+(Diese Konfiguration entspricht CSV mit gesetztem Haken „Zusätzlich das PDF der Rechnung verwenden“.)
+
+
+Test 5: XML plus Original-PDF
+-----------------------------
+Programm mit -c beispiele/xml/konfiguration-pdf-xml.yaml starten, NB-26-1001.pdf und NB-26-1001.xml aus
+beispiele/xml/ nach laufzeit/pdf-xml/Eingang kopieren.
+Erwartet: 1 × „Fertig“, Prüfung „gültig“, brutto 1.075,28. Liegt nur die PDF dort, wartet Fakturafalter
+auf die XML (Haken „Zusätzlich das PDF der Rechnung verwenden“, Wartezeit auf das Gegenstück).
+Optional: Einstellungen → Eingang & Vorlagen → „XML (ZUGFeRD / XRechnung)“ → „Probe mit einer XML…“.
+
+
+Test 6: Layouteditor
+--------------------
+1. Einstellungen → Absender → „Layout gestalten…“. Links die Bausteine (Schloss = Pflichtangabe nach
+   § 14 Abs. 4 UStG), in der Mitte die Seite mit Beispieldaten, rechts die Eigenschaften in mm.
+2. Bausteine ziehen und an den Ecken größer/kleiner ziehen; „Raster an/aus“ umschalten. Zwei
+   Pflichtbausteine übereinander → rote Rahmen, „Speichern“ geht dann nicht.
+3. Logo anklicken → „Bild wählen…“ → beispiele/layout/logo.png. „Textfeld hinzufügen“, Text ändern;
+   „Bildfeld hinzufügen…“. Mit „Ebene nach vorn/hinten“ übereinanderlegen.
+4. „Briefpapier laden…“ → beispiele/layout/briefpapier-seite1.pdf (Meldung „PDF/A-tauglich“), dann
+   „Folgeseite“ → briefpapier-folgeseite.pdf. „Vorschau mit Beispieldaten“ blendet die Rahmen aus.
+5. „Speichern“, dann unten in den Einstellungen „Speichern“. Eine CSV ohne Druck verwenden,
+   z. B. beispiele/variante-a_positionen_utf8.csv in den Eingang legen (Eingangsformat CSV, Haken aus),
+   oder unter Ausgabe das Sichtbild „Immer neu erzeugen“ wählen.
+Erwartet: Rechnung im eigenen Layout, Prüfung „gültig“ (PDF/A-3b). „Zurücksetzen auf Standard“ +
+Speichern stellt das bisherige Layout wieder her.
+Fertige Vorlage ohne Klicken: den Block „layout:“ aus beispiele/layout/layout-beispiel.yaml in
+beispiele/konfiguration.yaml einsetzen (der Ordner layout/ liegt dort schon daneben) und z. B.
+Test 7 mit variante-a_positionen_utf8.csv statt variante-d laufen lassen.
+
+
+Test 7: Rabatt, Gutschrift, Lastschrift (CSV und XML)
+-----------------------------------------------------
+Linux:    ./Fakturafalter-0.9.4-x86_64.AppImage -c beispiele/konfiguration.yaml \
+              --dateien beispiele/variante-d_rabatt_gutschrift_lastschrift.csv
+          ./Fakturafalter-0.9.4-x86_64.AppImage -c beispiele/xml/konfiguration-pdf-xml.yaml \
+              --dateien beispiele/xml-eingang/*.xml
+Windows:  fakturafalter-cli.exe mit denselben Angaben (Pfade mit \).
+Erwartet: 6 × „OK“ und „[gültig]“. In den PDFs stehen Rabatt- und Zuschlagszeilen, „Gutschrift“ mit
+„Zu Rechnung …“, „Bereits gezahlt“ und „Zahlbetrag“ sowie der Lastschrift-Satz mit der Mandatsreferenz.
+Im CSV-Assistenten (Test 3) mit variante-d_rabatt_gutschrift_lastschrift.csv werden Belegart, Zeilenart,
+Rabatt %, Zahlart, Mandat und Vorauszahlung erkannt.
+
+
+Test 8: Absender-Profile
+------------------------
+Einstellungen → Absender → Auswahlfeld „Absender-Profil“ → „+ Neuer Absender“, Firma eintragen,
+zwischen den Profilen wechseln, Speichern. Das gewählte Profil gilt für Rechnungen ohne eigenen Absender.
+
+
+Test 9: Fortschritt der Verarbeitung
+------------------------------------
+1. Wie Test 4 starten, Überwachung an. Alle 16 Dateien aus beispiele/industrie/eingang/ auf einmal nach
+   laufzeit/industrie-pdf-csv/Eingang kopieren und „Jetzt einlesen“ (F5) drücken. (PDF und CSV heißen dort
+   verschieden; ohne F5 wartet die Überwachung bis zu 10 Minuten auf Dateien mit gleichem Namen.)
+2. Über der Statusleiste erscheint der Fortschritt: „Rechnung 3 von 8 · XML erzeugen · NB-….pdf“, ein Balken
+   und sechs Schritte (Lesen, Einlesen (CSV), XML erzeugen, PDF/A, Prüfen, Ablegen). Nichts blinkt.
+   „Jetzt einlesen“ ist ausgegraut, die Statuskarte zeigt „Verarbeitung läuft“.
+3. Danach verschwindet der Bereich, links unten steht „Bereit“, „Heute: 8 erstellt“.
+4. Wie Test 5 (XML plus PDF) starten und nur NB-26-1001.pdf kopieren: Die Karte „Zu tun“ zeigt
+   „NB-26-1001.pdf wartet auf die passende XML“. NB-26-1001.xml nachlegen → beide werden verarbeitet.
+5. Eine kaputte Datei mitkopieren (z. B. beispiele/textdruck-wawi_cp1252.txt): Hinweis über dem Balken, der Lauf
+   geht weiter, die Datei liegt danach in Fehler.
+6. Mit beispiele/xml/ (Test 5) heißen die Schritte „Einlesen (XML)“ und „XML übernehmen“, mit Nur PDF (Test 10,
+   nach „Automatisch, ohne Nachfrage“) „Erkennen“.
+
+
+Test 10: Nur PDF mit Anlern-Assistent (unterstützt, nicht empfohlen)
+-------------------------------------------------------------------
+Linux:    ./Fakturafalter-0.9.4-x86_64.AppImage -c beispiele/industrie/konfiguration-nur-pdf.yaml
+Windows:  Fakturafalter.exe -c beispiele\industrie\konfiguration-nur-pdf.yaml
+
+1. Schalter oben links auf „Überwachung an“. Nur die PDFs aus beispiele/industrie/eingang/ nach
+   laufzeit/industrie-nur-pdf/Eingang kopieren.
+2. Hauptfenster zeigt „8 Rechnungen warten aufs Anlernen“ → „Anlernen“.
+3. Bereiche festlegen (freiwillig): Bereich rechts anklicken und im PDF einen Rahmen ziehen oder
+   „Vorschlag übernehmen“; gelesen wird dann nur im Rahmen. Weiter ▶. Danach Absender prüfen
+   (aus dem Druck erkannt) → Weiter.
+4. Rechnungsdaten: grün = erkannt. Jedes Feld mit „Passt“ bestätigen. Fehlt etwas: Feld anklicken,
+   dann im PDF auf den Wert klicken oder den Wert eintippen.
+5. Positionen: Tabelle prüfen, Spalten zuordnen (PE = Preiseinheit). Die Summe der Positionen muss
+   dem Netto entsprechen.
+6. „Speichern & nächste PDF“. Ab der zweiten Rechnung ist fast alles erkannt.
+   Nach dem Speichern liest Fakturafalter dieselbe PDF mit der neuen Vorlage noch einmal
+   (Selbstkontrolle). Weicht etwas ab, erscheint ein Hinweis, und das Feld ist bei der nächsten PDF
+   markiert. Gehen Positionen, Netto, USt und Brutto rechnerisch nicht auf, steht die Summe auf „prüfen“.
+7. Einstellungen → Eingang & Vorlagen: Fortschritt „n von 5 ohne Korrektur“. Nach 5 Rechnungen lässt
+   sich „Automatisch, ohne Nachfrage“ einschalten. Danach eine weitere PDF in den Eingang legen:
+   Sie wird ohne Nachfrage zur E-Rechnung. Die erzeugte Datei trotzdem kontrollieren:
+   die Erkennung kann fehlgehen.
+
+Erwartet für NB-26-1001: netto 903,60 · USt 171,68 · brutto 1.075,28.
+
+
+Test 11: Logs anonymisieren
+---------------------------
+1. Einstellungen → Allgemein → Datenschutz → „Logs anonymisieren“ einschalten, Speichern.
+2. Test 4 noch einmal laufen lassen. In der Logdatei (logs/fakturafalter.log neben der Konfiguration) stehen statt
+   Firmen, Anschriften, IBAN, USt-IdNr. und Beträgen Platzhalter wie [Name], [IBAN], [Betrag].
+3. Schalter aus → neue Zeilen wieder vollständig.
+
+
+Test 12: Starthinweis
+---------------------
+Beim Start steht oben „Ohne Gewährleistung und ohne Support“. „Schließen“ → beim nächsten Start wieder da.
+„Nicht mehr anzeigen“ → kommt nicht mehr (Eintrag starthinweis_aus in der Konfiguration).
+
+
+Was zurückmelden
+----------------
+- Wo du gezögert hast oder nicht wusstest, was zu tun ist.
+- Felder, die falsch erkannt wurden (Feldname, erwarteter Wert).
+- Fehlermeldungen: Hauptfenster → „Protokoll“ (Strg+L) und die Logdatei.

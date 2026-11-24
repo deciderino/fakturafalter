@@ -1,0 +1,5 @@
+Rechnungsnr;Datum;Lieferdatum;Kunde;Strasse;PLZ;Ort;Artikel;Menge;Einheit;Einzelpreis;Preiseinheit;USt-Satz
+NB-26-1004;14.10.2026;13.10.2026;Anlagenbau Riedel GmbH & Co. KG;Am Walzwerk 21;44147;Dortmund;Zylinderschraube ISO 4762 M6x20 12.9;1000;Stk;9,60;100;19
+NB-26-1004;14.10.2026;13.10.2026;Anlagenbau Riedel GmbH & Co. KG;Am Walzwerk 21;44147;Dortmund;Sechskantmutter DIN 934 M8 Kl. 8 verzinkt;1000;Stk;1,90;100;19
+NB-26-1004;14.10.2026;13.10.2026;Anlagenbau Riedel GmbH & Co. KG;Am Walzwerk 21;44147;Dortmund;Passfeder DIN 6885 A 8x7x50;40;Stk;0,85;1;19
+NB-26-1004;14.10.2026;13.10.2026;Anlagenbau Riedel GmbH & Co. KG;Am Walzwerk 21;44147;Dortmund;Gewindestange DIN 976 M12x1000 4.6;4;Stk;2,35;1;19

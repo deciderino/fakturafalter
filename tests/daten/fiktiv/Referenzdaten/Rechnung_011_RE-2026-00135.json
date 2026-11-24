@@ -1,0 +1,160 @@
+{
+  "datei": "Rechnung_011_RE-2026-00135.pdf",
+  "format": "PDF/A-2b",
+  "seller": {
+    "name": "Alberon Industriekomponenten GmbH",
+    "street": "Prüfwerkstraße 18",
+    "postal_code": "09111",
+    "city": "Chemnitz",
+    "ust_id": "DE123456789",
+    "iban": "DE89 3704 0044 0532 0130 00",
+    "bic": "COBADEFFXXX",
+    "bank": "Commerzbank AG",
+    "email": "rechnung@alberon.example",
+    "register": "Amtsgericht Chemnitz, HRB 999999",
+    "ceo": "Markus Seidel"
+  },
+  "buyer": {
+    "name_lines": [
+      "Blaustein Feinmechanik UG"
+    ],
+    "street": "Technikstraße 56",
+    "postal_code": "07743",
+    "city": "Jena",
+    "customer_number": "90751"
+  },
+  "invoice": {
+    "number": "RE-2026-00135",
+    "date": "22.08.2026",
+    "service_date": "15.08.2026",
+    "order_number": "",
+    "shipping": "Spedition"
+  },
+  "positions": [
+    {
+      "qty": 1,
+      "unit": "Std.",
+      "description": [
+        "Adapterplatte 286606",
+        "Ausführung Serie B2"
+      ],
+      "unit_price": "35.00",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "35.00"
+    },
+    {
+      "qty": 18,
+      "unit": "Std.",
+      "description": [
+        "Montageschiene 580211"
+      ],
+      "unit_price": null,
+      "kind": "without_price",
+      "price_unit": "/1",
+      "total": null
+    },
+    {
+      "qty": 2500,
+      "unit": "Stk.",
+      "description": [
+        "Montageschiene 496250"
+      ],
+      "unit_price": null,
+      "kind": "without_price",
+      "price_unit": "/1",
+      "total": null
+    },
+    {
+      "qty": 500,
+      "unit": "Stk.",
+      "description": [
+        "Gehäusedeckel 975625"
+      ],
+      "unit_price": null,
+      "kind": "without_price",
+      "price_unit": "/1",
+      "total": null
+    },
+    {
+      "qty": 1,
+      "unit": "Stk.",
+      "description": [
+        "Mindestauftrag Auftrag 2028-129"
+      ],
+      "unit_price": "450.00",
+      "kind": "flat_rate",
+      "price_unit": "/1",
+      "total": "450.00"
+    },
+    {
+      "qty": 12,
+      "unit": "Std.",
+      "description": [
+        "Aluminiumgehäuse 864355"
+      ],
+      "unit_price": "7.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "90.00"
+    },
+    {
+      "qty": 100,
+      "unit": "Stk.",
+      "description": [
+        "Montageschiene 697073",
+        "Oberfläche harteloxiert 40 µm"
+      ],
+      "unit_price": "89.90",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "8990.00"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": "4.00",
+  "discount_days": 10,
+  "payment_days": 30,
+  "totals": {
+    "net": "9565.00",
+    "vat": "1817.35",
+    "gross": "11382.35"
+  },
+  "payment": {
+    "discount_date": "01.09.2026",
+    "due_date": "21.09.2026",
+    "discount_amount": "455.29"
+  },
+  "page_count": 1,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "line_count": 9,
+      "transfer": null,
+      "summary_present": true,
+      "payment_block_present": true
+    }
+  ],
+  "test_flags": {
+    "address_name_lines": 1,
+    "missing_order_number": true,
+    "shipping_empty": false,
+    "discount_applied": true,
+    "blank_unit_flat_rate": false,
+    "without_price_count": 3,
+    "flat_rate_count": 1,
+    "two_three_line_positions": 2,
+    "four_five_line_positions": 0,
+    "has_qty_thousands": true
+  },
+  "sha256": "740ea5164e345af596a6a6856cf50fedd015971792d40d41e7bf1fdea5f3a00b"
+}

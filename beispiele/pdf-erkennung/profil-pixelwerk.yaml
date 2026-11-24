@@ -1,0 +1,34 @@
+# Pixelwerk Software GmbH (erfunden) – UTF-8 mit BOM, senkrechter Strich, Dezimalkomma, ISO-Datum
+profil: pixelwerk
+datei: {muster: "pixelwerk_*.csv", trennzeichen: "|"}
+zahlen: {dezimal: ",", tausender: "."}
+datum: {format: "%Y-%m-%d"}
+aufbau: {art: zeile_je_position, rechnung_schluessel: rechnung}
+
+felder:
+  kopf:
+    BT-1:  {spalte: rechnung}
+    BT-2:  {spalte: datum, typ: datum}
+    BT-73: {spalte: von, typ: datum}
+    BT-74: {spalte: bis, typ: datum}
+    BT-44: {spalte: kunde}
+    BT-50: {spalte: strasse}
+    BT-53: {spalte: plz}
+    BT-52: {spalte: ort}
+  position:
+    BT-153: {spalte: text}
+    BT-129: {spalte: menge, typ: zahl}
+    BT-130: {spalte: einheit, mapping: einheiten}
+    BT-146: {spalte: preis, typ: zahl}
+    steuer: {spalte: ust, mapping: steuer}
+
+mappings:
+  einheiten: {Stk: C62, h: HUR, pauschal: LS, unbekannt: pruefen}
+  steuer: {"19": {BT-151: S, BT-152: 19}, unbekannt: pruefen}
+
+verkaeufer:
+  name: Pixelwerk Software GmbH
+  anschrift: {strasse: Gleis 7, plz: "04109", ort: Leipzig}
+  ust_id: DE607080900
+  register: Amtsgericht Leipzig HRB 990005
+zahlung: {iban: DE81000000000004040404}

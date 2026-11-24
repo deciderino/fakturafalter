@@ -1,0 +1,1337 @@
+{
+  "datei": "Rechnung_005_RE26-74005.pdf",
+  "format": "PDF 1.4 (reportlab), A4, Schrift Helvetica (Standard-14, nicht eingebettet)",
+  "familie": "f05_versatz",
+  "quelle": "Q5",
+  "holdout": true,
+  "split": "holdout",
+  "seller": {
+    "name": "Kerber Bürobedarf GmbH",
+    "street": "Stadtgraben 17",
+    "postal_code": "94315",
+    "city": "Straubing",
+    "ust_id": "DE139055215",
+    "iban": "DE87 0000 0000 0752 0099 15",
+    "bic": "KERBDEX1STR",
+    "bank": "Beispielbank Niederbayern",
+    "email": "service@kerber-buero.example",
+    "register": "Amtsgericht Straubing HRB 0000",
+    "ceo": "Thomas Kerber"
+  },
+  "buyer": {
+    "name_lines": [
+      "Zahnarztpraxis Dr. Okafor",
+      "z. Hd. Praxismanagement"
+    ],
+    "street": "Marktstraße 8",
+    "postal_code": "33602",
+    "city": "Bielefeld",
+    "customer_number": "C00322"
+  },
+  "invoice": {
+    "number": "RE26-74005",
+    "date": "29.10.2026",
+    "service_date": "23.10.2026",
+    "order_number": "",
+    "shipping": ""
+  },
+  "druck": {
+    "datum_format": "TT.MM.JJJJ",
+    "schrift": "Helvetica",
+    "seitenformat": "A4"
+  },
+  "BT-72": "23.10.2026",
+  "BT-119": "19.00",
+  "positions": [
+    {
+      "qty": "20",
+      "unit": "Stk.",
+      "description": [
+        "Archivkarton für 5 Ordner"
+      ],
+      "article_number": "170200",
+      "unit_price": "3.77",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "75.40"
+    },
+    {
+      "qty": "10",
+      "unit": "Stk.",
+      "description": [
+        "Ordner A4 schmal 5 cm, rot"
+      ],
+      "article_number": "110411",
+      "unit_price": "2.25",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "22.50"
+    },
+    {
+      "qty": "2",
+      "unit": "Stk.",
+      "description": [
+        "Tintenpatronen Multipack 4-farbig"
+      ],
+      "article_number": "140002",
+      "unit_price": "31.50",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "63.00"
+    },
+    {
+      "qty": "20",
+      "unit": "Stk.",
+      "description": [
+        "Kugelschreiber blau, Druckmechanik"
+      ],
+      "article_number": "120013",
+      "unit_price": "0.63",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "12.60"
+    },
+    {
+      "qty": "10",
+      "unit": "Stk.",
+      "description": [
+        "Trennblätter A4, 100 Stück"
+      ],
+      "article_number": "110520",
+      "unit_price": "3.55",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "35.50"
+    },
+    {
+      "qty": "2",
+      "unit": "Stk.",
+      "description": [
+        "Hängeregistratur A4, 25 Stück"
+      ],
+      "article_number": "170210",
+      "unit_price": "12.03",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "24.06"
+    },
+    {
+      "qty": "1",
+      "unit": "Stk.",
+      "description": [
+        "Tonerkartusche schwarz, kompatibel"
+      ],
+      "article_number": "140001",
+      "unit_price": "56.00",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "56.00"
+    },
+    {
+      "qty": "1",
+      "unit": "Stk.",
+      "description": [
+        "Locher bis 25 Blatt"
+      ],
+      "article_number": "150310",
+      "unit_price": "7.70",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "7.70"
+    },
+    {
+      "qty": "2",
+      "unit": "Stk.",
+      "description": [
+        "Whiteboard-Marker 4er-Set"
+      ],
+      "article_number": "180001",
+      "unit_price": "7.26",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "14.52"
+    },
+    {
+      "qty": "24",
+      "unit": "Stk.",
+      "description": [
+        "Bleistift HB mit Radierer"
+      ],
+      "article_number": "120031",
+      "unit_price": "0.52",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "12.48"
+    },
+    {
+      "qty": "1",
+      "unit": "Stk.",
+      "description": [
+        "Versandtaschen C4, 250 Stück"
+      ],
+      "article_number": "130140",
+      "unit_price": "21.00",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "21.00"
+    },
+    {
+      "qty": "20",
+      "unit": "Stk.",
+      "description": [
+        "Kopierpapier A4 80 g, 500 Blatt"
+      ],
+      "article_number": "100234",
+      "unit_price": "4.92",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "98.40"
+    },
+    {
+      "qty": "1",
+      "unit": "Stk.",
+      "description": [
+        "Laminierfolien A4 125 mic, 100 Stück"
+      ],
+      "article_number": "160050",
+      "unit_price": "16.85",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "16.85"
+    },
+    {
+      "qty": "2",
+      "unit": "Std.",
+      "description": [
+        "Einrichtung Druckerfreigabe vor Ort"
+      ],
+      "article_number": "190900",
+      "unit_price": "68.75",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "137.50"
+    },
+    {
+      "qty": "1",
+      "unit": "Stk.",
+      "description": [
+        "Schreibtischunterlage 60 × 40 cm"
+      ],
+      "article_number": "150300",
+      "unit_price": "11.98",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "11.98"
+    },
+    {
+      "qty": "3",
+      "unit": "Stk.",
+      "description": [
+        "Heftgerät bis 30 Blatt"
+      ],
+      "article_number": "150320",
+      "unit_price": "12.02",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "36.06"
+    },
+    {
+      "qty": "1",
+      "unit": "Stk.",
+      "description": [
+        "Moderationskarten 250 Stück"
+      ],
+      "article_number": "180010",
+      "unit_price": "9.06",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "9.06"
+    },
+    {
+      "qty": "10",
+      "unit": "Stk.",
+      "description": [
+        "Ordner A4 breit 8 cm, blau"
+      ],
+      "article_number": "110410",
+      "unit_price": "3.11",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "31.10"
+    },
+    {
+      "qty": "10",
+      "unit": "Stk.",
+      "description": [
+        "Heftklammern 24/6, 1000 Stück"
+      ],
+      "article_number": "150330",
+      "unit_price": "1.49",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "14.90"
+    },
+    {
+      "qty": "10",
+      "unit": "Stk.",
+      "description": [
+        "Textmarker 4er-Set, Restposten, solange Vorrat reicht"
+      ],
+      "article_number": "120020",
+      "unit_price": "3.03",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "30.30"
+    },
+    {
+      "qty": "2",
+      "unit": "Stk.",
+      "description": [
+        "Etiketten 70 × 37 mm, 2400 Stück"
+      ],
+      "article_number": "160060",
+      "unit_price": "21.75",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "43.50"
+    },
+    {
+      "qty": "36",
+      "unit": "Stk.",
+      "description": [
+        "Haftnotizen 76 × 76 mm, gelb"
+      ],
+      "article_number": "130100",
+      "unit_price": "1.56",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "56.16"
+    },
+    {
+      "qty": "5",
+      "unit": "Stk.",
+      "description": [
+        "Recyclingpapier A4 80 g, 500 Blatt"
+      ],
+      "article_number": "100251",
+      "unit_price": "5.72",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "28.60"
+    },
+    {
+      "qty": "2",
+      "unit": "Stk.",
+      "description": [
+        "Briefumschläge DIN lang, 1000 Stück"
+      ],
+      "article_number": "130122",
+      "unit_price": "17.42",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "34.84"
+    },
+    {
+      "qty": "10",
+      "unit": "Stk.",
+      "description": [
+        "Archivkarton für 5 Ordner"
+      ],
+      "article_number": "170200",
+      "unit_price": "3.77",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "37.70"
+    },
+    {
+      "qty": "20",
+      "unit": "Stk.",
+      "description": [
+        "Ordner A4 schmal 5 cm, rot"
+      ],
+      "article_number": "110411",
+      "unit_price": "2.25",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "45.00"
+    },
+    {
+      "qty": "3",
+      "unit": "Stk.",
+      "description": [
+        "Tintenpatronen Multipack 4-farbig"
+      ],
+      "article_number": "140002",
+      "unit_price": "31.50",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "94.50"
+    },
+    {
+      "qty": "20",
+      "unit": "Stk.",
+      "description": [
+        "Kugelschreiber blau, Druckmechanik"
+      ],
+      "article_number": "120013",
+      "unit_price": "0.63",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "12.60"
+    },
+    {
+      "qty": "2",
+      "unit": "Stk.",
+      "description": [
+        "Trennblätter A4, 100 Stück"
+      ],
+      "article_number": "110520",
+      "unit_price": "3.55",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "7.10"
+    },
+    {
+      "qty": "4",
+      "unit": "Stk.",
+      "description": [
+        "Hängeregistratur A4, 25 Stück"
+      ],
+      "article_number": "170210",
+      "unit_price": "12.03",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "48.12"
+    },
+    {
+      "qty": "4",
+      "unit": "Stk.",
+      "description": [
+        "Tonerkartusche schwarz, kompatibel, FSC-zertifiziert,",
+        "chlorfrei gebleicht"
+      ],
+      "article_number": "140001",
+      "unit_price": "56.00",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "224.00"
+    },
+    {
+      "qty": "3",
+      "unit": "Stk.",
+      "description": [
+        "Locher bis 25 Blatt"
+      ],
+      "article_number": "150310",
+      "unit_price": "7.70",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "23.10"
+    },
+    {
+      "qty": "5",
+      "unit": "Stk.",
+      "description": [
+        "Whiteboard-Marker 4er-Set"
+      ],
+      "article_number": "180001",
+      "unit_price": "7.26",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "36.30"
+    },
+    {
+      "qty": "48",
+      "unit": "Stk.",
+      "description": [
+        "Bleistift HB mit Radierer"
+      ],
+      "article_number": "120031",
+      "unit_price": "0.52",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "24.96"
+    },
+    {
+      "qty": "1",
+      "unit": "Stk.",
+      "description": [
+        "Versandtaschen C4, 250 Stück"
+      ],
+      "article_number": "130140",
+      "unit_price": "21.00",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "21.00"
+    },
+    {
+      "qty": "20",
+      "unit": "Stk.",
+      "description": [
+        "Kopierpapier A4 80 g, 500 Blatt"
+      ],
+      "article_number": "100234",
+      "unit_price": "4.92",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "98.40"
+    },
+    {
+      "qty": "2",
+      "unit": "Stk.",
+      "description": [
+        "Laminierfolien A4 125 mic, 100 Stück"
+      ],
+      "article_number": "160050",
+      "unit_price": "16.85",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "33.70"
+    },
+    {
+      "qty": "1.5",
+      "unit": "Std.",
+      "description": [
+        "Einrichtung Druckerfreigabe vor Ort"
+      ],
+      "article_number": "190900",
+      "unit_price": "68.75",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "103.13"
+    },
+    {
+      "qty": "5",
+      "unit": "Stk.",
+      "description": [
+        "Schreibtischunterlage 60 × 40 cm"
+      ],
+      "article_number": "150300",
+      "unit_price": "11.98",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "59.90"
+    },
+    {
+      "qty": "2",
+      "unit": "Stk.",
+      "description": [
+        "Heftgerät bis 30 Blatt"
+      ],
+      "article_number": "150320",
+      "unit_price": "12.02",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "24.04"
+    },
+    {
+      "qty": "1",
+      "unit": "Stk.",
+      "description": [
+        "Moderationskarten 250 Stück"
+      ],
+      "article_number": "180010",
+      "unit_price": "9.06",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "9.06"
+    },
+    {
+      "qty": "20",
+      "unit": "Stk.",
+      "description": [
+        "Ordner A4 breit 8 cm, blau"
+      ],
+      "article_number": "110410",
+      "unit_price": "3.11",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "62.20"
+    },
+    {
+      "qty": "10",
+      "unit": "Stk.",
+      "description": [
+        "Heftklammern 24/6, 1000 Stück"
+      ],
+      "article_number": "150330",
+      "unit_price": "1.49",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "14.90"
+    },
+    {
+      "qty": "10",
+      "unit": "Stk.",
+      "description": [
+        "Textmarker 4er-Set"
+      ],
+      "article_number": "120020",
+      "unit_price": "3.03",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "30.30"
+    },
+    {
+      "qty": "2",
+      "unit": "Stk.",
+      "description": [
+        "Etiketten 70 × 37 mm, 2400 Stück"
+      ],
+      "article_number": "160060",
+      "unit_price": "21.75",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "43.50"
+    },
+    {
+      "qty": "36",
+      "unit": "Stk.",
+      "description": [
+        "Haftnotizen 76 × 76 mm, gelb"
+      ],
+      "article_number": "130100",
+      "unit_price": "1.56",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "56.16"
+    },
+    {
+      "qty": "5",
+      "unit": "Stk.",
+      "description": [
+        "Recyclingpapier A4 80 g, 500 Blatt"
+      ],
+      "article_number": "100251",
+      "unit_price": "5.72",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "28.60"
+    },
+    {
+      "qty": "2",
+      "unit": "Stk.",
+      "description": [
+        "Briefumschläge DIN lang, 1000 Stück"
+      ],
+      "article_number": "130122",
+      "unit_price": "17.42",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "34.84"
+    },
+    {
+      "qty": "5",
+      "unit": "Stk.",
+      "description": [
+        "Archivkarton für 5 Ordner"
+      ],
+      "article_number": "170200",
+      "unit_price": "3.77",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "18.85"
+    },
+    {
+      "qty": "10",
+      "unit": "Stk.",
+      "description": [
+        "Ordner A4 schmal 5 cm, rot"
+      ],
+      "article_number": "110411",
+      "unit_price": "2.25",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "22.50"
+    },
+    {
+      "qty": "2",
+      "unit": "Stk.",
+      "description": [
+        "Tintenpatronen Multipack 4-farbig"
+      ],
+      "article_number": "140002",
+      "unit_price": "31.50",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "63.00"
+    },
+    {
+      "qty": "50",
+      "unit": "Stk.",
+      "description": [
+        "Kugelschreiber blau, Druckmechanik"
+      ],
+      "article_number": "120013",
+      "unit_price": "0.63",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "31.50"
+    },
+    {
+      "qty": "10",
+      "unit": "Stk.",
+      "description": [
+        "Trennblätter A4, 100 Stück"
+      ],
+      "article_number": "110520",
+      "unit_price": "3.55",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "35.50"
+    },
+    {
+      "qty": "4",
+      "unit": "Stk.",
+      "description": [
+        "Hängeregistratur A4, 25 Stück"
+      ],
+      "article_number": "170210",
+      "unit_price": "12.03",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "48.12"
+    },
+    {
+      "qty": "1",
+      "unit": "Stk.",
+      "description": [
+        "Tonerkartusche schwarz, kompatibel"
+      ],
+      "article_number": "140001",
+      "unit_price": "56.00",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "56.00"
+    },
+    {
+      "qty": "3",
+      "unit": "Stk.",
+      "description": [
+        "Locher bis 25 Blatt, FSC-zertifiziert, chlorfrei gebleicht"
+      ],
+      "article_number": "150310",
+      "unit_price": "7.70",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "23.10"
+    },
+    {
+      "qty": "2",
+      "unit": "Stk.",
+      "description": [
+        "Whiteboard-Marker 4er-Set"
+      ],
+      "article_number": "180001",
+      "unit_price": "7.26",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "14.52"
+    },
+    {
+      "qty": "24",
+      "unit": "Stk.",
+      "description": [
+        "Bleistift HB mit Radierer"
+      ],
+      "article_number": "120031",
+      "unit_price": "0.52",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "12.48"
+    },
+    {
+      "qty": "2",
+      "unit": "Stk.",
+      "description": [
+        "Versandtaschen C4, 250 Stück"
+      ],
+      "article_number": "130140",
+      "unit_price": "21.00",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "42.00"
+    },
+    {
+      "qty": "5",
+      "unit": "Stk.",
+      "description": [
+        "Kopierpapier A4 80 g, 500 Blatt"
+      ],
+      "article_number": "100234",
+      "unit_price": "4.92",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "24.60"
+    },
+    {
+      "qty": "2",
+      "unit": "Stk.",
+      "description": [
+        "Laminierfolien A4 125 mic, 100 Stück"
+      ],
+      "article_number": "160050",
+      "unit_price": "16.85",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "33.70"
+    },
+    {
+      "qty": "1.5",
+      "unit": "Std.",
+      "description": [
+        "Einrichtung Druckerfreigabe vor Ort"
+      ],
+      "article_number": "190900",
+      "unit_price": "68.75",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "103.13"
+    },
+    {
+      "qty": "5",
+      "unit": "Stk.",
+      "description": [
+        "Schreibtischunterlage 60 × 40 cm"
+      ],
+      "article_number": "150300",
+      "unit_price": "11.98",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "59.90"
+    },
+    {
+      "qty": "3",
+      "unit": "Stk.",
+      "description": [
+        "Heftgerät bis 30 Blatt, FSC-zertifiziert, chlorfrei gebleicht"
+      ],
+      "article_number": "150320",
+      "unit_price": "12.02",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "36.06"
+    },
+    {
+      "qty": "1",
+      "unit": "Stk.",
+      "description": [
+        "Moderationskarten 250 Stück"
+      ],
+      "article_number": "180010",
+      "unit_price": "9.06",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "9.06"
+    },
+    {
+      "qty": "30",
+      "unit": "Stk.",
+      "description": [
+        "Ordner A4 breit 8 cm, blau"
+      ],
+      "article_number": "110410",
+      "unit_price": "3.11",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "93.30"
+    },
+    {
+      "qty": "5",
+      "unit": "Stk.",
+      "description": [
+        "Heftklammern 24/6, 1000 Stück"
+      ],
+      "article_number": "150330",
+      "unit_price": "1.49",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "7.45"
+    },
+    {
+      "qty": "5",
+      "unit": "Stk.",
+      "description": [
+        "Textmarker 4er-Set"
+      ],
+      "article_number": "120020",
+      "unit_price": "3.03",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "15.15"
+    },
+    {
+      "qty": "3",
+      "unit": "Stk.",
+      "description": [
+        "Etiketten 70 × 37 mm, 2400 Stück"
+      ],
+      "article_number": "160060",
+      "unit_price": "21.75",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "65.25"
+    },
+    {
+      "qty": "12",
+      "unit": "Stk.",
+      "description": [
+        "Haftnotizen 76 × 76 mm, gelb"
+      ],
+      "article_number": "130100",
+      "unit_price": "1.56",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "18.72"
+    },
+    {
+      "qty": "10",
+      "unit": "Stk.",
+      "description": [
+        "Recyclingpapier A4 80 g, 500 Blatt"
+      ],
+      "article_number": "100251",
+      "unit_price": "5.72",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "57.20"
+    },
+    {
+      "qty": "1",
+      "unit": "Stk.",
+      "description": [
+        "Briefumschläge DIN lang, 1000 Stück"
+      ],
+      "article_number": "130122",
+      "unit_price": "17.42",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "17.42"
+    },
+    {
+      "qty": "20",
+      "unit": "Stk.",
+      "description": [
+        "Archivkarton für 5 Ordner"
+      ],
+      "article_number": "170200",
+      "unit_price": "3.77",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "75.40"
+    },
+    {
+      "qty": "10",
+      "unit": "Stk.",
+      "description": [
+        "Ordner A4 schmal 5 cm, rot"
+      ],
+      "article_number": "110411",
+      "unit_price": "2.25",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "22.50"
+    },
+    {
+      "qty": "1",
+      "unit": "Stk.",
+      "description": [
+        "Tintenpatronen Multipack 4-farbig"
+      ],
+      "article_number": "140002",
+      "unit_price": "31.50",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "31.50"
+    },
+    {
+      "qty": "100",
+      "unit": "Stk.",
+      "description": [
+        "Kugelschreiber blau, Druckmechanik"
+      ],
+      "article_number": "120013",
+      "unit_price": "0.63",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "63.00"
+    },
+    {
+      "qty": "10",
+      "unit": "Stk.",
+      "description": [
+        "Trennblätter A4, 100 Stück"
+      ],
+      "article_number": "110520",
+      "unit_price": "3.55",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "35.50"
+    },
+    {
+      "qty": "1",
+      "unit": "Stk.",
+      "description": [
+        "Hängeregistratur A4, 25 Stück"
+      ],
+      "article_number": "170210",
+      "unit_price": "12.03",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "12.03"
+    },
+    {
+      "qty": "2",
+      "unit": "Stk.",
+      "description": [
+        "Tonerkartusche schwarz, kompatibel"
+      ],
+      "article_number": "140001",
+      "unit_price": "56.00",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "112.00"
+    },
+    {
+      "qty": "3",
+      "unit": "Stk.",
+      "description": [
+        "Locher bis 25 Blatt"
+      ],
+      "article_number": "150310",
+      "unit_price": "7.70",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "23.10"
+    },
+    {
+      "qty": "2",
+      "unit": "Stk.",
+      "description": [
+        "Whiteboard-Marker 4er-Set"
+      ],
+      "article_number": "180001",
+      "unit_price": "7.26",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "14.52"
+    },
+    {
+      "qty": "24",
+      "unit": "Stk.",
+      "description": [
+        "Bleistift HB mit Radierer"
+      ],
+      "article_number": "120031",
+      "unit_price": "0.52",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "12.48"
+    },
+    {
+      "qty": "1",
+      "unit": "Stk.",
+      "description": [
+        "Versandtaschen C4, 250 Stück"
+      ],
+      "article_number": "130140",
+      "unit_price": "21.00",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "21.00"
+    },
+    {
+      "qty": "10",
+      "unit": "Stk.",
+      "description": [
+        "Kopierpapier A4 80 g, 500 Blatt"
+      ],
+      "article_number": "100234",
+      "unit_price": "4.92",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "49.20"
+    },
+    {
+      "qty": "2",
+      "unit": "Stk.",
+      "description": [
+        "Laminierfolien A4 125 mic, 100 Stück"
+      ],
+      "article_number": "160050",
+      "unit_price": "16.85",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "33.70"
+    },
+    {
+      "qty": "1",
+      "unit": "Std.",
+      "description": [
+        "Einrichtung Druckerfreigabe vor Ort"
+      ],
+      "article_number": "190900",
+      "unit_price": "68.75",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "68.75"
+    },
+    {
+      "qty": "1",
+      "unit": "Stk.",
+      "description": [
+        "Versandkosten Paket"
+      ],
+      "article_number": "900001",
+      "unit_price": "6.90",
+      "kind": "shipping",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "6.90"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": "3.00",
+  "discount_days": 10,
+  "payment_days": 30,
+  "totals": {
+    "net": "3557.21",
+    "vat": "675.87",
+    "gross": "4233.08"
+  },
+  "totals_printed": {
+    "net": "3557.21",
+    "vat": "675.87",
+    "gross": "4233.08"
+  },
+  "payment": {
+    "discount_date": "08.11.2026",
+    "due_date": "28.11.2026",
+    "discount_amount": "126.99",
+    "discount_base": "gross"
+  },
+  "payment_terms_text": [
+    "Zahlungsziel: 30 Tage",
+    "Bei Zahlung innerhalb von 10 Tagen gewähren wir 3,00 % Skonto."
+  ],
+  "page_count": 3,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31
+      ],
+      "transfer": "1363.03",
+      "carry_forward": null,
+      "summary_present": false
+    },
+    {
+      "page": 2,
+      "position_indices": [
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65,
+        66,
+        67,
+        68,
+        69,
+        70,
+        71,
+        72,
+        73,
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80
+      ],
+      "transfer": "3350.66",
+      "carry_forward": "1363.03",
+      "summary_present": false
+    },
+    {
+      "page": 3,
+      "position_indices": [
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87
+      ],
+      "transfer": null,
+      "carry_forward": "3350.66",
+      "summary_present": true
+    }
+  ],
+  "erwarteter_status": "ok",
+  "erwartete_hinweise": [],
+  "kosit": null,
+  "verapdf": null,
+  "validierung_hinweis": "lokal nicht validierbar / spätere Phase (KoSIT/veraPDF prüfen die App-Ausgabe, nicht diese PDFs)",
+  "korrekturen": null,
+  "korrekturen_hinweis": "erst beim echten Anlernen messbar",
+  "test_flags": {
+    "address_name_lines": 2,
+    "po_box": false,
+    "multi_line_positions": 1,
+    "shipping_position": true,
+    "page_format": "A4",
+    "payment": "skonto",
+    "pruefen": null,
+    "missing_order_number": true,
+    "note": "Hold-out: 3 Seiten, zwei Überträge",
+    "auftragsnummer": "AU115557"
+  },
+  "sha256": "b1aaf4e1a349d3cbae041cacfae9a58cac32c10bc50655534eb92c4cd6580bcf"
+}

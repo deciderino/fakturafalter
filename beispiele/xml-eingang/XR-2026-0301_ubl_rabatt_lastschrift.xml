@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Erfundene Beispielrechnung (XRechnung 3.0, UBL): Rabatte, Zuschläge, Vorauszahlung, SEPA-Lastschrift -->
+<Invoice xmlns="urn:oasis:names:specification:ubl:schema:xsd:Invoice-2"
+ xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2"
+ xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2">
+ <cbc:CustomizationID>urn:cen.eu:en16931:2017#compliant#urn:xeinkauf.de:kosit:xrechnung_3.0</cbc:CustomizationID>
+ <cbc:ProfileID>urn:fdc:peppol.eu:2017:poacc:billing:01:1.0</cbc:ProfileID>
+ <cbc:ID>XR-2026-0301</cbc:ID>
+ <cbc:IssueDate>2026-10-20</cbc:IssueDate>
+ <cbc:DueDate>2026-11-03</cbc:DueDate>
+ <cbc:InvoiceTypeCode>380</cbc:InvoiceTypeCode>
+ <cbc:Note>Wartung und Ersatzteile Halle 3</cbc:Note>
+ <cbc:DocumentCurrencyCode>EUR</cbc:DocumentCurrencyCode>
+ <cbc:AccountingCost>8400</cbc:AccountingCost>
+ <cbc:BuyerReference>04011000-12345-03</cbc:BuyerReference>
+ <cac:InvoicePeriod><cbc:StartDate>2026-10-01</cbc:StartDate><cbc:EndDate>2026-10-15</cbc:EndDate></cac:InvoicePeriod>
+ <cac:OrderReference><cbc:ID>B-2026-55</cbc:ID><cbc:SalesOrderID>AB-2026-90</cbc:SalesOrderID></cac:OrderReference>
+ <cac:DespatchDocumentReference><cbc:ID>LS-2026-301</cbc:ID></cac:DespatchDocumentReference>
+ <cac:ReceiptDocumentReference><cbc:ID>WE-2026-12</cbc:ID></cac:ReceiptDocumentReference>
+ <cac:OriginatorDocumentReference><cbc:ID>LOS-7</cbc:ID></cac:OriginatorDocumentReference>
+ <cac:ContractDocumentReference><cbc:ID>V-2026-03</cbc:ID></cac:ContractDocumentReference>
+ <cac:AdditionalDocumentReference><cbc:ID schemeID="AAG">ZAEHLER-7</cbc:ID><cbc:DocumentTypeCode>130</cbc:DocumentTypeCode></cac:AdditionalDocumentReference>
+ <cac:AdditionalDocumentReference><cbc:ID>Stundenzettel</cbc:ID><cbc:DocumentDescription>Stundenzettel Oktober</cbc:DocumentDescription>
+  <cac:Attachment><cbc:EmbeddedDocumentBinaryObject mimeCode="text/csv" filename="stunden.csv">UG9zO1JhdW07U3R1bmRlbgoxO0hhbGxlIDM7MTAK</cbc:EmbeddedDocumentBinaryObject></cac:Attachment></cac:AdditionalDocumentReference>
+ <cac:AdditionalDocumentReference><cbc:ID>Wartungsplan</cbc:ID><cbc:DocumentDescription>Wartungsplan 2026</cbc:DocumentDescription>
+  <cac:Attachment><cac:ExternalReference><cbc:URI>https://muster-gmbh.example/wartungsplan.pdf</cbc:URI></cac:ExternalReference></cac:Attachment></cac:AdditionalDocumentReference>
+ <cac:ProjectReference><cbc:ID>PRJ-31</cbc:ID></cac:ProjectReference>
+ <cac:AccountingSupplierParty><cac:Party>
+  <cbc:EndpointID schemeID="EM">rechnung@muster-gmbh.example</cbc:EndpointID>
+  <cac:PartyIdentification><cbc:ID schemeID="SEPA">DE98ZZZ09999999999</cbc:ID></cac:PartyIdentification>
+  <cac:PartyName><cbc:Name>Muster Service</cbc:Name></cac:PartyName>
+  <cac:PostalAddress><cbc:StreetName>Musterstraße 1</cbc:StreetName><cbc:CityName>Musterstadt</cbc:CityName>
+   <cbc:PostalZone>12345</cbc:PostalZone><cac:Country><cbc:IdentificationCode>DE</cbc:IdentificationCode></cac:Country></cac:PostalAddress>
+  <cac:PartyTaxScheme><cbc:CompanyID>DE123456788</cbc:CompanyID><cac:TaxScheme><cbc:ID>VAT</cbc:ID></cac:TaxScheme></cac:PartyTaxScheme>
+  <cac:PartyLegalEntity><cbc:RegistrationName>Muster GmbH</cbc:RegistrationName><cbc:CompanyID>HRB 00000</cbc:CompanyID></cac:PartyLegalEntity>
+  <cac:Contact><cbc:Name>Erika Beispiel</cbc:Name><cbc:Telephone>+49 000 0000000</cbc:Telephone><cbc:ElectronicMail>buchhaltung@muster-gmbh.example</cbc:ElectronicMail></cac:Contact>
+ </cac:Party></cac:AccountingSupplierParty>
+ <cac:AccountingCustomerParty><cac:Party>
+  <cbc:EndpointID schemeID="EM">erechnung@musterhausen.example</cbc:EndpointID>
+  <cac:PartyIdentification><cbc:ID>K-1002</cbc:ID></cac:PartyIdentification>
+  <cac:PostalAddress><cbc:StreetName>Rathausplatz 1</cbc:StreetName><cbc:CityName>Musterhausen</cbc:CityName>
+   <cbc:PostalZone>54321</cbc:PostalZone><cac:Country><cbc:IdentificationCode>DE</cbc:IdentificationCode></cac:Country></cac:PostalAddress>
+  <cac:PartyLegalEntity><cbc:RegistrationName>Stadtverwaltung Musterhausen</cbc:RegistrationName></cac:PartyLegalEntity>
+ </cac:Party></cac:AccountingCustomerParty>
+ <cac:Delivery><cbc:ActualDeliveryDate>2026-10-15</cbc:ActualDeliveryDate>
+  <cac:DeliveryLocation><cbc:ID>LO-3</cbc:ID><cac:Address><cbc:StreetName>Werkstraße 9</cbc:StreetName><cbc:CityName>Musterhausen</cbc:CityName>
+   <cbc:PostalZone>54321</cbc:PostalZone><cac:Country><cbc:IdentificationCode>DE</cbc:IdentificationCode></cac:Country></cac:Address></cac:DeliveryLocation>
+  <cac:DeliveryParty><cac:PartyName><cbc:Name>Bauhof Halle 3</cbc:Name></cac:PartyName></cac:DeliveryParty></cac:Delivery>
+ <cac:PaymentMeans><cbc:PaymentMeansCode>59</cbc:PaymentMeansCode><cbc:PaymentID>XR-2026-0301</cbc:PaymentID>
+  <cac:PaymentMandate><cbc:ID>MANDAT-2026-011</cbc:ID><cac:PayerFinancialAccount><cbc:ID>DE75512108001245126199</cbc:ID></cac:PayerFinancialAccount></cac:PaymentMandate></cac:PaymentMeans>
+ <cac:PaymentTerms><cbc:Note>Der Betrag wird am 03.11.2026 per SEPA-Lastschrift eingezogen.</cbc:Note></cac:PaymentTerms>
+ <cac:AllowanceCharge><cbc:ChargeIndicator>false</cbc:ChargeIndicator><cbc:AllowanceChargeReasonCode>95</cbc:AllowanceChargeReasonCode>
+  <cbc:AllowanceChargeReason>Treuerabatt</cbc:AllowanceChargeReason><cbc:MultiplierFactorNumeric>2</cbc:MultiplierFactorNumeric>
+  <cbc:Amount currencyID="EUR">20.80</cbc:Amount><cbc:BaseAmount currencyID="EUR">1040.00</cbc:BaseAmount>
+  <cac:TaxCategory><cbc:ID>S</cbc:ID><cbc:Percent>19</cbc:Percent><cac:TaxScheme><cbc:ID>VAT</cbc:ID></cac:TaxScheme></cac:TaxCategory></cac:AllowanceCharge>
+ <cac:AllowanceCharge><cbc:ChargeIndicator>true</cbc:ChargeIndicator><cbc:AllowanceChargeReasonCode>FC</cbc:AllowanceChargeReasonCode>
+  <cbc:AllowanceChargeReason>Fracht</cbc:AllowanceChargeReason><cbc:Amount currencyID="EUR">15.00</cbc:Amount>
+  <cac:TaxCategory><cbc:ID>S</cbc:ID><cbc:Percent>19</cbc:Percent><cac:TaxScheme><cbc:ID>VAT</cbc:ID></cac:TaxScheme></cac:TaxCategory></cac:AllowanceCharge>
+ <cac:TaxTotal><cbc:TaxAmount currencyID="EUR">196.50</cbc:TaxAmount>
+  <cac:TaxSubtotal><cbc:TaxableAmount currencyID="EUR">1034.20</cbc:TaxableAmount><cbc:TaxAmount currencyID="EUR">196.50</cbc:TaxAmount>
+   <cac:TaxCategory><cbc:ID>S</cbc:ID><cbc:Percent>19</cbc:Percent><cac:TaxScheme><cbc:ID>VAT</cbc:ID></cac:TaxScheme></cac:TaxCategory></cac:TaxSubtotal></cac:TaxTotal>
+ <cac:LegalMonetaryTotal><cbc:LineExtensionAmount currencyID="EUR">1040.00</cbc:LineExtensionAmount>
+  <cbc:TaxExclusiveAmount currencyID="EUR">1034.20</cbc:TaxExclusiveAmount><cbc:TaxInclusiveAmount currencyID="EUR">1230.70</cbc:TaxInclusiveAmount>
+  <cbc:AllowanceTotalAmount currencyID="EUR">20.80</cbc:AllowanceTotalAmount><cbc:ChargeTotalAmount currencyID="EUR">15.00</cbc:ChargeTotalAmount>
+  <cbc:PrepaidAmount currencyID="EUR">230.70</cbc:PrepaidAmount><cbc:PayableAmount currencyID="EUR">1000.00</cbc:PayableAmount></cac:LegalMonetaryTotal>
+ <cac:InvoiceLine><cbc:ID>1</cbc:ID><cbc:Note>Arbeitszeit laut Stundenzettel</cbc:Note>
+  <cbc:InvoicedQuantity unitCode="HUR">10</cbc:InvoicedQuantity><cbc:LineExtensionAmount currencyID="EUR">720.00</cbc:LineExtensionAmount>
+  <cbc:AccountingCost>4711</cbc:AccountingCost>
+  <cac:InvoicePeriod><cbc:StartDate>2026-10-01</cbc:StartDate><cbc:EndDate>2026-10-15</cbc:EndDate></cac:InvoicePeriod>
+  <cac:OrderLineReference><cbc:LineID>3</cbc:LineID></cac:OrderLineReference>
+  <cac:AllowanceCharge><cbc:ChargeIndicator>false</cbc:ChargeIndicator><cbc:AllowanceChargeReasonCode>95</cbc:AllowanceChargeReasonCode>
+   <cbc:AllowanceChargeReason>Mengenrabatt</cbc:AllowanceChargeReason><cbc:MultiplierFactorNumeric>10</cbc:MultiplierFactorNumeric>
+   <cbc:Amount currencyID="EUR">80.00</cbc:Amount><cbc:BaseAmount currencyID="EUR">800.00</cbc:BaseAmount></cac:AllowanceCharge>
+  <cac:Item><cbc:Description>Wartung der Hallentore</cbc:Description><cbc:Name>Wartung</cbc:Name>
+   <cac:SellersItemIdentification><cbc:ID>W-10</cbc:ID></cac:SellersItemIdentification>
+   <cac:ClassifiedTaxCategory><cbc:ID>S</cbc:ID><cbc:Percent>19</cbc:Percent><cac:TaxScheme><cbc:ID>VAT</cbc:ID></cac:TaxScheme></cac:ClassifiedTaxCategory></cac:Item>
+  <cac:Price><cbc:PriceAmount currencyID="EUR">80.00</cbc:PriceAmount>
+   <cac:AllowanceCharge><cbc:ChargeIndicator>false</cbc:ChargeIndicator><cbc:Amount currencyID="EUR">5.00</cbc:Amount><cbc:BaseAmount currencyID="EUR">85.00</cbc:BaseAmount></cac:AllowanceCharge></cac:Price>
+ </cac:InvoiceLine>
+ <cac:InvoiceLine><cbc:ID>2</cbc:ID>
+  <cbc:InvoicedQuantity unitCode="C62">2</cbc:InvoicedQuantity><cbc:LineExtensionAmount currencyID="EUR">320.00</cbc:LineExtensionAmount>
+  <cac:DocumentReference><cbc:ID>OBJ-31</cbc:ID><cbc:DocumentTypeCode>130</cbc:DocumentTypeCode></cac:DocumentReference>
+  <cac:AllowanceCharge><cbc:ChargeIndicator>true</cbc:ChargeIndicator><cbc:AllowanceChargeReason>Expresszuschlag</cbc:AllowanceChargeReason>
+   <cbc:Amount currencyID="EUR">20.00</cbc:Amount></cac:AllowanceCharge>
+  <cac:Item><cbc:Name>Torantrieb Ersatzteil</cbc:Name>
+   <cac:BuyersItemIdentification><cbc:ID>KA-5</cbc:ID></cac:BuyersItemIdentification>
+   <cac:SellersItemIdentification><cbc:ID>E-200</cbc:ID></cac:SellersItemIdentification>
+   <cac:StandardItemIdentification><cbc:ID schemeID="0160">4000000000013</cbc:ID></cac:StandardItemIdentification>
+   <cac:OriginCountry><cbc:IdentificationCode>DE</cbc:IdentificationCode></cac:OriginCountry>
+   <cac:CommodityClassification><cbc:ItemClassificationCode listID="TST" listVersionID="19.0501">43211503</cbc:ItemClassificationCode></cac:CommodityClassification>
+   <cac:ClassifiedTaxCategory><cbc:ID>S</cbc:ID><cbc:Percent>19</cbc:Percent><cac:TaxScheme><cbc:ID>VAT</cbc:ID></cac:TaxScheme></cac:ClassifiedTaxCategory>
+   <cac:AdditionalItemProperty><cbc:Name>Farbe</cbc:Name><cbc:Value>Grau</cbc:Value></cac:AdditionalItemProperty></cac:Item>
+  <cac:Price><cbc:PriceAmount currencyID="EUR">150.00</cbc:PriceAmount></cac:Price>
+ </cac:InvoiceLine>
+</Invoice>

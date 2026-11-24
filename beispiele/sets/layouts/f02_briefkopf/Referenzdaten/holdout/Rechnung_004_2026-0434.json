@@ -1,0 +1,129 @@
+{
+  "datei": "Rechnung_004_2026-0434.pdf",
+  "format": "PDF 1.4 (reportlab), A5, Schrift Times-Roman (Standard-14, nicht eingebettet)",
+  "familie": "f02_briefkopf",
+  "quelle": "Q2",
+  "holdout": true,
+  "split": "holdout",
+  "seller": {
+    "name": "Ingenieurbüro Brandauer GmbH",
+    "street": "Am Klosterhof 9",
+    "postal_code": "37073",
+    "city": "Göttingen",
+    "ust_id": "DE315590279",
+    "iban": "DE96 0000 0000 0270 7300 91",
+    "bic": "BRANDEX1GOE",
+    "bank": "Beispiel-Volksbank Göttingen",
+    "email": "info@ib-brandauer.example",
+    "register": "Amtsgericht Göttingen HRB 00000",
+    "ceo": "Dipl.-Ing. Jakob Brandauer"
+  },
+  "buyer": {
+    "name_lines": [
+      "Bäckerei Ohlendorf GmbH"
+    ],
+    "street": "Brückenstraße 5",
+    "postal_code": "37083",
+    "city": "Göttingen",
+    "customer_number": "2026-130"
+  },
+  "invoice": {
+    "number": "2026-0434",
+    "date": "22.10.2026",
+    "service_date": "22.10.2026",
+    "order_number": "",
+    "shipping": "",
+    "date_printed": "22. Oktober 2026"
+  },
+  "druck": {
+    "datum_format": "ausgeschrieben („3. November 2026“)",
+    "schrift": "Times-Roman",
+    "seitenformat": "A5"
+  },
+  "BT-72": "22.10.2026",
+  "BT-119": "19.00",
+  "positions": [
+    {
+      "qty": "1",
+      "unit": "Stk.",
+      "description": [
+        "Erstellung Brandschutznachweis"
+      ],
+      "article_number": "",
+      "unit_price": "1239.00",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "1239.00"
+    },
+    {
+      "qty": "1",
+      "unit": "Stk.",
+      "description": [
+        "Statische Vorbemessung Deckendurchbruch"
+      ],
+      "article_number": "",
+      "unit_price": "891.75",
+      "kind": "regular",
+      "price_unit": null,
+      "price_unit_qty": 1,
+      "total": "891.75"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": null,
+  "discount_days": null,
+  "payment_days": 14,
+  "totals": {
+    "net": "2130.75",
+    "vat": "404.84",
+    "gross": "2535.59"
+  },
+  "totals_printed": {
+    "net": "2130.75",
+    "vat": "404.84",
+    "gross": "2535.59"
+  },
+  "payment": {
+    "discount_date": null,
+    "due_date": "05.11.2026",
+    "discount_amount": null,
+    "discount_base": null
+  },
+  "payment_terms_text": [
+    "Zahlung innerhalb von 14 Tagen ab Rechnungseingang ohne Abzüge an die unten angegebene",
+    "Bankverbindung."
+  ],
+  "page_count": 1,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2
+      ],
+      "transfer": null,
+      "carry_forward": null,
+      "summary_present": true
+    }
+  ],
+  "erwarteter_status": "ok",
+  "erwartete_hinweise": [],
+  "kosit": null,
+  "verapdf": null,
+  "validierung_hinweis": "lokal nicht validierbar / spätere Phase (KoSIT/veraPDF prüfen die App-Ausgabe, nicht diese PDFs)",
+  "korrekturen": null,
+  "korrekturen_hinweis": "erst beim echten Anlernen messbar",
+  "test_flags": {
+    "address_name_lines": 1,
+    "po_box": false,
+    "multi_line_positions": 0,
+    "shipping_position": false,
+    "page_format": "A5",
+    "payment": "netto",
+    "pruefen": null,
+    "missing_order_number": true,
+    "note": "Hold-out: A5 (Koordinaten × 0,7071, Schrift ≥ 7 pt)"
+  },
+  "sha256": "bd21aaf87326aa13140d140e14b35598975107ecea70c3c6bce3a49bb2b51613"
+}

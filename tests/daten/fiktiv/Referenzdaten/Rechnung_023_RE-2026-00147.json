@@ -1,0 +1,207 @@
+{
+  "datei": "Rechnung_023_RE-2026-00147.pdf",
+  "format": "PDF/A-2b",
+  "seller": {
+    "name": "Alberon Industriekomponenten GmbH",
+    "street": "Prüfwerkstraße 18",
+    "postal_code": "09111",
+    "city": "Chemnitz",
+    "ust_id": "DE123456789",
+    "iban": "DE89 3704 0044 0532 0130 00",
+    "bic": "COBADEFFXXX",
+    "bank": "Commerzbank AG",
+    "email": "rechnung@alberon.example",
+    "register": "Amtsgericht Chemnitz, HRB 999999",
+    "ceo": "Markus Seidel"
+  },
+  "buyer": {
+    "name_lines": [
+      "Kronwald Automation GmbH",
+      "Bereich Fertigung"
+    ],
+    "street": "Montagestraße 41",
+    "postal_code": "04103",
+    "city": "Leipzig",
+    "customer_number": "00851"
+  },
+  "invoice": {
+    "number": "RE-2026-00147",
+    "date": "13.09.2026",
+    "service_date": "06.09.2026",
+    "order_number": "00831378",
+    "shipping": "Spedition"
+  },
+  "positions": [
+    {
+      "qty": 8,
+      "unit": "Stk.",
+      "description": [
+        "Kupplungsstück 582452"
+      ],
+      "unit_price": null,
+      "kind": "without_price",
+      "price_unit": "/1",
+      "total": null
+    },
+    {
+      "qty": 1,
+      "unit": "Stk.",
+      "description": [
+        "Gesamtpreis Auftrag 2029-445"
+      ],
+      "unit_price": "120.00",
+      "kind": "flat_rate",
+      "price_unit": "/1",
+      "total": "120.00"
+    },
+    {
+      "qty": 125,
+      "unit": "Stk.",
+      "description": [
+        "Mess- und Prüfarbeit 814955"
+      ],
+      "unit_price": "4.75",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "593.75"
+    },
+    {
+      "qty": 5,
+      "unit": "Stk.",
+      "description": [
+        "Wellenhalter 992735"
+      ],
+      "unit_price": "3.90",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "19.50"
+    },
+    {
+      "qty": 75,
+      "unit": "Stk.",
+      "description": [
+        "Befestigungswinkel 633234"
+      ],
+      "unit_price": "12.50",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "937.50"
+    },
+    {
+      "qty": 1,
+      "unit": "Stk.",
+      "description": [
+        "Adapterplatte 716449"
+      ],
+      "unit_price": null,
+      "kind": "without_price",
+      "price_unit": "/1",
+      "total": null
+    },
+    {
+      "qty": 10000,
+      "unit": "Stk.",
+      "description": [
+        "Adapterplatte 759257"
+      ],
+      "unit_price": null,
+      "kind": "without_price",
+      "price_unit": "/1",
+      "total": null
+    },
+    {
+      "qty": 1,
+      "unit": "Stk.",
+      "description": [
+        "Pauschalpreis Auftrag 2028-738"
+      ],
+      "unit_price": "250.00",
+      "kind": "flat_rate",
+      "price_unit": "/1",
+      "total": "250.00"
+    },
+    {
+      "qty": 250,
+      "unit": "Stk.",
+      "description": [
+        "Maschinenbolzen 423540"
+      ],
+      "unit_price": "4.75",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "1187.50"
+    },
+    {
+      "qty": 2500,
+      "unit": "Stk.",
+      "description": [
+        "Führungsbuchse 307099"
+      ],
+      "unit_price": "18.75",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "46875.00"
+    },
+    {
+      "qty": 500,
+      "unit": "Stk.",
+      "description": [
+        "Gehäuseboden 718304"
+      ],
+      "unit_price": "0.85",
+      "kind": "regular",
+      "price_unit": "/1",
+      "total": "425.00"
+    }
+  ],
+  "vat_rate": "19.00",
+  "discount_percent": "2.00",
+  "discount_days": 10,
+  "payment_days": 30,
+  "totals": {
+    "net": "50408.25",
+    "vat": "9577.57",
+    "gross": "59985.82"
+  },
+  "payment": {
+    "discount_date": "23.09.2026",
+    "due_date": "13.10.2026",
+    "discount_amount": "1199.72"
+  },
+  "page_count": 1,
+  "pages": [
+    {
+      "page": 1,
+      "position_indices": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "line_count": 11,
+      "transfer": null,
+      "summary_present": true,
+      "payment_block_present": true
+    }
+  ],
+  "test_flags": {
+    "address_name_lines": 2,
+    "missing_order_number": false,
+    "shipping_empty": false,
+    "discount_applied": true,
+    "blank_unit_flat_rate": false,
+    "without_price_count": 3,
+    "flat_rate_count": 2,
+    "two_three_line_positions": 0,
+    "four_five_line_positions": 0,
+    "has_qty_thousands": true
+  },
+  "sha256": "4a467c2451081cce920b275c587c26c08122edbd73554802dc40d53afc803d77"
+}
