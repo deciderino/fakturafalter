@@ -109,6 +109,18 @@ Standardaufbau: `beispiele/variante-zjp_textzeilen.csv` (fiktiv, RE-2026-0818:
 Kommentar und Leerzeile über der Position, Kommentar darunter; netto 394,40 /
 USt 74,94 / brutto 469,34). Profil: `beispiele/profil-variante-zjp-textzeilen.yaml`.
 
+## Textzeilen, Darstellung und Mengen (ab 0.9.8.1, Standardaufbau)
+
+Im Aufbau `zeile_je_position` (nicht bei `bloecke`) gilt zusätzlich:
+
+- **Leer** sind leere Zellen, nur Leerzeichen sowie `0` / `0,00`. Menge *und* Preis leer oder 0 → keine Position (Textzeile oder gewollte Leerzeile). Steht nur die Menge, ist es eine Position. Steht nur der Preis, entscheidet `aufbau.textzeile.preis_ohne_menge`: `pruefen` (Standard), `eins` (Menge 1) oder `kommentar`.
+- Spalten auf „nicht verwenden“ zählen nirgends mit, auch nicht bei der Erkennung von Kommentar- und Leerzeilen.
+- Ohne zugeordnete Positionsspalte erhalten echte Positionen die Nummern 1, 2, 3 … Mit Spalte gilt die ERP-Nummer (BT-126 in der XML immer eindeutig). `sicht.positionsnummer: false` blendet die Nummer nur auf der Sichtseite aus.
+- `sicht.menge_exakt: true` (Standard): die Sichtseite zeigt die Menge wie in der CSV (`40,00`). In der XML bleibt der Zahlenwert normal.
+- `sicht.einheit: csv` zeigt den Einheitentext aus der CSV; Standard `kurz` (z. B. `Stk.`). In der XML steht weiter der Rec-20-Code in BT-130.
+- Kommentarzeilen stehen auf der Sichtseite ohne Vorsatz „Beschreibung:“ direkt unter der Position (XML: BT-154). Der Vorsatz gilt nur für eine eigene Beschreibungsspalte. `sicht.kommentar_ohne_bezeichnungen: true` blendet auch Labels wie „Art.-Nr.:“ an Kommentarzeilen aus.
+- Im Assistenten folgen nach der Spaltenzuordnung die Schritte „Textzeilen“ und „Darstellung auf der Rechnung“ (PDF-Bezeichnung umbenennen, optionale Felder ausblenden). „Darstellung…“ ist später auch direkt in den Einstellungen am Profil erreichbar.
+
 ## Profile in den Einstellungen (ab 0.9.8)
 
 In der Konfiguration darf `csv_profile` eine Zeichenkette (Pfad) oder

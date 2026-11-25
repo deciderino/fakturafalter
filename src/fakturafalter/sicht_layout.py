@@ -30,15 +30,19 @@ from .sicht import (
     UNTERZEILE_PT,
     _schriften,
     datum,
-    einheit_text,
+    einheit_anzeige,
     einpassen,
     eur,
+    feld_sichtbar,
+    feld_titel,
     ist_gutschrift,
     kaeufer_ust_info,
     leistung,
     menge,
+    menge_anzeige,
     preis_text,
     satz,
+    sicht_von,
     steuer_texte,
     summen_zeilen,
     titel,
@@ -399,7 +403,9 @@ def _zeilen_bauen(r: Rechnung, e: lay.Element, sprache) -> list[_Zeile]:
             preis_b,
             MIN_PT,
         )
-        extra = unterzeilen_umbrochen(_Breite, p, sprache, F, g * UNTERZEILE_PT / 9, bez_b)
+        extra = unterzeilen_umbrochen(
+            _Breite, p, sprache, F, g * UNTERZEILE_PT / 9, bez_b, sicht=sicht_von(r)
+        )
         davor: list[str] = []
         for ztext in getattr(p, "zeilen_davor", None) or []:
             if ztext == "":
@@ -450,6 +456,7 @@ def _tabelle(
     vortrag: Decimal | None,
     uebertrag: Decimal | None,
     bericht,
+    r: Rechnung | None = None,
 ) -> None:
     g = e.schrift
     sp = _spalten(e)
@@ -458,17 +465,28 @@ def _tabelle(
     lh = g * 0.44 * mm
     y = _y(e.y) - g * 0.82 * PT * mm
     c.setFont(FB, g)
-    for k, t, r_ in (
-        ("pos", "Pos", False),
-        ("bez", "Bezeichnung", False),
-        ("menge", "Menge", True),
-        ("einh", "Einh.", False),
-        ("preis", "Einzelpreis", True),
-        ("gesamt", "Gesamt", True),
-        ("ust", "USt", True),
+    titel = {
+        "pos": feld_titel(r, "BT-126", "Pos"),
+        "bez": feld_titel(r, "BT-153", "Bezeichnung"),
+        "menge": feld_titel(r, "BT-129", "Menge"),
+        "einh": feld_titel(r, "BT-130", "Einh."),
+        "preis": feld_titel(r, "BT-146", "Einzelpreis"),
+        "gesamt": feld_titel(r, "gesamt", "Gesamt"),
+        "ust": feld_titel(r, "steuer", "USt"),
+    }
+    for k, txt, r_ in (
+        ("pos", titel["pos"], False),
+        ("bez", titel["bez"], False),
+        ("menge", titel["menge"], True),
+        ("einh", titel["einh"], False),
+        ("preis", titel["preis"], True),
+        ("gesamt", titel["gesamt"], True),
+        ("ust", titel["ust"], True),
     ):
+        if k == "pos" and not feld_sichtbar(r, "BT-126"):
+            continue
         x = rechts - 13 * mm * f if k == "gesamt" else sp[k]
-        (c.drawRightString if r_ else c.drawString)(x, y, t)
+        (c.drawRightString if r_ else c.drawString)(x, y, txt)
     c.line(e.x * mm, y - 1.5 * mm, rechts, y - 1.5 * mm)
     y -= lh + 2.5 * mm
     if vortrag is not None:
@@ -484,7 +502,8 @@ def _tabelle(
             if txt:
                 c.drawString(sp["bez"], y - i * lh, txt)
         y_p = y - len(z.davor) * lh
-        c.drawString(sp["pos"], y_p, p.nr)
+        if feld_sichtbar(r, "BT-126"):
+            c.drawString(sp["pos"], y_p, p.nr)
         for i, txt in enumerate(z.bez):
             c.drawString(sp["bez"], y_p - i * lh, txt)
         if z.extra:  # Unterzeilen (Art.-Nr., Zeichnung, Beschreibung, …, Rabatt)
@@ -494,8 +513,8 @@ def _tabelle(
                 c.drawString(sp["bez"], y_p - i * lh, txt)
             c.setFillColorRGB(0, 0, 0)
             c.setFont(F, g)
-        c.drawRightString(sp["menge"], y_p, menge(p.menge))
-        c.drawString(sp["einh"], y_p, einheit_text(p.einheit, sprache))
+        c.drawRightString(sp["menge"], y_p, menge_anzeige(p, r))
+        c.drawString(sp["einh"], y_p, einheit_anzeige(p, r, sprache))
         c.drawRightString(rechts - 13 * mm * f, y_p, eur(p.netto))
         c.drawRightString(rechts, y_p, f"{menge(p.steuer.satz)} %")
         c.setFont(F, z.pg)
@@ -565,7 +584,7 @@ def _seite(
         elif e.art == "kopf":
             _kopf(c, e, r, nr, seiten, bericht)
         elif e.art == "positionen":
-            _tabelle(c, e, zeilen, sprache, vortrag, uebertrag, bericht)
+            _tabelle(c, e, zeilen, sprache, vortrag, uebertrag, bericht, r)
         elif e.art == "summen":
             bed = _bedingungen(r)
             zusatz = (

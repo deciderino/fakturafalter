@@ -225,7 +225,7 @@ def _csv(text: str, profil: dict, pfad: Path):
                         )
             for f in aufbau.get("kopf_muss_gleich_sein", []):
                 g[0].setdefault("_roh_" + f, (row.get(f), None))
-            _zeile_je_position(g, feldsatz, row, felder.get("position", {}), zeile, pfad, tz)
+            _zeile_je_position(g, feldsatz, row, felder, zeile, pfad, tz)
     out = OrderedDict()
     for key, (kopf, pos, fehler) in gruppen.items():
         if kopf is None:
@@ -239,20 +239,36 @@ def _csv(text: str, profil: dict, pfad: Path):
             _verwaist_in_kopf(kopf, davor, tz, 0)
         elif davor:
             # Rest nach der letzten Position (zwischen=nachher) an diese anhängen
+            from . import csv_zeilen
+
             for txt in davor:
-                csv_bloecke.text_an_roh(pos[-1], txt, txt == "", tz, 0, pfad)
+                csv_zeilen.kommentar_an(pos[-1], txt, txt == "", tz, 0, pfad)
         kopf = {k: v for k, v in kopf.items() if not k.startswith("_roh_")}
         out[key] = (kopf, pos, fehler)
     return out
 
 
-def _zeile_je_position(g, feldsatz, row, pos_defs, zeile, pfad, tz) -> None:
+def _zeile_je_position(g, feldsatz, row, felder, zeile, pfad, tz) -> None:
     """Standardaufbau: Position, Textzeile, gewollte Leerzeile oder überspringen."""
-    from . import csv_bloecke
+    from . import csv_bloecke, csv_zeilen
 
-    art = csv_bloecke.textzeile_erkennen(row, pos_defs, tz)
+    pos_defs = felder.get("position", {}) if felder else {}
+    kopf_defs = felder.get("kopf", {}) if felder else {}
+    art = csv_zeilen.erkennen(row, pos_defs, kopf_defs, tz)
+    if art and art[0] == "preis_ohne_menge":
+        modus = str(tz.get("preis_ohne_menge") or "pruefen")
+        if modus == "kommentar":
+            art = ("text", art[1])
+        else:
+            art = None  # Position; „eins“ setzt die Menge später im Aufbau
+            if modus == "eins":
+                row = dict(row)
     if art is None:
         pos = feldsatz(row, pos_defs, zeile, g[2])
+        pos["_menge_roh"] = (csv_bloecke._feld_wert(row, pos_defs, "BT-129") or "").strip()
+        pos["_einheit_roh"] = (csv_bloecke._feld_wert(row, pos_defs, "BT-130") or "").strip()
+        if str(tz.get("preis_ohne_menge") or "pruefen") == "eins":
+            pos["_menge_eins"] = True
         davor = g[0].pop("_zeilen_davor", None) if g[0] is not None else None
         if davor:
             pos["_zeilen_davor"] = list(davor)
@@ -268,7 +284,7 @@ def _zeile_je_position(g, feldsatz, row, pos_defs, zeile, pfad, tz) -> None:
     leer = kind == "leer"
     zwischen = str(tz.get("zwischen") or "vorher")
     if g[1] and zwischen != "nachher":
-        csv_bloecke.text_an_roh(g[1][-1], text, leer, tz, zeile, pfad)
+        csv_zeilen.kommentar_an(g[1][-1], text, leer, tz, zeile, pfad)
         return
     if g[0] is None:
         g[0] = {}

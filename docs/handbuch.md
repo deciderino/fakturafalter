@@ -66,17 +66,24 @@ Einstellungen lassen sich später unter **Einstellungen** ändern.
    Preis hängen standardmäßig als Beschreibung (BT-154) an der Position darüber;
    eine gewollte Leerzeile auf der Sichtseite erkennst du mit dem Platzhalter
    `#LEER` (änderbar) oder einer Zeile, die nur Kopffelder trägt.
-5. **Probe:** zeigt je Rechnung „bereit“ oder „braucht Prüfung“ – es wird
+5. Nur beim Standardaufbau („eine Zeile je Position“): **Textzeilen** (ob
+   Kommentare oder gewollte Leerzeilen vorkommen; 0 und 0,00 gelten als leer;
+   Vorschau, wie die Zeilen erkannt werden) und **Darstellung auf der Rechnung**
+   (Positionsnummer, Menge exakt wie in der CSV, Einheit, Bezeichnungen auf der
+   PDF, optionale Felder ausblenden). Die Vorschläge übernimmst du mit Weiter.
+   Später erreichst du die Darstellung auch über **Darstellung…** an der
+   Profilkarte, ohne den ganzen Assistenten.
+6. **Probe:** zeigt je Rechnung „bereit“ oder „braucht Prüfung“ – es wird
    nichts erzeugt. Optional **Sichtseite ansehen…**. Dann **Speichern**. Die
    Zuordnung erscheint als Karte unter „CSV-Zuordnungen“.
-6. Den Haken **„Zusätzlich das PDF der Rechnung verwenden“** nur setzen, wenn
+7. Den Haken **„Zusätzlich das PDF der Rechnung verwenden“** nur setzen, wenn
    der Original-Druck die Sichtseite bleiben soll. Ohne Haken (Standard für eine
    neue CSV-Einstellung) baut Fakturafalter die Sichtseite aus den Daten neu
    (Layout unter Absender → „Layout gestalten…“) und wartet nicht auf ein PDF.
    Liegt trotzdem ein PDF mit gleichem Dateinamen daneben, wird es nicht als
    Sichtseite und nicht als eigene Rechnung genommen; es wandert mit der CSV
    nach `Erledigt`.
-7. Schalter **Überwachung** einschalten und die CSV in den `Eingang` legen.
+8. Schalter **Überwachung** einschalten und die CSV in den `Eingang` legen.
 
 Satzart-Dateien richtet der Assistent ebenfalls ein, wenn eine Spalte „Satzart“
 (oder ähnlich) erkannt wird; Feineinstellungen stehen in

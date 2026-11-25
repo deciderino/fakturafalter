@@ -11,6 +11,7 @@ from pathlib import Path
 
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import (
+    QCheckBox,
     QComboBox,
     QDialog,
     QFileDialog,
@@ -205,7 +206,7 @@ class _Assistent(QDialog):
 class CsvAssistent(_Assistent):
     SCHRITTE = ("Datei", "Format", "Vorschau", "Probe", "Fertig")
 
-    def __init__(self, haupt, eltern=None, profil: dict | None = None):
+    def __init__(self, haupt, eltern=None, profil: dict | None = None, start: str | None = None):
         super().__init__(
             haupt,
             eltern,
@@ -226,15 +227,30 @@ class CsvAssistent(_Assistent):
         self.zuordnung_je: dict[str, dict[str, str]] = {}
         self.block_typ: dict[int, QComboBox] = {}
         self.f_art = None
+        self._start = start
         for s in (
             self._seite_datei(),
             self._seite_format(),
             self._seite_vorschau(),
+            self._seite_textzeilen(),
+            self._seite_darstellung(),
             self._seite_probe(),
             self._seite_fertig(),
         ):
             self.stapel.addWidget(rollen(s))
-        self.gehe(0)
+        self._schritte_anpassen()
+        ziel = 0
+        if (
+            start == "darstellung"
+            and (profil or {}).get("aufbau", {}).get("art", "zeile_je_position")
+            == "zeile_je_position"
+        ):
+            folge = self._folge()
+            for i, (st, _n) in enumerate(folge):
+                if st == 4:
+                    ziel = i
+                    break
+        self.gehe(ziel)
 
     # ------------------------------------------------------------------ 1 Datei
     def _seite_datei(self) -> QWidget:
@@ -439,6 +455,7 @@ class CsvAssistent(_Assistent):
         if not self.fmt:
             return
         self._art_vorschlagen()
+        self._schritte_anpassen()
         self._vorschau_bauen()
 
     def _textzeile(self) -> dict:
@@ -453,8 +470,11 @@ class CsvAssistent(_Assistent):
             if getattr(self, "f_zwischen", None)
             else "vorher",
             "trenner": "\n",
-            "leer": ["BT-129", "BT-146", "text"],
+            "leer": self._leer_felder(),
             "text_spalte": (self.zuordnung() or {}).get("BT-153"),
+            "preis_ohne_menge": self.f_preis_ohne.currentData()
+            if getattr(self, "f_preis_ohne", None)
+            else "pruefen",
         }
 
     def _block_wechseln(self, *_a) -> None:
@@ -571,7 +591,7 @@ class CsvAssistent(_Assistent):
         bloecke = self.art == "bloecke"
         if getattr(self, "box_bloecke", None):
             self.box_bloecke.setVisible(bloecke)
-            self.box_text.setVisible(bloecke or self.art == "zeile_je_position")
+            self.box_text.setVisible(bloecke)
         if bloecke:
             self._bloecke_tabelle()
             self._vorschau_bauen_block()
@@ -775,7 +795,332 @@ class CsvAssistent(_Assistent):
             self.g_steuer.addWidget(b, i, 1)
             self.steuer_wahl[w] = b
 
+    def _folge(self) -> list[tuple[int, str]]:
+        """Seitenindex und Schrittname. Neue Schritte nur bei „eine Zeile je Position“."""
+        basis = [(0, "Datei"), (1, "Format"), (2, "Vorschau")]
+        extra = (
+            [(3, "Textzeilen"), (4, "Darstellung auf der Rechnung")]
+            if self.art == "zeile_je_position"
+            else []
+        )
+        return basis + extra + [(5, "Probe"), (6, "Fertig")]
+
+    def _schritte_anpassen(self) -> None:
+        namen = [_(n) for _st, n in self._folge()]
+        alt = self.schritte
+        eltern = alt.parent()
+        lay = eltern.layout() if eltern is not None else None
+        neu = Schritte(self.c, namen)
+        if lay is not None:
+            i = lay.indexOf(alt)
+            lay.insertWidget(max(0, i), neu)
+            alt.setParent(None)
+            alt.deleteLater()
+        self.schritte = neu
+
+    def gehe(self, i: int) -> None:
+        folge = self._folge()
+        n = len(folge)
+        self.i = max(0, min(n - 1, i))
+        stapel_i, _name = folge[self.i]
+        self.stapel.setCurrentIndex(stapel_i)
+        if getattr(self, "schritte", None):
+            self.schritte.setzen(self.i)
+        self.b_zurueck.setEnabled(0 < self.i < n - 1)
+        self.b_weiter.setText(_("Fertig") if self.i == n - 1 else _("Weiter"))
+        self.l_fuss.setText(_("Schritt {n} von {m}").format(n=self.i + 1, m=n))
+        self.betreten(stapel_i)
+
+    def _leer_felder(self) -> list[str]:
+        aus = ["BT-129", "BT-146"]
+        if getattr(self, "c_leer_text", None) and self.c_leer_text.isChecked():
+            aus.append("text")
+        elif not getattr(self, "c_leerzeilen", None):
+            aus.append("text")
+        return aus
+
+    def _seite_textzeilen(self) -> QWidget:
+        w, v = _seite()
+        v.addWidget(lbl(_("Kommentar- und Leerzeilen"), "titel", umbruch=True))
+        v.addWidget(
+            lbl(
+                _(
+                    "Kommt in der CSV Text oder eine gewollte Leerzeile ohne Menge und Preis vor? "
+                    "Dann legen wir fest, woran Fakturafalter das erkennt. 0 und 0,00 gelten als leer."
+                ),
+                "sub",
+                umbruch=True,
+            )
+        )
+        self.c_kommentare = QCheckBox(_("Kommentarzeilen sind zu erwarten"))
+        self.c_kommentare.setChecked(True)
+        self.c_leerzeilen = QCheckBox(_("Gewollte Leerzeilen sind zu erwarten"))
+        self.c_leerzeilen.setChecked(True)
+        v.addWidget(self.c_kommentare)
+        v.addWidget(self.c_leerzeilen)
+        v.addWidget(lbl(_("Damit eine Zeile als Kommentar oder Leerzeile gilt, müssen leer sein:")))
+        self.c_leer_menge = QCheckBox(_("Menge"))
+        self.c_leer_menge.setChecked(True)
+        self.c_leer_menge.setEnabled(False)
+        self.c_leer_preis = QCheckBox(_("Preis"))
+        self.c_leer_preis.setChecked(True)
+        self.c_leer_preis.setEnabled(False)
+        self.c_leer_text = QCheckBox(_("Text / Bezeichnung (für eine Leerzeile)"))
+        self.c_leer_text.setChecked(True)
+        v.addWidget(self.c_leer_menge)
+        v.addWidget(self.c_leer_preis)
+        v.addWidget(self.c_leer_text)
+        v.addWidget(lbl(_("Platzhalter für eine gewollte Leerzeile (optional)")))
+        self.f_platz_zjp = QLineEdit("#LEER")
+        self.f_platz_zjp.setMinimumHeight(48)
+        v.addWidget(self.f_platz_zjp)
+        self.f_preis_ohne = _auswahl(
+            (
+                ("pruefen", "Zu prüfen (Standard)"),
+                ("eins", "Menge 1 setzen"),
+                ("kommentar", "Als Kommentarzeile (nur Text, nicht in der Summe)"),
+            ),
+            "pruefen",
+            _("Preis vorhanden, Menge leer oder 0"),
+        )
+        v.addWidget(lbl(_("Wenn ein Preis steht, die Menge aber leer oder 0 ist")))
+        v.addWidget(self.f_preis_ohne)
+        v.addWidget(
+            lbl(_("Vorschau: so werden die Zeilen der Datei erkannt"), "titel", umbruch=True)
+        )
+        self.t_tz_vorschau = QTableWidget(0, 3)
+        self.t_tz_vorschau.setHorizontalHeaderLabels([_("Zeile"), _("Erkennung"), _("Inhalt")])
+        self.t_tz_vorschau.verticalHeader().setVisible(False)
+        self.t_tz_vorschau.setEditTriggers(QTableWidget.EditTrigger.NoEditTriggers)
+        self.t_tz_vorschau.setMinimumHeight(180)
+        v.addWidget(self.t_tz_vorschau, 1)
+        for wdg in (
+            self.c_kommentare,
+            self.c_leerzeilen,
+            self.c_leer_text,
+            self.f_platz_zjp,
+            self.f_preis_ohne,
+        ):
+            if isinstance(wdg, QCheckBox):
+                wdg.toggled.connect(self._textzeilen_vorschau_fuellen)
+            elif isinstance(wdg, QLineEdit):
+                wdg.textChanged.connect(lambda *_a: self._textzeilen_vorschau_fuellen())
+            else:
+                wdg.currentIndexChanged.connect(lambda *_a: self._textzeilen_vorschau_fuellen())
+        # Werte aus vorhandenem Profil
+        alt_tz = ((self.alt or {}).get("aufbau") or {}).get("textzeile") or {}
+        if alt_tz.get("platzhalter") is not None:
+            self.f_platz_zjp.setText(str(alt_tz.get("platzhalter")))
+        if (
+            alt_tz.get("preis_ohne_menge")
+            and self.f_preis_ohne.findData(alt_tz["preis_ohne_menge"]) >= 0
+        ):
+            self.f_preis_ohne.setCurrentIndex(
+                self.f_preis_ohne.findData(alt_tz["preis_ohne_menge"])
+            )
+        return w
+
+    def _textzeilen_vorschau_fuellen(self) -> None:
+        from .. import csv_bloecke, csv_zeilen
+
+        t = self.t_tz_vorschau
+        if not self.fmt or not getattr(t, "setRowCount", None):
+            return
+        z = self.zuordnung()
+        p = self.profil() if z.get("BT-1") else None
+        if not p:
+            t.setRowCount(0)
+            return
+        tz = csv_bloecke.textzeile_konfig(p)
+        # Platzhalter aus diesem Schritt, falls der Vorschau-Schritt den anderen noch führt
+        if getattr(self, "f_platz_zjp", None):
+            tz["platzhalter"] = self.f_platz_zjp.text()
+        pos, kopf = (
+            (p.get("felder") or {}).get("position") or {},
+            (p.get("felder") or {}).get("kopf") or {},
+        )
+        daten = list(self.fmt.zeilen)
+        t.setRowCount(min(len(daten), 40))
+        namen = {
+            "position": _("Position"),
+            "text": _("Kommentarzeile"),
+            "leer": _("Leerzeile"),
+            "skip": _("wird ignoriert"),
+            "preis_ohne_menge": _("Preis ohne Menge"),
+        }
+        for i, werte in enumerate(daten[:40]):
+            row = dict(zip(self.fmt.kopf, werte))
+            art = csv_zeilen.erkennen(row, pos, kopf, tz)
+            if art is None:
+                kind, inhalt = "position", row.get(z.get("BT-153") or "", "") or ""
+            else:
+                kind, inhalt = art[0], art[1]
+            t.setItem(i, 0, QTableWidgetItem(str(i + 2)))
+            t.setItem(i, 1, QTableWidgetItem(namen.get(kind, kind)))
+            t.setItem(
+                i, 2, QTableWidgetItem(str(inhalt or row.get(z.get("BT-153") or "", "") or ""))
+            )
+        t.resizeColumnsToContents()
+
+    def _seite_darstellung(self) -> QWidget:
+        w, v = _seite()
+        v.addWidget(lbl(_("Darstellung auf der Rechnung"), "titel", umbruch=True))
+        v.addWidget(
+            lbl(
+                _(
+                    "Hier bestimmst du, wie die Sichtseite aussieht. Die XML (ZUGFeRD/XRechnung) bleibt "
+                    "unverändert. Mit Weiter werden die Vorschläge übernommen."
+                ),
+                "sub",
+                umbruch=True,
+            )
+        )
+        self.c_posnr = QCheckBox(_("Positionsnummer auf der Sichtseite zeigen"))
+        self.c_posnr.setChecked(True)
+        v.addWidget(self.c_posnr)
+        self.c_menge_exakt = QCheckBox(_("Menge exakt aus der CSV zeigen (z. B. 40,00)"))
+        self.c_menge_exakt.setChecked(True)
+        v.addWidget(self.c_menge_exakt)
+        self.f_einheit_sicht = _auswahl(
+            (("kurz", "Kurzform (Stk., Std., …)"), ("csv", "Einheit wie in der CSV anzeigen")),
+            "kurz",
+            _("Einheit auf der Sichtseite"),
+        )
+        v.addWidget(lbl(_("Einheit auf der Sichtseite")))
+        v.addWidget(self.f_einheit_sicht)
+        self.c_kommentar_ohne = QCheckBox(_("Bezeichnungen bei Kommentarzeilen ausblenden"))
+        self.c_kommentar_ohne.setChecked(False)
+        v.addWidget(self.c_kommentar_ohne)
+        v.addWidget(
+            lbl(
+                _(
+                    "PDF-Bezeichnung je Spalte (Pflichtfelder können nur umbenannt, nicht ausgeblendet werden)"
+                ),
+                "hinweis",
+                umbruch=True,
+            )
+        )
+        self.t_darstellung = QTableWidget(0, 3)
+        self.t_darstellung.setHorizontalHeaderLabels(
+            [_("Feld"), _("Bezeichnung auf der PDF"), _("Auf PDF zeigen")]
+        )
+        self.t_darstellung.verticalHeader().setVisible(False)
+        self.t_darstellung.setMinimumHeight(160)
+        v.addWidget(self.t_darstellung, 1)
+        v.addWidget(lbl(_("Vorschau der Positionszeile"), "titel"))
+        self.l_darst_vorschau = lbl("", "hinweis", umbruch=True)
+        v.addWidget(self.l_darst_vorschau)
+        v.addWidget(knopf(_("Sichtseite ansehen…"), klick=self._sichtseite))
+        for wdg in (self.c_posnr, self.c_menge_exakt, self.c_kommentar_ohne, self.f_einheit_sicht):
+            if isinstance(wdg, QCheckBox):
+                wdg.toggled.connect(self._darstellung_aktualisieren)
+            else:
+                wdg.currentIndexChanged.connect(lambda *_a: self._darstellung_aktualisieren())
+        alt_s = (self.alt or {}).get("sicht") or {}
+        if "positionsnummer" in alt_s:
+            self.c_posnr.setChecked(bool(alt_s["positionsnummer"]))
+        if "menge_exakt" in alt_s:
+            self.c_menge_exakt.setChecked(bool(alt_s["menge_exakt"]))
+        if alt_s.get("einheit") and self.f_einheit_sicht.findData(alt_s["einheit"]) >= 0:
+            self.f_einheit_sicht.setCurrentIndex(self.f_einheit_sicht.findData(alt_s["einheit"]))
+        if "kommentar_ohne_bezeichnungen" in alt_s:
+            self.c_kommentar_ohne.setChecked(bool(alt_s["kommentar_ohne_bezeichnungen"]))
+        return w
+
+    PFLICHT_SICHT = ("BT-153", "BT-129", "BT-146", "steuer", "BT-130")
+    FELD_TITEL = {
+        "BT-126": "Pos",
+        "BT-153": "Bezeichnung",
+        "BT-129": "Menge",
+        "BT-130": "Einh.",
+        "BT-146": "Einzelpreis",
+        "steuer": "USt",
+        "gesamt": "Gesamt",
+        "BT-155": "Art.-Nr.",
+        "BT-154": "Beschreibung",
+    }
+
+    def _darstellung_tabelle_bauen(self) -> None:
+        z = self.zuordnung()
+        keys = [
+            k
+            for k in (
+                "BT-126",
+                "BT-153",
+                "BT-155",
+                "BT-154",
+                "BT-129",
+                "BT-130",
+                "BT-146",
+                "steuer",
+            )
+            if z.get(k) or k in ("BT-153", "BT-129", "BT-146", "steuer", "BT-130")
+        ]
+        # nur zugeordnete, Pflicht immer
+        keys = [k for k in keys if z.get(k) or k in self.PFLICHT_SICHT]
+        alt = ((self.alt or {}).get("sicht") or {}).get("felder") or {}
+        self.t_darstellung.setRowCount(len(keys))
+        self._darst_felder = keys
+        for i, k in enumerate(keys):
+            self.t_darstellung.setItem(i, 0, QTableWidgetItem(_(self.FELD_TITEL.get(k, k))))
+            titel = QLineEdit((alt.get(k) or {}).get("titel") or self.FELD_TITEL.get(k, k))
+            titel.setMinimumHeight(36)
+            titel.textChanged.connect(lambda *_a: self._darstellung_aktualisieren())
+            self.t_darstellung.setCellWidget(i, 1, titel)
+            box = QCheckBox()
+            sichtbar = (alt.get(k) or {}).get("sichtbar", True)
+            if k == "BT-126":
+                sichtbar = bool(self.c_posnr.isChecked())
+            box.setChecked(bool(sichtbar))
+            box.setEnabled(k not in self.PFLICHT_SICHT)
+            box.toggled.connect(lambda *_a: self._darstellung_aktualisieren())
+            self.t_darstellung.setCellWidget(i, 2, box)
+        self.t_darstellung.resizeColumnsToContents()
+
+    def _sicht_aus_seite(self) -> dict:
+        felder = {}
+        for i, k in enumerate(getattr(self, "_darst_felder", []) or []):
+            titel = self.t_darstellung.cellWidget(i, 1)
+            box = self.t_darstellung.cellWidget(i, 2)
+            d = {}
+            if titel and titel.text().strip() and titel.text().strip() != self.FELD_TITEL.get(k, k):
+                d["titel"] = titel.text().strip()
+            if box is not None and k not in self.PFLICHT_SICHT:
+                d["sichtbar"] = box.isChecked()
+            if d:
+                felder[k] = d
+        return {
+            "positionsnummer": self.c_posnr.isChecked() if getattr(self, "c_posnr", None) else True,
+            "einheit": self.f_einheit_sicht.currentData()
+            if getattr(self, "f_einheit_sicht", None)
+            else "kurz",
+            "menge_exakt": self.c_menge_exakt.isChecked()
+            if getattr(self, "c_menge_exakt", None)
+            else True,
+            "kommentar_ohne_bezeichnungen": self.c_kommentar_ohne.isChecked()
+            if getattr(self, "c_kommentar_ohne", None)
+            else False,
+            "felder": felder,
+        }
+
+    def _darstellung_aktualisieren(self) -> None:
+        if not getattr(self, "l_darst_vorschau", None):
+            return
+        sicht = self._sicht_aus_seite()
+        teile = []
+        teile.append(
+            _("Pos {n}").format(n="1")
+            if sicht.get("positionsnummer", True)
+            else _("ohne Positionsnummer")
+        )
+        teile.append(_("Menge {m}").format(m="40,00" if sicht.get("menge_exakt", True) else "40"))
+        teile.append(
+            _("Einheit {e}").format(e="Stück" if sicht.get("einheit") == "csv" else "Stk.")
+        )
+        self.l_darst_vorschau.setText(" · ".join(teile))
+
     # ------------------------------------------------------------------ 4 Probe
+
     def _seite_probe(self) -> QWidget:
         w, v = _seite()
         v.addWidget(lbl(_("Probe mit deiner Datei"), "titel", umbruch=True))
@@ -867,10 +1212,17 @@ class CsvAssistent(_Assistent):
                     p["aufbau"]["kopf"] = "K"
                 if "P" in werte:
                     p["aufbau"]["position"] = "P"
+        if self.art == "zeile_je_position" and getattr(self, "c_posnr", None):
+            p["sicht"] = self._sicht_aus_seite()
+            if getattr(self, "f_platz_zjp", None):
+                p.setdefault("aufbau", {}).setdefault("textzeile", {})
+                p["aufbau"]["textzeile"]["platzhalter"] = self.f_platz_zjp.text()
         if self.alt:  # Handprofil: eigene Zusätze (Ausgabe, Erkennung …) behalten
             p = {**{k: v for k, v in self.alt.items() if not k.startswith("_")}, **p}
             if (self.alt.get("datei") or {}).get("muster"):
                 p["datei"]["muster"] = self.alt["datei"]["muster"]
+            if self.art == "zeile_je_position" and getattr(self, "c_posnr", None):
+                p["sicht"] = self._sicht_aus_seite()
         return p
 
     def _probe(self) -> None:
@@ -973,6 +1325,7 @@ class CsvAssistent(_Assistent):
 
     # ------------------------------------------------------------------ Ablauf
     def betreten(self, i: int) -> None:
+        # i ist der Seitenindex im Stapel, nicht der Schritt in der Leiste
         if i == 0:
             self.b_weiter.setEnabled(self.datei is not None)
         elif i == 1:
@@ -980,6 +1333,13 @@ class CsvAssistent(_Assistent):
         elif i == 2:
             self.b_weiter.setEnabled(not ce.fehlende_pflicht(self._alle_zuordnungen()))
         elif i == 3:
+            self.b_weiter.setEnabled(True)
+            self._textzeilen_vorschau_fuellen()
+        elif i == 4:
+            self.b_weiter.setEnabled(True)
+            self._darstellung_tabelle_bauen()
+            self._darstellung_aktualisieren()
+        elif i == 5:
             self.b_weiter.setEnabled(True)
             self.b_weiter.setText(_("Speichern"))
             self._probe()
@@ -992,12 +1352,14 @@ class CsvAssistent(_Assistent):
             )
 
     def _weiter(self) -> None:
-        if self.i == 0 and not self.name.text().strip():
+        folge = self._folge()
+        stapel_i = folge[self.i][0] if folge else self.i
+        if stapel_i == 0 and not self.name.text().strip():
             self.toast("fehler", _("Bitte einen Namen angeben."))
             return
-        if self.i == 3 and not self.speichern():
+        if stapel_i == 5 and not self.speichern():
             return
-        if self.i == len(self.SCHRITTE) - 1:
+        if self.i == len(folge) - 1:
             self.accept()
             return
         self.gehe(self.i + 1)

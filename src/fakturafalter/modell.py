@@ -129,6 +129,8 @@ class Position:
     bezeichnung: str = ""  # BT-153
     menge: Decimal | None = None  # BT-129 (None = fehlt in der Quelle -> Pflichtprüfung hält an)
     einheit: str = ""  # BT-130 (UN/ECE Rec 20); "" = fehlt, kein stilles C62
+    menge_roh: str = ""  # Mengenangabe wie in der CSV (Sichtseite, Option menge_exakt)
+    einheit_roh: str = ""  # Einheitentext wie in der CSV (Sichtseite, Option einheit=csv)
     einzelpreis: Decimal | None = None  # BT-146 (netto); None = fehlt
     preiseinheit: Decimal = Decimal(
         "1"
@@ -149,6 +151,9 @@ class Position:
     # Leerer String = gewollte Leerzeile. Gehört nicht in die XML der Position;
     # Text vor der ersten Position steht standardmäßig in Rechnung.bemerkungen (BT-22).
     zeilen_davor: list[str] = field(default_factory=list)
+    # Kommentarzeilen UNTER der Position (Sichtseite ohne Vorsatz „Beschreibung:“).
+    # In der XML bleiben sie BT-154. Leerer String = gewollte Leerzeile.
+    kommentar_unten: list[str] = field(default_factory=list)
     kaeufer_artikelnummer: str = ""  # BT-156
     standard_id: str = ""  # BT-157 (z. B. GTIN)
     standard_schema: str = ""  # BT-157-1 (ISO 6523 ICD, GTIN = 0160)
@@ -294,6 +299,7 @@ class Rechnung:
     hinweise: list[Hinweis] = field(default_factory=list)
     quelle: str = ""  # Datei, aus der die Daten stammen
     sicht_pdf: object | None = None  # (Pfad, [Seitenindizes]) des Original-Drucks oder None
+    sicht: dict = field(default_factory=dict)  # Darstellung Sichtseite (Profil, nicht XML)
     profil: str = ""  # Name des CSV-Profils (für Gegenprüfung/Anlernen)
     zu_abschlaege: list[ZuAbschlag] = field(default_factory=list)  # BG-20/BG-21
     vorausbezahlt: Decimal = Decimal("0")  # BT-113 laut Quelle (geht in die Summen)

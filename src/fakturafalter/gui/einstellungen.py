@@ -852,6 +852,15 @@ class Einstellungen(QDialog):
                 enabled=not prof.get("_fehler") and csv_einrichtung.bearbeitbar(prof),
             )
         )
+        zjp = (prof.get("aufbau") or {}).get("art", "zeile_je_position") == "zeile_je_position"
+        unten.addWidget(
+            knopf(
+                _("Darstellung…"),
+                klick=lambda _c=False, p=prof: self._csv_darstellung(p),
+                tip=_("Darstellung auf der Rechnung ändern, ohne den ganzen Assistenten"),
+                enabled=zjp and not prof.get("_fehler") and csv_einrichtung.bearbeitbar(prof),
+            )
+        )
         unten.addWidget(
             knopf(
                 _("Hoch"),
@@ -1029,6 +1038,10 @@ class Einstellungen(QDialog):
 
     def _csv_assistent(self, profil: dict | None = None) -> None:
         self.haupt.datenassistent_oeffnen("csv", eltern=self, profil=profil)
+        self._vorlagen_neu(("csv_profile", "modus"))
+
+    def _csv_darstellung(self, profil: dict) -> None:
+        self.haupt.datenassistent_oeffnen("csv", eltern=self, profil=profil, start="darstellung")
         self._vorlagen_neu(("csv_profile", "modus"))
 
     def _xml_assistent(self) -> None:

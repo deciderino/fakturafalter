@@ -24,6 +24,7 @@ aufbau:
     leerzeile_modus: beides
     verwaist: BT-22
     zwischen: vorher
+    preis_ohne_menge: pruefen
     trenner: "\n"
     leer: [BT-129, BT-146, text]
 
@@ -42,7 +43,6 @@ felder:
     BT-3:           {fest: "380"}
     BT-5:           {fest: EUR}
   position:
-    BT-126:           {spalte: Position, optional: true}
     BT-155:           {spalte: "Artikel-Nr.", optional: true}
     BT-153:           {spalte: Bezeichnung}
     BT-129:           {spalte: Menge, typ: zahl}
@@ -59,3 +59,9 @@ mappings:
     unbekannt: allgemein
   steuer:
     unbekannt: satz
+
+sicht:
+  positionsnummer: true
+  einheit: kurz
+  menge_exakt: true
+  kommentar_ohne_bezeichnungen: false

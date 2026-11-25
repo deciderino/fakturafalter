@@ -404,6 +404,7 @@ def profil_bauen(
     einheiten: dict[str, str],
     kundenstamm: str | None,
     textzeile: dict | None = None,
+    sicht: dict | None = None,
 ) -> dict:
     """Normales CSV-Profil (zeile_je_position). ``steuer``: Wert -> Anzeige aus STEUER_WAHL."""
     kopf, pos = {}, {}
@@ -455,6 +456,13 @@ def profil_bauen(
         p["kundenstamm"] = {"datei": kundenstamm, "schluessel": "kundennummer", "fehlt": "pruefen"}
     if textzeile:
         p["aufbau"]["textzeile"] = textzeile
+    p["sicht"] = sicht or {
+        "positionsnummer": True,
+        "einheit": "kurz",
+        "menge_exakt": True,
+        "kommentar_ohne_bezeichnungen": False,
+        "felder": {},
+    }
     return p
 
 

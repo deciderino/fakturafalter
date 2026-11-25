@@ -244,8 +244,16 @@ def erzeugen(r: Rechnung, profil: str = "EN16931") -> bytes:
         if p.kaeufer_artikelnummer:
             _e(prod, "ram:BuyerAssignedID", p.kaeufer_artikelnummer)  # BT-156
         _e(prod, "ram:Name", p.bezeichnung)  # BT-153
-        if p.beschreibung:
-            _e(prod, "ram:Description", p.beschreibung)  # BT-154
+        beschr = p.beschreibung or ""
+        if getattr(p, "kommentar_unten", None):
+            zusatz = "\n".join(p.kommentar_unten)
+            beschr = (
+                beschr + ("\n" if beschr and zusatz else "") + zusatz
+                if zusatz or beschr
+                else beschr
+            )
+        if beschr:
+            _e(prod, "ram:Description", beschr)  # BT-154
         for m in p.merkmale:  # BG-32
             pc = _e(prod, "ram:ApplicableProductCharacteristic")
             _e(pc, "ram:Description", m.name)  # BT-160

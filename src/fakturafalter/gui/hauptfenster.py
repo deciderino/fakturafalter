@@ -36,7 +36,10 @@ log = logging.getLogger("fakturafalter")
 
 
 class Hauptfenster(QMainWindow):
-    update_ergebnis = Signal(bool, object)  # (erreichbar, updatepruefung.Neu | None) aus dem Hintergrund
+    update_ergebnis = Signal(
+        bool, object
+    )  # (erreichbar, updatepruefung.Neu | None) aus dem Hintergrund
+
     def __init__(self, konfig_pfad: Path, tray_erlaubt: bool = True, auto_start: bool = True):
         super().__init__()
         self.konfig_pfad = Path(konfig_pfad)
@@ -117,7 +120,8 @@ class Hauptfenster(QMainWindow):
             self.k.csv_profile
             or self.k.pdf_vorlagen
             or self.k.pdf_profile
-            or self.k.modus == "nur_pdf" or self.k.ist_xml()
+            or self.k.modus == "nur_pdf"
+            or self.k.ist_xml()
         ):
             fehlt.append(_("CSV-Profil oder PDF-Vorlage"))
         return fehlt
@@ -602,10 +606,17 @@ class Hauptfenster(QMainWindow):
         self.b_jetzt.setEnabled(self.zust == "aktiv")
         if lauf is None:
             self.aktualisieren()
-            self.l_status.setText(_("Eingang ist leer – keine lesbaren CSV-, XML- oder PDF-Dateien."))
+            self.l_status.setText(
+                _("Eingang ist leer – keine lesbaren CSV-, XML- oder PDF-Dateien.")
+            )
             return
         for vorlage, werte in getattr(lauf, "meldungen", []):  # z. B. Protokoll fehlt (kein Halt)
-            self.toast("info", _("Hinweis zum Protokoll"), _(vorlage).format(**werte), schluessel="protokoll")
+            self.toast(
+                "info",
+                _("Hinweis zum Protokoll"),
+                _(vorlage).format(**werte),
+                schluessel="protokoll",
+            )
         neu_pr = any(e.status == "pruefen" for e in lauf.ergebnisse)
         neu_fe = bool(lauf.datei_fehler) or any(e.status == "fehler" for e in lauf.ergebnisse)
         self.aktualisieren()
@@ -726,12 +737,14 @@ class Hauptfenster(QMainWindow):
             else:
                 self._zustand(self.zust)
 
-    def datenassistent_oeffnen(self, art: str, eltern=None, profil: dict | None = None) -> bool:
+    def datenassistent_oeffnen(
+        self, art: str, eltern=None, profil: dict | None = None, start: str | None = None
+    ) -> bool:
         """CSV- oder XML-Assistent; speichert selbst über :meth:`einstellungen_uebernehmen`."""
         from .datenassistent import CsvAssistent, XmlAssistent
 
         dlg = (
-            CsvAssistent(self, eltern or self, profil)
+            CsvAssistent(self, eltern or self, profil, start=start)
             if art == "csv"
             else XmlAssistent(self, eltern or self)
         )

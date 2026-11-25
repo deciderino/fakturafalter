@@ -130,6 +130,41 @@ def einheit_text(code: str, sprache: str | None = None, lang: bool = False) -> s
     return (t[1] if lang else t[0]) if t else (code or "")
 
 
+def sicht_von(r) -> dict:
+    return getattr(r, "sicht", None) or {}
+
+
+def menge_anzeige(p, r=None) -> str:
+    """Mengentext für die Sichtseite: Standard exakt wie in der CSV, sonst formatiert."""
+    roh = str(getattr(p, "menge_roh", "") or "").strip()
+    if (sicht_von(r).get("menge_exakt", True) if r is not None else True) and roh:
+        return roh
+    return menge(p.menge)
+
+
+def einheit_anzeige(p, r=None, sprache: str | None = None) -> str:
+    """Einheit auf der Sichtseite: Kurzform aus der Tabelle oder unveränderter CSV-Text."""
+    roh = str(getattr(p, "einheit_roh", "") or "").strip()
+    if r is not None and sicht_von(r).get("einheit") == "csv" and roh:
+        return roh
+    return einheit_text(p.einheit, sprache)
+
+
+def feld_titel(r, schluessel: str, standard: str) -> str:
+    d = (sicht_von(r).get("felder") or {}).get(schluessel) or {}
+    t = d.get("titel")
+    return str(t) if t else standard
+
+
+def feld_sichtbar(r, schluessel: str, default: bool = True) -> bool:
+    d = (sicht_von(r).get("felder") or {}).get(schluessel) or {}
+    if "sichtbar" in d:
+        return bool(d["sichtbar"])
+    if schluessel == "BT-126":
+        return bool(sicht_von(r).get("positionsnummer", True))
+    return default
+
+
 def preis_text(
     einzelpreis: Decimal | None,
     preiseinheit: Decimal | None,
@@ -440,14 +475,15 @@ def _ein(t) -> str:
     return "\n".join(" ".join(z.split()) for z in str(t or "").split("\n"))
 
 
-def unterzeilen(p, sprache: str | None = None) -> list[tuple[str, bool]]:
+def unterzeilen(p, sprache: str | None = None, sicht: dict | None = None) -> list[tuple[str, bool]]:
     """Belegte Zusatzangaben einer Position als Unterzeilen unter der Bezeichnung -> [(Text, grau)].
 
-    Reihenfolge: (a) Identifikation (grau): Art.-Nr. BT-155, Ihre Art.-Nr. BT-156, Zeichnungs-Nr. mit Index
-    (Merkmale „Zeichnungsnummer“/„Index“), GTIN bzw. Standard-ID BT-157; (b) Beschreibung BT-154, übrige Merkmale
-    BT-160/161, Ursprungsland BT-159; (c) Bestellpos. BT-132, Kostenstelle BT-133, Objekt BT-128,
-    Leistungszeitraum BT-134/135; (d) Hinweis BT-127; (e) Listenpreis/Nachlass BT-147/148, Rabatt/Zuschlag
-    BG-27/28. Leere Angaben ergeben keine Zeile. Die Hauptzeile (Spalten) ändert sich dadurch nie."""
+    Reihenfolge: Kommentarzeilen (ohne Vorsatz „Beschreibung:“) direkt unter der Position;
+    danach (a) Identifikation … wie bisher. Der Vorsatz „Beschreibung:“ gilt nur für eine
+    eigene Beschreibungsspalte (BT-154), nicht für angehängte Kommentarzeilen."""
+    sicht = sicht or {}
+    ohne = bool(sicht.get("kommentar_ohne_bezeichnungen"))
+    felder = sicht.get("felder") or {}
     sp = "en" if _sprache(sprache) == "en" else "de"
     t = _UZ[sp]
     aus: list[tuple[str, bool]] = []
@@ -455,6 +491,18 @@ def unterzeilen(p, sprache: str | None = None) -> list[tuple[str, bool]]:
     def dazu(text: str, grau: bool = False) -> None:
         if text or text == "":  # leerer String = gewollte Leerzeile (ab 0.9.8)
             aus.append((text, grau))
+
+    def sichtbar(key: str, default: bool = True) -> bool:
+        d = felder.get(key) or {}
+        return bool(d["sichtbar"]) if "sichtbar" in d else default
+
+    def mit_label(pref: str, wert: str, grau: bool = False) -> None:
+        if not wert:
+            return
+        dazu(wert if ohne else f"{pref} {wert}", grau)
+
+    for ztext in getattr(p, "kommentar_unten", None) or []:
+        dazu(ztext)
 
     zeichnung = index = ""
     merkmale = []
@@ -467,10 +515,10 @@ def unterzeilen(p, sprache: str | None = None) -> list[tuple[str, bool]]:
         elif wert:
             merkmale.append(f"{name}: {wert}" if name else wert)
     # (a) Identifikation
-    if _ein(p.artikelnummer):
-        dazu(f"{t['art']} {_ein(p.artikelnummer)}", True)
-    if _ein(p.kaeufer_artikelnummer):
-        dazu(f"{t['kunde_art']} {_ein(p.kaeufer_artikelnummer)}", True)
+    if _ein(p.artikelnummer) and sichtbar("BT-155"):
+        mit_label(t["art"], _ein(p.artikelnummer), True)
+    if _ein(p.kaeufer_artikelnummer) and sichtbar("BT-156"):
+        mit_label(t["kunde_art"], _ein(p.kaeufer_artikelnummer), True)
     if zeichnung and index:
         dazu(f"{t['zeichnung']} {zeichnung}, {t['index']} {index}", True)
     elif zeichnung:
@@ -577,12 +625,12 @@ def _umbrechen_fuellend(c, text: str, font: str, groesse: float, breite: float) 
 
 
 def unterzeilen_umbrochen(
-    c, p, sprache: str | None, font: str, groesse: float, breite: float
+    c, p, sprache: str | None, font: str, groesse: float, breite: float, sicht: dict | None = None
 ) -> list[tuple[str, bool]]:
     """Unterzeilen auf die Breite der Bezeichnung umbrechen (ohne Zeichenverlust) -> [(Zeile, grau)]."""
     return [
         (z, grau)
-        for text, grau in unterzeilen(p, sprache)
+        for text, grau in unterzeilen(p, sprache, sicht=sicht)
         for z in _umbrechen_fuellend(c, text, font, groesse, breite)
     ]
 
@@ -767,16 +815,19 @@ def _erzeugen_standard(r: Rechnung, sprache: str | None = None) -> bytes:
 
     def tabellenkopf(y):
         c.setFont("ER-Sans-Bold", 9)
-        for x, t, rechts in [
-            (L, "Pos", False),
-            (L + 10 * mm, "Bezeichnung", False),
-            (L + 105 * mm, "Menge", True),
-            (L + 107 * mm, "Einh.", False),
-            (L + 140 * mm, "Einzelpreis", True),
-            (R - 13 * mm, "Gesamt", True),
-            (R, "USt", True),
-        ]:
-            (c.drawRightString if rechts else c.drawString)(x, y, t)
+        koepfe = [
+            (L, feld_titel(r, "BT-126", "Pos"), False, "BT-126"),
+            (L + 10 * mm, feld_titel(r, "BT-153", "Bezeichnung"), False, "BT-153"),
+            (L + 105 * mm, feld_titel(r, "BT-129", "Menge"), True, "BT-129"),
+            (L + 107 * mm, feld_titel(r, "BT-130", "Einh."), False, "BT-130"),
+            (L + 140 * mm, feld_titel(r, "BT-146", "Einzelpreis"), True, "BT-146"),
+            (R - 13 * mm, feld_titel(r, "gesamt", "Gesamt"), True, "gesamt"),
+            (R, feld_titel(r, "steuer", "USt"), True, "steuer"),
+        ]
+        for x, txt, rechts, key in koepfe:
+            if key == "BT-126" and not feld_sichtbar(r, "BT-126"):
+                continue
+            (c.drawRightString if rechts else c.drawString)(x, y, txt)
         c.line(L, y - 1.5 * mm, R, y - 1.5 * mm)
         return y - 6 * mm
 
@@ -798,29 +849,42 @@ def _erzeugen_standard(r: Rechnung, sprache: str | None = None) -> bytes:
             7,
         )
         # Unterzeilen (Art.-Nr., Zeichnung, Beschreibung, …, Rabatt), umbrochen, nie abgeschnitten
-        extra = unterzeilen_umbrochen(c, p, sprache, "ER-Sans", UNTERZEILE_PT, BEZ_BREITE)
-        hoehe = max(len(bez) + len(extra), len(preis))
+        extra = unterzeilen_umbrochen(
+            c, p, sprache, "ER-Sans", UNTERZEILE_PT, BEZ_BREITE, sicht=sicht_von(r)
+        )
+        davor: list[str] = []
+        for ztext in getattr(p, "zeilen_davor", None) or []:
+            if ztext == "":
+                davor.append("")
+            else:
+                davor.extend(umbrechen(c, ztext, "ER-Sans", 9, BEZ_BREITE) or [ztext])
+        hoehe = max(len(davor) + len(bez) + len(extra), len(preis))
         if y - (hoehe - 1) * 4 * mm < 45 * mm:
             c.showPage()
             y = tabellenkopf(kopf())
         c.setFont("ER-Sans", 9)
-        c.drawString(L, y, p.nr)
+        for i, z in enumerate(davor):
+            if z:
+                c.drawString(BEZ_X, y - i * 4 * mm, z)
+        y_p = y - len(davor) * 4 * mm
+        if feld_sichtbar(r, "BT-126"):
+            c.drawString(L, y_p, p.nr)
         for i, z in enumerate(bez):
-            c.drawString(BEZ_X, y - i * 4 * mm, z)
+            c.drawString(BEZ_X, y_p - i * 4 * mm, z)
         if extra:
             c.setFont("ER-Sans", UNTERZEILE_PT)
             for i, (z, grau) in enumerate(extra, len(bez)):
                 c.setFillColorRGB(*(GRAU if grau else (0, 0, 0)))
-                c.drawString(BEZ_X, y - i * 4 * mm, z)
+                c.drawString(BEZ_X, y_p - i * 4 * mm, z)
             c.setFillColorRGB(0, 0, 0)
             c.setFont("ER-Sans", 9)
-        c.drawRightString(L + 105 * mm, y, menge(p.menge))
-        c.drawString(L + 107 * mm, y, einheit_text(p.einheit, sprache))
-        c.drawRightString(R - 13 * mm, y, eur(p.netto))
-        c.drawRightString(R, y, f"{menge(p.steuer.satz)} %")
+        c.drawRightString(L + 105 * mm, y_p, menge_anzeige(p, r))
+        c.drawString(L + 107 * mm, y_p, einheit_anzeige(p, r, sprache))
+        c.drawRightString(R - 13 * mm, y_p, eur(p.netto))
+        c.drawRightString(R, y_p, f"{menge(p.steuer.satz)} %")
         c.setFont("ER-Sans", pg)
         for i, z in enumerate(preis):  # BT-149
-            c.drawRightString(L + 140 * mm, y - i * 4 * mm, z)
+            c.drawRightString(L + 140 * mm, y_p - i * 4 * mm, z)
         y -= 5 * mm + (hoehe - 1) * 4 * mm
     if y < 75 * mm + 5 * mm * (len(r.zu_abschlaege) + 3):
         c.showPage()

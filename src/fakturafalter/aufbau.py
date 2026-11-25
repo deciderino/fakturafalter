@@ -231,10 +231,22 @@ def _monat(v) -> tuple[date, date] | None:
     return date(j, m, 1), date(j, m, calendar.monthrange(j, m)[1])
 
 
+def sicht_konfig(definition: dict) -> dict:
+    """Darstellung auf der Sichtseite aus dem Profil; fehlende Schlüssel = Defaults."""
+    s = dict(definition.get("sicht") or {})
+    s.setdefault("positionsnummer", True)
+    s.setdefault("einheit", "kurz")  # kurz | csv
+    s.setdefault("menge_exakt", True)
+    s.setdefault("kommentar_ohne_bezeichnungen", False)
+    s.setdefault("felder", {})
+    return s
+
+
 def rechnung_bauen(
     kopf: Roh, positionen: list[Roh], definition: dict, konfig: Konfig, quelle: str
 ) -> Rechnung:
     r = Rechnung(quelle=quelle)
+    r.sicht = sicht_konfig(definition)
     mappings = definition.get("mappings", {})
     stamm = stammdaten_aus_definition(definition, konfig)
     ku = stamm[0].kleinunternehmer  # § 19 UStG: alle Positionen E/0 mit Hinweistext
@@ -341,11 +353,34 @@ def rechnung_bauen(
         if za_art:  # Rabatt-/Zuschlagszeile -> BG-20/BG-21
             _zeile_als_zu_abschlag(r, g, za_art, mappings, nr)
             continue
-        pos.nr = str(g("BT-126", nr)).strip()
+        if g("BT-126") not in (None, ""):
+            pos.nr = str(g("BT-126")).strip()
+        else:
+            pos.nr = str(len(r.positionen) + 1)
         pos.artikelnummer = str(g("BT-155", "") or "")
         pos.bezeichnung = str(g("BT-153", "") or "")
         pos.menge = g("BT-129")  # None = fehlt -> Pflichtprüfung (keine stille 0)
         pos.einzelpreis = g("BT-146")
+        roh_m = p.get("_menge_roh")
+        pos.menge_roh = str(roh_m[0] if isinstance(roh_m, tuple) else (roh_m or ""))
+        roh_e = p.get("_einheit_roh")
+        pos.einheit_roh = str(roh_e[0] if isinstance(roh_e, tuple) else (roh_e or ""))
+        if p.get("_menge_eins"):
+            if (pos.menge is None or pos.menge == 0) and pos.einzelpreis is not None:
+                pos.menge = Decimal(1)
+                from .csv_zeilen import wert_ist_leer
+
+                if not str(pos.menge_roh).strip() or wert_ist_leer(pos.menge_roh):
+                    pos.menge_roh = "1"
+        elif pos.einzelpreis is not None and (pos.menge is None or pos.menge == 0):
+            from .csv_zeilen import wert_ist_leer as _leer
+
+            if _leer(pos.menge_roh) or pos.menge is None:
+                r.hinweis(
+                    "pruefen",
+                    "Menge fehlt oder ist 0, obwohl ein Preis steht",
+                    f"Pos {pos.nr} BT-129",
+                )
         pe = g("BT-149")  # Preiseinheit (optional, Standard 1)
         if pe is not None:
             try:
@@ -381,6 +416,11 @@ def rechnung_bauen(
             davor = davor[0]
         if davor:
             pos.zeilen_davor = ["" if x is None else str(x) for x in davor]
+        unten = p.get("_kommentar_unten")
+        if isinstance(unten, tuple):
+            unten = unten[0]
+        if unten:
+            pos.kommentar_unten = ["" if x is None else str(x) for x in unten]
         if not pos.bezeichnung:
             r.hinweis("pruefen", "Bezeichnung fehlt", f"Pos {pos.nr} BT-153")
         r.positionen.append(pos)

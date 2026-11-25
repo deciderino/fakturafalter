@@ -40,10 +40,16 @@ def test_csv_assistent_legt_normales_profil_an(fenster, qapp, konfig_datei):
     assert d.zuordnung()["BT-1"]
     d.b_weiter.click()
     qapp.processEvents()
-    assert d.i == 3 and d.t_probe.rowCount() == 3 and d.b_weiter.isEnabled()
+    assert d.i == 3 and d.b_weiter.isEnabled()  # Textzeilen
+    d.b_weiter.click()
+    qapp.processEvents()
+    assert d.i == 4 and d.b_weiter.isEnabled()  # Darstellung
+    d.b_weiter.click()
+    qapp.processEvents()
+    assert d.i == 5 and d.t_probe.rowCount() == 3 and d.b_weiter.isEnabled()
     d.b_weiter.click()  # „Speichern“
     qapp.processEvents()
-    assert d.i == 4 and d.gespeichert and d.gespeichert.exists()
+    assert d.i == 6 and d.gespeichert and d.gespeichert.exists()
     roh = yaml.safe_load(konfig_datei.read_text(encoding="utf-8"))
     from fakturafalter.konfig import csv_eintrag_datei
 
@@ -68,6 +74,50 @@ def test_csv_assistent_legt_normales_profil_an(fenster, qapp, konfig_datei):
     if any(e.pruefung for e in lauf.ergebnisse):
         pruef = [(e.nummer, e.pruefung, e.hinweise) for e in lauf.ergebnisse]
         assert all(e.pruefung == "gültig" for e in lauf.ergebnisse), pruef
+
+
+def test_csv_assistent_textzeilen_und_darstellung_zjp(fenster, qapp):
+    from fakturafalter.gui.datenassistent import CsvAssistent
+
+    d = CsvAssistent(fenster, fenster)
+    d.datei_setzen(BEISPIELE / "variante-zjp_textzeilen.csv")
+    d.name.setText("ZJP-Text")
+    d.b_weiter.click()
+    qapp.processEvents()
+    d.b_weiter.click()
+    qapp.processEvents()
+    assert d.i == 2
+    d.b_weiter.click()
+    qapp.processEvents()
+    assert d.i == 3
+    assert d.c_kommentare.isChecked() and d.c_leerzeilen.isChecked()
+    assert d.t_tz_vorschau.rowCount() >= 1
+    d.b_weiter.click()
+    qapp.processEvents()
+    assert d.i == 4
+    assert d.c_menge_exakt.isChecked()
+    p = d.profil()
+    sicht = p.get("sicht") or {}
+    assert sicht.get("menge_exakt") is True
+    assert sicht.get("einheit") == "kurz"
+    assert (p.get("aufbau") or {}).get("art") == "zeile_je_position"
+    d.reject()
+
+
+def test_csv_assistent_start_darstellung(fenster, qapp):
+    from fakturafalter.gui.datenassistent import CsvAssistent
+
+    d = CsvAssistent(fenster, fenster, start="darstellung")
+    d.datei_setzen(BEISPIELE / "variante-zjp_textzeilen.csv")
+    d.name.setText("ZJP-Text")
+    qapp.processEvents()
+    # nach Datei/Format/Vorschau-Daten zum Darstellungsschritt springen
+    if d.i != 4:
+        d.gehe(4)
+        qapp.processEvents()
+    assert d.i == 4
+    assert d.c_menge_exakt.isChecked()
+    d.reject()
 
 
 def test_csv_assistent_lesefehler_laesst_weiter_konsistent(fenster, qapp, tmp_path):

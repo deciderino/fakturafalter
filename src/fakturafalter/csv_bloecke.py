@@ -141,6 +141,7 @@ def textzeile_konfig(profil: dict) -> dict:
     t.setdefault("verwaist", "BT-22")
     t.setdefault("leerzeile_modus", "beides")
     t.setdefault("zwischen", "vorher")
+    t.setdefault("preis_ohne_menge", "pruefen")
     return t
 
 
