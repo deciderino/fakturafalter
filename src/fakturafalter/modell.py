@@ -145,6 +145,10 @@ class Position:
     leistung_von: date | None = None  # BT-134 (BG-26)
     leistung_bis: date | None = None  # BT-135
     beschreibung: str = ""  # BT-154
+    # Text-/Leerzeilen ÜBER der Position auf der Sichtseite (in der Bezeichnungsspalte).
+    # Leerer String = gewollte Leerzeile. Gehört nicht in die XML der Position;
+    # Text vor der ersten Position steht standardmäßig in Rechnung.bemerkungen (BT-22).
+    zeilen_davor: list[str] = field(default_factory=list)
     kaeufer_artikelnummer: str = ""  # BT-156
     standard_id: str = ""  # BT-157 (z. B. GTIN)
     standard_schema: str = ""  # BT-157-1 (ISO 6523 ICD, GTIN = 0160)

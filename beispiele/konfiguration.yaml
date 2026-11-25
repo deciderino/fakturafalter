@@ -28,7 +28,7 @@ ordner:                     # relativ zu dieser Datei
   pruefen: ../laufzeit/pruefen
 # protokoll_ordner: ../laufzeit/Protokoll   # ab 0.9.6, Standard: „Protokoll“ neben dem Eingang
 
-csv_profile: [profil-variante-blo.yaml, profil-variante-a.json, profil-variante-b.yaml, profil-variante-c.yaml, profil-variante-d.yaml, profil-variante-k.yaml, profil-variante-s.yaml]
+csv_profile: [profil-variante-blo.yaml, profil-variante-zjp-textzeilen.yaml, profil-variante-a.json, profil-variante-b.yaml, profil-variante-c.yaml, profil-variante-d.yaml, profil-variante-k.yaml, profil-variante-s.yaml]
 pdf_vorlagen: [vorlage-wawi-druck.yaml]
 
 optionen:

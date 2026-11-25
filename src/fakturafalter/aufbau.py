@@ -376,6 +376,11 @@ def rechnung_bauen(
                     f"Pos {pos.nr} BT-151",
                 )
         _position_ergaenzen(pos, g)
+        davor = p.get("_zeilen_davor")
+        if isinstance(davor, tuple):
+            davor = davor[0]
+        if davor:
+            pos.zeilen_davor = ["" if x is None else str(x) for x in davor]
         if not pos.bezeichnung:
             r.hinweis("pruefen", "Bezeichnung fehlt", f"Pos {pos.nr} BT-153")
         r.positionen.append(pos)

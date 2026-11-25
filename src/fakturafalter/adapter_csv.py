@@ -179,9 +179,13 @@ def _csv(text: str, profil: dict, pfad: Path):
                 fehler.append(f"Zeile {zeile}, {feld}: {e}")
         return roh
 
+    from . import csv_bloecke
+
+    tz = csv_bloecke.textzeile_konfig(profil)
+
     for i, werte in enumerate(daten):
         zeile = start + i
-        if not any(w.strip() for w in werte):
+        if csv_bloecke.zeile_ohne_inhalt(werte):
             continue
         row = dict(zip(kopfzeile, werte))
         key = (row.get(schl) or "").strip()
@@ -221,15 +225,77 @@ def _csv(text: str, profil: dict, pfad: Path):
                         )
             for f in aufbau.get("kopf_muss_gleich_sein", []):
                 g[0].setdefault("_roh_" + f, (row.get(f), None))
-            g[1].append(feldsatz(row, felder.get("position", {}), zeile, g[2]))
+            _zeile_je_position(g, feldsatz, row, felder.get("position", {}), zeile, pfad, tz)
     out = OrderedDict()
     for key, (kopf, pos, fehler) in gruppen.items():
         if kopf is None:
             kopf = {}
             fehler.append("Kopfsatz fehlt")
+        davor = kopf.pop("_zeilen_davor", None) if kopf else None
+        if davor and not pos:
+            _verwaist_in_kopf(kopf, davor, tz, 0)
+        elif davor and "_zeilen_davor" not in pos[0]:
+            pos[0]["_zeilen_davor"] = list(davor)
+            _verwaist_in_kopf(kopf, davor, tz, 0)
+        elif davor:
+            # Rest nach der letzten Position (zwischen=nachher) an diese anhängen
+            for txt in davor:
+                csv_bloecke.text_an_roh(pos[-1], txt, txt == "", tz, 0, pfad)
         kopf = {k: v for k, v in kopf.items() if not k.startswith("_roh_")}
         out[key] = (kopf, pos, fehler)
     return out
+
+
+def _zeile_je_position(g, feldsatz, row, pos_defs, zeile, pfad, tz) -> None:
+    """Standardaufbau: Position, Textzeile, gewollte Leerzeile oder überspringen."""
+    from . import csv_bloecke
+
+    art = csv_bloecke.textzeile_erkennen(row, pos_defs, tz)
+    if art is None:
+        pos = feldsatz(row, pos_defs, zeile, g[2])
+        davor = g[0].pop("_zeilen_davor", None) if g[0] is not None else None
+        if davor:
+            pos["_zeilen_davor"] = list(davor)
+            _verwaist_in_kopf(g[0], davor, tz, zeile)
+            if str(tz.get("verwaist") or "BT-22") == "naechste":
+                for txt in davor:
+                    csv_bloecke.text_an_roh(pos, txt, txt == "", tz, zeile, pfad)
+        g[1].append(pos)
+        return
+    kind, text = art
+    if kind == "skip":
+        return
+    leer = kind == "leer"
+    zwischen = str(tz.get("zwischen") or "vorher")
+    if g[1] and zwischen != "nachher":
+        csv_bloecke.text_an_roh(g[1][-1], text, leer, tz, zeile, pfad)
+        return
+    if g[0] is None:
+        g[0] = {}
+    wartend = g[0].setdefault("_zeilen_davor", [])
+    wartend.append("" if leer else text)
+    if not g[1] and str(tz.get("verwaist") or "BT-22") == "pruefen":
+        g[2].append(Pruefen(f"Textzeile vor der ersten Position (Zeile {zeile})"))
+
+
+def _verwaist_in_kopf(kopf: dict, davor: list, tz: dict, zeile: int) -> None:
+    """Text vor der ersten Position in die XML (Standard: BT-22). Sichtseite bleibt Vorspann."""
+    from . import csv_bloecke
+
+    if not kopf:
+        return
+    verw = str(tz.get("verwaist") or "BT-22")
+    texte = [t for t in davor if (t or "").strip()]
+    if not texte or verw != "BT-22":
+        return
+    alt = str((kopf.get("BT-22") or ("",))[0] or "")
+    trenner = tz.get("trenner")
+    trenner = "\n" if trenner is None else str(trenner)
+    neu = "\n".join(texte)
+    kopf["BT-22"] = (
+        csv_bloecke._anhaengen(alt, neu, trenner),
+        Herkunft(f"csv Textzeile vor erster Position (Zeile {zeile})", 1.0),
+    )
 
 
 def _feste_breite(text: str, profil: dict, pfad: Path):

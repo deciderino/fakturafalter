@@ -13,6 +13,9 @@ welche Spalten mindestens vorhanden sein müssen.
 - Datum **TT.MM.JJJJ** (`02.10.2026`)
 - **eine Zeile je Position**; die Kopfwerte (Rechnungsnummer, Datum, Kunde …) stehen in jeder
   Zeile der Rechnung gleich. Zeilen mit derselben Rechnungsnummer bilden eine Rechnung.
+  Eine Zeile ohne Menge und Preis, aber mit Text (z. B. in der Bezeichnung), ist eine
+  **Textzeile**; eine Zeile, die nur Kopffelder trägt, eine **gewollte Leerzeile**.
+  Beides gilt ab 0.9.8.1 auch in diesem Standardaufbau (nicht nur bei `bloecke`).
 
 ## Was das Profil sonst zulässt
 
@@ -78,10 +81,15 @@ mit einer eigenen Kopfzeile. Im Profil: `aufbau.art: bloecke`.
 - Kopffelder (Rechnungsnummer, Datum, Kunde …) dürfen in jeder Positionszeile
   stehen oder einmal in einem eigenen Kopfblock. Gleiche Werte werden
   zusammengeführt, abweichende Werte halten die Rechnung in „Zu prüfen“ an.
-- **Textzeilen** im Positionsblock: Menge und Preis leer, Text vorhanden → der
-  Text hängt standardmäßig als Beschreibung (BT-154) an der Position darüber
-  (umstellbar auf Bezeichnung BT-153). Eine Textzeile *vor* der ersten Position
-  wird standardmäßig Hinweistext der Rechnung (BT-22).
+- **Textzeilen** (ab 0.9.8.1 auch bei `zeile_je_position`): Menge und Preis leer,
+  Text vorhanden → der Text hängt standardmäßig als Beschreibung (BT-154) an der
+  Position darüber (umstellbar auf Bezeichnung BT-153). Eine Textzeile *vor* der
+  ersten Position erscheint auf der Sichtseite an Ort und Stelle über der
+  ersten Position; in der XML wird sie standardmäßig Hinweistext der Rechnung
+  (BT-22). Optional (`aufbau.textzeile.verwaist: naechste`) gehört sie zur
+  folgenden Position (BT-154). Text *zwischen* zwei Positionen hängt
+  standardmäßig an der vorherigen (`zwischen: vorher`); `nachher` legt ihn als
+  Vorspann über die folgende Position.
 - **Gewollte Leerzeile** auf der Sichtseite: Platzhalter (Standard `#LEER`, im
   Profil unter `aufbau.textzeile.platzhalter` frei wählbar oder leer lassbar)
   und/oder eine Zeile, die Kopffelder trägt, aber Menge, Preis und Text leer
@@ -97,6 +105,9 @@ Beispiele: `beispiele/variante-blo_hotel.csv` (fiktiv, SK-2026-0413: netto 574,8
 USt 101,44 / brutto 676,24, fällig 05.11.2026) und
 `beispiele/variante-blo_getrennt.csv` (Kopf, Positionen mit Textzeile und `#LEER`,
 Zahlung getrennt). Profil: `beispiele/profil-variante-blo.yaml`.
+Standardaufbau: `beispiele/variante-zjp_textzeilen.csv` (fiktiv, RE-2026-0818:
+Kommentar und Leerzeile über der Position, Kommentar darunter; netto 394,40 /
+USt 74,94 / brutto 469,34). Profil: `beispiele/profil-variante-zjp-textzeilen.yaml`.
 
 ## Profile in den Einstellungen (ab 0.9.8)
 

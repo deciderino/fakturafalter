@@ -13,7 +13,7 @@ from __future__ import annotations
 
 import io
 import re
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from decimal import Decimal
 
 from reportlab.lib.pagesizes import A4
@@ -376,6 +376,7 @@ class _Zeile:
     preis: list[str]
     pg: float
     hoehe: float  # in pt-Einheiten der Zeichenfläche
+    davor: list[str] = field(default_factory=list)  # Kommentar-/Leerzeilen über der Position
 
 
 def _spalten(e: lay.Element) -> dict[str, float]:
@@ -399,8 +400,14 @@ def _zeilen_bauen(r: Rechnung, e: lay.Element, sprache) -> list[_Zeile]:
             MIN_PT,
         )
         extra = unterzeilen_umbrochen(_Breite, p, sprache, F, g * UNTERZEILE_PT / 9, bez_b)
-        n = max(len(bez) + len(extra), len(preis))
-        out.append(_Zeile(p, bez, extra, preis, pg, lh * n + 1 * mm))
+        davor: list[str] = []
+        for ztext in getattr(p, "zeilen_davor", None) or []:
+            if ztext == "":
+                davor.append("")
+            else:
+                davor.extend(umbrechen(_Breite, ztext, F, g, bez_b) or [ztext])
+        n = max(len(davor) + len(bez) + len(extra), len(preis))
+        out.append(_Zeile(p, bez, extra, preis, pg, lh * n + 1 * mm, davor))
     return out
 
 
@@ -473,23 +480,27 @@ def _tabelle(
     for z in zeilen:
         p = z.pos
         c.setFont(F, g)
-        c.drawString(sp["pos"], y, p.nr)
-        for i, t in enumerate(z.bez):
-            c.drawString(sp["bez"], y - i * lh, t)
+        for i, txt in enumerate(z.davor):
+            if txt:
+                c.drawString(sp["bez"], y - i * lh, txt)
+        y_p = y - len(z.davor) * lh
+        c.drawString(sp["pos"], y_p, p.nr)
+        for i, txt in enumerate(z.bez):
+            c.drawString(sp["bez"], y_p - i * lh, txt)
         if z.extra:  # Unterzeilen (Art.-Nr., Zeichnung, Beschreibung, …, Rabatt)
             c.setFont(F, g * UNTERZEILE_PT / 9)
-            for i, (t, grau) in enumerate(z.extra, len(z.bez)):
+            for i, (txt, grau) in enumerate(z.extra, len(z.bez)):
                 c.setFillColorRGB(*(GRAU if grau else (0, 0, 0)))
-                c.drawString(sp["bez"], y - i * lh, t)
+                c.drawString(sp["bez"], y_p - i * lh, txt)
             c.setFillColorRGB(0, 0, 0)
             c.setFont(F, g)
-        c.drawRightString(sp["menge"], y, menge(p.menge))
-        c.drawString(sp["einh"], y, einheit_text(p.einheit, sprache))
-        c.drawRightString(rechts - 13 * mm * f, y, eur(p.netto))
-        c.drawRightString(rechts, y, f"{menge(p.steuer.satz)} %")
+        c.drawRightString(sp["menge"], y_p, menge(p.menge))
+        c.drawString(sp["einh"], y_p, einheit_text(p.einheit, sprache))
+        c.drawRightString(rechts - 13 * mm * f, y_p, eur(p.netto))
+        c.drawRightString(rechts, y_p, f"{menge(p.steuer.satz)} %")
         c.setFont(F, z.pg)
-        for i, t in enumerate(z.preis):  # BT-149
-            c.drawRightString(sp["preis"], y - i * lh, t)
+        for i, txt in enumerate(z.preis):  # BT-149
+            c.drawRightString(sp["preis"], y_p - i * lh, txt)
         y -= z.hoehe
     if y < unten - 0.5 and bericht is not None:
         bericht.append("Positionstabelle: Position höher als der Rahmen (läuft darüber hinaus)")

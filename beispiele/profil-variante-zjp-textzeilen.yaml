@@ -1,0 +1,61 @@
+# CSV-Zuordnungsprofil – passt zu variante-zjp_textzeilen.csv (fiktiv, ab 0.9.8.1)
+# Standardaufbau „eine Zeile je Position“ mit Kommentar- und Leerzeilen über/unter der Position.
+profil: zjp-textzeilen
+version: 1
+beschreibung: "Eine Zeile je Position, UTF-8, Semikolon, Dezimalkomma; Text- und Leerzeilen ohne Menge/Preis"
+
+datei:
+  muster: "*zjp_textzeilen*.csv"
+  kodierung: auto
+  trennzeichen: ";"
+  textbegrenzer: '"'
+  kopfzeile: true
+
+zahlen:  {dezimal: ",", tausender: "."}
+datum:   {format: "%d.%m.%Y"}
+
+aufbau:
+  art: zeile_je_position
+  rechnung_schluessel: Belegname
+  kopf_muss_gleich_sein: [Belegdatum]
+  textzeile:
+    ziel: BT-154
+    platzhalter: "#LEER"
+    leerzeile_modus: beides
+    verwaist: BT-22
+    zwischen: vorher
+    trenner: "\n"
+    leer: [BT-129, BT-146, text]
+
+felder:
+  kopf:
+    BT-1:           {spalte: Belegname}
+    BT-2:           {spalte: Belegdatum, typ: datum}
+    BT-72:          {spalte: Leistungsdatum, typ: datum, optional: true}
+    BT-44:          {spalte: Kunde1}
+    kaeufer_name_2: {spalte: Kunde2, optional: true}
+    kaeufer_name_3: {spalte: Kunde3, optional: true}
+    BT-50:          {spalte: Strasse}
+    BT-53:          {spalte: PLZ}
+    BT-52:          {spalte: Ort}
+    BT-48:          {spalte: "USt.-ID", optional: true}
+    BT-3:           {fest: "380"}
+    BT-5:           {fest: EUR}
+  position:
+    BT-126:           {spalte: Position, optional: true}
+    BT-155:           {spalte: "Artikel-Nr.", optional: true}
+    BT-153:           {spalte: Bezeichnung}
+    BT-129:           {spalte: Menge, typ: zahl}
+    BT-130:           {spalte: Einheit, mapping: einheiten, optional: true}
+    BT-146:           {spalte: Einzelpreis, typ: zahl}
+    BT-149:           {spalte: Preisbasis, typ: zahl, optional: true}
+    gesamt_kontrolle: {spalte: Gesamtpreis, typ: zahl, optional: true, zweck: pruefung}
+    steuer:           {spalte: Ust-Satz, mapping: steuer}
+
+mappings:
+  einheiten:
+    "Stück": C62
+    "Stk": C62
+    unbekannt: allgemein
+  steuer:
+    unbekannt: satz

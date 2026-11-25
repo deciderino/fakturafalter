@@ -1,0 +1,7 @@
+Position;Belegname;Belegdatum;Leistungsdatum;Kunde1;Strasse;PLZ;Ort;Bezeichnung;Menge;Einheit;Einzelpreis;Ust-Satz
+001;RE-2026-0819;25.11.2026;25.11.2026;Beispielbau GmbH;Musterweg 12;12345;Musterstadt;Vorbemerkung zur ersten Position;;;;
+002;RE-2026-0819;25.11.2026;25.11.2026;Beispielbau GmbH;Musterweg 12;12345;Musterstadt;Platte A;10;Stück;5,00;19
+003;RE-2026-0819;25.11.2026;25.11.2026;Beispielbau GmbH;Musterweg 12;12345;Musterstadt;Hinweis zwischen den Positionen;;;;
+004;RE-2026-0819;25.11.2026;25.11.2026;Beispielbau GmbH;Musterweg 12;12345;Musterstadt;Platte B;2;Stück;10,00;19
+005;RE-2026-0819;25.11.2026;25.11.2026;Beispielbau GmbH;Musterweg 12;12345;Musterstadt;#LEER;;;;
+006;RE-2026-0819;25.11.2026;25.11.2026;Beispielbau GmbH;Musterweg 12;12345;Musterstadt;Nachsatz zur zweiten Position;;;;

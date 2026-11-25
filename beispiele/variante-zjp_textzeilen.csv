@@ -1,0 +1,6 @@
+Position;Belegname;Belegdatum;Leistungsdatum;Kunde1;Kunde2;Kunde3;Strasse;PLZ;Ort;USt.-ID;Artikel-Nr.;Bezeichnung;Menge;Einheit;Einzelpreis;Preisbasis;Gesamtpreis;Ust-Satz;                                                                                
+001;RE-2026-0818;25.11.2026;25.11.2026;Beispielbau GmbH;;Gewerbegebiet;Musterweg 12;12345;Musterstadt;;;Unser Lieferschein B-2026-1650:;;;;;;;                                                                              
+002;RE-2026-0818;25.11.2026;25.11.2026;Beispielbau GmbH;;Gewerbegebiet;Musterweg 12;12345;Musterstadt;;;;;;;;;;;                                                                                                            
+003;RE-2026-0818;25.11.2026;25.11.2026;Beispielbau GmbH;;Gewerbegebiet;Musterweg 12;12345;Musterstadt;;#ART-0000-1111-222/01;Grundplatte;40,00;Stück;9,86;1;394,40;19;                                                      
+004;RE-2026-0818;25.11.2026;25.11.2026;Beispielbau GmbH;;Gewerbegebiet;Musterweg 12;12345;Musterstadt;;;000000-1111-222/01;;;;;;;                                                                                           
+

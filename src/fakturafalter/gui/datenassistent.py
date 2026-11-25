@@ -449,6 +449,9 @@ class CsvAssistent(_Assistent):
             "platzhalter": self.f_platz.text(),
             "leerzeile_modus": self.f_leer_modus.currentData(),
             "verwaist": self.f_verwaist.currentData(),
+            "zwischen": self.f_zwischen.currentData()
+            if getattr(self, "f_zwischen", None)
+            else "vorher",
             "trenner": "\n",
             "leer": ["BT-129", "BT-146", "text"],
             "text_spalte": (self.zuordnung() or {}).get("BT-153"),
@@ -514,7 +517,7 @@ class CsvAssistent(_Assistent):
         self.box_text = QWidget()
         tv = QVBoxLayout(self.box_text)
         tv.setContentsMargins(0, 8, 0, 0)
-        tv.addWidget(lbl(_("Textzeilen und Leerzeilen im Positionsblock"), "titel", umbruch=True))
+        tv.addWidget(lbl(_("Textzeilen und Leerzeilen"), "titel", umbruch=True))
         self.f_textziel = _auswahl(
             (("BT-154", "Beschreibung (BT-154)"), ("BT-153", "Bezeichnung (BT-153)")),
             "BT-154",
@@ -540,6 +543,7 @@ class CsvAssistent(_Assistent):
         self.f_verwaist = _auswahl(
             (
                 ("BT-22", "Als Hinweis zur Rechnung (BT-22)"),
+                ("naechste", "Zur folgenden Position (BT-154)"),
                 ("pruefen", "Rechnung nach „Zu prüfen“"),
             ),
             "BT-22",
@@ -547,6 +551,16 @@ class CsvAssistent(_Assistent):
         )
         tv.addWidget(lbl(_("Textzeile vor der ersten Position")))
         tv.addWidget(self.f_verwaist)
+        self.f_zwischen = _auswahl(
+            (
+                ("vorher", "Zur vorherigen Position (Beschreibung)"),
+                ("nachher", "Zur folgenden Position (darüber auf der Sichtseite)"),
+            ),
+            "vorher",
+            _("Text zwischen zwei Positionen"),
+        )
+        tv.addWidget(lbl(_("Text zwischen zwei Positionen")))
+        tv.addWidget(self.f_zwischen)
         v.addWidget(self.box_text)
         return w
 
@@ -557,7 +571,7 @@ class CsvAssistent(_Assistent):
         bloecke = self.art == "bloecke"
         if getattr(self, "box_bloecke", None):
             self.box_bloecke.setVisible(bloecke)
-            self.box_text.setVisible(bloecke)
+            self.box_text.setVisible(bloecke or self.art == "zeile_je_position")
         if bloecke:
             self._bloecke_tabelle()
             self._vorschau_bauen_block()
@@ -835,6 +849,7 @@ class CsvAssistent(_Assistent):
                 steuer,
                 eh,
                 ce.kundenstamm_vorschlag(self.haupt.k) if z.get("kundennummer") else None,
+                self._textzeile(),
             )
             if self.art == "satzart":
                 spalte = next(

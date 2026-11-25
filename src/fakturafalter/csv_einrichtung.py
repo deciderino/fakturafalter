@@ -150,7 +150,7 @@ _SYNONYME = {
     "BT-129": "menge anzahl qty quantity",
     "BT-130": "einheit me mengeneinheit unit",
     "BT-146": "einzelpreisnetto einzelpreis epnetto ep nettopreis preis unitprice price",
-    "BT-149": "preiseinheit pe",
+    "BT-149": "preiseinheit pe preisbasis",
     "gesamt_kontrolle": "gesamtnetto gpnetto gp positionsbetrag nettobetrag betrag gesamt",
     "steuer": "steuersatz steuerschluessel steuerschlüssel stschl mwst mwstsatz ust ustsatz steuer vat tax",
     "belegart": "belegart belegtyp dokumentart rechnungsart doctype documenttype",
@@ -266,7 +266,7 @@ def format_erkennen(datei: Path, kodierung: str = "auto", trennzeichen: str = "a
     """Kodierung, Trennzeichen, Dezimalzeichen und Datumsformat vorschlagen (alles änderbar)."""
     text, kod = dekodieren(Path(datei).read_bytes(), kodierung)
     trenn = trennzeichen_erkennen(text) if trennzeichen in ("auto", "", None) else trennzeichen
-    zeilen = [z for z in csv_lesen(text, trenn) if any(w.strip() for w in z)]
+    zeilen = [z for z in csv_lesen(text, trenn) if any((w or "").strip().strip("\x1a") for w in z)]
     if not zeilen:
         raise ValueError("Datei ist leer")
     kopf, daten = [c.strip() for c in zeilen[0]], zeilen[1:]
@@ -403,6 +403,7 @@ def profil_bauen(
     steuer: dict[str, str],
     einheiten: dict[str, str],
     kundenstamm: str | None,
+    textzeile: dict | None = None,
 ) -> dict:
     """Normales CSV-Profil (zeile_je_position). ``steuer``: Wert -> Anzeige aus STEUER_WAHL."""
     kopf, pos = {}, {}
@@ -452,6 +453,8 @@ def profil_bauen(
     }
     if kundenstamm and zuordnung.get("kundennummer"):
         p["kundenstamm"] = {"datei": kundenstamm, "schluessel": "kundennummer", "fehlt": "pruefen"}
+    if textzeile:
+        p["aufbau"]["textzeile"] = textzeile
     return p
 
 

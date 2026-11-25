@@ -140,6 +140,7 @@ def textzeile_konfig(profil: dict) -> dict:
     t.setdefault("platzhalter", "#LEER")
     t.setdefault("verwaist", "BT-22")
     t.setdefault("leerzeile_modus", "beides")
+    t.setdefault("zwischen", "vorher")
     return t
 
 
@@ -231,6 +232,43 @@ def _text_aus_zeile(row: dict, felder: dict, tz: dict) -> str:
     if not sp:
         return ""
     return (row.get(sp) or "").strip() if isinstance(sp, str) else ""
+
+
+def zeile_ohne_inhalt(werte) -> bool:
+    """Leer oder nur Steuerzeichen (z. B. DOS-Dateiende \x1a) – kein Inhalt."""
+    return not any((w or "").strip().strip("\x1a") for w in werte)
+
+
+def textzeile_erkennen(row: dict, felder: dict, tz: dict) -> tuple[str, str] | None:
+    """None = normale Positionszeile. Sonst ('text', Inhalt), ('leer', '') oder ('skip', '')."""
+    menge = (_feld_wert(row, felder, "BT-129") or "").strip()
+    preis = (_feld_wert(row, felder, "BT-146") or "").strip()
+    if _ist_fuellung(menge) or _ist_fuellung(preis):
+        return None
+    text = _text_aus_zeile(row, felder, tz)
+    modus = str(tz.get("leerzeile_modus") or "beides")
+    platz = tz.get("platzhalter")
+    platz = "#LEER" if platz is None else str(platz)
+    if text and platz and text == platz and modus in ("platzhalter", "beides"):
+        return ("leer", "")
+    if text:
+        return ("text", text)
+    if modus in ("kopffeldzeile", "beides") and _kopffelder_ohne_leerpflicht(row, felder, tz):
+        return ("leer", "")
+    return ("skip", "")
+
+
+def text_an_roh(pos: dict, text: str, leerzeile: bool, tz: dict, zeile: int, pfad: Path) -> None:
+    """Text- oder Leerzeile an die vorherige Positions-Rohzeile (BT-154 bzw. konfiguriertes Ziel)."""
+    ziel = str(tz.get("ziel") or "BT-154")
+    trenner = tz.get("trenner")
+    trenner = "\n" if trenner is None else str(trenner)
+    alt = str((pos.get(ziel) or ("",))[0] or "")
+    herkunft = Herkunft(f"csv:{Path(pfad).name} Zeile {zeile} Textzeile", 1.0)
+    pos[ziel] = (_anhaengen(alt, text, trenner, leerzeile=leerzeile), herkunft)
+    if ziel == "BT-153" and leerzeile:
+        alt4 = str((pos.get("BT-154") or ("",))[0] or "")
+        pos["BT-154"] = (_anhaengen(alt4, "", "\n", leerzeile=True), herkunft)
 
 
 def _ist_fuellung(val) -> bool:
