@@ -1167,7 +1167,7 @@ class AnlernAssistent(QDialog):
                 " ("
             )  # Klammerzusatz unter den Knopf: Knopf bleibt schmal
             b = knopf(
-                kurz,
+                kurz.replace("&", "&&"),  # „&“ sonst als Tastenkürzel (Steuerhinweis & Kennungen)
                 klick=lambda _c=False, n=name: self._zone_ziel(n),
                 tip=voll + " – " + _("Rahmen in der PDF ziehen"),
             )
