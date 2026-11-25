@@ -807,7 +807,7 @@ def test_bereiche_festlegen_schritt(qapp, fenster, monkeypatch, tmp_path, sprach
     qapp.processEvents()
     assert d.schritt == S_BEREICHE  # ohne Bereiche beginnt der Assistent hier
     ui = d.zonen_ui
-    assert set(ui) == {"anschrift", "kopf", "tabelle", "summen", "zahlung"}
+    assert set(ui) == {"anschrift", "kopf", "tabelle", "summen", "zahlung", "steuer"}  # ab 0.9.7: Steuerhinweis & Kennungen
     for z in ui.values():
         assert z["knopf"].minimumHeight() >= 48 and z["vorschlag"].minimumHeight() >= 48
         assert z["status"].text() == "○" and not z["weg"].isEnabled()

@@ -1311,3 +1311,42 @@ def hinweis_text(text: str) -> str:
     if m:
         return _(ZAHLUNG_NICHT_AN_STELLE).format(text=m.group(1))
     return _(text)
+
+# Steuer-Sonderfälle, Fremdwährung, Leitweg-ID (0.9.7)
+_STEUER_097 = {
+    "Ausfuhrlieferung (Drittland)": "Export (non-EU)",
+    "Dann steht auf jeder Rechnung „Gemäß § 19 UStG wird keine Umsatzsteuer berechnet.“ Liefert eine Quelle "
+    "trotzdem einen Steuersatz, wird die Rechnung angehalten.": "Every invoice then states “Gemäß § 19 UStG wird "
+    "keine Umsatzsteuer berechnet.” (no VAT under the German small business scheme). If a source still supplies "
+    "a VAT rate, the invoice is held.",
+    "Innergemeinschaftliche Lieferung": "Intra-community supply",
+    "Kein Steuerhinweis im Druck – Regelbesteuerung.": "No tax note in the print – standard VAT.",
+    "Kleinunternehmer (§ 19 UStG)": "Small business (§ 19 UStG)",
+    "Kleinunternehmer (§ 19 UStG) – Rechnungen ohne Umsatzsteuer": "Small business (§ 19 UStG) – invoices "
+    "without VAT",
+    "Käufer: Land (freiwillig)": "Buyer: country (optional)",
+    "Käufer: Registernummer (freiwillig)": "Buyer: registration number (optional)",
+    "Käufer: USt-IdNr. (freiwillig)": "Buyer: VAT ID (optional)",
+    "Leitweg-ID / Käuferreferenz (freiwillig)": "Leitweg-ID / buyer reference (optional)",
+    "Lieferland (freiwillig)": "Delivery country (optional)",
+    "Nicht im Inland steuerbar": "Not taxable in Germany",
+    "Regelbesteuerung (Steuersatz aus dem Druck)": "Standard VAT (rate from the print)",
+    "Reverse Charge (§ 13b UStG)": "Reverse charge (§ 13b UStG)",
+    "Steuerfall": "Tax case",
+    "Steuerhinweis & Kennungen": "Tax note & identifiers",
+    "Steuerhinweis & Kennungen (freiwillig)": "Tax note & identifiers (optional)",
+    "Steuerhinweis (z. B. Reverse Charge, § 19 UStG)": "Tax note (e.g. reverse charge, § 19 UStG)",
+    "Steuerwert „{t}“ ist:": "Tax value “{t}” means:",
+    "Umrechnungskurs (1 EUR = …)": "Exchange rate (1 EUR = …)",
+    "Vorschlag aus dem Steuerhinweis: {f}": "Suggested from the tax note: {f}",
+    "Währung (freiwillig, z. B. USD)": "Currency (optional, e.g. USD)",
+    "automatisch (aus dem Steuerhinweis im Druck)": "automatic (from the tax note in the print)",
+    "Gelesener Wert ist keine USt-IdNr. – nicht übernommen.": "The value read is not a VAT ID – not used.",
+    "Gelesener Wert ist kein Land – nicht übernommen.": "The value read is not a country – not used.",
+    "Steuerhinweis im Druck gefunden. Steuerfall unten bei den Positionen prüfen.": "Tax note found in the print. "
+    "Check the tax case below the line items.",
+    "Fremdwährung im Druck gefunden – Kurs oder USt in EUR angeben.": "Foreign currency found in the print – "
+    "enter the exchange rate or the VAT in EUR.",
+}
+EN.update(_STEUER_097)
+DYNAMISCH += tuple(_STEUER_097)

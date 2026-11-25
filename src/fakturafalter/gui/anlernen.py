@@ -77,8 +77,29 @@ SPALTEN_RAHMEN = (
     "BT-146",
     "BT-149",
     "gesamt",
+    "steuer",  # ab 0.9.7: Steuersatz/-kennzeichen je Position (Steuerfall je Position)
     "BT-155",
     "ignorieren",
+)
+# Steuerfall der Vorlage (Positionen): "" = Vorschlag aus dem Hinweistext im Druck
+STEUERFALL_WAHL = (
+    ("", "automatisch (aus dem Steuerhinweis im Druck)"),
+    ("S", "Regelbesteuerung (Steuersatz aus dem Druck)"),
+    ("AE", "Reverse Charge (§ 13b UStG)"),
+    ("K", "Innergemeinschaftliche Lieferung"),
+    ("G", "Ausfuhrlieferung (Drittland)"),
+    ("O", "Nicht im Inland steuerbar"),
+    ("KU", "Kleinunternehmer (§ 19 UStG)"),
+)
+# Wert der Steuerspalte -> Bedeutung
+STEUERWERT_WAHL = (
+    ("S:19", "19 %"),
+    ("S:7", "7 %"),
+    ("AE", "Reverse Charge (§ 13b UStG)"),
+    ("K", "Innergemeinschaftliche Lieferung"),
+    ("G", "Ausfuhrlieferung (Drittland)"),
+    ("O", "Nicht im Inland steuerbar"),
+    ("KU", "Kleinunternehmer (§ 19 UStG)"),
 )
 SPALTEN_FARBE = {
     "BT-129": "#1565c0",
@@ -1495,6 +1516,7 @@ class AnlernAssistent(QDialog):
             (_("Beträge"), ("BT-109", "BT-119", "BT-110", "BT-112")),
             (_("Gutschrift"), ("BT-3", "BT-25")),
             (_("Weitere Angaben (freiwillig)"), ("BT-20", "BT-13", "kundennummer")),
+            (_("Steuerhinweis & Kennungen (freiwillig)"), anlernen.STEUERFELDER),
         ):
             if titel:
                 v.addSpacing(6)
@@ -1549,7 +1571,7 @@ class AnlernAssistent(QDialog):
 
     def _feld_anzeigen(self, f: str, *, _kette: bool = False) -> None:
         vs = self.s.werte[f]
-        pflicht = anlernen.FELDER[f][2]
+        pflicht = anlernen.FELDER[f][2] and not (f == "BT-119" and self.s.steuerfall_wirksam() != "S")
         zust = vs.status if vs.status != "fehlt" or pflicht else "aus"
         zusatz = ""
         if f == "BT-20":
@@ -1959,6 +1981,19 @@ class AnlernAssistent(QDialog):
         self.einh_box = QVBoxLayout()
         self.einh_box.setSpacing(6)
         kv.addLayout(self.einh_box)
+        # ab 0.9.7: Steuerfall der Vorlage und Bedeutung der Werte in der Steuerspalte
+        kv.addWidget(lbl(_("Steuerfall"), "hinweis"))
+        self.steuerfall = Auswahl()
+        self.steuerfall.setObjectName("steuerfall")
+        for code, name in STEUERFALL_WAHL:
+            self.steuerfall.addItem(_(name), code)
+        self.steuerfall.activated.connect(self._steuerfall_gewaehlt)
+        kv.addWidget(self.steuerfall)
+        self.l_steuerfall = lbl("", "hinweis", umbruch=True)
+        kv.addWidget(self.l_steuerfall)
+        self.steuer_box = QVBoxLayout()
+        self.steuer_box.setSpacing(6)
+        kv.addLayout(self.steuer_box)
         v.addWidget(k)
 
         k2, kv2 = karte()
@@ -2109,6 +2144,7 @@ class AnlernAssistent(QDialog):
                 )
             )
             self.einh_box.addWidget(self._einheit_combo(e, ""))
+        self._steuer_anzeigen()
         # Vorschau
         abw = {a[0]: a for a in s.betrag_abweichungen()}
         self.vorschau.setRowCount(len(pos))
@@ -2223,6 +2259,53 @@ class AnlernAssistent(QDialog):
         cb.setCurrentIndex(max(0, cb.findData(code)))
         cb.activated.connect(lambda _i: self._einheit_gewaehlt(text, cb.currentData()))
         return cb
+
+    def _steuer_anzeigen(self) -> None:
+        """Steuerfall (Vorschlag aus dem Hinweistext) und je Wert der Steuerspalte die Bedeutung."""
+        s = self.s
+        self.steuerfall.setCurrentIndex(max(0, self.steuerfall.findData(s.steuerfall)))
+        vorschlag = s.steuerfall_vorschlag()
+        name = _(dict(STEUERFALL_WAHL).get(vorschlag, ""))
+        if s.steuerfall:
+            self.l_steuerfall.setText("")
+        elif vorschlag == "S":
+            self.l_steuerfall.setText(_("Kein Steuerhinweis im Druck – Regelbesteuerung."))
+        else:
+            self.l_steuerfall.setText(_("Vorschlag aus dem Steuerhinweis: {f}").format(f=name))
+        while self.steuer_box.count():
+            w = self.steuer_box.takeAt(0).widget()
+            if w:
+                w.deleteLater()
+        for text, wahl in s.steuerwerte_offen().items():
+            self.steuer_box.addWidget(
+                lbl(_("Steuerwert „{t}“ ist:").format(t=text), "hinweis" if wahl else "warn")
+            )
+            self.steuer_box.addWidget(self._steuerwert_combo(text, wahl))
+
+    def _steuerwert_combo(self, text: str, wahl: str) -> QComboBox:
+        cb = Auswahl()
+        cb.setObjectName("steuerwert")
+        if not wahl:
+            cb.addItem(_("bitte wählen"), "")
+        for code, name in STEUERWERT_WAHL:
+            cb.addItem(_(name), code)
+        if wahl and cb.findData(wahl) < 0:  # z. B. „S:16“ aus einer Steuerzeile
+            cb.addItem(wahl.replace("S:", "") + " %", wahl)
+        cb.setCurrentIndex(max(0, cb.findData(wahl)))
+        cb.activated.connect(lambda _i: self._steuerwert_gewaehlt(text, cb.currentData()))
+        return cb
+
+    def _steuerwert_gewaehlt(self, text: str, wahl: str) -> None:
+        if wahl:
+            self.s.tabelle.steuerwerte[text] = wahl
+            self._tabelle_anzeigen()
+
+    def _steuerfall_gewaehlt(self, _i: int = 0) -> None:
+        self.s.steuerfall_setzen(self.steuerfall.currentData() or "")
+        self._tabelle_anzeigen()
+        if hasattr(self, "zeilen") and "BT-119" in self.zeilen:
+            self._feld_anzeigen("BT-119")
+        self._fuss()
 
     def _einheit_gewaehlt(self, text: str, code: str) -> None:
         if code:

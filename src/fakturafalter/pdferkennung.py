@@ -1248,6 +1248,8 @@ BEREICHE: dict[str, tuple[str, ...]] = {
     "tabelle": (),  # Positionstabelle: Rahmen über alle Seiten wie bisher
     "summen": ("BT-109", "BT-110", "BT-112"),
     "zahlung": ("BT-20",),
+    # ab 0.9.7: Steuerhinweis, Kennungen des Kunden, Leitweg-ID, Währung/Kurs
+    "steuer": ("steuerhinweis", "BT-48", "BT-47", "BT-55", "BT-80", "BT-10", "BT-5", "kurs", "BT-111"),
 }
 BEREICH_NAMEN = {
     "anschrift": "Anschrift Empfänger",
@@ -1255,9 +1257,10 @@ BEREICH_NAMEN = {
     "tabelle": "Positionstabelle",
     "summen": "Summen",
     "zahlung": "Zahlungsbedingungen",
+    "steuer": "Steuerhinweis & Kennungen",
 }
 BEREICH_SEITEN = ("alle", "erste", "letzte")
-_HINTEN_ZUERST = ("summen", "zahlung")  # „alle Seiten“: von der letzten Seite her suchen
+_HINTEN_ZUERST = ("summen", "zahlung", "steuer")  # „alle Seiten“: von der letzten Seite her suchen
 
 
 def bereich_von(feld: str) -> str | None:
