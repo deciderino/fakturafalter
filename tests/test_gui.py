@@ -349,7 +349,7 @@ def test_autostart_windows_mit_falscher_registry(monkeypatch):
 def test_erststart_und_konfig_ladbar(tmp_path):
     p = orte.erststart(tmp_path / "cfg", tmp_path / "Arbeit")
     k = lade_konfig(p)
-    assert k.csv_profile and k.pdf_vorlagen
+    assert not k.csv_profile and k.pdf_vorlagen
     assert k.eingang.is_dir() and k.eingang.parent == tmp_path / "Arbeit"
     assert daten.absender_fehlt(k)  # Startkonfiguration: Absender leer -> Einrichtung nötig
     assert k.modus == "csv" and k.pdf_verwenden is False

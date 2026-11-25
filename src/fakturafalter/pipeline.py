@@ -78,7 +78,10 @@ class Ergebnis:
     kunde: str = ""
     brutto: str = ""  # Dezimalzahl als Text, z.B. "175.55"
     pruefung: str = ""  # gültig | ungültig | nicht geprüft | "" (Prüfung aus / nichts erzeugt)
-    entwurf: Entwurf | None = field(default=None, repr=False)  # erzeugt, noch nicht im Ausgang (ab 0.9.6)
+    entwurf: Entwurf | None = field(
+        default=None, repr=False
+    )  # erzeugt, noch nicht im Ausgang (ab 0.9.6)
+    profil: str = ""  # ab 0.9.8: welches CSV-/PDF-Profil die Datei gelesen hat
 
 
 @dataclass
@@ -195,7 +198,9 @@ def ausgabe_namen_oder_hinweis(r: Rechnung, k: Konfig) -> tuple[str, str] | None
     try:
         return ausgabe_namen(r.nummer, r, k)
     except nummernkreis.MusterFehler as e:
-        r.hinweis("pruefen", f"Dateinamen-Muster ungültig ({e}) – Einstellungen → Ausgabe", "Dateiname")
+        r.hinweis(
+            "pruefen", f"Dateinamen-Muster ungültig ({e}) – Einstellungen → Ausgabe", "Dateiname"
+        )
         return None
 
 
@@ -224,8 +229,10 @@ def einlesen(datei: Path, k: Konfig) -> tuple[str, list[Rechnung]]:
         return "pdf", adapter_pdf.lesen(datei, v, k, seiten)
     if suf in CSV_ENDUNGEN:
         for prof in k.csv_profile:
+            if not adapter_csv.profil_aktiv(prof):
+                continue
             if adapter_csv.profil_passt(datei, prof):
-                log.debug(
+                log.info(
                     "%s: CSV-Profil „%s“",
                     datei.name,
                     prof.get("profil") or prof.get("name") or Path(prof.get("_datei", "?")).stem,
@@ -288,11 +295,7 @@ def _zum_anlernen(zeilen: list, k: Konfig) -> bool:
 
 def _schon_erzeugt(zeilen: list, k: Konfig) -> str:
     """Rechnungsnummer, falls der Druck genau eine schon erzeugte Rechnung (protokoll.tsv) trägt, sonst ""."""
-    treffer = [
-        nr
-        for nr in protokoll.bekannte_nummern(k)
-        if _nummer_im_text(nr, zeilen)
-    ]
+    treffer = [nr for nr in protokoll.bekannte_nummern(k) if _nummer_im_text(nr, zeilen)]
     return treffer[0] if len(treffer) == 1 else ""
 
 
@@ -435,7 +438,9 @@ def entwurf_erzeugen(r: Rechnung, k: Konfig, ausgang: Path | None = None, bei_pd
         ent.teile.append((ent.ordner / n_pdf, ausgang / n_pdf))
         xr = _xrechnung(r, k)
         if xr is not None:
-            xr_ordner = ausgang / XRECHNUNG_ORDNER if k.xrechnung_ablage == "unterordner" else ausgang
+            xr_ordner = (
+                ausgang / XRECHNUNG_ORDNER if k.xrechnung_ablage == "unterordner" else ausgang
+            )
             (ent.ordner / n_xr).write_bytes(xr)
             ent.teile.append((ent.ordner / n_xr, xr_ordner / n_xr))
     except BaseException:
@@ -684,7 +689,9 @@ def verarbeiten(
                 e.entwurf = None
 
 
-def _verarbeiten(lauf: Lauf, dateien: list[Path], k: Konfig, *, verschieben: bool, fortschritt) -> Lauf:
+def _verarbeiten(
+    lauf: Lauf, dateien: list[Path], k: Konfig, *, verschieben: bool, fortschritt
+) -> Lauf:
     eingelesen = []
     melden = _Melder(fortschritt)
     sortiert = sorted(dateien)
@@ -730,7 +737,9 @@ def _verarbeiten(lauf: Lauf, dateien: list[Path], k: Konfig, *, verschieben: boo
     _pdfs_ohne_haken(paare, ungenutzt_pdfs, lauf.datei_fehler)
     bad_files.update(lauf.datei_fehler)
     n_r = len(paare)
-    vergeben: set[str] = set()  # Ausgabenamen dieses Laufs (Ausgaben liegen bis nach der Prüfung im Temp)
+    vergeben: set[str] = (
+        set()
+    )  # Ausgabenamen dieses Laufs (Ausgaben liegen bis nach der Prüfung im Temp)
     for r, _q in paare:  # „Logs anonymisieren“: diese Angaben auch wörtlich maskieren
         logdatei.ANONYM.merken(
             r.kaeufer.name,
@@ -756,11 +765,14 @@ def _verarbeiten(lauf: Lauf, dateien: list[Path], k: Konfig, *, verschieben: boo
             quellen=quellen,
             kunde=r.kaeufer.name,
             brutto=str(r.summen.brutto) if r.summen.brutto else "",
+            profil=r.profil or "",
         )
         namen = ausgabe_namen_oder_hinweis(r, k) if erg.status == "ok" else None
         if namen is None:
             erg.status = r.status
-        elif (k.ausgang / namen[0]).exists() or namen[0] in vergeben:  # auch im selben Lauf vergeben
+        elif (k.ausgang / namen[0]).exists() or namen[
+            0
+        ] in vergeben:  # auch im selben Lauf vergeben
             r.hinweis(
                 "pruefen",
                 f"Ausgabe {namen[0]} existiert bereits – Rechnung wurde schon erzeugt?",
@@ -956,6 +968,7 @@ def _protokoll(lauf: Lauf, k: Konfig, ziel_lauf: Lauf | None = None) -> None:
                     e.kunde,
                     e.brutto,
                     e.pruefung,
+                    getattr(e, "profil", "") or "",
                 )
             )
         )
@@ -972,12 +985,13 @@ def _protokoll(lauf: Lauf, k: Konfig, ziel_lauf: Lauf | None = None) -> None:
                     "",
                     "",
                     "",
+                    "",
                 )
             )
         )
     for d, grund in lauf.datei_fehler.items():
         zeilen.append(
-            "\t".join(_tsv(x) for x in (jetzt, "fehler", Path(d).name, "", grund, "", "", ""))
+            "\t".join(_tsv(x) for x in (jetzt, "fehler", Path(d).name, "", grund, "", "", "", ""))
         )
     meldung = protokoll.schreiben(k, zeilen)
     if meldung is not None:

@@ -90,10 +90,13 @@ def standard_konfig() -> Path:
 
 
 def erststart(ordner: Path, arbeitsordner: Path) -> Path:
-    """Startkonfiguration + Beispielprofile anlegen. Absender bleibt leer (muss in den Einstellungen rein)."""
+    """Startkonfiguration anlegen. Absender bleibt leer (muss in den Einstellungen rein).
+    Beispiel-CSV-Profile (profil-variante-*) werden ab 0.9.8 nicht mehr mitkopiert."""
     ordner.mkdir(parents=True, exist_ok=True)
     for f in START.iterdir():
         if f.name != KONFIG_NAME and f.is_file() and not (ordner / f.name).exists():
+            if f.name.startswith("profil-variante-"):
+                continue
             (ordner / f.name).write_bytes(f.read_bytes())
     d = yaml.safe_load((START / KONFIG_NAME).read_text(encoding="utf-8"))
     d.pop("ordner", None)

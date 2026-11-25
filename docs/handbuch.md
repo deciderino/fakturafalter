@@ -55,13 +55,20 @@ Einstellungen lassen sich später unter **Einstellungen** ändern.
 2. **Neue CSV einrichten…** Eine echte Export-Datei aus der Warenwirtschaft
    wählen (sie wird nur gelesen). Der Zuordnung einen Namen geben und **Weiter**.
 3. **Format:** Trennzeichen, Zeichensatz, Dezimalzeichen und Datumsformat sind
-   erkannt. Passt die Vorschau nicht, stelle sie um.
+   erkannt. Passt die Vorschau nicht, stelle sie um. Unter **Aufbau** kannst du
+   festlegen, ob jede Zeile eine Position ist, die Datei **Blöcke mit eigener
+   Kopfzeile** hat oder eine Satzart-Spalte Kopf und Positionen trennt.
+   Fakturafalter schlägt den erkannten Aufbau vor.
 4. **Vorschau:** Über jeder Spalte steht, wofür Fakturafalter sie nimmt.
    Stimmt etwas nicht, wähle das Feld um. Unklare Steuerwerte bleiben auf
-   „prüfen“.
+   „prüfen“. Bei Blöcken typisierst du die erkannten Blöcke (Kopf, Positionen,
+   Zahlung …) und ordnest die Spalten je Block zu. Textzeilen ohne Menge und
+   Preis hängen standardmäßig als Beschreibung (BT-154) an der Position darüber;
+   eine gewollte Leerzeile auf der Sichtseite erkennst du mit dem Platzhalter
+   `#LEER` (änderbar) oder einer Zeile, die nur Kopffelder trägt.
 5. **Probe:** zeigt je Rechnung „bereit“ oder „braucht Prüfung“ – es wird
-   nichts erzeugt. Dann **Speichern**. Die Zuordnung erscheint als Karte unter
-   „CSV-Zuordnungen“ und lässt sich mit „Ändern…“ öffnen.
+   nichts erzeugt. Optional **Sichtseite ansehen…**. Dann **Speichern**. Die
+   Zuordnung erscheint als Karte unter „CSV-Zuordnungen“.
 6. Den Haken **„Zusätzlich das PDF der Rechnung verwenden“** nur setzen, wenn
    der Original-Druck die Sichtseite bleiben soll. Ohne Haken (Standard für eine
    neue CSV-Einstellung) baut Fakturafalter die Sichtseite aus den Daten neu
@@ -71,8 +78,22 @@ Einstellungen lassen sich später unter **Einstellungen** ändern.
    nach `Erledigt`.
 7. Schalter **Überwachung** einschalten und die CSV in den `Eingang` legen.
 
-Dateien mit getrennten Kopf- und Positionszeilen (Satzart) richtet der Assistent
-nicht ein; ein Profil dafür schreibst du von Hand (siehe [csv-format.md](csv-format.md)).
+Satzart-Dateien richtet der Assistent ebenfalls ein, wenn eine Spalte „Satzart“
+(oder ähnlich) erkannt wird; Feineinstellungen stehen in
+[csv-format.md](csv-format.md).
+
+### Profile in den Einstellungen (ab 0.9.8)
+
+Jede Profilkarte zeigt, ob sie **aktiv** ist und welche Spalten oder Merkmale
+sie erkennt. Du kannst ein Profil aus- und wieder einschalten, ohne es zu
+löschen, und die Reihenfolge mit **Hoch** / **Runter** ändern. Passen mehrere
+Profile zu einer Datei, gewinnt das **oberste aktive**. Protokoll und
+Rechnungsseite nennen je Datei das verwendete Profil. Mit **Profil testen…**
+wählst du eine CSV und siehst, welches Profil greifen würde und warum die
+anderen nicht. Alle Profile, auch mitgelieferte, sind bearbeit- und löschbar.
+Beispielprofile (Varianten a/b/c/d/k/s und das Block-Beispiel) liegen im
+Testdaten-ZIP und lassen sich mit **Profil übernehmen…** in deine Konfiguration
+holen; eine frische Installation startet ohne diese Beispiele.
 
 ## 4. Schnellstart: XML
 

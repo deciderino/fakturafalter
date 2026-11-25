@@ -31,8 +31,9 @@ weiterhin dein System.
     leeren; das Protokoll liegt getrennt im Ordner `Protokoll`.
 - **Kostenlos und offen.** Apache-2.0, für Windows und Linux. Java-Laufzeit und Prüfwerkzeuge sind im Paket
   enthalten.
-- **Passt sich an.** CSV-Assistent für eigene Exporte, Layout-Editor für die Sichtseite. Optional Prüfmuster für
-  die Rechnungsnummer und eigene Dateinamen.
+- **Passt sich an.** CSV-Assistent für eigene Exporte – auch Dateien mit mehreren Blöcken und eigener Kopfzeile.
+  Profile in den Einstellungen an- und ausschalten, in fester Reihenfolge prüfen. Layout-Editor für die Sichtseite.
+  Optional Prüfmuster für die Rechnungsnummer und eigene Dateinamen.
 
 ## In drei Schritten
 
@@ -42,7 +43,10 @@ weiterhin dein System.
 
    Ein kurzer Assistent fragt nach Arbeitsordner und Absender.
 2. **Eingang einrichten.** Einstellungen → Eingang & Vorlagen:
-   - **CSV**: „Neue CSV einrichten…“ mit einer echten Export-Datei, Spalten prüfen, Probe ansehen, speichern.
+   - **CSV**: „Neue CSV einrichten…“ mit einer echten Export-Datei. Der Assistent erkennt, ob jede Zeile eine
+     Position ist, ob die Datei Blöcke mit eigener Kopfzeile hat, oder ob eine Satzart-Spalte Kopf und Positionen
+     trennt. Spalten prüfen, Probe und optional die Sichtseite ansehen, speichern. Unter Einstellungen siehst du
+     je Profil, was es erkennt; mit „Profil testen…“ prüfst du, welches Profil eine Datei lesen würde.
    - **XML** (ZUGFeRD / XRechnung, CII oder UBL): Eine Zuordnung ist nicht nötig.
 3. **Überwachung einschalten.** Exporte in den Ordner `Eingang` legen. Die geprüfte ZUGFeRD-PDF liegt im
    `Ausgang`, die Quelle wandert nach `Erledigt`.

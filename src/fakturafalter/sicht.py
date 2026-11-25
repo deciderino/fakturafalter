@@ -146,28 +146,38 @@ def preis_text(
 
 
 def umbrechen(c, text: str, font: str, groesse: float, breite: float) -> list[str]:
-    """Text auf Zeilen von höchstens ``breite`` umbrechen (an Leerzeichen, zu lange Wörter hart)."""
-    zeilen: list[str] = []
-    akt = ""
-    for wort in (text or "").split():
-        while c.stringWidth(wort, font, groesse) > breite and len(wort) > 1:
-            n = len(wort)
-            while n > 1 and c.stringWidth(wort[:n], font, groesse) > breite:
-                n -= 1
-            if akt:
+    """Text auf Zeilen von höchstens ``breite`` umbrechen (an Leerzeichen, zu lange Wörter hart).
+
+    Explizite Zeilenumbrüche und leere Zeilen bleiben erhalten (ab 0.9.8, Positionstext).
+    """
+    aus: list[str] = []
+    teile = str(text or "").split("\n")
+    for i, teil in enumerate(teile):
+        if teil == "":
+            aus.append("")
+            continue
+        zeilen: list[str] = []
+        akt = ""
+        for wort in teil.split():
+            while c.stringWidth(wort, font, groesse) > breite and len(wort) > 1:
+                n = len(wort)
+                while n > 1 and c.stringWidth(wort[:n], font, groesse) > breite:
+                    n -= 1
+                if akt:
+                    zeilen.append(akt)
+                    akt = ""
+                zeilen.append(wort[:n])
+                wort = wort[n:]
+            probe = f"{akt} {wort}".strip()
+            if akt and c.stringWidth(probe, font, groesse) > breite:
                 zeilen.append(akt)
-                akt = ""
-            zeilen.append(wort[:n])
-            wort = wort[n:]
-        probe = f"{akt} {wort}".strip()
-        if akt and c.stringWidth(probe, font, groesse) > breite:
+                akt = wort
+            else:
+                akt = probe
+        if akt:
             zeilen.append(akt)
-            akt = wort
-        else:
-            akt = probe
-    if akt:
-        zeilen.append(akt)
-    return zeilen or [""]
+        aus.extend(zeilen or [""])
+    return aus or [""]
 
 
 def einpassen(
@@ -220,7 +230,9 @@ def summen_zeilen(r: Rechnung) -> list[tuple[str, str]]:
     if r.zu_abschlaege:  # BG-20/BG-21
         zeilen.append(("Summe Positionen", eur(s.positionen_netto)))
         zeilen += [_za_text(za) for za in r.zu_abschlaege]
-    ku = bool(s.steuerzeilen) and all(steuerfaelle.fall_von(z.steuer) == "KU" for z in s.steuerzeilen)
+    ku = bool(s.steuerzeilen) and all(
+        steuerfaelle.fall_von(z.steuer) == "KU" for z in s.steuerzeilen
+    )
     if not ku:  # Kleinunternehmer: nur der Gesamtbetrag
         zeilen.append(("Nettobetrag", eur(s.netto)))
     for z in s.steuerzeilen:
@@ -247,7 +259,10 @@ def steuer_texte(r: Rechnung) -> list[str]:
             texte.append(t)
     kt = steuerfaelle.kurs_text(r)
     if r.summen.ust_steuerwaehrung is not None:
-        texte.append(f"Umsatzsteuer in EUR: {eur(r.summen.ust_steuerwaehrung)} €" + (f" ({kt})" if kt else ""))
+        texte.append(
+            f"Umsatzsteuer in EUR: {eur(r.summen.ust_steuerwaehrung)} €"
+            + (f" ({kt})" if kt else "")
+        )
     elif kt:
         texte.append(kt)
     return texte
@@ -421,7 +436,8 @@ GRAU = (0.4, 0.4, 0.4)
 
 
 def _ein(t) -> str:
-    return " ".join(str(t or "").split())
+    """Whitespace in einer Zeile zusammenziehen; Zeilenumbrüche und Leerzeilen bleiben (ab 0.9.8)."""
+    return "\n".join(" ".join(z.split()) for z in str(t or "").split("\n"))
 
 
 def unterzeilen(p, sprache: str | None = None) -> list[tuple[str, bool]]:
@@ -437,7 +453,7 @@ def unterzeilen(p, sprache: str | None = None) -> list[tuple[str, bool]]:
     aus: list[tuple[str, bool]] = []
 
     def dazu(text: str, grau: bool = False) -> None:
-        if text:
+        if text or text == "":  # leerer String = gewollte Leerzeile (ab 0.9.8)
             aus.append((text, grau))
 
     zeichnung = index = ""
@@ -467,7 +483,16 @@ def unterzeilen(p, sprache: str | None = None) -> list[tuple[str, bool]]:
     # (b) Beschreibung, Merkmale, Ursprung
     beschr = _ein(p.beschreibung)
     if beschr and beschr != _ein(p.bezeichnung):
-        dazu(f"{t['beschreibung']} {beschr}")
+        teile = beschr.split("\n")
+        while teile and teile[0] == "":
+            teile.pop(0)
+        erste = True
+        for teil in teile:
+            if erste and teil:
+                dazu(f"{t['beschreibung']} {teil}")
+                erste = False
+            else:
+                dazu(teil)  # auch leer: gewollte Leerzeile auf der Sichtseite
     for m in merkmale:
         dazu(m)
     if _ein(p.ursprungsland):
@@ -503,7 +528,18 @@ def unterzeilen(p, sprache: str | None = None) -> list[tuple[str, bool]]:
 
 def _umbrechen_fuellend(c, text: str, font: str, groesse: float, breite: float) -> list[str]:
     """Wie ``umbrechen``, aber ein Wort, das auch allein nicht in eine Zeile passt (lange Artikelnummer), beginnt
-    direkt hinter dem Präfix und wird hart umbrochen – „Art.-Nr.“ steht so nie allein in einer Zeile."""
+    direkt hinter dem Präfix und wird hart umbrochen – „Art.-Nr.“ steht so nie allein in einer Zeile.
+
+    Explizite Zeilenumbrüche und leere Zeilen bleiben erhalten (ab 0.9.8).
+    """
+    if "\n" in str(text or ""):
+        aus: list[str] = []
+        for teil in str(text or "").split("\n"):
+            if teil == "":
+                aus.append("")
+            else:
+                aus.extend(_umbrechen_fuellend(c, teil, font, groesse, breite))
+        return aus or [""]
     zeilen: list[str] = []
     akt = ""
     for wort in (text or "").split():
@@ -525,7 +561,9 @@ def _umbrechen_fuellend(c, text: str, font: str, groesse: float, breite: float) 
                 zeilen.append(akt)  # nicht einmal ein Zeichen passt noch dahinter
                 akt = ""
                 continue
-            if n < len(rest):  # lieber hinter einem Bindestrich/Schrägstrich trennen, wenn das nicht zu früh ist
+            if n < len(
+                rest
+            ):  # lieber hinter einem Bindestrich/Schrägstrich trennen, wenn das nicht zu früh ist
                 k = max(rest.rfind("-", 0, n), rest.rfind("/", 0, n), rest.rfind(".", 0, n)) + 1
                 n = k if k > n // 2 else n
             akt = vor + rest[:n]

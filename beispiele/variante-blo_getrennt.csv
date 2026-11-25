@@ -1,0 +1,13 @@
+Rechnungsnr;Datum;Lieferdatum;Kunde;Strasse;PLZ;Ort
+SK-2026-0414;06.10.2026;05.10.2026;Hotel Am Stadtpark GmbH;Parkallee 18;31135;Hildesheim
+
+Artikel;Menge;Einheit;Einzelpreis;USt-Satz
+Roggenmischbrot 1000 g;12;Stk;3,40;7
+mit extra Körnern und länger haltbar;;;
+#LEER;;;
+Quarkbällchen;2,5;kg;9,60;7
+Brotkorb Leihgebühr;60;Stk;2,50;19
+Lieferpauschale Innenstadt;60;Stk;6,00;19
+
+Skonto;Zahlungsziel mit Skonto;Zahlungsziel ohne Abzug;Gesamt Brutto;Gesamt Netto;
+3;10;30;676,24;574,80;

@@ -7,6 +7,7 @@ Bei großer Skalierung (schmales Fenster) wird die linke Liste zur Auswahl oben.
 from __future__ import annotations
 
 import copy
+import shutil
 from pathlib import Path
 
 from PySide6.QtCore import Signal
@@ -21,16 +22,19 @@ from PySide6.QtWidgets import (
     QLineEdit,
     QListWidget,
     QListWidgetItem,
+    QMessageBox,
     QRadioButton,
     QSpinBox,
     QStackedWidget,
     QSystemTrayIcon,
+    QTextEdit,
     QVBoxLayout,
     QWidget,
 )
 
 from .. import (
     __version__,
+    adapter_csv,
     anlernen,
     csv_einrichtung,
     nummernkreis,
@@ -38,7 +42,13 @@ from .. import (
     updatepruefung,
     validierung,
 )
-from ..konfig import PROTOKOLL_ORDNER, UNTERORDNER, XRECHNUNG_ORDNER, gemeinsamer_ordner
+from ..konfig import (
+    PROTOKOLL_ORDNER,
+    UNTERORDNER,
+    XRECHNUNG_ORDNER,
+    csv_eintrag_datei,
+    gemeinsamer_ordner,
+)
 from . import aktionen, autostart, daten
 from .absender_form import AbsenderFormular, aus_roh, in_roh
 from .bausteine import Segmente, ToastStapel, fussleiste, karte, knopf, lbl, rollen, trenner
@@ -96,7 +106,9 @@ def _pruefen_text(n: int, ab: int, sicher: bool, an: bool) -> str:
 
 
 class Einstellungen(QDialog):
-    update_ergebnis = Signal(bool, object)  # „Jetzt prüfen“: (erreichbar, Neu | None) aus dem Hintergrund
+    update_ergebnis = Signal(
+        bool, object
+    )  # „Jetzt prüfen“: (erreichbar, Neu | None) aus dem Hintergrund
 
     def __init__(self, haupt, bereich: int = 0):
         super().__init__(haupt)
@@ -271,13 +283,21 @@ class Einstellungen(QDialog):
         )
         h = QHBoxLayout()
         h.setSpacing(8)
-        prot = self.roh.get("protokoll_ordner") or (self.roh.get("ordner") or {}).get("protokoll") or ""
+        prot = (
+            self.roh.get("protokoll_ordner")
+            or (self.roh.get("ordner") or {}).get("protokoll")
+            or ""
+        )
         self.protokoll_ordner = QLineEdit(str(prot))
         self.protokoll_ordner.setObjectName("protokoll_ordner")
         self.protokoll_ordner.setAccessibleName(_("Protokollordner"))
         self._protokoll_platzhalter()
         h.addWidget(self.protokoll_ordner, 1)
-        h.addWidget(knopf(_("Wählen…"), klick=lambda: self._waehlen(self.protokoll_ordner, "Protokollordner")))
+        h.addWidget(
+            knopf(
+                _("Wählen…"), klick=lambda: self._waehlen(self.protokoll_ordner, "Protokollordner")
+            )
+        )
         v.addLayout(h)
         self.arbeitsordner.textChanged.connect(self._protokoll_platzhalter)
         self.einzeln.toggled.connect(self._protokoll_platzhalter)
@@ -470,10 +490,12 @@ class Einstellungen(QDialog):
             (
                 "xml",
                 _("XML (ZUGFeRD / XRechnung)"),
-                (_(
-                    "Die Rechnungsdaten kommen aus einer ZUGFeRD- oder "
-                    "XRechnung-XML (CII oder UBL)."
-                ),),
+                (
+                    _(
+                        "Die Rechnungsdaten kommen aus einer ZUGFeRD- oder "
+                        "XRechnung-XML (CII oder UBL)."
+                    ),
+                ),
             ),
             (
                 "nur_pdf",
@@ -698,31 +720,68 @@ class Einstellungen(QDialog):
         for prof in k.pdf_profile:
             self._profil_karte(v, prof, "pdf")
 
+    def _csv_eintraege(self) -> list:
+        return list(self.roh.get("csv_profile") or [])
+
+    def _csv_profile_laden(self) -> list[dict]:
+        from .. import konfig as konfig_mod
+
+        k = self.haupt.k
+        aus = []
+        for e in self._csv_eintraege():
+            try:
+                aus.append(konfig_mod._profil_laden(k, self.roh, e))
+            except (OSError, ValueError, KeyError) as ex:
+                aus.append(
+                    {
+                        "profil": csv_eintrag_datei(e) or "?",
+                        "_datei": str(k.pfad(csv_eintrag_datei(e))) if csv_eintrag_datei(e) else "",
+                        "aktiv": not isinstance(e, dict) or e.get("aktiv", True),
+                        "_fehler": str(ex),
+                    }
+                )
+        return aus
+
+    def _csv_rel(self, datei: str) -> str:
+        k = self.haupt.k
+        p = Path(datei)
+        try:
+            return str(p.resolve().relative_to(Path(k.basis).resolve()))
+        except (ValueError, OSError):
+            return str(p)
+
+    def _csv_schreiben(self, eintraege: list) -> None:
+        self.roh["csv_profile"] = eintraege
+        self._vorlagen_neu_ohne_laden()
+
     def _teil_csv(self, v: QVBoxLayout) -> None:
         k = self.haupt.k
+        profile = self._csv_profile_laden()
         _abschnitt(
             v,
             _("CSV-Zuordnungen"),
             _(
-                "Wie Fakturafalter die CSV deiner Warenwirtschaft liest: Format und "
-                "welche Spalte was bedeutet. Trennzeichen, Zeichensatz und "
-                "Dezimalzeichen erkennt der Assistent selbst."
+                "Wie Fakturafalter die CSV deiner Warenwirtschaft liest. "
+                "Passen mehrere Profile, gilt das oberste aktive. "
+                "Beispielprofile aus dem Testdaten-ZIP kannst du übernehmen."
             ),
         )
         h = QHBoxLayout()
         h.addWidget(
             knopf(
                 _("Neue CSV einrichten…"),
-                primary=not k.csv_profile,
+                primary=not profile,
                 klick=lambda: self._csv_assistent(),
             )
         )
+        h.addWidget(knopf(_("Profil übernehmen…"), klick=self._csv_uebernehmen))
+        h.addWidget(knopf(_("Profil testen…"), klick=self._csv_testen))
         h.addStretch(1)
         v.addLayout(h)
-        if not k.csv_profile:
+        if not profile:
             v.addWidget(lbl(_("Noch keine CSV eingerichtet."), "hinweis", umbruch=True))
-        for prof in k.csv_profile:
-            self._profil_karte(v, prof, "csv")
+        for i, prof in enumerate(profile):
+            self._csv_karte(v, prof, i, len(profile))
         infos = daten.kundenstamm_info(k)
         if infos:
             _abschnitt(v, _("Kundenstamm"))
@@ -741,6 +800,206 @@ class Einstellungen(QDialog):
                 if ohne:
                     text += " · " + _("{n} ohne E-Mail (für XRechnung nötig)").format(n=ohne)
                 v.addWidget(lbl(text, "gut" if anzahl and not ohne else "warn", umbruch=True))
+
+    def _csv_karte(self, v: QVBoxLayout, prof: dict, index: int, anzahl: int) -> None:
+        aktiv = adapter_csv.profil_aktiv(prof)
+        kt, kv = karte()
+        kopf = QHBoxLayout()
+        titel = (
+            daten.profilname(prof)
+            if "profil" in prof or "name" in prof
+            else Path(prof.get("_datei") or "?").stem
+        )
+        kopf.addWidget(lbl(titel, "titel", umbruch=True), 1)
+        kopf.addWidget(lbl(_("aktiv") if aktiv else _("aus"), "gut" if aktiv else "warn"))
+        kv.addLayout(kopf)
+        if prof.get("_fehler"):
+            kv.addWidget(lbl(prof["_fehler"], "warn", umbruch=True))
+        else:
+            kv.addWidget(lbl(csv_einrichtung.merkmale(prof), "hinweis", umbruch=True))
+        d = prof.get("datei") or {}
+        if d.get("muster"):
+            kv.addWidget(
+                lbl(_("Dateien: {m}").format(m=d.get("muster", "*.csv")), "hinweis", umbruch=True)
+            )
+        an = QCheckBox(_("Aktiv"))
+        an.setChecked(aktiv)
+        an.toggled.connect(lambda an_, i=index: self._csv_aktiv(i, an_))
+        kv.addWidget(an)
+        # bestehende Schalter Gegenprüfung/Anlernen, falls das Profil sie kennt
+        name = pdferkennung.profil_name(prof) if not prof.get("_fehler") else ""
+        gp = anl = None
+        if name:
+            es = pdferkennung.einstellungen(prof)
+            gp = QCheckBox(_("Gegenprüfung: CSV mit dem Druck vergleichen"))
+            gp.setChecked(es["gegenpruefung"])
+            anl = QCheckBox(_("Anlernen: Layout aus Paaren CSV + PDF lernen"))
+            anl.setChecked(es["anlernen"])
+            kv.addWidget(gp)
+            kv.addWidget(anl)
+            self.pdf[name] = (
+                gp,
+                anl,
+                QCheckBox(),
+            )  # drittes wie bisher (nur_pdf-Haken ungenutzt bei CSV)
+            self.pdf[name][2].setChecked(False)
+        unten = QHBoxLayout()
+        unten.addWidget(
+            knopf(
+                _("Ändern…"),
+                klick=lambda _c=False, p=prof: self._csv_assistent(p),
+                tip=_("Format und Spaltenzuordnung ändern"),
+                enabled=not prof.get("_fehler") and csv_einrichtung.bearbeitbar(prof),
+            )
+        )
+        unten.addWidget(
+            knopf(
+                _("Hoch"),
+                klick=lambda _c=False, i=index: self._csv_verschieben(i, -1),
+                enabled=index > 0,
+            )
+        )
+        unten.addWidget(
+            knopf(
+                _("Runter"),
+                klick=lambda _c=False, i=index: self._csv_verschieben(i, 1),
+                enabled=index < anzahl - 1,
+            )
+        )
+        unten.addStretch(1)
+        unten.addWidget(
+            knopf(_("Löschen…"), danger=True, klick=lambda _c=False, i=index: self._csv_loeschen(i))
+        )
+        kv.addLayout(unten)
+        v.addWidget(kt)
+
+    def _csv_aktiv(self, index: int, an: bool) -> None:
+        ein = self._csv_eintraege()
+        if not (0 <= index < len(ein)):
+            return
+        e = ein[index]
+        if isinstance(e, dict):
+            e = dict(e)
+            e["aktiv"] = bool(an)
+        else:
+            e = {"datei": str(e), "aktiv": bool(an)}
+        ein[index] = e
+        self._csv_schreiben(ein)
+
+    def _csv_verschieben(self, index: int, delta: int) -> None:
+        ein = self._csv_eintraege()
+        j = index + delta
+        if not (0 <= index < len(ein) and 0 <= j < len(ein)):
+            return
+        ein[index], ein[j] = ein[j], ein[index]
+        self._csv_schreiben(ein)
+
+    def _csv_loeschen(self, index: int) -> None:
+        ein = self._csv_eintraege()
+        if not (0 <= index < len(ein)):
+            return
+        datei = csv_eintrag_datei(ein[index])
+        if (
+            QMessageBox.question(
+                self,
+                _("Profil löschen"),
+                _(
+                    "Das Profil „{n}“ aus der Liste nehmen? Die Datei kannst du zusätzlich löschen."
+                ).format(n=datei),
+                QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
+                QMessageBox.StandardButton.No,
+            )
+            != QMessageBox.StandardButton.Yes
+        ):
+            return
+        pfad = self.haupt.k.pfad(datei) if datei else None
+        del ein[index]
+        if pfad and pfad.exists():
+            if (
+                QMessageBox.question(
+                    self,
+                    _("Profildatei löschen"),
+                    _("Auch die Datei {n} löschen?").format(n=pfad.name),
+                    QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
+                    QMessageBox.StandardButton.No,
+                )
+                == QMessageBox.StandardButton.Yes
+            ):
+                try:
+                    pfad.unlink()
+                except OSError as e:
+                    self.toast("fehler", _("Datei nicht gelöscht"), str(e))
+        self._csv_schreiben(ein)
+
+    def _csv_uebernehmen(self) -> None:
+        datei, _f = QFileDialog.getOpenFileName(
+            self, _("Profil übernehmen"), str(Path.home()), _("YAML/JSON (*.yaml *.yml *.json)")
+        )
+        if not datei:
+            return
+        quelle = Path(datei)
+        ziel = Path(self.haupt.k.basis) / quelle.name
+        if ziel.exists() and ziel.resolve() != quelle.resolve():
+            stamm, n = ziel.stem, 2
+            while ziel.exists():
+                ziel, n = ziel.with_name(f"{stamm}-{n}{ziel.suffix}"), n + 1
+        try:
+            if ziel.resolve() != quelle.resolve():
+                shutil.copy2(quelle, ziel)
+        except OSError as e:
+            return self.toast("fehler", _("Profil nicht übernommen"), str(e))
+        ein = self._csv_eintraege()
+        rel = self._csv_rel(str(ziel))
+        if not any(csv_eintrag_datei(x) == rel or csv_eintrag_datei(x) == ziel.name for x in ein):
+            ein.append({"datei": rel, "aktiv": True})
+        self._csv_schreiben(ein)
+
+    def _csv_testen(self) -> None:
+        datei, _f = QFileDialog.getOpenFileName(
+            self, _("CSV zum Testen"), str(Path.home()), _("CSV/Text (*.csv *.txt *.tsv)")
+        )
+        if not datei:
+            return
+        pfad = Path(datei)
+        zeilen = []
+        treffer = None
+        for prof in self._csv_profile_laden():
+            name = daten.profilname(prof) if not prof.get("_fehler") else prof.get("profil", "?")
+            if prof.get("_fehler"):
+                zeilen.append(f"• {name}: nicht ladbar ({prof['_fehler']})")
+                continue
+            if not adapter_csv.profil_aktiv(prof):
+                zeilen.append(f"• {name}: ausgeschaltet")
+                continue
+            ok, grund = adapter_csv.profil_passt_grund(pfad, prof)
+            if ok and treffer is None:
+                treffer = name
+                zeilen.append(f"• {name}: greift ({grund})")
+            elif ok:
+                zeilen.append(f"• {name}: würde auch passen ({grund}), liegt aber weiter unten")
+            else:
+                zeilen.append(f"• {name}: passt nicht ({grund})")
+        kopf = (
+            _("Für {d} würde „{n}“ greifen (oberstes passendes aktives Profil).").format(
+                d=pfad.name, n=treffer
+            )
+            if treffer
+            else _("Für {d} greift kein aktives Profil.").format(d=pfad.name)
+        )
+        dlg = QDialog(self)
+        dlg.setWindowTitle(_("Profil testen"))
+        dlg.resize(640, 400)
+        v = QVBoxLayout(dlg)
+        v.addWidget(lbl(kopf, "titel", umbruch=True))
+        tbox = QTextEdit()
+        tbox.setReadOnly(True)
+        tbox.setPlainText("\n".join(zeilen) if zeilen else _("Keine Profile eingerichtet."))
+        v.addWidget(tbox)
+        h = QHBoxLayout()
+        h.addStretch(1)
+        h.addWidget(knopf(_("Schließen"), primary=True, klick=dlg.accept))
+        v.addLayout(h)
+        dlg.exec()
 
     def _teil_xml(self, v: QVBoxLayout) -> None:
         _abschnitt(v, _("XML-Eingang"))
@@ -807,6 +1066,16 @@ class Einstellungen(QDialog):
         alt.deleteLater()
         self.bereich_zeigen("Eingang & Vorlagen")
 
+    def _vorlagen_neu_ohne_laden(self) -> None:
+        """Seite „Eingang & Vorlagen“ neu aufbauen, ohne self.roh aus der gespeicherten Konfig zu überschreiben."""
+        alt = self.vorlagen_rolle
+        self.vorlagen_rolle = rollen(self._seite_vorlagen())
+        i = self.stapel.indexOf(alt)
+        self.stapel.insertWidget(i, self.vorlagen_rolle)
+        self.stapel.removeWidget(alt)
+        alt.deleteLater()
+        self.bereich_zeigen("Eingang & Vorlagen")
+
     # ======================================================================== Prüfung
     def _seite_pruefung(self) -> QWidget:
         w, v = _seite()
@@ -854,12 +1123,16 @@ class Einstellungen(QDialog):
             ),
             erste=True,
         )
-        v.addWidget(lbl(_("XRechnung (XML) zusätzlich, wenn der Kundenstamm es verlangt"), umbruch=True))
+        v.addWidget(
+            lbl(_("XRechnung (XML) zusätzlich, wenn der Kundenstamm es verlangt"), umbruch=True)
+        )
         self.xr = QComboBox()
         self.xr.setObjectName("xrechnung_ablage")
         self.xr.setAccessibleName(_("XRechnung (XML) zusätzlich, wenn der Kundenstamm es verlangt"))
         self.xr.addItem(_("Neben der PDF im Ausgang"), "ausgang")
-        self.xr.addItem(_("Im Unterordner „{n}“ des Ausgangs").format(n=XRECHNUNG_ORDNER), "unterordner")
+        self.xr.addItem(
+            _("Im Unterordner „{n}“ des Ausgangs").format(n=XRECHNUNG_ORDNER), "unterordner"
+        )
         self.xr.addItem(_("Keine XRechnung-Datei"), "keine")
         ablage = str(opt.get("xrechnung_ablage") or "ausgang")
         if not opt.get("xrechnung_zusatz", True) or ablage == "keine":
@@ -905,7 +1178,9 @@ class Einstellungen(QDialog):
             xml.setObjectName(f"dateiname_xrechnung_{kreis}")
             xml.setAccessibleName(_("Dateiname der XRechnung-XML (falls erzeugt)"))
             xml.setPlaceholderText(
-                "{rechnungsnummer}_xrechnung.xml" if kreis == "rechnung" else _("wie bei Rechnungen")
+                "{rechnungsnummer}_xrechnung.xml"
+                if kreis == "rechnung"
+                else _("wie bei Rechnungen")
             )
             b.addWidget(xml)
             b.addWidget(lbl(_("Prüfmuster der Rechnungsnummer (optional)"), umbruch=True))
@@ -991,9 +1266,7 @@ class Einstellungen(QDialog):
             hat_zaehler = bool(k.pruefmuster) and nummernkreis.hat_zaehler(k.pruefmuster)
             f["luecken"].setEnabled(hat_zaehler)
             f["luecken"].setToolTip(
-                ""
-                if hat_zaehler
-                else _("Braucht ein Prüfmuster mit # (Zähler), z. B. JJJJ######.")
+                "" if hat_zaehler else _("Braucht ein Prüfmuster mit # (Zähler), z. B. JJJJ######.")
             )
             fehler = (
                 nummernkreis.muster_pruefen(k.pruefmuster)
@@ -1186,7 +1459,9 @@ class Einstellungen(QDialog):
         if prot:
             alt = r.get("protokoll_ordner")
             p = Path(prot).expanduser()
-            r["protokoll_ordner"] = alt if alt and (basis / alt).resolve() == p.resolve() else str(p)
+            r["protokoll_ordner"] = (
+                alt if alt and (basis / alt).resolve() == p.resolve() else str(p)
+            )
         else:
             r.pop("protokoll_ordner", None)
         self._absender_merken()
@@ -1211,12 +1486,16 @@ class Einstellungen(QDialog):
             r.pop("absender_profile", None)
         o = r.setdefault("optionen", {})
         o["pdf_verwenden"] = self.modus() in ("csv", "xml") and self.pdf_verwenden.isChecked()
-        if (self.modus() in ("csv", "xml") and self.pdf_verwenden.isChecked()) or "gegenstueck_minuten" in o:
+        if (
+            self.modus() in ("csv", "xml") and self.pdf_verwenden.isChecked()
+        ) or "gegenstueck_minuten" in o:
             o["gegenstueck_minuten"] = self.gegenstueck.value()
         ablage = self.xr.currentData()
         o["xrechnung_zusatz"] = ablage != "keine"
         if ablage == "unterordner" or "xrechnung_ablage" in o:
-            o["xrechnung_ablage"] = ablage if ablage != "keine" else o.get("xrechnung_ablage", "ausgang")
+            o["xrechnung_ablage"] = (
+                ablage if ablage != "keine" else o.get("xrechnung_ablage", "ausgang")
+            )
         if self.updates.isChecked() is not True or "updatepruefung" in o:
             o["updatepruefung"] = self.updates.isChecked()
         if self.updates_vorab.isChecked() or "updates_vorab" in o:

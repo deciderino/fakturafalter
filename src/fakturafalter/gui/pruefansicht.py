@@ -204,7 +204,9 @@ class Pruefansicht(QWidget):
             betr = daten.betrag(e.brutto, sprache()) if e.brutto else ""
             zeilen.append(
                 f"{z}  {e.status:8} {PRUEFZEICHEN.get(e.pruefung, ' '):1} {e.nummer:16} {e.kunde[:28]:28} "
-                f"{betr:>14}  " + " | ".join(e.hinweise)
+                f"{betr:>14}  "
+                + (f"[{e.profil}] " if getattr(e, "profil", "") else "")
+                + " | ".join(e.hinweise)
             )
         self.protokoll.setPlainText("\n".join(zeilen) if zeilen else _("Noch keine Einträge."))
 

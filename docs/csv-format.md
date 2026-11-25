@@ -23,7 +23,7 @@ welche Spalten mindestens vorhanden sein müssen.
 | Kopfzeile / Zeilen überspringen | ja/nein, Anzahl |
 | Zahlen | Dezimal- und Tausenderzeichen frei (`1.234,50` oder `1,234.50`) |
 | Datum | jedes feste Format, z. B. `%d.%m.%Y`, `%d.%m.%y`, `%Y-%m-%d` |
-| Aufbau | `zeile_je_position` (Standard), `satzart` (Kopf- und Positionszeilen, z. B. K/P), `feste_breite` |
+| Aufbau | `zeile_je_position` (Standard), `bloecke` (ab 0.9.8, Blöcke mit eigener Kopfzeile, eine Datei = eine Rechnung), `satzart` (Kopf- und Positionszeilen, z. B. K/P), `feste_breite` |
 | Spaltennamen | frei; das Profil ordnet jede Spalte einem Feld zu |
 | Einheiten, Steuer | Hausbezeichnungen (`Stk`, `Std`, Steuerschlüssel `1`/`2` …) werden im Profil übersetzt |
 
@@ -64,6 +64,47 @@ und das Profil einen Kundenstamm (eigene CSV) nennt.
 - **Preiseinheit** (BT-149): auf wie viele Einheiten sich der Einzelpreis bezieht, z. B. `100` für
   „Preis pro 100 Stk“. Fehlt die Spalte oder ist die Zelle leer, gilt `1`. Gesamt = Menge × Einzelpreis
   ÷ Preiseinheit (500 Stk zu 4,80 € pro 100 Stk = 24,00 €). Im Profil: `BT-149: {spalte: Preiseinheit, typ: zahl}`
+
+## Blöcke mit eigener Kopfzeile (ab 0.9.8)
+
+Manche Exporte legen in **einer Datei eine Rechnung** ab, aber in mehreren
+Abschnitten: zuerst die Positionen, darunter Zahlung oder Summen – jeder Abschnitt
+mit einer eigenen Kopfzeile. Im Profil: `aufbau.art: bloecke`.
+
+- Eine Zeile gilt als neue Block-Kopfzeile, wenn mindestens *n* Zellen (Standard
+  `kopfzeile_schwelle: 2`) bekannte oder im Profil zugeordnete Spaltennamen sind.
+  Die Reihenfolge der Spalten ist egal, unbekannte Spalten sind erlaubt.
+- Leere Zeilen zwischen Blöcken trennen nur; sie erscheinen nicht auf der Sichtseite.
+- Kopffelder (Rechnungsnummer, Datum, Kunde …) dürfen in jeder Positionszeile
+  stehen oder einmal in einem eigenen Kopfblock. Gleiche Werte werden
+  zusammengeführt, abweichende Werte halten die Rechnung in „Zu prüfen“ an.
+- **Textzeilen** im Positionsblock: Menge und Preis leer, Text vorhanden → der
+  Text hängt standardmäßig als Beschreibung (BT-154) an der Position darüber
+  (umstellbar auf Bezeichnung BT-153). Eine Textzeile *vor* der ersten Position
+  wird standardmäßig Hinweistext der Rechnung (BT-22).
+- **Gewollte Leerzeile** auf der Sichtseite: Platzhalter (Standard `#LEER`, im
+  Profil unter `aufbau.textzeile.platzhalter` frei wählbar oder leer lassbar)
+  und/oder eine Zeile, die Kopffelder trägt, aber Menge, Preis und Text leer
+  lässt (`leerzeile_modus`: `beides` / `platzhalter` / `kopffeldzeile`).
+- Die Sichtseite behält Zeilenumbrüche und Leerzeilen in der Beschreibung.
+
+Skonto und Zahlungsziel können in einem Zahlungsblock stehen (`3 %` oder `3`,
+`10 Tage` oder `10`). Fakturafalter schreibt daraus den Hinweistext (BT-20) und
+setzt das Fälligkeitsdatum (BT-9) auf Rechnungsdatum plus Nettotage. In EN 16931
+gibt es kein strukturiertes Skontofeld.
+
+Beispiele: `beispiele/variante-blo_hotel.csv` (fiktiv, SK-2026-0413: netto 574,80 /
+USt 101,44 / brutto 676,24, fällig 05.11.2026) und
+`beispiele/variante-blo_getrennt.csv` (Kopf, Positionen mit Textzeile und `#LEER`,
+Zahlung getrennt). Profil: `beispiele/profil-variante-blo.yaml`.
+
+## Profile in den Einstellungen (ab 0.9.8)
+
+In der Konfiguration darf `csv_profile` eine Zeichenkette (Pfad) oder
+`{datei: …, aktiv: true|false}` sein. Fehlt `aktiv`, gilt das Profil als aktiv
+(bestehende Konfigurationen bleiben gültig). Die Reihenfolge in der Liste ist
+die Prüf-Reihenfolge: das erste *aktive* passende Profil gewinnt. Das Protokoll
+(`protokoll.tsv`) hat eine neunte Spalte mit dem Profilnamen.
 
 ## Rabatt, Zuschlag, Gutschrift, Lastschrift und weitere Felder (ab 0.6.0)
 

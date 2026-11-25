@@ -10,6 +10,10 @@ Absender immer **Muster GmbH**, USt-IdNr. DE123456788, Domains `*.example`. Kein
 | `profil-variante-a.json` | Zuordnungsprofil zu A (JSON-Form) | |
 | `profil-variante-b.yaml` | Zuordnungsprofil zu B (vollständigste Form, kommentiert) | |
 | `profil-variante-c.yaml` | Zuordnungsprofil zu C (Spaltenpositionen) | |
+| `variante-blo_hotel.csv` | CSV (ab 0.9.8, fiktiv): eine Rechnung in Blöcken (Positionen + Zahlung/Skonto), Kopfwerte in jeder Positionszeile | UTF-8, `;`, Dezimalkomma |
+| `variante-blo_getrennt.csv` | CSV (ab 0.9.8): getrennter Kopf, Positionsblock mit Textzeile und Platzhalter `#LEER`, Zahlung | UTF-8, `;` |
+| `variante-blo_abweichung.csv` | CSV (ab 0.9.8): zwei Rechnungsnummern und abweichende Kontrollsumme → „Zu prüfen“ | UTF-8, `;` |
+| `profil-variante-blo.yaml` | Zuordnungsprofil zu den Block-Beispielen (`aufbau.art: bloecke`) | |
 | `variante-d_rabatt_gutschrift_lastschrift.csv` | CSV: Rabatt in % je Position, Rabatt-/Zuschlagszeile (Spalte Zeilenart), Gutschrift über Belegart mit negativen Beträgen und Bezug, SEPA-Lastschrift, Anzahlung | UTF-8, `;`, Dezimalkomma |
 | `profil-variante-d.yaml` | Zuordnungsprofil zu D | |
 | `variante-s_steuerfaelle.csv` | CSV (ab 0.9.7): Reverse Charge, igL nach Österreich, Ausfuhr in die Schweiz, nicht steuerbar (USD), 19 % in USD mit Kurs, gemischt RC + 19 % | UTF-8, `;`, Dezimalkomma |
@@ -24,6 +28,7 @@ Ordner **`layout/`**: Layouteditor (0.7.0) – `layout-beispiel.yaml` (Block `la
 
 Ordner **`poc/`**: Proof of Concept (Tischlerei Muster GmbH → Beispiel Bau GmbH, TM-2026-0042: CSV mit Käuferdaten + Druck-PDF, Profil mit Verkäufer/Bank und festem Format ZUGFeRD EN 16931, ohne Kundenstamm).
 
+Erwartete Summen (zum Gegenprüfen): Variante blo (Hotel, fiktiv) SK-2026-0413 und SK-2026-0414: netto 574,80 / USt 101,44 / brutto 676,24, fällig 05.11.2026.
 Erwartete Summen (zum Gegenprüfen): RE-2026-0101 netto 327,40 / USt 57,42 / brutto 384,82 · RE-2026-0102 174,50 / 33,16 / 207,66 · RE-2026-0103 145,00 / 27,55 / 172,55.
 Variante S (brutto in Rechnungswährung): RE-S-2026-001 1.784,00 · 002 160,00 · 003 498,00 · 004 2.160,00 USD · 005 3.174,92 USD (USt 506,92 USD = 467,21 EUR) · 006 892,65. Variante U: KU-2026-014 217,00.
 Variante D: RE-2026-0201 361,50 / 68,69 / 430,19 (Lastschrift) · GS-2026-0007 (Gutschrift) 137,40 / 21,32 / 158,72 · RE-2026-0202 250,00 / 47,50 / 297,50, zahlbar 197,50.

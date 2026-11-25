@@ -2,7 +2,7 @@
 # Copyright 2026 Fakturafalter-Mitwirkende
 """Rauchtest für ein gebautes Programm: beispiele/ einmal durchschicken (--einmal), Ausgaben prüfen.
 
-    python packaging/smoke.py -- dist/Fakturafalter-0.9.7-x86_64.AppImage
+    python packaging/smoke.py -- dist/Fakturafalter-0.9.8-x86_64.AppImage
     python packaging/smoke.py --wine -- wine dist/win/Fakturafalter/fakturafalter-cli.exe
 
 Je Beispielvariante (a/b/c/d: CSV/Text, x: PDF + XML, e: nur XML – UBL/CII mit Rabatt, Gutschrift, Lastschrift,
@@ -23,6 +23,7 @@ FAKTURAFALTER_* aus der Umgebung werden entfernt, damit wirklich das Paket prüf
 Mit --ohne-werkzeuge (Paket ohne Prüfwerkzeuge) wird stattdessen „nicht geprüft“ erwartet.
 Keine Online-Dienste.
 """
+
 import argparse
 import os
 import shutil
@@ -41,30 +42,62 @@ VARIANTEN = {
     "a": ["variante-a_positionen_utf8.csv"],
     "b": ["variante-b_wawi_cp1252.csv", "druckauftrag-wawi.pdf"],
     "c": ["variante-c_festbreite_cp1252.txt"],
-    "x": ["xml/NB-26-1001.pdf", "xml/NB-26-1001.xml"],          # PDF + XML (ZUGFeRD/CII mit gleichem Namen)
-    "d": ["variante-d_rabatt_gutschrift_lastschrift.csv"],       # Rabatt, Gutschrift, Lastschrift, Anzahlung
-    "e": ["xml-eingang/XR-2026-0301_ubl_rabatt_lastschrift.xml", "xml-eingang/GS-2026-0008_cii_gutschrift.xml",
-          "xml-eingang/GS-2026-0009_ubl_gutschrift.xml"],         # nur XML (UBL/CII), ohne PDF
-    "l": ["variante-a_positionen_utf8.csv"],                    # eigene Layout-Vorlage (beispiele/layout/)
-    "k": ["variante-k_kundenbezeichnung_erp.csv"],               # Kundenbezeichnung 1–3, Unterzeilen, Dateiname
+    "x": ["xml/NB-26-1001.pdf", "xml/NB-26-1001.xml"],  # PDF + XML (ZUGFeRD/CII mit gleichem Namen)
+    "d": [
+        "variante-d_rabatt_gutschrift_lastschrift.csv"
+    ],  # Rabatt, Gutschrift, Lastschrift, Anzahlung
+    "e": [
+        "xml-eingang/XR-2026-0301_ubl_rabatt_lastschrift.xml",
+        "xml-eingang/GS-2026-0008_cii_gutschrift.xml",
+        "xml-eingang/GS-2026-0009_ubl_gutschrift.xml",
+    ],  # nur XML (UBL/CII), ohne PDF
+    "l": ["variante-a_positionen_utf8.csv"],  # eigene Layout-Vorlage (beispiele/layout/)
+    "k": ["variante-k_kundenbezeichnung_erp.csv"],  # Kundenbezeichnung 1–3, Unterzeilen, Dateiname
     # ab 0.9.7: Steuer-Sonderfälle und Fremdwährung
-    "s": ["variante-s_steuerfaelle.csv"],                        # AE, K, G, O, USD mit Kurs, gemischt
-    "u": ["variante-u_kleinunternehmer.csv"],                    # Kleinunternehmer (§ 19 UStG)
-    "w": ["xml-eingang/XU-2026-0007_ubl_usd.xml", "xml-eingang/XC-2026-0008_cii_usd.xml"],  # USD, USt in EUR
-    "p": [f"steuerfaelle/eingang/{n}.pdf" for n in (           # Nur PDF mit angelernten Vorlagen
-        "LM-26-2001", "LM-26-2002", "LM-26-2003", "LM-26-2004", "LM-26-2005", "LM-26-2006", "LM-26-2007",
-        "WE-26-0301", "WE-26-0302", "GL-26-0014", "GL-26-0015")],
+    "s": ["variante-s_steuerfaelle.csv"],  # AE, K, G, O, USD mit Kurs, gemischt
+    "u": ["variante-u_kleinunternehmer.csv"],  # Kleinunternehmer (§ 19 UStG)
+    "w": [
+        "xml-eingang/XU-2026-0007_ubl_usd.xml",
+        "xml-eingang/XC-2026-0008_cii_usd.xml",
+    ],  # USD, USt in EUR
+    "p": [
+        f"steuerfaelle/eingang/{n}.pdf"
+        for n in (  # Nur PDF mit angelernten Vorlagen
+            "LM-26-2001",
+            "LM-26-2002",
+            "LM-26-2003",
+            "LM-26-2004",
+            "LM-26-2005",
+            "LM-26-2006",
+            "LM-26-2007",
+            "WE-26-0301",
+            "WE-26-0302",
+            "GL-26-0014",
+            "GL-26-0015",
+        )
+    ],
+    "blo": ["variante-blo_hotel.csv"],  # ab 0.9.8: CSV-Blöcke mit eigener Kopfzeile
 }
 # Variante k: Rechnungsnummer prüfen und Dateiname je Belegart (Einstellungen → Ausgabe, ab 0.9.5)
 NUMMERNKREISE = {
-    "rechnung": {"pruefmuster": "JJJJ######", "luecken_warnen": True, "dateiname": "{jahr}_{rechnungsnummer}_{kunde}"},
+    "rechnung": {
+        "pruefmuster": "JJJJ######",
+        "luecken_warnen": True,
+        "dateiname": "{jahr}_{rechnungsnummer}_{kunde}",
+    },
     "gutschrift": {"pruefmuster": "GS-JJJJ-####", "dateiname": "{belegart}_{rechnungsnummer}"},
 }
-NAMEN_K = ["2026_2026000101_Feinmechanik_Beispiel_GmbH_Werk_Sued_War.pdf",
-           "2026_2026000102_Hofladen_Beispiel_Inh._Erika_Musterfrau.pdf", "Gutschrift_GS-2026-0011.pdf"]
+NAMEN_K = [
+    "2026_2026000101_Feinmechanik_Beispiel_GmbH_Werk_Sued_War.pdf",
+    "2026_2026000102_Hofladen_Beispiel_Inh._Erika_Musterfrau.pdf",
+    "Gutschrift_GS-2026-0011.pdf",
+]
 MODUS = {"x": "pdf_xml", "e": "pdf_xml", "w": "pdf_xml"}
-XRECHNUNG_B = ["RE-2026-0102_xrechnung.xml", "RE-2026-0103_xrechnung.xml"]   # Variante b: Unterordner XRechnung
-ALLE_PRUEFEN = ("d", "e", "l", "k", "s", "u", "w", "p")
+XRECHNUNG_B = [
+    "RE-2026-0102_xrechnung.xml",
+    "RE-2026-0103_xrechnung.xml",
+]  # Variante b: Unterordner XRechnung
+ALLE_PRUEFEN = ("d", "e", "l", "k", "s", "u", "w", "p", "blo")
 
 
 def winpfad(p: Path) -> str:
@@ -80,7 +113,9 @@ def temp_ordner(wine: bool) -> list[Path]:
     orte = [Path(os.environ.get("TMPDIR") or "/tmp")]
     if wine:
         pre = Path(os.environ.get("WINEPREFIX") or Path.home() / ".wine")
-        orte += list(pre.glob("drive_c/users/*/AppData/Local/Temp")) + list(pre.glob("drive_c/users/*/Temp"))
+        orte += list(pre.glob("drive_c/users/*/AppData/Local/Temp")) + list(
+            pre.glob("drive_c/users/*/Temp")
+        )
         orte += [pre / "drive_c" / "windows" / "temp"]
     return orte
 
@@ -91,17 +126,28 @@ def temp_reste(wine: bool) -> set[str]:
 
 def ausgang_sauber(ausgang: Path) -> list[str]:
     """Unerwartetes im Ausgang: Temp-/Zwischendateien, versteckte Dateien, ein protokoll.tsv."""
-    return sorted(str(x.relative_to(ausgang)) for x in ausgang.rglob("*")
-                  if x.name.startswith((".", "~")) or x.suffix in (".tmp", ".part") or x.name == "protokoll.tsv")
+    return sorted(
+        str(x.relative_to(ausgang))
+        for x in ausgang.rglob("*")
+        if x.name.startswith((".", "~"))
+        or x.suffix in (".tmp", ".part")
+        or x.name == "protokoll.tsv"
+    )
 
 
 def main() -> int:
     sys.stdout.reconfigure(line_buffering=True)
     ap = argparse.ArgumentParser()
     ap.add_argument("--wine", action="store_true", help="Pfade für Wine (Z:\\…) schreiben")
-    ap.add_argument("--headless-sekunden", type=float, default=0,
-                    help="zusätzlich --headless so lange laufen lassen und eine Datei einwerfen")
-    ap.add_argument("--ohne-werkzeuge", action="store_true", help="Paket ohne Prüfwerkzeuge: „nicht geprüft“")
+    ap.add_argument(
+        "--headless-sekunden",
+        type=float,
+        default=0,
+        help="zusätzlich --headless so lange laufen lassen und eine Datei einwerfen",
+    )
+    ap.add_argument(
+        "--ohne-werkzeuge", action="store_true", help="Paket ohne Prüfwerkzeuge: „nicht geprüft“"
+    )
     ap.add_argument("programm", nargs="+")
     a = ap.parse_args()
     pf = winpfad if a.wine else str
@@ -122,46 +168,66 @@ def main() -> int:
         d = yaml.safe_load((b / "cfg" / "konfiguration.yaml").read_text(encoding="utf-8"))
         if v in MODUS:
             d["modus"] = MODUS[v]
-        if v == "l":                                          # Layouteditor: Vorlage + Bilder/Briefpapier
+        if v == "l":  # Layouteditor: Vorlage + Bilder/Briefpapier
             shutil.copytree(BSP / "layout", b / "cfg" / "layout")
-            d["layout"] = yaml.safe_load((BSP / "layout" / "layout-beispiel.yaml").read_text(encoding="utf-8"))["layout"]
+            d["layout"] = yaml.safe_load(
+                (BSP / "layout" / "layout-beispiel.yaml").read_text(encoding="utf-8")
+            )["layout"]
         if v == "k":
             d.setdefault("optionen", {})["nummernkreise"] = NUMMERNKREISE
         if v == "b":
             d.setdefault("optionen", {})["xrechnung_ablage"] = "unterordner"
-        if v == "u":                                          # ab 0.9.7: Schalter Kleinunternehmer am Absender
+        if v == "u":  # ab 0.9.7: Schalter Kleinunternehmer am Absender
             d["absender"]["kleinunternehmer"] = True
-        if v == "p":                                          # ab 0.9.7: Nur PDF, Profile + angelernte Vorlagen
+        if v == "p":  # ab 0.9.7: Nur PDF, Profile + angelernte Vorlagen
             sf = BSP / "steuerfaelle"
             for f in sf.glob("profil-*.yaml"):
                 shutil.copy(f, b / "cfg")
             shutil.copytree(sf / "angelernt", b / "cfg" / "angelernt")
             d = yaml.safe_load((sf / "konfiguration-nur-pdf.yaml").read_text(encoding="utf-8"))
             d.pop("arbeitsordner", None)
-        d["ordner"] = {n: pf(b / n) for n in ("eingang", "ausgang", "erledigt", "fehler", "pruefen")}
-        (b / "cfg" / "konfiguration.yaml").write_text(yaml.safe_dump(d, allow_unicode=True), encoding="utf-8")
+        d["ordner"] = {
+            n: pf(b / n) for n in ("eingang", "ausgang", "erledigt", "fehler", "pruefen")
+        }
+        (b / "cfg" / "konfiguration.yaml").write_text(
+            yaml.safe_dump(d, allow_unicode=True), encoding="utf-8"
+        )
         (b / "eingang").mkdir()
         for f in dateien:
             shutil.copy(BSP / f, b / "eingang" / Path(f).name)
         cmd = a.programm + ["--config", pf(b / "cfg" / "konfiguration.yaml"), "--einmal"]
-        r = subprocess.run(cmd, env=env, capture_output=True, text=True, errors="replace", timeout=600)
-        neu = sorted((b / "ausgang").glob("*.pdf"))           # Variante k: eigene Dateinamen
+        r = subprocess.run(
+            cmd, env=env, capture_output=True, text=True, errors="replace", timeout=600
+        )
+        neu = sorted((b / "ausgang").glob("*.pdf"))  # Variante k: eigene Dateinamen
         fehler = leer_oder_fehlt(b / "fehler")
-        prot = b / "Protokoll" / "protokoll.tsv"                # ab 0.9.6: eigener Ordner neben dem Eingang
+        prot = b / "Protokoll" / "protokoll.tsv"  # ab 0.9.6: eigener Ordner neben dem Eingang
         schmutz = ausgang_sauber(b / "ausgang")
-        pruef = [(z.split("\t") + [""] * 8)[7] for z in prot.read_text(encoding="utf-8").splitlines()] \
-            if prot.exists() else []
-        gut = (r.returncode == 0 and bool(neu) and not fehler and not leer_oder_fehlt(b / "eingang")
-               and bool(pruef) and set(pruef) == {erwartet} and not schmutz)
+        pruef = (
+            [(z.split("\t") + [""] * 8)[7] for z in prot.read_text(encoding="utf-8").splitlines()]
+            if prot.exists()
+            else []
+        )
+        gut = (
+            r.returncode == 0
+            and bool(neu)
+            and not fehler
+            and not leer_oder_fehlt(b / "eingang")
+            and bool(pruef)
+            and set(pruef) == {erwartet}
+            and not schmutz
+        )
         if v == "b":
             gut &= leer_oder_fehlt(b / "ausgang" / "XRechnung") == XRECHNUNG_B
-        if v == "l":                                          # Logo/Bildfeld (Image) und Briefpapier (Form) drin
+        if v == "l":  # Logo/Bildfeld (Image) und Briefpapier (Form) drin
             gut &= all(b"/Image" in x.read_bytes() and b"/Form" in x.read_bytes() for x in neu)
         if v == "k":
             gut &= [x.name for x in neu] == NAMEN_K
-        print(f"Variante {v}: exit {r.returncode}, {len(neu)} PDF(s), Prüfung {sorted(set(pruef))}, "
-              f"Fehlerordner {fehler or 'leer'}, Ausgang {schmutz or 'sauber'}, Protokoll "
-              f"{'ja' if prot.exists() else 'FEHLT'} -> {'OK' if gut else 'FEHLER'}")
+        print(
+            f"Variante {v}: exit {r.returncode}, {len(neu)} PDF(s), Prüfung {sorted(set(pruef))}, "
+            f"Fehlerordner {fehler or 'leer'}, Ausgang {schmutz or 'sauber'}, Protokoll "
+            f"{'ja' if prot.exists() else 'FEHLT'} -> {'OK' if gut else 'FEHLER'}"
+        )
         if not gut:
             print(r.stdout[-3000:], r.stderr[-3000:], sep="\n")
         ok &= gut
@@ -170,7 +236,9 @@ def main() -> int:
 
     if a.headless_sekunden:
         b = BASIS / "a"
-        cfg = b / "cfg" / "konfiguration.yaml"          # einzelne CSV: nicht auf ein PDF gleichen Namens warten
+        cfg = (
+            b / "cfg" / "konfiguration.yaml"
+        )  # einzelne CSV: nicht auf ein PDF gleichen Namens warten
         d = yaml.safe_load(cfg.read_text(encoding="utf-8"))
         d.setdefault("optionen", {})["gegenstueck_minuten"] = 0
         cfg.write_text(yaml.safe_dump(d, allow_unicode=True), encoding="utf-8")
@@ -179,14 +247,26 @@ def main() -> int:
         zeilen = len(prot.read_text(encoding="utf-8").splitlines())
 
         def fertig():
-            return (not (b / "eingang" / "nochmal.csv").exists() and
-                    len(prot.read_text(encoding="utf-8").splitlines()) > zeilen)
+            return (
+                not (b / "eingang" / "nochmal.csv").exists()
+                and len(prot.read_text(encoding="utf-8").splitlines()) > zeilen
+            )
+
         logf = BASIS / "headless.log"
-        with open(logf, "w") as lf:                         # eigene Prozessgruppe: AppImage/Wine starten Kinder
-            ohne_netz = ["unshare", "-rn"]                  # Updateprüfung ohne Netz: muss still bleiben
-            p = subprocess.Popen(ohne_netz + a.programm + ["--config", pf(b / "cfg" / "konfiguration.yaml"), "--headless"],
-                                 env=env, stdout=lf, stderr=subprocess.STDOUT, start_new_session=True)
-            time.sleep(min(10, a.headless_sekunden / 2))    # Wächter starten lassen, dann Datei einwerfen
+        with open(logf, "w") as lf:  # eigene Prozessgruppe: AppImage/Wine starten Kinder
+            ohne_netz = ["unshare", "-rn"]  # Updateprüfung ohne Netz: muss still bleiben
+            p = subprocess.Popen(
+                ohne_netz
+                + a.programm
+                + ["--config", pf(b / "cfg" / "konfiguration.yaml"), "--headless"],
+                env=env,
+                stdout=lf,
+                stderr=subprocess.STDOUT,
+                start_new_session=True,
+            )
+            time.sleep(
+                min(10, a.headless_sekunden / 2)
+            )  # Wächter starten lassen, dann Datei einwerfen
             shutil.copy(BSP / "variante-a_positionen_utf8.csv", b / "eingang" / "nochmal.csv")
             ende = time.time() + a.headless_sekunden
             while time.time() < ende and not fertig():
@@ -202,29 +282,52 @@ def main() -> int:
                 except subprocess.TimeoutExpired:
                     pass
         out = logf.read_text(errors="replace")
-        applog = "\n".join(x.read_text(errors="replace") for x in (b / "cfg" / "logs").glob("*.log*"))
-        still = "Update" not in out and "Traceback" not in out and "Updateprüfung nicht möglich" in applog
-        print(f"--headless ohne Netz: Updateprüfung still (nur Debug im Log) -> {'OK' if still else 'FEHLER'}")
+        applog = "\n".join(
+            x.read_text(errors="replace") for x in (b / "cfg" / "logs").glob("*.log*")
+        )
+        still = (
+            "Update" not in out
+            and "Traceback" not in out
+            and "Updateprüfung nicht möglich" in applog
+        )
+        print(
+            f"--headless ohne Netz: Updateprüfung still (nur Debug im Log) -> {'OK' if still else 'FEHLER'}"
+        )
         ok &= still
         gut = fertig()
         neu = prot.read_text(encoding="utf-8").splitlines()[zeilen:]
-        print(f"--headless: Datei abgeholt und verarbeitet ({len(neu)} Protokollzeile(n), Fehlerordner "
-              f"{vorher} -> {len(leer_oder_fehlt(b / 'fehler'))}) -> {'OK' if gut else 'FEHLER'}")
+        print(
+            f"--headless: Datei abgeholt und verarbeitet ({len(neu)} Protokollzeile(n), Fehlerordner "
+            f"{vorher} -> {len(leer_oder_fehlt(b / 'fehler'))}) -> {'OK' if gut else 'FEHLER'}"
+        )
         if not gut:
             print((out or "")[-3000:])
         ok &= gut
 
     rest = temp_reste(a.wine) - temp_vorher
-    print(f"System-Temp: {'aufgeräumt' if not rest else 'RESTE ' + ', '.join(sorted(rest))} -> "
-          f"{'OK' if not rest else 'FEHLER'}")
+    print(
+        f"System-Temp: {'aufgeräumt' if not rest else 'RESTE ' + ', '.join(sorted(rest))} -> "
+        f"{'OK' if not rest else 'FEHLER'}"
+    )
     ok &= not rest
 
-    if zu_pruefen and not a.ohne_werkzeuge:              # Prüfung von Hand mit der mitgelieferten Java-Laufzeit
-        r = subprocess.run(a.programm + ["--pruefe", *map(pf, zu_pruefen)], env=env, capture_output=True, text=True,
-                           errors="replace", timeout=900)
-        gut = (r.returncode == 0 and r.stdout.count("OK  Mustang") == len(zu_pruefen)
-               and r.stdout.count("OK  KoSIT") == len(zu_pruefen))
-        print(f"--pruefe {', '.join(p.name for p in zu_pruefen)}: exit {r.returncode} -> {'OK' if gut else 'FEHLER'}")
+    if zu_pruefen and not a.ohne_werkzeuge:  # Prüfung von Hand mit der mitgelieferten Java-Laufzeit
+        r = subprocess.run(
+            a.programm + ["--pruefe", *map(pf, zu_pruefen)],
+            env=env,
+            capture_output=True,
+            text=True,
+            errors="replace",
+            timeout=900,
+        )
+        gut = (
+            r.returncode == 0
+            and r.stdout.count("OK  Mustang") == len(zu_pruefen)
+            and r.stdout.count("OK  KoSIT") == len(zu_pruefen)
+        )
+        print(
+            f"--pruefe {', '.join(p.name for p in zu_pruefen)}: exit {r.returncode} -> {'OK' if gut else 'FEHLER'}"
+        )
         print("   " + r.stdout.strip().replace("\n", "\n   "))
         if not gut:
             print(r.stderr[-3000:])

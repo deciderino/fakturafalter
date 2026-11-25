@@ -4,6 +4,7 @@
 
 Ergebnis ist ein Profil ``aufbau.art: zeile_je_position`` wie ``beispiele/profil-variante-a.json`` – es läuft
 durch denselben Adapter wie jedes handgeschriebene Profil. Ohne GUI testbar."""
+
 from __future__ import annotations
 
 import re
@@ -36,6 +37,11 @@ FELDER: list[tuple[str, str, str, str, bool]] = [
     ("BT-10", "Leitweg-ID / Käuferreferenz", "kopf", "text", False),
     ("BT-13", "Bestellnummer", "kopf", "text", False),
     ("BT-112", "Summe brutto (Kontrolle)", "kopf", "zahl", False),
+    ("BT-109", "Summe netto (Kontrolle)", "kopf", "zahl", False),
+    ("BT-110", "Summe USt (Kontrolle)", "kopf", "zahl", False),
+    ("skonto_satz", "Skonto %", "kopf", "prozent", False),
+    ("skonto_tage", "Zahlungsziel mit Skonto", "kopf", "tage", False),
+    ("zahlungsziel_tage", "Zahlungsziel ohne Abzug", "kopf", "tage", False),
     ("BT-126", "Positionsnummer", "position", "text", False),
     ("BT-155", "Artikelnummer", "position", "text", False),
     ("BT-153", "Bezeichnung", "position", "text", True),
@@ -113,7 +119,7 @@ FELDER: list[tuple[str, str, str, str, bool]] = [
 ]
 FELD = {f[0]: f for f in FELDER}
 # Freiwillige Felder ab 0.6.0 nur bei genauem Spaltennamen vorschlagen (kein Wortanfang: „Versanddatum“ ≠ Fracht)
-NUR_GENAU = frozenset(f[0] for f in FELDER[FELDER.index(FELD["belegart"]):])
+NUR_GENAU = frozenset(f[0] for f in FELDER[FELDER.index(FELD["belegart"]) :])
 
 _SYNONYME = {
     "BT-1": "rechnungsnummer rechnungsnr renr rgnr belegnr belegnummer invoicenumber invoiceno invoice rechnung beleg nr nummer",
@@ -133,6 +139,11 @@ _SYNONYME = {
     "BT-10": "leitwegid leitweg buyerreference käuferreferenz kaeuferreferenz",
     "BT-13": "bestellnummer bestellnr ihrebestellung bestellung ordernumber order",
     "BT-112": "summebrutto bruttosumme gesamtbrutto brutto gesamtbetrag total",
+    "BT-109": "summenetto nettosumme gesamtnetto nettototal",
+    "BT-110": "summeust ustsumme gesamtuust mwstsumme",
+    "skonto_satz": "skonto skontosatz skonto% skontobetrag",
+    "skonto_tage": "zahlungszielmitskonto skontofrist skontotage",
+    "zahlungsziel_tage": "zahlungszielohneabzug zahlungsziel nettoziel nettotage zieltage",
     "BT-126": "pos position posnr zeile line",
     "BT-155": "artikelnummer artikelnr artnr sku artikel",
     "BT-153": "bezeichnung artikelbezeichnung beschreibung text description leistungstext",
@@ -212,9 +223,13 @@ STEUER_WAHL: dict[str, dict | None] = {
     "0 % – steuerfrei": {"BT-151": "E", "BT-152": 0, "BT-120": "Steuerfrei", "BT-121": ""},
     "prüfen": None,
 }
-_FALL_WAHL = {"AE": "0 % – Steuerschuldnerschaft des Leistungsempfängers",
-              "K": "0 % – innergemeinschaftliche Lieferung", "G": "0 % – Ausfuhrlieferung (Drittland)",
-              "O": "0 % – nicht im Inland steuerbar", "KU": "0 % – Kleinunternehmer (§ 19 UStG)"}
+_FALL_WAHL = {
+    "AE": "0 % – Steuerschuldnerschaft des Leistungsempfängers",
+    "K": "0 % – innergemeinschaftliche Lieferung",
+    "G": "0 % – Ausfuhrlieferung (Drittland)",
+    "O": "0 % – nicht im Inland steuerbar",
+    "KU": "0 % – Kleinunternehmer (§ 19 UStG)",
+}
 
 
 def _norm(s: str) -> str:
@@ -233,9 +248,12 @@ class Format:
 
     @property
     def zusammenfassung(self) -> str:
-        t = {";": "Semikolon", ",": "Komma", "\t": "Tabulator", "|": "Senkrechter Strich"}.get(self.trennzeichen,
-                                                                                               self.trennzeichen)
-        k = {"utf-8": "UTF-8", "utf-8-sig": "UTF-8", "cp1252": "Windows-1252"}.get(self.kodierung, self.kodierung)
+        t = {";": "Semikolon", ",": "Komma", "\t": "Tabulator", "|": "Senkrechter Strich"}.get(
+            self.trennzeichen, self.trennzeichen
+        )
+        k = {"utf-8": "UTF-8", "utf-8-sig": "UTF-8", "cp1252": "Windows-1252"}.get(
+            self.kodierung, self.kodierung
+        )
         return f"{t} · {k} · Dezimal{'komma' if self.dezimal == ',' else 'punkt'}"
 
 
@@ -254,8 +272,11 @@ def format_erkennen(datei: Path, kodierung: str = "auto", trennzeichen: str = "a
     kopf, daten = [c.strip() for c in zeilen[0]], zeilen[1:]
     werte = [w.strip() for z in daten for w in z if w.strip()]
     komma = sum(bool(re.fullmatch(r"-?\d{1,3}(\.\d{3})*,\d+-?|-?\d+,\d+-?", w)) for w in werte)
-    punkt = sum(bool(re.fullmatch(r"-?\d{1,3}(,\d{3})*\.\d+-?|-?\d+\.\d+-?", w)) for w in werte
-                if not re.fullmatch(r"\d{1,2}\.\d{1,2}\.\d{2,4}", w))
+    punkt = sum(
+        bool(re.fullmatch(r"-?\d{1,3}(,\d{3})*\.\d+-?|-?\d+\.\d+-?", w))
+        for w in werte
+        if not re.fullmatch(r"\d{1,2}\.\d{1,2}\.\d{2,4}", w)
+    )
     dez = "." if punkt > komma else ","
     tau = "." if dez == "," else ""
     treffer = {f: sum(_ist_datum(w, f) for w in werte) for f in DATUMSFORMATE}
@@ -274,7 +295,7 @@ def _ist_datum(w: str, f: str) -> bool:
 
 
 def satzart(fmt: Format) -> bool:
-    """Kopf- und Positionszeilen getrennt (Satzart K/P)? Das richtet der Assistent nicht ein."""
+    """Kopf- und Positionszeilen getrennt (Satzart-Spalte erkannt)?"""
     return any(_norm(s) in ("satzart", "satztyp", "zeilentyp", "recordtype") for s in fmt.kopf)
 
 
@@ -285,7 +306,9 @@ _KUNDE_MEHRDEUTIG = frozenset(("kunde", "kunden", "customer", "kd"))
 def _sieht_nach_nummer_aus(werte: list[str]) -> bool:
     """„K-1001“, „10023“, „KD/77“ – kurz, ohne Leerzeichen, mit Ziffer."""
     werte = [w.strip() for w in werte if w.strip()]
-    return bool(werte) and all(len(w) <= 20 and re.fullmatch(r"[A-Za-z]{0,4}[-./]?\d[\w./-]*", w) for w in werte)
+    return bool(werte) and all(
+        len(w) <= 20 and re.fullmatch(r"[A-Za-z]{0,4}[-./]?\d[\w./-]*", w) for w in werte
+    )
 
 
 def spalten_vorschlagen(kopf: list[str], zeilen: list[list[str]] | None = None) -> dict[str, str]:
@@ -297,6 +320,9 @@ def spalten_vorschlagen(kopf: list[str], zeilen: list[list[str]] | None = None) 
         i = kopf.index(s)
         if _sieht_nach_nummer_aus([z[i] for z in zeilen if i < len(z)]):
             aus["kundennummer"] = aus.pop("BT-44")
+    # „Artikel“ allein ist meist die Bezeichnung; nur Artikelnummer, wenn es schon eine Bezeichnung gibt
+    if "BT-153" not in aus and _norm(aus.get("BT-155") or "") == "artikel":
+        aus["BT-153"] = aus.pop("BT-155")
     return aus
 
 
@@ -309,7 +335,9 @@ def _spalten_nach_namen(kopf: list[str]) -> dict[str, str]:
                 continue
             for w in syn.split():
                 w = _norm(w)
-                treffer = [n for n in frei if (n == w if genau else len(w) >= 4 and n.startswith(w))]
+                treffer = [
+                    n for n in frei if (n == w if genau else len(w) >= 4 and n.startswith(w))
+                ]
                 if treffer:
                     aus[f] = frei.pop(treffer[0])
                     break
@@ -333,7 +361,11 @@ def _zahl(w: str) -> Decimal | None:
 def steuer_ist_satz(werte: list[str]) -> bool:
     """Steht in der Steuerspalte der Satz selbst („19“, „7,00“, „19 %“)?"""
     zahlen = [_zahl(w) for w in werte if w]
-    return bool(zahlen) and all(z is not None and z in SAETZE for z in zahlen) and any(z for z in zahlen)
+    return (
+        bool(zahlen)
+        and all(z is not None and z in SAETZE for z in zahlen)
+        and any(z for z in zahlen)
+    )
 
 
 def steuer_vorschlag(werte: list[str]) -> dict[str, str]:
@@ -343,8 +375,15 @@ def steuer_vorschlag(werte: list[str]) -> dict[str, str]:
     for w in sorted({w for w in werte if w}):
         z = _zahl(w)
         fall = steuerfaelle.erkennen_kurz(w) or steuerfaelle.erkennen(w)
-        aus[w] = ("19 %" if z == 19 else "7 %" if z == 7 else _FALL_WAHL[fall] if fall in _FALL_WAHL
-                  else "prüfen")
+        aus[w] = (
+            "19 %"
+            if z == 19
+            else "7 %"
+            if z == 7
+            else _FALL_WAHL[fall]
+            if fall in _FALL_WAHL
+            else "prüfen"
+        )
     return aus
 
 
@@ -356,8 +395,15 @@ def einheiten_vorschlag(werte: list[str]) -> dict[str, str]:
     return aus
 
 
-def profil_bauen(name: str, datei: Path, fmt: Format, zuordnung: dict[str, str], steuer: dict[str, str],
-                 einheiten: dict[str, str], kundenstamm: str | None) -> dict:
+def profil_bauen(
+    name: str,
+    datei: Path,
+    fmt: Format,
+    zuordnung: dict[str, str],
+    steuer: dict[str, str],
+    einheiten: dict[str, str],
+    kundenstamm: str | None,
+) -> dict:
     """Normales CSV-Profil (zeile_je_position). ``steuer``: Wert -> Anzeige aus STEUER_WAHL."""
     kopf, pos = {}, {}
     for f, sp in zuordnung.items():
@@ -387,12 +433,20 @@ def profil_bauen(name: str, datei: Path, fmt: Format, zuordnung: dict[str, str],
         "profil": name,
         "version": 1,
         "beschreibung": f"Eingerichtet mit dem Assistenten aus {Path(datei).name}: {fmt.zusammenfassung}",
-        "datei": {"muster": f"*{Path(datei).suffix.lower() or '.csv'}", "kodierung": fmt.kodierung,
-                  "trennzeichen": fmt.trennzeichen, "textbegrenzer": '"', "kopfzeile": True},
+        "datei": {
+            "muster": f"*{Path(datei).suffix.lower() or '.csv'}",
+            "kodierung": fmt.kodierung,
+            "trennzeichen": fmt.trennzeichen,
+            "textbegrenzer": '"',
+            "kopfzeile": True,
+        },
         "zahlen": {"dezimal": fmt.dezimal, "tausender": fmt.tausender},
         "datum": {"format": fmt.datum},
-        "aufbau": {"art": "zeile_je_position", "rechnung_schluessel": zuordnung["BT-1"],
-                   "kopf_muss_gleich_sein": gleich},
+        "aufbau": {
+            "art": "zeile_je_position",
+            "rechnung_schluessel": zuordnung["BT-1"],
+            "kopf_muss_gleich_sein": gleich,
+        },
         "felder": {"kopf": kopf, "position": pos},
         "mappings": {"einheiten": eh, "steuer": st},
     }
@@ -404,12 +458,17 @@ def profil_bauen(name: str, datei: Path, fmt: Format, zuordnung: dict[str, str],
 def profil_zuordnung(profil: dict) -> dict[str, str]:
     """Vorhandenes Assistenten-Profil -> {Feld: Spalte} (zum Ändern)."""
     f = profil.get("felder", {})
-    return {k: d["spalte"] for teil in ("kopf", "position") for k, d in (f.get(teil) or {}).items()
-            if isinstance(d, dict) and "spalte" in d}
+    return {
+        k: d["spalte"]
+        for teil in ("kopf", "position")
+        for k, d in (f.get(teil) or {}).items()
+        if isinstance(d, dict) and "spalte" in d
+    }
 
 
 def bearbeitbar(profil: dict) -> bool:
-    return (profil.get("aufbau") or {}).get("art", "zeile_je_position") == "zeile_je_position"
+    art = (profil.get("aufbau") or {}).get("art", "zeile_je_position")
+    return art in ("zeile_je_position", "satzart", "bloecke")
 
 
 def dateiname(name: str, ordner: Path) -> Path:
@@ -421,8 +480,11 @@ def speichern(profil: dict, ziel: Path) -> Path:
     sauber = {k: v for k, v in profil.items() if not k.startswith("_")}
     ziel.parent.mkdir(parents=True, exist_ok=True)
     tmp = ziel.with_suffix(".tmp")
-    tmp.write_text("# CSV-Zuordnungsprofil – mit dem Assistenten eingerichtet (Fakturafalter)\n"
-                   + yaml.safe_dump(sauber, allow_unicode=True, sort_keys=False), encoding="utf-8")
+    tmp.write_text(
+        "# CSV-Zuordnungsprofil – mit dem Assistenten eingerichtet (Fakturafalter)\n"
+        + yaml.safe_dump(sauber, allow_unicode=True, sort_keys=False),
+        encoding="utf-8",
+    )
     tmp.replace(ziel)
     return ziel
 
@@ -454,17 +516,184 @@ class Probe:
 def probe(rechnungen, k) -> list[Probe]:
     """Probe ohne Schreiben: rechnen + Pflichtprüfung wie im Lauf (ohne Ausgabe, ohne Verschieben)."""
     from . import pflichtpruefung, rechnen
+
     ctx = pflichtpruefung.Kontext(bekannte_nummern=frozenset())
     aus = []
     for r in rechnungen:
         rechnen.berechnen(r)
         pflichtpruefung.pruefen(r, ctx)
-        aus.append(Probe(r.nummer, r.kaeufer.name, str(r.summen.brutto), r.status,
-                         [str(h) for h in r.hinweise if h.stufe != "info"]))
+        aus.append(
+            Probe(
+                r.nummer,
+                r.kaeufer.name,
+                str(r.summen.brutto),
+                r.status,
+                [str(h) for h in r.hinweise if h.stufe != "info"],
+            )
+        )
     return aus
 
 
 def probe_csv(datei: Path, profil: dict, k) -> list[Probe]:
     from . import adapter_csv
+
     p = {**profil, "_basis": Path(k.basis), "_datei": str(Path(k.basis) / "assistent.yaml")}
     return probe(adapter_csv.lesen(Path(datei), p, k), k)
+
+
+def synonym_namen() -> set[str]:
+    """Alle bekannten Spalten-Synonyme, normalisiert (für Block-Kopfzeilen ohne Profil)."""
+    from . import csv_bloecke
+
+    aus: set[str] = set()
+    for syn in _SYNONYME.values():
+        for w in syn.split():
+            aus.add(csv_bloecke.name_norm(w))
+    for f, _a, *_r in FELDER:
+        aus.add(csv_bloecke.name_norm(_a))
+        aus.add(csv_bloecke.name_norm(f))
+    aus.discard("")
+    return aus
+
+
+def bloecke_erkannt(fmt: Format) -> bool:
+    """Mehr als eine Kopfzeile mit bekannten Spaltennamen?"""
+    from . import csv_bloecke
+
+    namen = synonym_namen()
+    kopfzeilen = 0
+    # erste Zeile ist fmt.kopf, weitere in fmt.zeilen? Format: kopf + daten
+    rows = [fmt.kopf] + list(fmt.zeilen or [])
+    for row in rows:
+        if csv_bloecke.ist_kopfzeile(row, namen, 2):
+            kopfzeilen += 1
+    return kopfzeilen >= 2
+
+
+def bloecke_schneiden_fmt(fmt: Format) -> list[dict]:
+    from . import csv_bloecke
+
+    rows = [fmt.kopf] + list(fmt.zeilen or [])
+    # format_erkennen already used first row as header; include it as row 1
+    return csv_bloecke.schneiden(rows, 1, synonym_namen(), 2)
+
+
+def typ_vorschlag(kopf: list[str]) -> str:
+    n = set()
+    from . import csv_bloecke
+
+    n = {csv_bloecke.name_norm(c) for c in kopf}
+    if n & {
+        csv_bloecke.name_norm(x)
+        for x in ("menge", "einzelpreis", "artikel", "bezeichnung", "ustsatz")
+    }:
+        return "positionen"
+    if n & {
+        csv_bloecke.name_norm(x) for x in ("skonto", "zahlungsziel", "gesamtbrutto", "gesamtnetto")
+    }:
+        return "zahlung"
+    if n & {csv_bloecke.name_norm(x) for x in ("liefername", "lieferstrasse", "lieferort")}:
+        return "lieferung"
+    if n & {csv_bloecke.name_norm(x) for x in ("rechnungsnr", "rechnungsnummer", "kunde", "datum")}:
+        return "kopf"
+    return "kopf"
+
+
+def merkmale(profil: dict) -> str:
+    """Kurzer Text für die Profilkarte: Aufbau und erkannte Spalten."""
+    art = (profil.get("aufbau") or {}).get("art", "zeile_je_position")
+    if art == "bloecke":
+        typen = [str(b.get("typ") or "?") for b in (profil.get("bloecke") or [])]
+        return "Blöcke: " + (", ".join(typen) if typen else "ohne Typen")
+    if art == "satzart":
+        a = profil.get("aufbau") or {}
+        return "Satzarten " + "/".join(
+            str(a.get(k) or "") for k in ("kopf", "position", "rabatt", "zuschlag") if a.get(k)
+        )
+    if art == "feste_breite":
+        return "Feste Breite"
+    spalten = []
+    for teil in (profil.get("felder") or {}).values():
+        if isinstance(teil, dict):
+            for d in teil.values():
+                if isinstance(d, dict) and d.get("spalte"):
+                    spalten.append(str(d["spalte"]))
+    if not spalten:
+        return "eine Zeile je Position"
+    return "eine Zeile je Position · " + ", ".join(spalten[:8]) + ("…" if len(spalten) > 8 else "")
+
+
+def profil_bauen_bloecke(
+    name: str,
+    datei: Path,
+    fmt: Format,
+    bloecke: list[dict],
+    zuordnung_je: dict[str, dict[str, str]],
+    steuer: dict[str, str],
+    einheiten: dict[str, str],
+    textzeile: dict,
+    kundenstamm: str | None,
+) -> dict:
+    """Profil art=bloecke aus dem Assistenten."""
+    st: dict = {w: STEUER_WAHL[a] for w, a in steuer.items() if STEUER_WAHL.get(a)}
+    st["unbekannt"] = "satz" if steuer_ist_satz(list(steuer)) else "pruefen"
+    eh: dict = {w: c for w, c in einheiten.items() if c}
+    eh["unbekannt"] = "allgemein"
+    tz = {
+        "leer": ["BT-129", "BT-146", "text"],
+        "ziel": "BT-154",
+        "trenner": "\n",
+        "platzhalter": "#LEER",
+        "verwaist": "BT-22",
+        "leerzeile_modus": "beides",
+    }
+    tz.update(textzeile or {})
+    aus_bloecke = []
+    for b in bloecke:
+        typ = b.get("typ") or typ_vorschlag(b.get("kopf") or [])
+        zu = zuordnung_je.get(typ) or zuordnung_je.get(str(b.get("start"))) or {}
+        felder = {}
+        quelle = {**zu}
+        # typ kopf/zahlung: kopf-Felder; positionen: beides
+        for f, sp in quelle.items():
+            if not sp or f not in FELD:
+                continue
+            _f, _anz, teil, typf, pflicht = FELD[f]
+            d: dict = {"spalte": sp}
+            if typf != "text":
+                d["typ"] = typf
+            if f in ("BT-112", "BT-109", "BT-110"):
+                d["zweck"] = "pruefung"
+            if f == "BT-130":
+                d["mapping"] = "einheiten"
+            if f == "steuer":
+                d["mapping"] = "steuer"
+            if not pflicht or typ != "positionen" or teil == "kopf":
+                d["optional"] = True
+            felder[f] = d
+        if typ in ("kopf", "positionen"):
+            felder.setdefault("BT-3", {"fest": "380"})
+            felder.setdefault("BT-5", {"fest": "EUR"})
+        if tz.get("text_spalte") and typ == "positionen":
+            pass
+        aus_bloecke.append({"typ": typ, "kopfzeile": list(b.get("kopf") or []), "felder": felder})
+    p = {
+        "profil": name,
+        "version": 1,
+        "beschreibung": f"Blöcke, eingerichtet mit dem Assistenten aus {Path(datei).name}: {fmt.zusammenfassung}",
+        "datei": {
+            "muster": f"*{Path(datei).suffix.lower() or '.csv'}",
+            "kodierung": fmt.kodierung,
+            "trennzeichen": fmt.trennzeichen,
+            "textbegrenzer": '"',
+            "kopfzeile": False,
+        },
+        "zahlen": {"dezimal": fmt.dezimal, "tausender": fmt.tausender},
+        "datum": {"format": fmt.datum},
+        "aufbau": {"art": "bloecke", "kopfzeile_schwelle": 2, "textzeile": tz},
+        "bloecke": aus_bloecke,
+        "mappings": {"einheiten": eh, "steuer": st},
+    }
+    if kundenstamm:
+        p["kundenstamm"] = {"datei": kundenstamm, "schluessel": "kundennummer", "fehlt": "pruefen"}
+    return p

@@ -1,0 +1,75 @@
+# CSV-Zuordnungsprofil – Blöcke mit eigener Kopfzeile (fiktive Daten, ab 0.9.8)
+profil: bloecke-hotel
+version: 1
+beschreibung: "CSV in Blöcken: Positionen (Kopffelder dürfen wiederholt werden) und Zahlung/Skonto"
+
+datei:
+  muster: "variante-blo_*.csv"
+  kodierung: auto
+  trennzeichen: ";"
+  textbegrenzer: '"'
+  kopfzeile: false
+
+zahlen:  {dezimal: ",", tausender: "."}
+datum:   {format: "%d.%m.%Y"}
+
+aufbau:
+  art: bloecke
+  kopfzeile_schwelle: 2
+  textzeile:
+    leer: [BT-129, BT-146, text]
+    text_spalte: Artikel
+    ziel: BT-154
+    trenner: "\n"
+    platzhalter: "#LEER"
+    verwaist: BT-22
+    leerzeile_modus: beides
+
+bloecke:
+  - typ: kopf
+    kopfzeile: [Rechnungsnr, Datum, Lieferdatum, Kunde, Strasse, PLZ, Ort]
+    felder:
+      BT-1:  {spalte: Rechnungsnr}
+      BT-2:  {spalte: Datum, typ: datum}
+      BT-72: {spalte: Lieferdatum, typ: datum, optional: true}
+      BT-44: {spalte: Kunde}
+      BT-50: {spalte: Strasse}
+      BT-53: {spalte: PLZ}
+      BT-52: {spalte: Ort}
+      BT-3:  {fest: "380"}
+      BT-5:  {fest: EUR}
+  - typ: positionen
+    kopfzeile: [Rechnungsnr, Datum, Lieferdatum, Kunde, Strasse, PLZ, Ort,
+                Artikel, Menge, Einheit, Einzelpreis, USt-Satz]
+    felder:
+      BT-1:   {spalte: Rechnungsnr, optional: true}
+      BT-2:   {spalte: Datum, typ: datum, optional: true}
+      BT-72:  {spalte: Lieferdatum, typ: datum, optional: true}
+      BT-44:  {spalte: Kunde, optional: true}
+      BT-50:  {spalte: Strasse, optional: true}
+      BT-53:  {spalte: PLZ, optional: true}
+      BT-52:  {spalte: Ort, optional: true}
+      BT-153: {spalte: Artikel}
+      BT-129: {spalte: Menge, typ: zahl, optional: true}
+      BT-130: {spalte: Einheit, mapping: einheiten, optional: true}
+      BT-146: {spalte: Einzelpreis, typ: zahl, optional: true}
+      steuer: {spalte: USt-Satz, mapping: steuer, optional: true}
+      BT-3:   {fest: "380"}
+      BT-5:   {fest: EUR}
+  - typ: zahlung
+    kopfzeile: [Skonto, "Zahlungsziel mit Skonto", "Zahlungsziel ohne Abzug",
+                "Gesamt Brutto", "Gesamt Netto"]
+    felder:
+      skonto_satz:       {spalte: Skonto, typ: prozent, optional: true}
+      skonto_tage:       {spalte: "Zahlungsziel mit Skonto", typ: tage, optional: true}
+      zahlungsziel_tage: {spalte: "Zahlungsziel ohne Abzug", typ: tage, optional: true}
+      BT-112:            {spalte: "Gesamt Brutto", typ: zahl, zweck: pruefung, optional: true}
+      BT-109:            {spalte: "Gesamt Netto", typ: zahl, zweck: pruefung, optional: true}
+
+mappings:
+  einheiten:
+    Stk: C62
+    kg: KGM
+    unbekannt: pruefen
+  steuer:
+    unbekannt: satz

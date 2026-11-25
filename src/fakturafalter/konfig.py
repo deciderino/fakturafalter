@@ -1,6 +1,7 @@
 # SPDX-License-Identifier: Apache-2.0
 # Copyright 2026 Fakturafalter-Mitwirkende
 """Konfiguration (Absender, Ordner, Profile) und Kundenstamm laden."""
+
 from __future__ import annotations
 
 import csv
@@ -38,9 +39,13 @@ def partei_aus(a: dict, basis: Partei | None = None) -> Partei:
 
     return Partei(
         name=w(a, "name", b.name),
-        anschrift=Anschrift(w(adr, "strasse", b.anschrift.strasse), w(adr, "plz", b.anschrift.plz),
-                            w(adr, "ort", b.anschrift.ort), w(adr, "land", b.anschrift.land or "DE"),
-                            w(adr, "zusatz", b.anschrift.zusatz)),
+        anschrift=Anschrift(
+            w(adr, "strasse", b.anschrift.strasse),
+            w(adr, "plz", b.anschrift.plz),
+            w(adr, "ort", b.anschrift.ort),
+            w(adr, "land", b.anschrift.land or "DE"),
+            w(adr, "zusatz", b.anschrift.zusatz),
+        ),
         ust_id=w(a, "ust_id", b.ust_id),
         steuernummer=w(a, "steuernummer", b.steuernummer),
         elektronische_adresse=w(a, "elektronische_adresse", b.elektronische_adresse),
@@ -50,7 +55,8 @@ def partei_aus(a: dict, basis: Partei | None = None) -> Partei:
         register=w(a, "register", b.register),
         kennung=b.kennung,
         # ab 0.9.7: Kleinunternehmer (§ 19 UStG) – Schalter beim Absender
-        kleinunternehmer=bool(a["kleinunternehmer"]) if a.get("kleinunternehmer") is not None
+        kleinunternehmer=bool(a["kleinunternehmer"])
+        if a.get("kleinunternehmer") is not None
         else b.kleinunternehmer,
         kleinunternehmer_text=w(a, "kleinunternehmer_text", b.kleinunternehmer_text),
     )
@@ -58,7 +64,9 @@ def partei_aus(a: dict, basis: Partei | None = None) -> Partei:
 
 def zahlung_aus(z: dict, basis: Zahlung | None = None, kontoinhaber: str = "") -> Zahlung:
     """Block ``zahlung`` (Konfiguration oder Profil) -> Zahlung; mit ``basis`` nur genannte Schlüssel überschreiben."""
-    b = basis or Zahlung(art="58", kontoinhaber=kontoinhaber, bedingungen=ZAHLUNGSBEDINGUNG, ziel_tage=14)
+    b = basis or Zahlung(
+        art="58", kontoinhaber=kontoinhaber, bedingungen=ZAHLUNGSBEDINGUNG, ziel_tage=14
+    )
     return Zahlung(
         art=str(z.get("art", b.art)),
         iban=str(z.get("iban", b.iban) or "").replace(" ", ""),
@@ -66,7 +74,9 @@ def zahlung_aus(z: dict, basis: Zahlung | None = None, kontoinhaber: str = "") -
         kontoinhaber=str(z.get("kontoinhaber", b.kontoinhaber) or ""),
         bedingungen=str(z.get("bedingungen", b.bedingungen) or ""),
         ziel_tage=z.get("ziel_tage", b.ziel_tage),
-        glaeubiger_id=str(z.get("glaeubiger_id", b.glaeubiger_id) or "").replace(" ", "").upper(),  # BT-90
+        glaeubiger_id=str(z.get("glaeubiger_id", b.glaeubiger_id) or "")
+        .replace(" ", "")
+        .upper(),  # BT-90
     )
 
 
@@ -86,26 +96,32 @@ class Konfig:
     fehler: Path
     pruefen: Path
     csv_profile: list[dict] = field(default_factory=list)
-    pdf_profile: list[dict] = field(default_factory=list)   # „Nur PDF“: Absender ohne CSV, Vorlage per Assistent
-    arbeitsordner: Path | None = None    # gemeinsamer Ordner mit den Standard-Unterordnern (sonst einzeln)
+    pdf_profile: list[dict] = field(
+        default_factory=list
+    )  # „Nur PDF“: Absender ohne CSV, Vorlage per Assistent
+    arbeitsordner: Path | None = (
+        None  # gemeinsamer Ordner mit den Standard-Unterordnern (sonst einzeln)
+    )
     pdf_vorlagen: list[dict] = field(default_factory=list)
-    sichtteil: str = "original"          # original | neu
-    xrechnung_zusatz: bool = True        # zusätzlich XRechnung-CII-XML, wenn Kunde es verlangt
+    sichtteil: str = "original"  # original | neu
+    xrechnung_zusatz: bool = True  # zusätzlich XRechnung-CII-XML, wenn Kunde es verlangt
     stabil_sekunden: float = 2.0
     paarung_sekunden: float = 5.0
-    gegenstueck_minuten: float = 10.0    # PDF + CSV/XML: so lange auf die Datei mit gleichem Namen warten (0 = nie)
+    gegenstueck_minuten: float = (
+        10.0  # PDF + CSV/XML: so lange auf die Datei mit gleichem Namen warten (0 = nie)
+    )
     schwelle: float = 0.9
-    logs_anonym: bool = False            # Log-Ausgabe ohne Namen, Anschriften, IBAN, USt-IdNr., Beträge
-    nachpruefen: bool = True             # nach Erstellung lokal prüfen (Mustang + KoSIT, im Paket enthalten)
-    modus: str = "csv"                   # nur_pdf | csv | xml (alt: pdf_csv / pdf_xml)
-    pdf_verwenden: bool = True           # CSV/XML: Original-PDF als Sichtteil
+    logs_anonym: bool = False  # Log-Ausgabe ohne Namen, Anschriften, IBAN, USt-IdNr., Beträge
+    nachpruefen: bool = True  # nach Erstellung lokal prüfen (Mustang + KoSIT, im Paket enthalten)
+    modus: str = "csv"  # nur_pdf | csv | xml (alt: pdf_csv / pdf_xml)
+    pdf_verwenden: bool = True  # CSV/XML: Original-PDF als Sichtteil
     # ab 0.9.5: je Belegart Prüfmuster, Lückenwarnung, Dateinamen-Muster (nummernkreis.Kreis); leer = wie bisher
     nummernkreise: dict = field(default_factory=dict)
     # ab 0.9.6: eigener Ordner für protokoll.tsv (None = „Protokoll“ neben Eingang, also im Arbeitsordner)
     protokoll_ordner: Path | None = None
-    xrechnung_ablage: str = "ausgang"     # ausgang (neben der PDF) | unterordner (Ausgang/XRechnung)
-    updatepruefung: bool = True           # beim Start nach neuer Version fragen (einziger Netzzugriff)
-    updates_vorab: bool = False           # Pre-Releases einbeziehen
+    xrechnung_ablage: str = "ausgang"  # ausgang (neben der PDF) | unterordner (Ausgang/XRechnung)
+    updatepruefung: bool = True  # beim Start nach neuer Version fragen (einziger Netzzugriff)
+    updates_vorab: bool = False  # Pre-Releases einbeziehen
     roh: dict = field(default_factory=dict)
 
     def pfad(self, p: str | Path) -> Path:
@@ -131,10 +147,21 @@ class Konfig:
     @property
     def xrechnung_ordner(self) -> Path:
         """Ziel der XRechnung-Zusatzdatei (neben der PDF oder im Unterordner „XRechnung“ des Ausgangs)."""
-        return self.ausgang / XRECHNUNG_ORDNER if self.xrechnung_ablage == "unterordner" else self.ausgang
+        return (
+            self.ausgang / XRECHNUNG_ORDNER
+            if self.xrechnung_ablage == "unterordner"
+            else self.ausgang
+        )
 
     def ordner_anlegen(self) -> None:
-        for p in (self.eingang, self.ausgang, self.pruefen, self.fehler, self.erledigt, self.protokoll):
+        for p in (
+            self.eingang,
+            self.ausgang,
+            self.pruefen,
+            self.fehler,
+            self.erledigt,
+            self.protokoll,
+        ):
             p.mkdir(parents=True, exist_ok=True)
 
     def ist_csv(self) -> bool:
@@ -159,8 +186,13 @@ XRECHNUNG_ORDNER = "XRechnung"
 XRECHNUNG_ABLAGEN = ("ausgang", "unterordner", "keine")
 
 # Ein Arbeitsordner, darin automatisch diese Unterordner (Schlüssel in der Konfiguration -> Ordnername)
-UNTERORDNER = (("eingang", "Eingang"), ("ausgang", "Ausgang"), ("pruefen", "Pruefen"),
-               ("fehler", "Fehler"), ("erledigt", "Erledigt"))
+UNTERORDNER = (
+    ("eingang", "Eingang"),
+    ("ausgang", "Ausgang"),
+    ("pruefen", "Pruefen"),
+    ("fehler", "Fehler"),
+    ("erledigt", "Erledigt"),
+)
 
 
 def _abs(basis: Path, p: str | Path) -> Path:
@@ -202,22 +234,33 @@ def _altlasten_bereinigen(datei: Path, roh: dict, schluessel) -> None:
     log.info("%s: Steuerzeichen-Reste entfernt (%s)", datei.name, ", ".join(geaendert))
     try:
         from .anlernen import _yaml_schreiben
-        ab = lade_datei(datei)                  # frisch lesen: nur die bereinigten Blöcke ersetzen
+
+        ab = lade_datei(datei)  # frisch lesen: nur die bereinigten Blöcke ersetzen
         for s in schluessel:
             if s in roh:
                 ab[s] = roh[s]
         _yaml_schreiben(datei, ab)
-    except Exception as e:                      # schreibgeschützt o. Ä.: bereinigt nur im Speicher
+    except Exception as e:  # schreibgeschützt o. Ä.: bereinigt nur im Speicher
         log.warning("%s: bereinigte Werte nicht gespeichert: %s", datei.name, e)
 
 
-def _profil_laden(k: "Konfig", d: dict, p: str) -> dict:
-    prof = lade_datei(k.pfad(p))
-    _altlasten_bereinigen(k.pfad(p), prof, ("verkaeufer", "zahlung"))
-    prof["_basis"] = k.pfad(p).parent
-    prof["_datei"] = str(k.pfad(p))
-    name = str(prof.get("profil") or prof.get("name") or k.pfad(p).stem)
-    ueber = (d.get("pdf_erkennung") or {}).get(name)   # Schalter aus den Einstellungen gehen vor
+def csv_eintrag_datei(eintrag) -> str:
+    """Pfad aus einem csv_profile-Eintrag (Zeichenkette oder {datei, aktiv})."""
+    if isinstance(eintrag, dict):
+        return str(eintrag.get("datei") or "")
+    return str(eintrag or "")
+
+
+def _profil_laden(k: "Konfig", d: dict, p) -> dict:
+    rel = csv_eintrag_datei(p)
+    prof = lade_datei(k.pfad(rel))
+    _altlasten_bereinigen(k.pfad(rel), prof, ("verkaeufer", "zahlung"))
+    prof["_basis"] = k.pfad(rel).parent
+    prof["_datei"] = str(k.pfad(rel))
+    if isinstance(p, dict) and "aktiv" in p:
+        prof["aktiv"] = bool(p["aktiv"])
+    name = str(prof.get("profil") or prof.get("name") or k.pfad(rel).stem)
+    ueber = (d.get("pdf_erkennung") or {}).get(name)  # Schalter aus den Einstellungen gehen vor
     if ueber:
         prof["pdf_erkennung"] = {**(prof.get("pdf_erkennung") or {}), **ueber}
     return prof
@@ -306,7 +349,9 @@ class Kundenstamm:
             text, _ = dekodieren(Path(pfad).read_bytes())
             trenn = trennzeichen_erkennen(text)
             for row in csv.DictReader(text.splitlines(), delimiter=trenn):
-                self.daten[(row.get("kundennummer") or "").strip()] = {k: (v or "").strip() for k, v in row.items()}
+                self.daten[(row.get("kundennummer") or "").strip()] = {
+                    k: (v or "").strip() for k, v in row.items()
+                }
 
     def get(self, nr: str) -> dict | None:
         return self.daten.get((nr or "").strip())
@@ -317,8 +362,13 @@ class Kundenstamm:
             return None
         return Partei(
             name=r.get("name", ""),
-            anschrift=Anschrift(r.get("strasse", ""), r.get("plz", ""), r.get("ort", ""), r.get("land", "DE") or "DE",
-                                r.get("zusatz", "")),
+            anschrift=Anschrift(
+                r.get("strasse", ""),
+                r.get("plz", ""),
+                r.get("ort", ""),
+                r.get("land", "DE") or "DE",
+                r.get("zusatz", ""),
+            ),
             ust_id=r.get("ust_id", ""),
             register=r.get("register", ""),  # ab 0.9.7: BT-47 (Reverse Charge ohne USt-IdNr.)
             elektronische_adresse=r.get("elektr_adresse_bt49", ""),

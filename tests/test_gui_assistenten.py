@@ -45,7 +45,11 @@ def test_csv_assistent_legt_normales_profil_an(fenster, qapp, konfig_datei):
     qapp.processEvents()
     assert d.i == 4 and d.gespeichert and d.gespeichert.exists()
     roh = yaml.safe_load(konfig_datei.read_text(encoding="utf-8"))
-    assert roh["modus"] == "csv" and any("profil-testware" in p for p in roh["csv_profile"])
+    from fakturafalter.konfig import csv_eintrag_datei
+
+    assert roh["modus"] == "csv" and any(
+        "profil-testware" in csv_eintrag_datei(p) for p in roh["csv_profile"]
+    )
     assert any(p.get("profil") == "Testware" for p in fenster.k.csv_profile)
     d.b_weiter.click()  # „Fertig“
     qapp.processEvents()
@@ -84,7 +88,7 @@ def test_csv_assistent_lesefehler_laesst_weiter_konsistent(fenster, qapp, tmp_pa
     d.reject()
 
 
-def test_csv_assistent_sperrt_satzart(fenster, qapp):
+def test_csv_assistent_erkennt_satzart(fenster, qapp):
     from fakturafalter.gui.datenassistent import CsvAssistent
 
     d = CsvAssistent(fenster, fenster)
@@ -92,7 +96,26 @@ def test_csv_assistent_sperrt_satzart(fenster, qapp):
     d.name.setText("b")
     assert d.b_weiter.isEnabled() and d.i == 0
     d.b_weiter.click()
-    assert d.i == 1 and not d.b_weiter.isEnabled()
+    assert d.i == 1 and d.b_weiter.isEnabled()
+    assert d.art == "satzart"
+    d.reject()
+
+
+def test_csv_assistent_erkennt_bloecke(fenster, qapp):
+    from fakturafalter.gui.datenassistent import CsvAssistent
+
+    d = CsvAssistent(fenster, fenster)
+    d.datei_setzen(BEISPIELE / "variante-blo_hotel.csv")
+    d.name.setText("Hotel")
+    assert d.art == "bloecke"
+    d.b_weiter.click()
+    assert d.i == 1 and d.b_weiter.isEnabled()
+    d.b_weiter.click()
+    assert d.i == 2 and d.box_bloecke.isVisibleTo(d) and d.box_text.isVisibleTo(d)
+    assert d.f_block.count() >= 2
+    assert d.b_weiter.isEnabled(), d._alle_zuordnungen()
+    p = d.profil()
+    assert (p.get("aufbau") or {}).get("art") == "bloecke"
     d.reject()
 
 
@@ -141,6 +164,26 @@ def test_einstellungen_gegliedert_und_speicherbar(fenster, qapp):
     r = d.ergebnis()
     assert r["modus"] == "csv" and r["optionen"]["pdf_verwenden"] is False
     assert fenster.einstellungen_uebernehmen(r)
+    d.reject()
+
+
+def test_einstellungen_profilkarten_aktiv_und_reihenfolge(fenster, qapp):
+    from PySide6.QtWidgets import QCheckBox, QPushButton
+
+    d = einst.Einstellungen(fenster, "Eingang & Vorlagen")
+    aktiv = [b for b in d.findChildren(QCheckBox) if b.text() == "Aktiv"]
+    assert len(aktiv) >= 2
+    knoepfe = [b.text() for b in d.findChildren(QPushButton)]
+    assert "Hoch" in knoepfe and "Runter" in knoepfe
+    assert any("Profil testen" in (t or "") for t in knoepfe)
+    texte = " ".join(w.text() or "" for w in d.findChildren(QLabel))
+    assert "Blöcke:" in texte or "Bloecke:" in texte
+    # erstes Profil aus, bleibt in der Liste
+    assert aktiv[0].isChecked()
+    aktiv[0].setChecked(False)
+    r = d.ergebnis()
+    ein = r.get("csv_profile") or []
+    assert ein and isinstance(ein[0], dict) and ein[0].get("aktiv") is False
     d.reject()
 
 

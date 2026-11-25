@@ -27,6 +27,7 @@ class Eintrag:
     kunde: str = ""
     brutto: str = ""
     pruefung: str = ""  # gültig | ungültig | nicht geprüft | "" (ab v0.4)
+    profil: str = ""  # ab 0.9.8
 
 
 @dataclass
@@ -59,7 +60,7 @@ def protokoll(k: Konfig, anzahl: int | None = None) -> list[Eintrag]:
         t = z.split("\t")
         if len(t) < 3:
             continue
-        t += [""] * (8 - len(t))
+        t += [""] * (9 - len(t))
         try:
             zeit = datetime.strptime(t[0], "%Y-%m-%d %H:%M:%S")
         except ValueError:
@@ -74,6 +75,7 @@ def protokoll(k: Konfig, anzahl: int | None = None) -> list[Eintrag]:
                 t[5],
                 t[6],
                 t[7],
+                t[8] if len(t) > 8 else "",
             )
         )
     aus.sort(key=lambda e: e.zeit or datetime.min)  # Nachträge an die richtige Stelle

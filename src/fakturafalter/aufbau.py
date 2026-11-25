@@ -435,6 +435,11 @@ def rechnung_bauen(
         r.herkunft["BT-20"] = Herkunft("profil", 1.0)  # Standardtext des Profils
     if wert("zahlungsziel_tage") is not None:
         r.zahlung.ziel_tage = int(Decimal(str(wert("zahlungsziel_tage"))))
+    if wert("skonto_satz") is not None or wert("skonto_tage") is not None:
+        r.zahlung.bedingungen = zahlungsziel.aus_feldern(
+            r.datum, wert("skonto_satz"), wert("skonto_tage"), r.zahlung.ziel_tage
+        )
+        r.herkunft["BT-20"] = Herkunft("csv:skonto", 1.0)
     bt44_offen = any(h.feld == "BT-44" for h in r.hinweise)  # z. B. Kundenbezeichnung 1 fehlt
     if bt44_offen:
         pass

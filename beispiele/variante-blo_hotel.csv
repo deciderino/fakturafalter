@@ -1,0 +1,10 @@
+Rechnungsnr;Datum;Lieferdatum;Kunde;Strasse;PLZ;Ort;Artikel;Menge;Einheit;Einzelpreis;USt-Satz
+SK-2026-0413;06.10.2026;05.10.2026;Hotel Am Stadtpark GmbH;Parkallee 18;31135;Hildesheim;Roggenmischbrot 1000 g;12;Stk;3,40;7
+SK-2026-0413;06.10.2026;05.10.2026;Hotel Am Stadtpark GmbH;Parkallee 18;31135;Hildesheim;Quarkbällchen;2,5;kg;9,60;7
+SK-2026-0413;06.10.2026;05.10.2026;Hotel Am Stadtpark GmbH;Parkallee 18;31135;Hildesheim;Brotkorb Leihgebühr;60;Stk;2,50;19
+SK-2026-0413;06.10.2026;05.10.2026;Hotel Am Stadtpark GmbH;Parkallee 18;31135;Hildesheim;Lieferpauschale Innenstadt;60;Stk;6,00;19
+
+
+Skonto;Zahlungsziel mit Skonto;Zahlungsziel ohne Abzug;Gesamt Brutto;Gesamt Netto;
+3%;10 Tage;30 Tage;
+

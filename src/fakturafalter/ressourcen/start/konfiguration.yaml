@@ -1,6 +1,7 @@
 # Startkonfiguration – wird beim ersten Start kopiert. Absender bitte in den Einstellungen eintragen.
-# Die mitgelieferten Profile/Vorlagen/Kundenstamm sind BEISPIELE (erfundene Daten) und an die eigene
-# Warenwirtschaft anzupassen.
+# Beim ersten Start ist noch kein CSV-Profil eingerichtet – das legst du unter
+# Einstellungen → Eingang & Vorlagen mit „Neue CSV einrichten…“ an. Beispielprofile
+# liegen im Testdaten-ZIP und können übernommen werden.
 absender:
   name: ""
   anschrift: {strasse: "", plz: "", ort: "", land: DE}
@@ -19,7 +20,7 @@ zahlung:
 bemerkungen: []
 ordner: {}
 modus: csv
-csv_profile: [profil-variante-a.json, profil-variante-b.yaml, profil-variante-c.yaml]
+csv_profile: []
 pdf_vorlagen: [vorlage-wawi-druck.yaml]
 optionen:
   pdf_verwenden: false

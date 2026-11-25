@@ -66,6 +66,11 @@ def _typisieren(roh: str, d: dict, profil: dict):
             return str(int(roh))
         except ValueError:
             raise WertFehler(f"„{roh}“ ist keine ganze Zahl") from None
+    if typ == "tage":  # „10 Tage“, „10“, „10 Tagen“
+        m = re.search(r"(\d{1,3})", roh)
+        if not m:
+            raise WertFehler(f"„{roh}“ ist keine Tagesangabe")
+        return int(m.group(1))
     if typ == "datum":
         return datum(roh, d.get("format") or profil.get("datum", {}).get("format", "%d.%m.%Y"))
     return roh
@@ -78,6 +83,9 @@ def profil_passt(pfad: Path, profil: dict) -> bool:
     art = profil.get("aufbau", {}).get("art")
     if art == "feste_breite":
         return _feste_breite_passt(pfad, profil)
+    if art == "bloecke":
+        ok, _g = profil_passt_grund(pfad, profil)
+        return ok
     # Kopfzeile muss alle benötigten Spalten enthalten
     try:
         text, _ = dekodieren(pfad.read_bytes(), profil.get("datei", {}).get("kodierung", "auto"))
@@ -119,6 +127,8 @@ def lesen(pfad: Path, profil: dict, konfig: Konfig) -> list[Rechnung]:
     art = profil.get("aufbau", {}).get("art", "zeile_je_position")
     if art == "feste_breite":
         gruppen = _feste_breite(text, profil, pfad)
+    elif art == "bloecke":
+        gruppen = _bloecke(text, profil, pfad)
     else:
         gruppen = _csv(text, profil, pfad)
     rechnungen = []
@@ -271,3 +281,52 @@ def _feste_breite(text: str, profil: dict, pfad: Path):
         (k, (v[0] or {}, v[1], v[2] + ([] if v[0] else ["Kopfsatz fehlt"])))
         for k, v in gruppen.items()
     )
+
+
+def _bloecke(text: str, profil: dict, pfad: Path):
+    from . import csv_bloecke
+
+    dat = profil.get("datei", {})
+    trenn = dat.get("trennzeichen", "auto")
+    trenn = trennzeichen_erkennen(text) if trenn in (None, "auto") else trenn
+    zeilen = csv_lesen(text, trenn, dat.get("textbegrenzer", '"'))
+    zeilen = zeilen[int(dat.get("zeilen_ueberspringen", 0)) :]
+    if not zeilen:
+        raise ProfilFehler("Datei ist leer")
+    # Im Block-Modus ist die erste Zeile typischerweise schon eine Block-Kopfzeile
+    start = 1 + int(dat.get("zeilen_ueberspringen", 0))
+    return csv_bloecke.lesen(zeilen, profil, pfad, start)
+
+
+def profil_passt_grund(pfad: Path, profil: dict) -> tuple[bool, str]:
+    """Wie ``profil_passt``, dazu die Begründung (für „Profil testen“)."""
+    muster = profil.get("datei", {}).get("muster", "*.csv")
+    if not fnmatch.fnmatch(pfad.name.lower(), muster.lower()):
+        return False, f"Dateiname passt nicht zum Muster „{muster}“"
+    art = profil.get("aufbau", {}).get("art") or "zeile_je_position"
+    if art == "bloecke":
+        try:
+            text, _ = dekodieren(
+                pfad.read_bytes(), profil.get("datei", {}).get("kodierung", "auto")
+            )
+        except (OSError, UnicodeDecodeError) as e:
+            return False, f"Datei nicht lesbar ({e})"
+        dat = profil.get("datei", {})
+        trenn = dat.get("trennzeichen", "auto")
+        trenn = trennzeichen_erkennen(text) if trenn in (None, "auto") else trenn
+        zeilen = csv_lesen(text, trenn, dat.get("textbegrenzer", '"'))
+        zeilen = zeilen[int(dat.get("zeilen_ueberspringen", 0)) :]
+        from . import csv_bloecke
+
+        return csv_bloecke.passt(zeilen, profil)
+    ok = profil_passt(pfad, profil)
+    if ok:
+        return True, f"Aufbau „{art}“, Pflichtspalten vorhanden"
+    return False, f"Aufbau „{art}“, Pflichtspalten fehlen oder Datei passt nicht"
+
+
+def profil_aktiv(profil: dict) -> bool:
+    """Fehlendes „aktiv“ gilt als an (rückwärtskompatibel)."""
+    if "aktiv" not in profil:
+        return True
+    return bool(profil.get("aktiv"))

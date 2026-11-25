@@ -1,4 +1,4 @@
-Fakturafalter 0.9.7 – Testdaten
+Fakturafalter 0.9.8 – Testdaten
 ===============================
 
 Alle Firmen, Personen, Rechnungen und Kontonummern sind erfunden.
@@ -95,9 +95,9 @@ Test 7 mit variante-a_positionen_utf8.csv statt variante-d laufen lassen.
 
 Test 7: Rabatt, Gutschrift, Lastschrift (CSV und XML)
 -----------------------------------------------------
-Linux:    ./Fakturafalter-0.9.7-x86_64.AppImage -c beispiele/konfiguration.yaml \
+Linux:    ./Fakturafalter-0.9.8-x86_64.AppImage -c beispiele/konfiguration.yaml \
               --dateien beispiele/variante-d_rabatt_gutschrift_lastschrift.csv
-          ./Fakturafalter-0.9.7-x86_64.AppImage -c beispiele/xml/konfiguration-pdf-xml.yaml \
+          ./Fakturafalter-0.9.8-x86_64.AppImage -c beispiele/xml/konfiguration-pdf-xml.yaml \
               --dateien beispiele/xml-eingang/*.xml
 Windows:  fakturafalter-cli.exe mit denselben Angaben (Pfade mit \).
 Erwartet: 6 × „OK“ und „[gültig]“. In den PDFs stehen Rabatt- und Zuschlagszeilen, „Gutschrift“ mit
@@ -131,7 +131,7 @@ Test 9: Fortschritt der Verarbeitung
 
 Test 10: Nur PDF mit Anlern-Assistent (unterstützt, nicht empfohlen)
 -------------------------------------------------------------------
-Linux:    ./Fakturafalter-0.9.7-x86_64.AppImage -c beispiele/industrie/konfiguration-nur-pdf.yaml
+Linux:    ./Fakturafalter-0.9.8-x86_64.AppImage -c beispiele/industrie/konfiguration-nur-pdf.yaml
 Windows:  Fakturafalter.exe -c beispiele\industrie\konfiguration-nur-pdf.yaml
 
 1. Schalter oben links auf „Überwachung an“. Nur die PDFs aus beispiele/industrie/eingang/ nach
@@ -201,9 +201,9 @@ Test 14: Ausgang als Postbox, Protokollordner, XRechnung-Ablage, Updateprüfung 
    bzw. ein Hinweis mit Link. Es wird nichts heruntergeladen; abschaltbar mit „Beim Start nach Updates suchen“.
 
 
-Test 15: Steuer-Sonderfälle, Fremdwährung, Kleinunternehmer, Leitweg-ID (neu in 0.9.7)
+Test 15: Steuer-Sonderfälle, Fremdwährung, Kleinunternehmer, Leitweg-ID (neu in 0.9.8)
 -------------------------------------------------------------------------------------
-1. CSV:   ./Fakturafalter-0.9.7-x86_64.AppImage -c beispiele/konfiguration.yaml \
+1. CSV:   ./Fakturafalter-0.9.8-x86_64.AppImage -c beispiele/konfiguration.yaml \
               --dateien beispiele/variante-s_steuerfaelle.csv
    Erwartet: 6 × „OK“ und „[gültig]“. RE-S-2026-001 Reverse Charge (Hinweis § 13b, „Ihre USt-IdNr.“),
    002 innergemeinschaftliche Lieferung nach Österreich, 003 Ausfuhr in die Schweiz, 004 nicht steuerbar in USD,
@@ -224,6 +224,26 @@ Test 15: Steuer-Sonderfälle, Fremdwährung, Kleinunternehmer, Leitweg-ID (neu i
 6. Leitweg-ID: in einer Kopie von beispiele/kundenstamm.csv bei K-1002 die Leitweg-ID auf 04011000-12345-04
    ändern (Konfiguration auf die Kopie zeigen lassen), variante-a_positionen_utf8.csv verarbeiten →
    RE-2026-0102 (an K-1002) geht nach „Zu prüfen“ (Prüfziffer). 04011000-12345-03 ist gültig.
+
+
+Test 16: CSV-Blöcke und Profillogik (neu in 0.9.8)
+--------------------------------------------------
+1. CSV-Blöcke:   ./Fakturafalter-0.9.8-x86_64.AppImage -c beispiele/konfiguration.yaml \
+                     --dateien beispiele/variante-blo_hotel.csv
+   Erwartet: 1 × „OK“ und „[gültig]“, Profil „…blo…“ im Protokoll, SK-2026-0413
+   netto 574,80 / USt 101,44 / brutto 676,24, Zahlbar bis 05.11.2026, Skonto-Hinweis
+   (3 % in 10 Tagen). Sichtseite: Beschreibungen dürfen Zeilenumbrüche behalten.
+   Ebenso variante-blo_getrennt.csv (Textzeile + Leerzeile mit #LEER).
+   variante-blo_abweichung.csv geht nach „Zu prüfen“ (zwei Nummern, Kontrollsumme).
+2. Neue CSV einrichten… mit variante-blo_hotel.csv: Aufbau „Blöcke“ wird erkannt.
+   Blöcke typisieren, Probe und „Sichtseite ansehen…“, speichern.
+3. Einstellungen → Eingang & Vorlagen: Jede Profilkarte zeigt aktiv/aus und
+   erkannte Merkmale. Profil ausknipsen ohne Löschen, Reihenfolge mit Hoch/Runter.
+   „Profil testen…“ mit variante-blo_hotel.csv: das Block-Profil greift, die
+   anderen (eine Zeile je Position, Satzart, …) nicht, jeweils mit Begründung.
+   Mitgelieferte Profile lassen sich bearbeiten, übernehmen und löschen.
+   Eine frische Installation hat noch keine Beispielprofile in der Konfiguration;
+   sie liegen im Testdaten-ZIP.
 
 
 Was zurückmelden

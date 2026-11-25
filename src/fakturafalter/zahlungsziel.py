@@ -272,3 +272,23 @@ def profilziel_anpassen(r, quelltext: str) -> bool:
         )
         return True
     return False
+
+
+def aus_feldern(datum: date | None, satz, skonto_tage, netto_tage) -> str:
+    """BT-20 aus getrennten Spalten (Skonto-Satz, Skonto-Tage, Netto-Tage)."""
+    teile: list[str] = []
+    if satz not in (None, ""):
+        sdec = satz if isinstance(satz, Decimal) else Decimal(str(satz))
+        st = format(sdec.normalize(), "f").replace(".", ",")
+        s = f"{st} % Skonto"
+        if skonto_tage is not None:
+            s += f" innerhalb von {int(skonto_tage)} Tagen"
+            if datum:
+                s += f" (bis {datum + timedelta(days=int(skonto_tage)):%d.%m.%Y})"
+        teile.append(s)
+    if netto_tage is not None:
+        s = f"zahlbar innerhalb von {int(netto_tage)} Tagen ohne Abzug"
+        if datum:
+            s += f" (bis {datum + timedelta(days=int(netto_tage)):%d.%m.%Y})"
+        teile.append(s)
+    return (", ".join(teile) + ".") if teile else ""
