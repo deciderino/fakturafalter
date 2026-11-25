@@ -45,23 +45,27 @@ def test_kodierung_cp1252_erkannt():
     )
 
 
+def _profil(konfig, name: str):
+    return next(p for p in konfig.csv_profile if p.get("profil") == name)
+
+
 @pytest.mark.parametrize(
-    "datei,profil_nr",
+    "datei,profil_name",
     [
-        ("variante-a_positionen_utf8.csv", 0),
-        ("variante-b_wawi_cp1252.csv", 1),
-        ("variante-c_festbreite_cp1252.txt", 2),
+        ("variante-a_positionen_utf8.csv", "export-utf8-komma"),
+        ("variante-b_wawi_cp1252.csv", "wawi-semikolon"),
+        ("variante-c_festbreite_cp1252.txt", "festbreite-kp"),
     ],
 )
-def test_csv_varianten(konfig, datei, profil_nr):
+def test_csv_varianten(konfig, datei, profil_name):
     pfad = BEISPIELE / datei
-    prof = konfig.csv_profile[profil_nr]
+    prof = _profil(konfig, profil_name)
     assert adapter_csv.profil_passt(pfad, prof)
     # andere Profile dürfen nicht passen
     assert not any(
         adapter_csv.profil_passt(pfad, p)
-        for i, p in enumerate(konfig.csv_profile)
-        if i != profil_nr
+        for p in konfig.csv_profile
+        if p.get("profil") != profil_name
     )
     rs = {r.nummer: r for r in adapter_csv.lesen(pfad, prof, konfig)}
     assert set(rs) == set(SOLL)
@@ -103,7 +107,7 @@ def test_unbekannte_einheit_fuehrt_zu_pruefen(konfig, tmp_path):
     )
     p = tmp_path / "x.csv"
     p.write_text(src, encoding="utf-8")
-    rs = {r.nummer: r for r in adapter_csv.lesen(p, konfig.csv_profile[0], konfig)}
+    rs = {r.nummer: r for r in adapter_csv.lesen(p, _profil(konfig, "export-utf8-komma"), konfig)}
     assert rs["RE-2026-0101"].status == "pruefen"
     assert rs["RE-2026-0102"].status == "ok"
 
