@@ -1,0 +1,10 @@
+Rechnungsnummer;Rechnungsdatum;Leistungsdatum;Kunde;Strasse;PLZ;Ort;Land;USt-IdNr Kunde;Lieferland;Waehrung;Kurs;Kursdatum;Steuerhinweis;Pos;Bezeichnung;Menge;Einheit;Einzelpreis;Steuer
+RE-S-2026-001;20.11.2026;18.11.2026;Bau Beispiel GmbH;Baustellenweg 3;12345;Musterstadt;DE;DE000000003;;EUR;;;Steuerschuldnerschaft des Leistungsempfängers (§ 13b UStG);1;Trockenbauarbeiten Halle 2;24;Std;58,00;RC
+RE-S-2026-001;20.11.2026;18.11.2026;Bau Beispiel GmbH;Baustellenweg 3;12345;Musterstadt;DE;DE000000003;;EUR;;;Steuerschuldnerschaft des Leistungsempfängers (§ 13b UStG);2;Gipskartonplatten 12,5 mm;40;Stk;9,80;RC
+RE-S-2026-002;20.11.2026;19.11.2026;Alpen Beispiel Handels GmbH;Beispielgasse 4;6020;Innsbruck;AT;ATU99999999;AT;EUR;;;Steuerfreie innergemeinschaftliche Lieferung (§ 4 Nr. 1 Buchst. b, § 6a UStG);1;Sechskantschraube M10x60 verzinkt;500;Stk;0,32;IGL
+RE-S-2026-003;21.11.2026;20.11.2026;Muster Uhren AG;Beispielstrasse 9;8000;Zürich;Schweiz;;CH;EUR;;;Steuerfreie Ausfuhrlieferung (§ 4 Nr. 1 Buchst. a, § 6 UStG);1;Präzisionsdrehteil Messing;120;Stk;4,15;EX
+RE-S-2026-004;21.11.2026;21.11.2026;Example Software Inc.;100 Example Street;10001;New York;US;;;USD;1,0850;31.10.2026;Nicht im Inland steuerbare Leistung (Leistungsort im Ausland, § 3a Abs. 2 UStG);1;Beratung Softwarearchitektur (remote);16;Std;135,00;NSTB
+RE-S-2026-005;22.11.2026;22.11.2026;Beispiel Import GmbH;Hafenstraße 21;20457;Hamburg;DE;;;USD;1,0850;31.10.2026;;1;Messgerät Typ X (Listenpreis USD);2;Stk;1.249,00;19
+RE-S-2026-005;22.11.2026;22.11.2026;Beispiel Import GmbH;Hafenstraße 21;20457;Hamburg;DE;;;USD;1,0850;31.10.2026;;2;Kalibrierschein;2;Stk;85,00;19
+RE-S-2026-006;23.11.2026;23.11.2026;Bau Beispiel GmbH;Baustellenweg 3;12345;Musterstadt;DE;DE000000003;;EUR;;;Steuerschuldnerschaft des Leistungsempfängers (§ 13b UStG) für Position 1;1;Estricharbeiten Halle 2;12;Std;61,00;RC
+RE-S-2026-006;23.11.2026;23.11.2026;Bau Beispiel GmbH;Baustellenweg 3;12345;Musterstadt;DE;DE000000003;;EUR;;;Steuerschuldnerschaft des Leistungsempfängers (§ 13b UStG) für Position 1;2;Werkzeugmiete (keine Bauleistung);3;Stk;45,00;19

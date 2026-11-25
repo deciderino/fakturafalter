@@ -77,7 +77,19 @@ def _steuerwaehrung(r: Rechnung, s: Summen) -> None:
     Kurs „1 EUR = x BT-5“ und/oder BT-111 kommen aus den Daten; ohne beides hält die Pflichtprüfung an."""
     r.steuerwaehrung = ""
     s.ust_steuerwaehrung = None
-    if (r.waehrung or "EUR").strip().upper() == "EUR" or s.ust == 0:
+    if (r.waehrung or "EUR").strip().upper() == "EUR":
+        return
+    warn = []
+    if r.zahlung.art in ("58", "59") or r.zahlung.mandat:
+        warn.append((f"Rechnung in {r.waehrung}, Zahlungsart SEPA (Überweisung/Lastschrift) läuft in EUR – "
+                     "Zahlungsart bzw. Bankverbindung prüfen.", "BT-81"))
+    if r.kursdatum and r.datum and (r.datum - r.kursdatum).days > 62:
+        warn.append((f"Kursdatum {r.kursdatum:%d.%m.%Y} ist älter als zwei Monate (§ 16 Abs. 6 UStG: Kurs des "
+                     "Leistungsmonats).", "kurs"))
+    for text, feld in warn:
+        if not any(h.text == text for h in r.hinweise):
+            r.hinweis("warnung", text, feld)
+    if s.ust == 0:
         return
     berechnet = runden(s.ust / r.kurs) if r.kurs and r.kurs > 0 else None
     quelle = r.ust_eur_quelle

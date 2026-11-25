@@ -285,7 +285,8 @@ def kurs_text(r, sprache: str = "de") -> str:
     """„Umrechnungskurs: 1 EUR = 1,0850 USD (Stand 01.11.2026)“ – leer ohne Kurs."""
     if not r.kurs or (r.waehrung or "EUR").upper() == "EUR":
         return ""
-    k = f"{r.kurs.normalize():f}".replace(".", ",")
+    stellen = max(4, -r.kurs.normalize().as_tuple().exponent)
+    k = f"{r.kurs:.{stellen}f}".replace(".", ",")
     if sprache == "en":
         t = f"Exchange rate: 1 EUR = {k.replace(',', '.')} {r.waehrung}"
         return t + (f" (as of {r.kursdatum:%Y-%m-%d})" if r.kursdatum else "")

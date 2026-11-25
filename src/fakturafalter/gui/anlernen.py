@@ -93,6 +93,7 @@ STEUERFALL_WAHL = (
 )
 # Wert der Steuerspalte -> Bedeutung
 STEUERWERT_WAHL = (
+    ("hinweis", "aus dem Steuerhinweis je Rechnung"),
     ("S:19", "19 %"),
     ("S:7", "7 %"),
     ("AE", "Reverse Charge (§ 13b UStG)"),

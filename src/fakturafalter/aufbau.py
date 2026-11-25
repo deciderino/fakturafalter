@@ -369,6 +369,9 @@ def rechnung_bauen(
             neu = steuer_aus_code(code, r.steuerhinweis)
             if neu is not None:
                 pos.steuer = neu
+            elif isinstance(code, dict):
+                r.hinweis("pruefen", "Steuerfall nicht bestimmbar: kein Steuerhinweis im Druck und kein Steuersatz",
+                          f"Pos {pos.nr} BT-151")
         _position_ergaenzen(pos, g)
         if not pos.bezeichnung:
             r.hinweis("pruefen", "Bezeichnung fehlt", f"Pos {pos.nr} BT-153")
@@ -397,6 +400,15 @@ def rechnung_bauen(
     for a in (r.kaeufer.anschrift, r.lieferung.anschrift):  # „Österreich“ -> AT
         if a.land and not re.fullmatch(r"[A-Z]{2}", a.land):
             a.land = steuerfaelle.land_code(a.land) or a.land
+    la = r.lieferung.anschrift
+    if la.land and not (r.lieferung.name or la.strasse or la.plz or la.ort or la.zusatz):
+        # nur „Lieferland“ (BT-80) ohne Anschrift: gleiches Land wie der Käufer -> Käuferanschrift gilt (die
+        # E-Rechnung übernimmt sie bei innergemeinschaftlicher Lieferung als Lieferanschrift)
+        if la.land == (r.kaeufer.anschrift.land or "DE"):
+            la.land = ""
+        else:
+            r.hinweis("pruefen", (f"Lieferland {la.land} weicht vom Land des Kunden ab – bitte die vollständige "
+                                  "Lieferanschrift (Name, Straße, PLZ, Ort) angeben."), "BT-80")
     if aus_quelle and not r.kaeufer.kennung:
         r.kaeufer.kennung = r.kundennummer  # BT-46
     if wert("BT-10") is not None:
@@ -514,6 +526,8 @@ def steuer_aus_code(code, hinweis: str = "") -> Steuer | None:
         erkannt = steuerfaelle.erkennen(hinweis)
         if erkannt:
             return steuerfaelle.steuer(erkannt, hinweis)
+        if "BT-152" not in code:
+            return None  # kein Hinweis im Druck und kein Satz: nicht raten
     elif fall in steuerfaelle.FAELLE:
         passt = hinweis if steuerfaelle.erkennen(hinweis) == fall else ""
         return steuerfaelle.steuer(fall, str(code.get("BT-120") or "") or passt)

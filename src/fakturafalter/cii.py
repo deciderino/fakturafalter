@@ -141,7 +141,8 @@ def _zu_abschlag(parent, za: ZuAbschlag, beleg: bool):
         t = _e(el, "ram:CategoryTradeTax")
         _e(t, "ram:TypeCode", "VAT")
         _e(t, "ram:CategoryCode", za.steuer.kategorie)
-        _e(t, "ram:RateApplicablePercent", satz(za.steuer.satz))
+        if za.steuer.kategorie != "O":  # BR-O-06/07: ohne Satz
+            _e(t, "ram:RateApplicablePercent", satz(za.steuer.satz))
     return el
 
 
@@ -277,7 +278,8 @@ def erzeugen(r: Rechnung, profil: str = "EN16931") -> bytes:
         t = _e(st, "ram:ApplicableTradeTax")
         _e(t, "ram:TypeCode", "VAT")
         _e(t, "ram:CategoryCode", p.steuer.kategorie)  # BT-151
-        _e(t, "ram:RateApplicablePercent", satz(p.steuer.satz))  # BT-152
+        if p.steuer.kategorie != "O":  # BR-O-05: „nicht steuerbar“ ohne Satz
+            _e(t, "ram:RateApplicablePercent", satz(p.steuer.satz))  # BT-152
         _zeitraum(st, p.leistung_von, p.leistung_bis)  # BG-26
         for za in p.zu_abschlaege:  # BG-27/BG-28
             _zu_abschlag(st, za, beleg=False)
@@ -416,7 +418,8 @@ def erzeugen(r: Rechnung, profil: str = "EN16931") -> bytes:
         _e(t, "ram:CategoryCode", zl.steuer.kategorie)  # BT-118
         if zl.steuer.befreiungscode:
             _e(t, "ram:ExemptionReasonCode", zl.steuer.befreiungscode)  # BT-121
-        _e(t, "ram:RateApplicablePercent", satz(zl.steuer.satz))  # BT-119
+        if zl.steuer.kategorie != "O":  # BR-O-10: ohne Satz
+            _e(t, "ram:RateApplicablePercent", satz(zl.steuer.satz))  # BT-119
     _zeitraum(se, r.leistung_von, r.leistung_bis)  # BG-14 Rechnungszeitraum
     for za in r.zu_abschlaege:  # BG-20/BG-21
         _zu_abschlag(se, za, beleg=True)

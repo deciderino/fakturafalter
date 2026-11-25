@@ -1,0 +1,58 @@
+# CSV-Zuordnungsprofil – passt zu variante-s_steuerfaelle.csv (erfundene Daten, ab 0.9.7)
+# Zeigt die Steuer-Sonderfälle: Reverse Charge (§ 13b UStG), innergemeinschaftliche Lieferung, Ausfuhr ins
+# Drittland, nicht im Inland steuerbare Leistung, Fremdwährung (USD mit Kurs) und eine gemischte Rechnung.
+# Der Steuerhinweis der Quelle wird BT-120; fehlt er, gilt der Standardtext des Falls.
+profil: steuerfaelle
+version: 1
+beschreibung: "Eine Zeile je Position, UTF-8, Semikolon, Dezimalkomma; Steuerschlüssel RC/IGL/EX/NSTB"
+
+datei:
+  muster: "*.csv"
+  kodierung: auto
+  trennzeichen: ";"
+  textbegrenzer: '"'
+  kopfzeile: true
+
+zahlen:  {dezimal: ",", tausender: "."}
+datum:   {format: "%d.%m.%Y"}
+
+aufbau:
+  art: zeile_je_position
+  rechnung_schluessel: Rechnungsnummer
+  kopf_muss_gleich_sein: [Rechnungsdatum, Kunde]
+
+felder:
+  kopf:
+    BT-1:          {spalte: Rechnungsnummer}
+    BT-2:          {spalte: Rechnungsdatum, typ: datum}
+    BT-72:         {spalte: Leistungsdatum, typ: datum}
+    BT-44:         {spalte: Kunde}
+    BT-50:         {spalte: Strasse}
+    BT-53:         {spalte: PLZ}
+    BT-52:         {spalte: Ort}
+    BT-55:         {spalte: Land}                                  # ISO-Code oder Ländername
+    BT-48:         {spalte: "USt-IdNr Kunde", optional: true}
+    BT-80:         {spalte: Lieferland, optional: true}
+    BT-5:          {spalte: Waehrung}                              # EUR, USD …
+    kurs:          {spalte: Kurs, optional: true}                  # 1 EUR = x Fremdwährung (aus der Quelle)
+    kursdatum:     {spalte: Kursdatum, typ: datum, optional: true}
+    steuerhinweis: {spalte: Steuerhinweis, optional: true}         # Pflichthinweis -> BT-120
+    BT-3:          {fest: "380"}
+  position:
+    BT-126:        {spalte: Pos}
+    BT-153:        {spalte: Bezeichnung}
+    BT-129:        {spalte: Menge, typ: zahl}
+    BT-130:        {spalte: Einheit, mapping: einheiten}
+    BT-146:        {spalte: Einzelpreis, typ: zahl}
+    steuer:        {spalte: Steuer, mapping: steuer}
+
+mappings:
+  einheiten: {"Stk": H87, "Std": HUR, "pausch": LS, unbekannt: allgemein}
+  steuer:
+    "19":   {BT-151: S, BT-152: 19}
+    "7":    {BT-151: S, BT-152: 7}
+    "RC":   AE      # Steuerschuldnerschaft des Leistungsempfängers (§ 13b UStG)
+    "IGL":  K       # innergemeinschaftliche Lieferung
+    "EX":   G       # Ausfuhrlieferung
+    "NSTB": O       # nicht im Inland steuerbar
+    unbekannt: pruefen

@@ -221,7 +221,8 @@ def summen_zeilen(r: Rechnung) -> list[tuple[str, str]]:
         zeilen.append(("Summe Positionen", eur(s.positionen_netto)))
         zeilen += [_za_text(za) for za in r.zu_abschlaege]
     ku = bool(s.steuerzeilen) and all(steuerfaelle.fall_von(z.steuer) == "KU" for z in s.steuerzeilen)
-    zeilen.append(("Rechnungsbetrag" if ku else "Nettobetrag", eur(s.netto)))
+    if not ku:  # Kleinunternehmer: nur der Gesamtbetrag
+        zeilen.append(("Nettobetrag", eur(s.netto)))
     for z in s.steuerzeilen:
         if steuerfaelle.fall_von(z.steuer) == "KU":
             continue

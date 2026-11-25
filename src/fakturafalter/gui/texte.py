@@ -1341,6 +1341,7 @@ _STEUER_097 = {
     "Vorschlag aus dem Steuerhinweis: {f}": "Suggested from the tax note: {f}",
     "Währung (freiwillig, z. B. USD)": "Currency (optional, e.g. USD)",
     "automatisch (aus dem Steuerhinweis im Druck)": "automatic (from the tax note in the print)",
+    "aus dem Steuerhinweis je Rechnung": "from the tax note of each invoice",
     "Gelesener Wert ist keine USt-IdNr. – nicht übernommen.": "The value read is not a VAT ID – not used.",
     "Gelesener Wert ist kein Land – nicht übernommen.": "The value read is not a country – not used.",
     "Steuerhinweis im Druck gefunden. Steuerfall unten bei den Positionen prüfen.": "Tax note found in the print. "

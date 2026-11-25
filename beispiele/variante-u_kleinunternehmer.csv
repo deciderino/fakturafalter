@@ -1,0 +1,3 @@
+Rechnungsnummer;Rechnungsdatum;Leistungsdatum;Kunde;Strasse;PLZ;Ort;Land;USt-IdNr Kunde;Lieferland;Waehrung;Kurs;Kursdatum;Steuerhinweis;Pos;Bezeichnung;Menge;Einheit;Einzelpreis;Steuer
+KU-2026-014;24.11.2026;20.11.2026;Erika Musterfrau;Lindenweg 2;12347;Musterstadt;DE;;;EUR;;;;1;Gartenpflege November;6;Std;32,00;0
+KU-2026-014;24.11.2026;20.11.2026;Erika Musterfrau;Lindenweg 2;12347;Musterstadt;DE;;;EUR;;;;2;Grünschnitt-Entsorgung;1;pausch;25,00;0

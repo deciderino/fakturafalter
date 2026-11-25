@@ -123,6 +123,8 @@ def steuerwert_mapping(wahl: str, text: str = "") -> dict:
     """Auswahl im Assistenten („S:19“, „S:7“, „AE“, „K“, „G“, „O“, „KU“) -> Steuer-Mapping der Vorlage."""
     if wahl.startswith("S:"):
         return {"BT-151": "S", "BT-152": wahl[2:]}
+    if wahl == "hinweis":
+        return {"fall": "hinweis"}
     m = {"fall": wahl, **steuerfaelle.mapping(wahl, text)}
     if not text:
         m.pop("BT-120", None)  # Text je Rechnung aus dem Druck, sonst Standardtext
@@ -134,7 +136,7 @@ def steuerwert_kennung(m: dict | None) -> str:
     if not m:
         return ""
     f = str(m.get("fall") or "")
-    if f in steuerfaelle.FAELLE:
+    if f in steuerfaelle.FAELLE or (f == "hinweis" and "BT-152" not in m):
         return f
     if str(m.get("BT-151", "S")) == "S":
         return f"S:{pdferkennung._satz(Decimal(str(m.get('BT-152', 0))))}".replace(",", ".")
@@ -2010,7 +2012,10 @@ class Sitzung:
                 elif kurz:
                     st[p.steuer_text] = steuerwert_mapping(kurz, self.steuerfall_text() if kurz == fall else "")
                 elif m and Decimal(m[1].replace(",", ".")) == 0 and fall != "S":
-                    st[p.steuer_text] = steuerwert_mapping(fall, self.steuerfall_text())
+                    # 0 % ohne Kennzeichen: Steuerfall aus der Auswahl, sonst je Rechnung aus dem Hinweistext
+                    st[p.steuer_text] = (
+                        steuerwert_mapping(fall, self.steuerfall_text()) if self.steuerfall else {"fall": "hinweis"}
+                    )
                 elif m:
                     st[p.steuer_text] = {"BT-151": "S", "BT-152": m[1].replace(",", ".")}
                 elif pdferkennung.ist_steuerbuchstabe(p.steuer_text):
@@ -2020,9 +2025,14 @@ class Sitzung:
                 elif satz is not None:
                     st[p.steuer_text] = {"BT-151": "S", "BT-152": str(satz)}
             pv["steuer"] = st
-        elif fall != "S":  # Steuersatz nur im Summenblock: ein Steuerfall je Rechnung
-            pv["steuer_fest"] = {"fall": fall, **steuerfaelle.mapping(fall)}
-            pv["steuer_fest"].pop("BT-120", None)  # Text kommt je Rechnung aus dem Druck (sonst Standardtext)
+        elif self.steuerfall and self.steuerfall != "S":  # ausgewählt: fester Steuerfall der Vorlage
+            pv["steuer_fest"] = steuerwert_mapping(self.steuerfall)
+        elif not self.steuerfall and (fall != "S" or (satz is not None and satz > 0)):
+            # Steuersatz nur im Summenblock: ein Steuerfall je Rechnung – aus dem Steuerhinweis im Druck, ohne
+            # Hinweis der Steuersatz (Regelbesteuerung)
+            pv["steuer_fest"] = {"fall": "hinweis"}
+            if satz is not None and satz > 0:
+                pv["steuer_fest"].update({"BT-151": "S", "BT-152": str(satz)})
         elif (
             satz is not None
         ):  # ohne Steuersatz kein stiller Standard (19 %): Positionen bleiben „prüfen“
