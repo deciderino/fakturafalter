@@ -85,6 +85,11 @@ XRechnung (CII), wenn der Kundenstamm sie verlangt – neben der PDF, im Unteror
 - Kundenbezeichnung 1–3 als eigene Adresszeilen.
 - Artikel-, Zeichnungs- und Bestellangaben unter der Positionsbezeichnung.
 - Rabatte, Gutschriften und Lastschrift.
+- Steuer-Sonderfälle: Reverse Charge (§ 13b UStG), innergemeinschaftliche Lieferung, Ausfuhr, nicht steuerbare
+  Leistungen und Kleinunternehmer (§ 19 UStG) – auch gemischt in einer Rechnung und im Modus Nur PDF anlernbar.
+- Rechnungen in Fremdwährung (z. B. USD) mit der Umsatzsteuer zusätzlich in EUR; der Kurs kommt aus deinen Daten,
+  Fakturafalter ruft keinen Kurs ab.
+- Leitweg-ID (XRechnung) mit Prüfziffer nach Mod 97-10.
 
 **Nur PDF** (Angaben allein aus dem Rechnungsdruck) wird weiterhin unterstützt, ist aber nicht der empfohlene Weg:
 Die Erkennung kann fehlgehen, Layouts müssen angelernt und Ergebnisse kontrolliert werden.

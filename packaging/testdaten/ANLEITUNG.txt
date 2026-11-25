@@ -1,4 +1,4 @@
-Fakturafalter 0.9.6 – Testdaten
+Fakturafalter 0.9.7 – Testdaten
 ===============================
 
 Alle Firmen, Personen, Rechnungen und Kontonummern sind erfunden.
@@ -95,9 +95,9 @@ Test 7 mit variante-a_positionen_utf8.csv statt variante-d laufen lassen.
 
 Test 7: Rabatt, Gutschrift, Lastschrift (CSV und XML)
 -----------------------------------------------------
-Linux:    ./Fakturafalter-0.9.6-x86_64.AppImage -c beispiele/konfiguration.yaml \
+Linux:    ./Fakturafalter-0.9.7-x86_64.AppImage -c beispiele/konfiguration.yaml \
               --dateien beispiele/variante-d_rabatt_gutschrift_lastschrift.csv
-          ./Fakturafalter-0.9.6-x86_64.AppImage -c beispiele/xml/konfiguration-pdf-xml.yaml \
+          ./Fakturafalter-0.9.7-x86_64.AppImage -c beispiele/xml/konfiguration-pdf-xml.yaml \
               --dateien beispiele/xml-eingang/*.xml
 Windows:  fakturafalter-cli.exe mit denselben Angaben (Pfade mit \).
 Erwartet: 6 × „OK“ und „[gültig]“. In den PDFs stehen Rabatt- und Zuschlagszeilen, „Gutschrift“ mit
@@ -131,7 +131,7 @@ Test 9: Fortschritt der Verarbeitung
 
 Test 10: Nur PDF mit Anlern-Assistent (unterstützt, nicht empfohlen)
 -------------------------------------------------------------------
-Linux:    ./Fakturafalter-0.9.6-x86_64.AppImage -c beispiele/industrie/konfiguration-nur-pdf.yaml
+Linux:    ./Fakturafalter-0.9.7-x86_64.AppImage -c beispiele/industrie/konfiguration-nur-pdf.yaml
 Windows:  Fakturafalter.exe -c beispiele\industrie\konfiguration-nur-pdf.yaml
 
 1. Schalter oben links auf „Überwachung an“. Nur die PDFs aus beispiele/industrie/eingang/ nach
@@ -199,6 +199,31 @@ Test 14: Ausgang als Postbox, Protokollordner, XRechnung-Ablage, Updateprüfung 
    lässt sie weg.
 5. Einstellungen → Allgemein → Updates: „Jetzt prüfen“. Ohne Netz: „Keine Verbindung“, sonst „ist aktuell“
    bzw. ein Hinweis mit Link. Es wird nichts heruntergeladen; abschaltbar mit „Beim Start nach Updates suchen“.
+
+
+Test 15: Steuer-Sonderfälle, Fremdwährung, Kleinunternehmer, Leitweg-ID (neu in 0.9.7)
+-------------------------------------------------------------------------------------
+1. CSV:   ./Fakturafalter-0.9.7-x86_64.AppImage -c beispiele/konfiguration.yaml \
+              --dateien beispiele/variante-s_steuerfaelle.csv
+   Erwartet: 6 × „OK“ und „[gültig]“. RE-S-2026-001 Reverse Charge (Hinweis § 13b, „Ihre USt-IdNr.“),
+   002 innergemeinschaftliche Lieferung nach Österreich, 003 Ausfuhr in die Schweiz, 004 nicht steuerbar in USD,
+   005 19 % in USD mit „Umsatzsteuer in EUR: 467,21 €“ und Kurszeile, 006 gemischt (RC für Position 1 + 19 %).
+2. Kleinunternehmer: Einstellungen → Absender → Haken „Kleinunternehmer (§ 19 UStG)“, Speichern, dann
+   --dateien beispiele/variante-u_kleinunternehmer.csv. Erwartet: „OK [gültig]“, auf der Rechnung
+   „Gemäß § 19 UStG wird keine Umsatzsteuer berechnet.“, nur „Gesamtbetrag“. Haken wieder entfernen.
+   Gegenprobe: mit Haken variante-s_steuerfaelle.csv → Rechnungen mit 19 % gehen nach „Zu prüfen“.
+3. XML in USD:   -c beispiele/xml/konfiguration-pdf-xml.yaml --dateien beispiele/xml-eingang/X?-2026-000?_*_usd.xml
+   Erwartet: 2 × „OK [gültig]“, USt 350,23 EUR.
+4. Nur PDF:   -c beispiele/steuerfaelle/konfiguration-nur-pdf.yaml, die 11 PDFs aus
+   beispiele/steuerfaelle/eingang/ nach laufzeit/steuerfaelle-nur-pdf/Eingang kopieren. Erwartet: 11 × „OK [gültig]“
+   ohne Anlernen (Vorlagen liegen bei), LM-26-2006 mit Warnung „Rechnung in USD, Zahlungsart SEPA …“.
+5. Anlernen ansehen: Konfiguration aus Test 10, eine PDF aus beispiele/steuerfaelle/eingang/ (z. B. LM-26-2007)
+   in den Eingang legen → Anlernen. Schritt 1: neuer Bereich „Steuerhinweis & Kennungen“. Schritt „Positionen“:
+   Auswahl „Steuerfall“ (Vorschlag aus dem Steuerhinweis), Spalte „USt“ als „USt-Satz“, darunter je Wert
+   („19 %“, „0 %“) die Bedeutung.
+6. Leitweg-ID: in einer Kopie von beispiele/kundenstamm.csv bei K-1002 die Leitweg-ID auf 04011000-12345-04
+   ändern (Konfiguration auf die Kopie zeigen lassen), variante-a_positionen_utf8.csv verarbeiten →
+   RE-2026-0102 (an K-1002) geht nach „Zu prüfen“ (Prüfziffer). 04011000-12345-03 ist gültig.
 
 
 Was zurückmelden

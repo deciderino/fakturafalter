@@ -514,7 +514,7 @@ def bezug_zerlegen(text: str) -> tuple[str, date | None]:
 _AUSLAND_PLZ = re.compile(r"^(?:[A-Z]{1,2}-)?\d{4}(?:\s?[A-Z]{2})?$|^\d{5}-\d{4}$")
 
 
-def wert_passt(feld: str, text: str) -> bool:
+def wert_passt(feld: str, text: str, ausland: bool = False) -> bool:
     """Typprüfung je Feld, bevor ein gelesener Wert übernommen wird: PLZ 5 Ziffern, gültiges Datum,
     USt-IdNr. (DE + 9 Ziffern), IBAN mit Prüfziffer, Betrag, Steuersatz 0–30 %. Leerer Text passt nie."""
     t = " ".join(str(text or "").split())
@@ -523,8 +523,8 @@ def wert_passt(feld: str, text: str) -> bool:
     art = _TYP_JE_FELD.get(feld)
     if (
         art == "plz"
-    ):  # ab 0.9.7 auch ausländische Formen („9020“, „A-9020“, „1012 AB“, „02110-1234“)
-        return _NUR_PLZ.match(t) is not None or _AUSLAND_PLZ.match(t) is not None
+    ):  # ab 0.9.7 mit Landzeile (ausland) auch „9020“, „A-9020“, „1012 AB“, „02110-1234“
+        return _NUR_PLZ.match(t) is not None or (ausland and _AUSLAND_PLZ.match(t) is not None)
     if art == "datum":
         d = daten(t)
         return bool(d) and 2000 <= d[0].year <= 2099
@@ -3825,8 +3825,10 @@ def nur_pdf(
     bezug = None
     for f, regel in v["felder"].items():
         if f == ANSCHRIFT_BLOCK:
-            for bf, (t, ws) in vorlage_anschrift_lesen(v, regel, zeilen, brueche).items():
-                if bf in _TYP_JE_FELD and not wert_passt(bf, t):
+            block = vorlage_anschrift_lesen(v, regel, zeilen, brueche)
+            ausland = block.get("BT-55", ("DE",))[0] not in ("", "DE")
+            for bf, (t, ws) in block.items():
+                if bf in _TYP_JE_FELD and not wert_passt(bf, t, ausland):
                     log.info("Nur-PDF: %s passt nicht zum Feldtyp – nicht übernommen", feldname(bf))
                     continue
                 kopf[bf] = (t, _herkunft(v, f"S.{ws[0].seite + 1}" if ws else "Block"))

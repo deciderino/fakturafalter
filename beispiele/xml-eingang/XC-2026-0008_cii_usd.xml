@@ -44,6 +44,7 @@
       </ram:SpecifiedLineTradeSettlement>
     </ram:IncludedSupplyChainTradeLineItem>
     <ram:ApplicableHeaderTradeAgreement>
+      <ram:BuyerReference>K-2026-77</ram:BuyerReference>
       <ram:SellerTradeParty>
         <ram:Name>Muster GmbH</ram:Name>
         <ram:DefinedTradeContact>
@@ -76,6 +77,9 @@
           <ram:CityName>Hamburg</ram:CityName>
           <ram:CountryID>DE</ram:CountryID>
         </ram:PostalTradeAddress>
+        <ram:URIUniversalCommunication>
+          <ram:URIID schemeID="EM">einkauf@beispiel-import.example</ram:URIID>
+        </ram:URIUniversalCommunication>
       </ram:BuyerTradeParty>
     </ram:ApplicableHeaderTradeAgreement>
     <ram:ApplicableHeaderTradeDelivery>

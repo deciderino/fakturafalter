@@ -261,6 +261,7 @@ vollständig in der CSV bzw. XML steht:
 | Straße und Hausnummer, PLZ, Ort | Vollständige Anschrift des Verkäufers | § 14 Abs. 4 Nr. 1 UStG; EN 16931 BT-35, BT-38, BT-37, Land BT-40 (Standard: DE) |
 | USt-IdNr. **oder** Steuernummer | Steuerliche Identifikation des Verkäufers | § 14 Abs. 4 Nr. 2 UStG; EN 16931 BT-31 bzw. BT-32 |
 | Handelsregister | Nur nötig, wenn du **keine** USt-IdNr. angibst, sondern nur die Steuernummer | EN 16931, BR-CO-26 (BT-30) |
+| Kleinunternehmer (Schalter, ab 0.9.7) | Alle Rechnungen ohne Umsatzsteuer mit Hinweis nach § 19 UStG; siehe Abschnitt 11 | § 19 UStG; EN 16931 Kategorie E |
 | IBAN | Bei Zahlung per Überweisung | EN 16931, BR-61 (BT-84) |
 
 Freiwillig, aber sinnvoll: BIC, Adresszusatz (BT-36), Ansprechpartner, Telefon
@@ -400,7 +401,80 @@ sobald „Automatisch, ohne Nachfrage“ eingeschaltet ist. Prüfe die erste
 automatisch erzeugte Gutschrift trotzdem in der Prüfansicht, bevor du sie
 verschickst.
 
-## 11. Logs, Anonymisieren und Updateprüfung
+## 11. Steuer-Sonderfälle, Fremdwährung und Leitweg-ID (ab 0.9.7)
+
+### Steuerfälle
+
+Neben der Regelbesteuerung (19 % / 7 %, Kategorie S) erzeugt Fakturafalter diese Fälle:
+
+| Fall | Kategorie | Pflicht auf der Rechnung | Was Fakturafalter prüft |
+|---|---|---|---|
+| Reverse Charge (§ 13b UStG) | AE | Hinweis „Steuerschuldnerschaft des Leistungsempfängers“ | USt-IdNr. oder Steuernummer des Verkäufers, USt-IdNr. des Käufers empfohlen |
+| Innergemeinschaftliche Lieferung | K | Hinweis auf die Steuerbefreiung | USt-IdNr. von Verkäufer **und** Käufer, Lieferland in einem anderen EU-Land |
+| Ausfuhr (Drittland) | G | Hinweis auf die Steuerbefreiung | USt-IdNr. des Verkäufers |
+| Nicht im Inland steuerbar | O | Hinweis | keine anderen Kategorien in derselben Rechnung; die USt-IdNr. bleibt nur in der XML weg (BR-O-02), der Briefkopf zeigt sie weiter |
+| Kleinunternehmer (§ 19 UStG) | E | „Gemäß § 19 UStG wird keine Umsatzsteuer berechnet.“ | kein Steuersatz > 0 in den Daten |
+
+Ein Verkäufer mit Sitz im Ausland wird nicht unterstützt.
+
+- **Gemischte Rechnungen** (z. B. eine Bauleistung mit Reverse Charge und eine Lieferung mit 19 %) gehen, wenn der
+  Steuerfall je Position in den Daten steht. Nur „nicht steuerbar“ (O) darf nicht gemischt werden.
+- **Den Hinweistext** nimmt Fakturafalter aus den Daten (Spalte bzw. Feld „Steuerhinweis“). Fehlt er, setzt es
+  den Standardtext des Falls ein.
+- **CSV:** In der Steuerspalte dürfen neben Sätzen auch Kennzeichen stehen („RC“, „igL“, „EX“, „§19“ usw.); im
+  CSV-Assistenten wählst du je Wert den Fall. Siehe [csv-format.md](csv-format.md#steuerfälle-und-fremdwährung-ab-097).
+- **XML:** Die Kategorien AE/K/G/O/E werden aus ZUGFeRD/XRechnung (CII und UBL) übernommen.
+
+**Kleinunternehmer:** Einstellungen → Absender, Haken **„Kleinunternehmer (§ 19 UStG)“**. Dann steht auf jeder
+Rechnung der § 19-Hinweis, in den Summen nur der Gesamtbetrag. Für die E-Rechnung braucht der Absender eine
+USt-IdNr. oder eine Steuernummer **mit** Handelsregisternummer (BR-CO-26); fehlt das, hält
+Fakturafalter mit einem Hinweis an. Liefert eine Quelle trotzdem einen Steuersatz über 0 %, geht die Rechnung
+nach „Zu prüfen“ – nichts wird still überschrieben.
+
+### Im Nur-PDF-Modus anlernen
+
+Der Anlern-Assistent hat dafür den Bereich **„Steuerhinweis & Kennungen“** (Schritt 1, freiwillig): Rahmen um
+den Steuerhinweis, die USt-IdNr. des Kunden, Land, Leitweg-ID, Währung und Kurs ziehen. Ohne Rahmen sucht
+Fakturafalter den Hinweis, die Währung an den Beträgen und eine Kurszeile („1 EUR = 1,0850 USD“) selbst.
+
+Unter **Positionen** wählst du den **Steuerfall**:
+
+- **Steuerspalte im Druck** (z. B. „19 %“, „0 %“, „RC“): Die Spalte als **„USt-Satz“** zuordnen (Spaltenrahmen).
+  Je Wert erscheint eine Auswahl, was er bedeutet. „0 %“ ohne Kennzeichen gilt als „aus dem Steuerhinweis je
+  Rechnung“ – so liest dieselbe Vorlage Reverse-Charge- und igL-Rechnungen. Gemischte Rechnungen gehen.
+- **Satz nur in den Summen:** ein Steuerfall je Rechnung. Bei „automatisch“ entscheidet der Steuerhinweis im
+  Druck; fehlt er, gilt der Satz aus der Summenzeile („zzgl. 19 % USt“).
+- **Fester Fall** (z. B. Kleinunternehmer): in der Auswahl festlegen. „Kleinunternehmer“ setzt auch den Schalter
+  am Absender.
+
+Widerspricht der Druck der Vorlage (Hinweis „Reverse Charge“, aber Umsatzsteuer berechnet, oder umgekehrt),
+geht die Rechnung nach „Zu prüfen“. Eine Auslandsanschrift erkennt Fakturafalter, wenn unter „PLZ Ort“ eine
+Landzeile steht („Österreich“, „Schweiz“, „USA“); das Land wird dann zum Käuferland (BT-55).
+
+Ein durchgespieltes Beispiel mit allen Fällen liegt in [beispiele/steuerfaelle](../beispiele/steuerfaelle/README.md).
+
+### Fremdwährung
+
+Rechnungen in einer anderen Währung als EUR (Feld „Währung“, BT-5) brauchen die Umsatzsteuer zusätzlich in EUR
+(§ 14 Abs. 4 Nr. 8 und § 16 Abs. 6 UStG, Art. 230 MwStSystRL). Fakturafalter nimmt dafür
+
+- den **Kurs** „1 EUR = x Fremdwährung“ aus den Daten (Spalte/Feld „Kurs“, optional „Kursdatum“) oder
+- die **Umsatzsteuer in EUR** (BT-111) aus den Daten.
+
+Fakturafalter **ruft keinen Kurs ab**. Fehlt beides, geht die Rechnung nach „Zu prüfen“. Stehen beide da und
+passen nicht zusammen, ebenso. Die XML erhält die Steuerwährung EUR (BT-6) und den Betrag in EUR (BT-111), die
+Sichtseite zeigt „Gesamtbetrag USD“ und „Umsatzsteuer in EUR: … (Umrechnungskurs …)“. Warnungen (ohne Anhalten):
+SEPA-Zahlung bei Fremdwährung, Kursdatum älter als zwei Monate.
+
+### Leitweg-ID
+
+Die Leitweg-ID (BT-10) kommt aus der Quelle (Feld „Leitweg-ID“) oder dem Kundenstamm (Spalte `leitweg_id_bt10`),
+sonst wie bisher die Kundennummer als
+Käuferreferenz. Sieht der Wert wie eine Leitweg-ID aus (z. B. `04011000-12345-03`), prüft Fakturafalter Aufbau und
+Prüfziffer (Mod 97-10) streng; eine falsche Leitweg-ID geht nach „Zu prüfen“. Andere Werte (Kundennummern)
+werden nicht als Leitweg-ID geprüft.
+
+## 12. Logs, Anonymisieren und Updateprüfung
 
 Die Logdatei liegt im Ordner `logs/` neben der Konfiguration
 (rotierend, typisch 1 MB × 5 Dateien). Dort stehen die technischen Details,
@@ -428,7 +502,7 @@ Einstellungen → Allgemein → **Updates**: „Beim Start nach Updates suchen�
 „Jetzt prüfen“. Im Hintergrundmodus (`--headless`) steht ein Hinweis nur in der
 Logdatei.
 
-## 12. Häufige Probleme
+## 13. Häufige Probleme
 
 **Die Überwachung startet nicht / es fehlt noch etwas.**
 Im Hauptfenster oder in den Einstellungen fehlt oft der Arbeitsordner oder
@@ -472,8 +546,13 @@ kann es nicht verarbeiten (OCR ist nicht vorgesehen).
 
 **XRechnung / Leitweg-ID an Behörden.**
 Der Standardweg ist ZUGFeRD im Profil EN 16931 und erfüllt die E-Rechnungspflicht
-im B2B. Zusätzliche XRechnung-Angaben wie die Leitweg-ID sind in dieser Version
-nicht vorgesehen.
+im B2B. Für Behörden trägst du die Leitweg-ID im Kundenstamm ein (Abschnitt 11);
+eine XRechnung (CII) legt Fakturafalter zusätzlich ab, wenn der Kundenstamm sie
+verlangt.
+
+**„Rechnung in USD … Kurs oder USt in EUR fehlt“.**
+Den Kurs oder die Umsatzsteuer in EUR in den Export aufnehmen (Abschnitt 11).
+Fakturafalter rechnet nie mit einem selbst geholten Kurs.
 
 ## Rechtliches und Lizenz
 

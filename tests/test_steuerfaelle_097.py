@@ -125,7 +125,10 @@ def test_auslandsanschrift_mit_landzeile():
         ["Bluewater Instruments Inc.", "200 Harbor Drive", "Boston, MA 02110", "USA"]
     )
     assert (t["BT-53"], t["BT-52"], t["BT-55"]) == ("02110", "Boston, MA", "US")
-    assert pdferkennung.wert_passt("BT-53", "9020") and not pdferkennung.wert_passt("BT-53", "Wien")
+    assert pdferkennung.wert_passt("BT-53", "9020", ausland=True)
+    assert not pdferkennung.wert_passt("BT-53", "9020") and not pdferkennung.wert_passt(
+        "BT-53", "Wien", ausland=True
+    )
 
 
 # ------------------------------------------------------------------ CSV (Variante S, U)

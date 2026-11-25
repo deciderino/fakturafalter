@@ -138,13 +138,40 @@ Spalte gilt als Zeile 1.
 Beispiel: `beispiele/variante-k_kundenbezeichnung_erp.csv` mit `beispiele/profil-variante-k.yaml`.
 Rechnungsnummer prüfen und Dateinamen festlegen: siehe [Handbuch](handbuch.md#dateiname-und-rechnungsnummer-ab-095).
 
+## Steuerfälle und Fremdwährung (ab 0.9.7)
+
+Alles freiwillig; ohne diese Spalten bleibt es bei Regelbesteuerung in EUR.
+
+| Feld im Profil | Spalte (Beispiel) | Wirkung |
+|---|---|---|
+| `steuer` (Position) | `Steuer` | neben Sätzen auch Kennzeichen; im Mapping je Wert ein Fall: `AE` (Reverse Charge), `K` (igL), `G` (Ausfuhr), `O` (nicht steuerbar), `KU` (§ 19) oder `{BT-151: S, BT-152: 19}` |
+| `steuerhinweis` | `Steuerhinweis` | Pflichthinweis auf der Rechnung (BT-120); fehlt er, gilt der Standardtext des Falls |
+| `BT-48` | `USt-IdNr Kunde` | USt-IdNr. des Käufers (Pflicht bei igL, empfohlen bei Reverse Charge) |
+| `BT-47` | `Register Kunde` | Registernummer des Käufers |
+| `BT-55`, `BT-80` | `Land`, `Lieferland` | ISO-Code oder Ländername („Österreich“); Lieferland nur, wenn anders als das Käuferland |
+| `BT-5` | `Waehrung` | Rechnungswährung (`EUR`, `USD`, auch `$`); Standard EUR |
+| `kurs`, `kursdatum` | `Kurs`, `Kursdatum` | Kurs „1 EUR = x Fremdwährung“ und sein Stand |
+| `BT-111` | `USt EUR` | Umsatzsteuer in EUR, wenn die Warenwirtschaft sie selbst liefert |
+
+- Bei Fremdwährung muss **Kurs oder USt in EUR** in den Daten stehen, sonst „Zu prüfen“. Fakturafalter ruft keinen
+  Kurs ab.
+- Kleinunternehmer stellst du am **Absender** ein (Einstellungen → Absender), nicht in der CSV. Die Steuerspalte
+  darf dann fehlen oder `0` enthalten; ein Satz über 0 % hält die Rechnung an.
+- Der CSV-Assistent erkennt Kennzeichen wie `RC`, `13b`, `igL`, `EX`, `§19` und schlägt den Fall vor.
+
+Beispiele: `beispiele/variante-s_steuerfaelle.csv` mit `beispiele/profil-variante-s.yaml` (Reverse Charge, igL nach
+Österreich, Ausfuhr in die Schweiz, nicht steuerbar in USD, 19 % in USD mit Kurs, gemischt) und
+`beispiele/variante-u_kleinunternehmer.csv` (Absender mit Schalter Kleinunternehmer).
+
 ## XML-Eingang (XRechnung/ZUGFeRD, CII und UBL)
 
 XML-Dateien liest Fakturafalter mit allen Feldern nach EN 16931: Rechnungen und Gutschriften (UBL `Invoice`
 und `CreditNote`), Nachlässe und Zuschläge, Lastschrift, Anzahlung, Anhänge, Lieferung und Referenzen.
 Für jedes Element, das nicht übernommen wird (z. B. aus dem Profil EXTENDED), steht im Protokoll eine
 Warnung „XML-Element nicht übernommen: …“. Die Rechnung wird trotzdem erzeugt.
-Beispiele: `beispiele/xml-eingang/`.
+Ab 0.9.7 auch AE/K/G/O/E und Fremdwährung mit Steuerwährung EUR (BT-6/BT-111, Kurs aus einer Notiz
+„Umrechnungskurs …“). Beispiele: `beispiele/xml-eingang/` (u. a. `XU-2026-0007_ubl_usd.xml`,
+`XC-2026-0008_cii_usd.xml`).
 
 ## Beispiel
 

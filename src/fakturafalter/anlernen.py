@@ -143,11 +143,12 @@ def steuerwert_kennung(m: dict | None) -> str:
     return ""
 
 
-def wert_passt_feld(feld: str, text: str) -> bool:
-    """Typprüfung je Feld (PLZ, Datum, Betrag, Satz); Felder ohne Typregel passen immer."""
+def wert_passt_feld(feld: str, text: str, ausland: bool = False) -> bool:
+    """Typprüfung je Feld (PLZ, Datum, Betrag, Satz); Felder ohne Typregel passen immer. ``ausland``: Käuferland
+    nicht DE (ab 0.9.7) – dann gilt auch eine ausländische PLZ."""
     if feld in ("leistung", "BT-55", "BT-80", "BT-111"):
         return lesen(feld, text) is not None
-    return feld not in TYP_HINWEIS or pdferkennung.wert_passt(feld, text)
+    return feld not in TYP_HINWEIS or pdferkennung.wert_passt(feld, text, ausland)
 
 
 # Spalten der Positionstabelle: Schlüssel -> Bezeichnung im Auswahlfeld
@@ -620,8 +621,10 @@ class Sitzung:
             out[feld] = vs
         self._nebenfelder_fuellen(out, zone_kaeufer)
         self._anschrift_pruefen(out, zone_kaeufer is not None)
+        land = out.get("BT-55")
+        ausland = bool(land and land.wert and lesen("BT-55", land.wert) not in (None, "DE"))
         for feld, vs in out.items():
-            if vs.wert and not wert_passt_feld(feld, vs.wert):
+            if vs.wert and not wert_passt_feld(feld, vs.wert, ausland):
                 log.info(
                     "Anlernen %s: gelesener Wert für %s passt nicht zum Feldtyp – nicht übernommen",
                     self.pfad.name,

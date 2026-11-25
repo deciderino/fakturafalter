@@ -111,7 +111,8 @@ def test_name_geaendert_dann_eine_zeile():
 
 
 def test_beispiel_csv_variante_k(konfig):
-    rs = {r.nummer: r for r in lesen(VARIANTE_K, konfig.csv_profile[-1], konfig)}
+    prof = next(p for p in konfig.csv_profile if p["_datei"].endswith("profil-variante-k.yaml"))
+    rs = {r.nummer: r for r in lesen(VARIANTE_K, prof, konfig)}
     a, b = rs["2026000101"], rs["2026000102"]
     assert a.kaeufer.name_zeilen == ["Feinmechanik Beispiel GmbH", "Werk Süd", "Wareneingang Tor 3"]
     assert b.kaeufer.name == "Hofladen Beispiel Inh. Erika Musterfrau"

@@ -12,6 +12,7 @@
  <cbc:Note>Umrechnungskurs: 1 EUR = 1,0850 USD (Stand 31.10.2026)</cbc:Note>
  <cbc:DocumentCurrencyCode>USD</cbc:DocumentCurrencyCode>
  <cbc:TaxCurrencyCode>EUR</cbc:TaxCurrencyCode>
+ <cbc:BuyerReference>K-2026-77</cbc:BuyerReference>
  <cac:AccountingSupplierParty><cac:Party>
   <cbc:EndpointID schemeID="EM">rechnung@muster-gmbh.example</cbc:EndpointID>
   <cac:PostalAddress><cbc:StreetName>Musterstraße 1</cbc:StreetName><cbc:CityName>Musterstadt</cbc:CityName>
@@ -21,6 +22,7 @@
   <cac:Contact><cbc:Name>Erika Beispiel</cbc:Name><cbc:Telephone>+49 000 0000000</cbc:Telephone><cbc:ElectronicMail>buchhaltung@muster-gmbh.example</cbc:ElectronicMail></cac:Contact>
  </cac:Party></cac:AccountingSupplierParty>
  <cac:AccountingCustomerParty><cac:Party>
+  <cbc:EndpointID schemeID="EM">einkauf@beispiel-import.example</cbc:EndpointID>
   <cac:PostalAddress><cbc:StreetName>Hafenstraße 21</cbc:StreetName><cbc:CityName>Hamburg</cbc:CityName>
    <cbc:PostalZone>20457</cbc:PostalZone><cac:Country><cbc:IdentificationCode>DE</cbc:IdentificationCode></cac:Country></cac:PostalAddress>
   <cac:PartyLegalEntity><cbc:RegistrationName>Beispiel Import GmbH</cbc:RegistrationName></cac:PartyLegalEntity>
