@@ -1,0 +1,160 @@
+# Angelernte PDF-Vorlage (automatisch erzeugt). Lesbar und änderbar; gelöscht wird sie
+# beim nächsten Paar PDF + CSV neu angelernt. Koordinaten in pt, Seite 0 = erste, -1 = letzte.
+profil: gartenpflege-lindner
+kennung: 5769fcc2
+erkennung:
+  texte:
+  - 'Rechnung Nr.:'
+  - 'Rechnungsdatum:'
+  - Rechnungsbetrag
+  - Pos Bezeichnung Menge ME Einzelpreis Betrag
+  kennungen:
+  - DE577215669
+  - DE15000000000090311064
+  - 06454/90311
+statistik:
+  rechnungen: 2
+  folge_treffer: 1
+  verlauf:
+  - 1.0
+felder:
+  kaeufer_block:
+    typ: text
+    lage: bereich
+    seite: 0
+    rahmen:
+    - 48.0
+    - 124.2
+    - 294.0
+    - 170.1
+    block: true
+    anker:
+    - Gartenpflege
+    - Lindner
+    - ·
+    anker_top: 117.2
+    anker_x0: 50.0
+  BT-1:
+    typ: text
+    lage: naechster
+    anker:
+    - Rechnung
+    - 'Nr.:'
+    seite: 0
+    top: 123.9
+    ende: true
+  BT-2:
+    typ: datum
+    lage: naechster
+    anker:
+    - 'Rechnungsdatum:'
+    seite: 0
+    top: 137.9
+    ende: true
+  BT-72:
+    typ: datum
+    lage: naechster
+    anker:
+    - 'Leistungsdatum:'
+    seite: 0
+    top: 151.9
+    ende: true
+  BT-31:
+    typ: kennung
+    lage: rechts
+    anker:
+    - USt-IdNr.
+    seite: 0
+    top: 789.3
+    n: 1
+  BT-32:
+    typ: kennung
+    lage: rechts
+    anker:
+    - '#'
+    - ·
+    - St.-Nr.
+    seite: 0
+    top: 789.3
+    n: 1
+  BT-84:
+    typ: kennung
+    lage: rechts
+    anker:
+    - '#'
+    - ·
+    - IBAN
+    seite: 0
+    top: 789.3
+    n: 6
+  BT-112:
+    typ: betrag
+    lage: naechster
+    anker:
+    - Rechnungsbetrag
+    seite: -1
+    top: 305.9
+    n: 1
+    format: de
+  BT-20:
+    typ: text
+    lage: bereich
+    seite: 0
+    rahmen:
+    - 48.0
+    - 329.9
+    - 215.6
+    - 342.9
+  steuerhinweis:
+    typ: text
+    lage: fest
+    x0: 50.0
+    i: 0
+    seite: 0
+    top: 351.9
+    ende: true
+nicht_im_druck:
+- BT-109
+positionen:
+  kopf:
+  - Pos
+  - Bezeichnung
+  - Menge
+  - ME
+  - Einzelpreis
+  - Betrag
+  format: de
+  spalten:
+    BT-126:
+    - 50.0
+    - 70.3
+    BT-153:
+    - 74.3
+    - 249.7
+    BT-129:
+    - 253.7
+    - 360.0
+    BT-130:
+    - 365.0
+    - 402.9
+    BT-146:
+    - 406.9
+    - 450.0
+    gesamt:
+    - 470.2
+    - 545.0
+  zeilenabstand: 16.0
+  rahmen:
+  - 46.0
+  - 238.7
+  - 549.0
+  - 291.8
+  ende:
+  - Rechnungsbetrag
+  einheiten:
+    Std: HUR
+    pauschal: LS
+  steuer_fest:
+    fall: KU
+    BT-151: E
+    BT-152: '0'

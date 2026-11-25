@@ -101,8 +101,16 @@ def main() -> int:
         if not (app / exe).is_file():
             sys.exit(f"{exe} fehlt")
     # ohne Laufzeitreste (Protokolle, angelernte Vorlagen, Bytecode) – wie packaging/testdaten.sh
-    shutil.copytree(ROOT / "beispiele", app / "beispiele",
-                    ignore=shutil.ignore_patterns("logs", "angelernt", "__pycache__", "*.pyc"))
+    # Ausnahme ab 0.9.7: beispiele/steuerfaelle/angelernt sind mitgelieferte Beispielvorlagen (in git)
+    reste = shutil.ignore_patterns("logs", "angelernt", "__pycache__", "*.pyc")
+
+    def ohne_reste(ordner, namen):
+        weg = reste(ordner, namen)
+        if Path(ordner).name == "steuerfaelle":
+            weg.discard("angelernt")
+        return weg
+
+    shutil.copytree(ROOT / "beispiele", app / "beispiele", ignore=ohne_reste)
     werkzeuge = ROOT / "build" / "werkzeuge-win"
     if (werkzeuge / "jre" / "bin" / "java.exe").is_file():
         shutil.copytree(werkzeuge, app / "werkzeuge")

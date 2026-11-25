@@ -1,0 +1,208 @@
+# Angelernte PDF-Vorlage (automatisch erzeugt). Lesbar und änderbar; gelöscht wird sie
+# beim nächsten Paar PDF + CSV neu angelernt. Koordinaten in pt, Seite 0 = erste, -1 = letzte.
+profil: lichtbogen-messtechnik
+kennung: 3c4aeb4f
+erkennung:
+  texte:
+  - 'Rechnung Nr.:'
+  - 'Rechnungsdatum:'
+  - Rechnungsbetrag
+  - Pos Bezeichnung Menge ME Einzelpreis USt Betrag
+  kennungen:
+  - DE271828180
+  - DE94000000000027182818
+  - 202/118/04711
+statistik:
+  rechnungen: 4
+  folge_treffer: 1
+  verlauf:
+  - 0.933
+  - 0.846
+  - 1.0
+felder:
+  kaeufer_block:
+    typ: text
+    lage: bereich
+    seite: 0
+    rahmen:
+    - 48.0
+    - 124.2
+    - 294.0
+    - 170.1
+    block: true
+  BT-1:
+    typ: text
+    lage: naechster
+    anker:
+    - Rechnung
+    - 'Nr.:'
+    seite: 0
+    top: 123.9
+    ende: true
+  BT-2:
+    typ: datum
+    lage: naechster
+    anker:
+    - 'Rechnungsdatum:'
+    seite: 0
+    top: 137.9
+    ende: true
+  BT-72:
+    typ: datum
+    lage: naechster
+    anker:
+    - 'Leistungsdatum:'
+    seite: 0
+    top: 151.9
+    ende: true
+  BT-31:
+    typ: kennung
+    lage: rechts
+    anker:
+    - USt-IdNr.
+    seite: 0
+    top: 789.3
+    n: 1
+  BT-32:
+    typ: kennung
+    lage: rechts
+    anker:
+    - '#'
+    - ·
+    - St.-Nr.
+    seite: 0
+    top: 789.3
+    n: 1
+  BT-84:
+    typ: kennung
+    lage: rechts
+    anker:
+    - '#'
+    - ·
+    - IBAN
+    seite: 0
+    top: 789.3
+    n: 6
+  BT-109:
+    typ: betrag
+    lage: naechster
+    anker:
+    - Nettobetrag
+    seite: -1
+    top: 305.9
+    n: 1
+    format: de
+  BT-110:
+    typ: betrag
+    lage: naechster
+    anker:
+    - '#'
+    - '%'
+    - USt
+    seite: -1
+    top: 319.9
+    n: 1
+    format: de
+  BT-112:
+    typ: betrag
+    lage: naechster
+    anker:
+    - Rechnungsbetrag
+    seite: -1
+    top: 333.9
+    n: 1
+    format: de
+  BT-13:
+    typ: text
+    lage: naechster
+    anker:
+    - Ihre
+    - 'USt-IdNr.:'
+    seite: 0
+    top: 165.9
+    ende: true
+  BT-20:
+    typ: text
+    lage: bereich
+    seite: 0
+    rahmen:
+    - 48.0
+    - 357.9
+    - 215.6
+    - 370.9
+  BT-48:
+    typ: text
+    lage: naechster
+    anker:
+    - Ihre
+    - 'USt-IdNr.:'
+    seite: 0
+    top: 165.9
+    ende: true
+  steuerhinweis:
+    typ: text
+    lage: fest
+    x0: 50.0
+    i: 0
+    seite: 0
+    top: 379.9
+    ende: true
+  BT-55:
+    typ: land
+    lage: fest
+    x0: 50.0
+    i: 0
+    seite: 0
+    top: 171.1
+    ende: true
+positionen:
+  kopf:
+  - Pos
+  - Bezeichnung
+  - Menge
+  - ME
+  - Einzelpreis
+  - USt
+  - Betrag
+  format: de
+  spalten:
+    BT-126:
+    - 50.0
+    - 70.3
+    BT-153:
+    - 74.3
+    - 283.9
+    BT-129:
+    - 287.9
+    - 360.0
+    BT-130:
+    - 364.2
+    - 395.6
+    BT-146:
+    - 399.6
+    - 450.0
+    steuer:
+    - 454.9
+    - 501.5
+    gesamt:
+    - 505.5
+    - 545.0
+  zeilenabstand: 16.0
+  rahmen:
+  - 46.0
+  - 238.7
+  - 549.0
+  - 291.8
+  ende:
+  - Nettobetrag
+  einheiten:
+    Std: HUR
+    Tage: DAY
+    pauschal: LS
+    Stk: H87
+  steuer:
+    0 %:
+      fall: hinweis
+    19 %:
+      BT-151: S
+      BT-152: '19'
