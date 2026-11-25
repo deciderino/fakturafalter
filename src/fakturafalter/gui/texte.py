@@ -1348,6 +1348,7 @@ _STEUER_097 = {
     "Check the tax case below the line items.",
     "Fremdwährung im Druck gefunden – Kurs oder USt in EUR angeben.": "Foreign currency found in the print – "
     "enter the exchange rate or the VAT in EUR.",
+    "Land aus der Anschrift gelesen.": "Country read from the address.",
 }
 EN.update(_STEUER_097)
 DYNAMISCH += tuple(_STEUER_097)

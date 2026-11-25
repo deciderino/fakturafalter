@@ -1,0 +1,14 @@
+# Test-Setup „Steuerfälle“, Modus Nur PDF (ALLE Daten erfunden), ab 0.9.7.
+# Drei angelernte Profile (erzeugt mit „python erzeuge_beispiele.py --anlernen“):
+#   lichtbogen-messtechnik  Steuerspalte im Druck -> Steuerfall je Position (19 % / 0 % + Steuerhinweis)
+#   estrichbau-wendel       Satz nur in den Summen -> ein Steuerfall je Rechnung aus dem Steuerhinweis
+#   gartenpflege-lindner    Kleinunternehmer (§ 19 UStG)
+arbeitsordner: ../../laufzeit/steuerfaelle-nur-pdf
+modus: nur_pdf
+pdf_profile:
+- profil-lichtbogen-messtechnik.yaml
+- profil-estrichbau-wendel.yaml
+- profil-gartenpflege-lindner.yaml
+optionen:
+  sichtteil: original
+  xrechnung_zusatz: false

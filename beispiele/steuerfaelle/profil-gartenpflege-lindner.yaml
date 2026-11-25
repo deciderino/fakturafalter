@@ -1,0 +1,26 @@
+# Profil für Rechnungen ohne CSV (Nur PDF), angelegt vom Anlern-Assistenten.
+# Die gelernte Vorlage liegt im Ordner angelernt/. Absender in den Einstellungen ändern.
+profil: gartenpflege-lindner
+quelle: pdf
+name: Gartenpflege Lindner
+verkaeufer:
+  name: Gartenpflege Lindner
+  anschrift:
+    strasse: Am Rosenhang 12
+    plz: '79102'
+    ort: Freiburg
+  ust_id: DE577215669
+  steuernummer: 06454/90311
+  kleinunternehmer: true
+  kontakt:
+    name: Gartenpflege Lindner
+    telefon: 0761 5512290
+    email: post@gartenpflege-lindner.invalid
+  elektronische_adresse: post@gartenpflege-lindner.invalid
+zahlung:
+  iban: DE15000000000090311064
+  ziel_tage: 14
+  bedingungen: Zahlbar innerhalb von {zahlungsziel_tage} Tagen ohne Abzug.
+pdf_erkennung:
+  nur_pdf: true
+  nur_pdf_ab: 1  # Beispiel; üblich 5

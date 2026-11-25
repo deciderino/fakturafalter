@@ -497,6 +497,9 @@ def bezug_zerlegen(text: str) -> tuple[str, date | None]:
     return "", d
 
 
+_AUSLAND_PLZ = re.compile(r"^(?:[A-Z]{1,2}-)?\d{4}(?:\s?[A-Z]{2})?$|^\d{5}-\d{4}$")
+
+
 def wert_passt(feld: str, text: str) -> bool:
     """Typprüfung je Feld, bevor ein gelesener Wert übernommen wird: PLZ 5 Ziffern, gültiges Datum,
     USt-IdNr. (DE + 9 Ziffern), IBAN mit Prüfziffer, Betrag, Steuersatz 0–30 %. Leerer Text passt nie."""
@@ -504,8 +507,8 @@ def wert_passt(feld: str, text: str) -> bool:
     if not t:
         return False
     art = _TYP_JE_FELD.get(feld)
-    if art == "plz":
-        return _NUR_PLZ.match(t) is not None
+    if art == "plz":  # ab 0.9.7 auch ausländische Formen („9020“, „A-9020“, „1012 AB“, „02110-1234“)
+        return _NUR_PLZ.match(t) is not None or _AUSLAND_PLZ.match(t) is not None
     if art == "datum":
         d = daten(t)
         return bool(d) and 2000 <= d[0].year <= 2099
@@ -588,7 +591,8 @@ def soll_wert(r: Rechnung, feld: str):
         "BT-109": s.netto,
         "BT-110": s.ust if s.ust else None,
         "BT-112": s.brutto,
-        "BT-119": sorted({z.steuer.satz for z in s.steuerzeilen}) or None,
+        # nur Regelbesteuerung (S): bei AE/K/G/O/E steht kein Satz im Druck, der gelernt werden könnte
+        "BT-119": sorted({z.steuer.satz for z in s.steuerzeilen if z.steuer.kategorie == "S"}) or None,
         "kundennummer": r.kundennummer or None,
         "BT-13": r.bestellnummer or None,
         "steuerhinweis": r.steuerhinweis or None,
@@ -2911,8 +2915,13 @@ def _pos_steuer(pv: dict, p: PosRoh) -> dict | None:
     return (pv.get("steuer") or {}).get(p.steuer_text)
 
 
-def _pos_gleich(pv: dict, ex: PosRoh, p, tol: Decimal) -> bool:
+def _pos_gleich(pv: dict, ex: PosRoh, p, tol: Decimal, hinweis: str = "") -> bool:
     st = _pos_steuer(pv, ex) or {}
+    if "fall" in st or isinstance(st, str):  # Steuerfall (ab 0.9.7): über den Hinweis der Rechnung auflösen
+        from .aufbau import steuer_aus_code
+
+        s = steuer_aus_code(st, hinweis)
+        st = {"BT-151": s.kategorie, "BT-152": str(s.satz)} if s else {}
     ok = (
         norm(ex.bezeichnung) == norm(p.bezeichnung)
         and ex.menge == p.menge
@@ -2968,9 +2977,13 @@ def bewerten(
         ergebnis[f] = bool(erg and feld_gleich(f, regel["typ"], soll, erg[0], tol))
     treffer, anzahl = sum(ergebnis.values()), len(ergebnis)
     pv = v.get("positionen")
+    if pv and isinstance(pv.get("steuer_fest"), dict) and pv["steuer_fest"].get("fall") == "hinweis":
+        m = {"*": pv["steuer_fest"]}  # „je Rechnung“ ohne Satz: Satz aus dem Druck wie beim Lesen (nur_pdf)
+        steuer_fest_aus_druck(m, {"steuerhinweis": (r.steuerhinweis, None)}, zeilen)
+        pv = {**pv, "steuer_fest": m["*"]}
     if pv:
         ex = positionen_auslesen(pv, zeilen)
-        gleich_je = [_pos_gleich(pv, e, p, tol) for e, p in zip(ex, r.positionen)]
+        gleich_je = [_pos_gleich(pv, e, p, tol, r.steuerhinweis) for e, p in zip(ex, r.positionen)]
         pt = sum(gleich_je)
         anzahl += max(len(ex), len(r.positionen))
         treffer += pt
@@ -3667,6 +3680,32 @@ def steuer_kopf_ergaenzen(kopf: dict, zeilen: list[Zeile], h) -> list[tuple[str,
     return meld
 
 
+def ust_saetze_im_druck(zeilen: list[Zeile]) -> list[str]:
+    """Steuersätze > 0 aus Summenzeilen wie „zzgl. 19 % USt“ oder „MwSt 7 %“ (ohne Doppelte)."""
+    out: list[str] = []
+    for z in zeilen:
+        if not re.search(r"ust|mwst|umsatzsteuer|mehrwertsteuer|\bvat\b", z.text, re.I):
+            continue
+        for m in re.finditer(r"(?<![\d,.])(\d{1,2}(?:[.,]\d{1,2})?)\s*%", z.text):
+            satz = m[1].replace(",", ".")
+            if Decimal(satz) > 0 and satz not in out:
+                out.append(satz)
+    return out
+
+
+def steuer_fest_aus_druck(mapping: dict, kopf: dict, zeilen: list[Zeile]) -> None:
+    """Steuerfall je Rechnung („fall: hinweis“) ohne gelernten Satz: Steht kein Steuerhinweis im Druck, gilt der
+    eine Steuersatz aus den Summenzeilen (Regelbesteuerung). Mehrere oder keiner -> bleibt offen (prüfen)."""
+    fest = mapping.get("*")
+    if not (isinstance(fest, dict) and fest.get("fall") == "hinweis" and "BT-152" not in fest):
+        return
+    if steuerfaelle.erkennen(str((kopf.get("steuerhinweis") or ("",))[0] or "")):
+        return
+    saetze = ust_saetze_im_druck(zeilen)
+    if len(saetze) == 1:
+        mapping["*"] = {**fest, "BT-151": "S", "BT-152": saetze[0]}
+
+
 def steuerfall_abgleichen(r: Rechnung, hinweis: str) -> None:
     """Steuerfall der Positionen gegen den Hinweis im Druck: Widerspruch oder fehlender Pflichthinweis
     (§ 14a UStG, § 19 UStG) -> prüfen. Mehrere Fälle im Hinweis zählen als „passt“, wenn einer passt."""
@@ -3814,6 +3853,7 @@ def nur_pdf(
         "einheiten": einheiten_mapping(pv, [roh["BT-130"][0] for roh in pos]),
         "steuer": steuer_zuordnung(pv),
     }
+    steuer_fest_aus_druck(definition["mappings"]["steuer"], kopf, zeilen)
     # BT-56/BT-163 (Kontaktstelle, Adresszeile 3) laufen über KAEUFER_FELDER
     r = rechnung_bauen(kopf, pos, definition, konfig, quelle=str(pfad))
     zahlungsziel.profiltext_sperren(r, " ".join(z.text for z in zeilen))

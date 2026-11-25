@@ -1,0 +1,26 @@
+# Profil für Rechnungen ohne CSV (Nur PDF), angelegt vom Anlern-Assistenten.
+# Die gelernte Vorlage liegt im Ordner angelernt/. Absender in den Einstellungen ändern.
+profil: estrichbau-wendel
+quelle: pdf
+name: Estrichbau Wendel GmbH
+verkaeufer:
+  name: Estrichbau Wendel GmbH
+  anschrift:
+    strasse: Mörtelgasse 3
+    plz: '34117'
+    ort: Kassel
+  ust_id: DE161803398
+  steuernummer: 026/233/50918
+  register: Amtsgericht Kassel HRB 990215
+  kontakt:
+    name: Estrichbau Wendel GmbH
+    telefon: 0561 7703300
+    email: buero@estrichbau-wendel.invalid
+  elektronische_adresse: buero@estrichbau-wendel.invalid
+zahlung:
+  iban: DE65000000000016180339
+  ziel_tage: 14
+  bedingungen: Zahlbar innerhalb von {zahlungsziel_tage} Tagen ohne Abzug.
+pdf_erkennung:
+  nur_pdf: true
+  nur_pdf_ab: 1  # Beispiel; üblich 5

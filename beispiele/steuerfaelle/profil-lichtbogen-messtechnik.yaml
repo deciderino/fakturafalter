@@ -1,0 +1,26 @@
+# Profil für Rechnungen ohne CSV (Nur PDF), angelegt vom Anlern-Assistenten.
+# Die gelernte Vorlage liegt im Ordner angelernt/. Absender in den Einstellungen ändern.
+profil: lichtbogen-messtechnik
+quelle: pdf
+name: Lichtbogen Messtechnik GmbH
+verkaeufer:
+  name: Lichtbogen Messtechnik GmbH
+  anschrift:
+    strasse: Elbuferweg 7
+    plz: '01099'
+    ort: Dresden
+  ust_id: DE271828180
+  steuernummer: 202/118/04711
+  register: Amtsgericht Dresden HRB 990071
+  kontakt:
+    name: Lichtbogen Messtechnik GmbH
+    telefon: 0351 4471100
+    email: rechnung@lichtbogen-messtechnik.invalid
+  elektronische_adresse: rechnung@lichtbogen-messtechnik.invalid
+zahlung:
+  iban: DE94000000000027182818
+  ziel_tage: 14
+  bedingungen: Zahlbar innerhalb von {zahlungsziel_tage} Tagen ohne Abzug.
+pdf_erkennung:
+  nur_pdf: true
+  nur_pdf_ab: 1  # Beispiel; üblich 5

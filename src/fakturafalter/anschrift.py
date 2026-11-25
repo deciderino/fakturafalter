@@ -21,6 +21,10 @@ _NUR_PLZ = re.compile(rf"^{PLZ_MUSTER}$")
 _PLZ_IN_ZEILE = re.compile(rf"(?:^|[\s,·•|]){PLZ_MUSTER}\s+[^\W\d_]")  # „Fa, Weg 1, 12345 Ort“
 
 _LAND = re.compile(r"^(?:deutschland|germany|de|d)$", re.I)
+# Ausland (ab 0.9.7, nur mit Landzeile darunter): „9020 Klagenfurt“, „A-9020 Klagenfurt“, „1012 AB Amsterdam“,
+# „Boston, MA 02110“
+_AUSLAND_PLZ_ORT = re.compile(r"^(?:[A-Z]{1,2}-)?(\d{3,6}(?:\s?[A-Z]{2}(?=\s))?)\s+([^\W\d_][^\d]*)$")
+_AUSLAND_ORT_PLZ = re.compile(r"^([^\W\d_][^,\d]*),\s*([A-Z]{2})\s+(\d{5}(?:-\d{4})?)$")
 _STRASSE_PLZ = re.compile(rf"^(.+?{_HAUSNR})\s*,\s*({PLZ_MUSTER}\s+.+)$")
 
 
@@ -149,12 +153,15 @@ def anschrift_zerlegen(zeilen: list[str], zusatz: bool = True) -> tuple[dict[str
             ein.append((i, z))
     if len(ein) > 1 and _LAND.match(ein[-1][1].rstrip(".")) and PLZ_ORT.match(ein[-2][1]):
         ein.pop()  # „Deutschland“ unter PLZ/Ort
+    ausland = _ausland(ein)
     if not ein:
         return {}, rollen
     out: dict[str, str] = {}
     i, t = ein.pop()
-    mp = PLZ_ORT.match(t)
-    if mp:
+    mp = PLZ_ORT.match(t) if not ausland else None
+    if ausland:
+        out["BT-53"], out["BT-52"], out["BT-55"] = ausland
+    elif mp:
         out["BT-53"], out["BT-52"] = mp.group(1), mp.group(2).strip()
     else:
         out["BT-52"] = t
@@ -209,6 +216,29 @@ def anschrift_zerlegen(zeilen: list[str], zusatz: bool = True) -> tuple[dict[str
 _NUR_HAUSNR = re.compile(
     r"^(?:nr\.?\s*)?\d{1,4}\s?[a-zA-Z]?(?:\s?[-/–]\s?\d{1,4}\s?[a-zA-Z]?)?$", re.I
 )
+
+
+def _ausland(ein: list[tuple[int, str]]) -> tuple[str, str, str] | None:
+    """Unterste Zeile ein Land außer Deutschland und darüber „PLZ Ort“ in ausländischer Form -> (PLZ, Ort, Land);
+    die Landzeile wird aus ``ein`` genommen. Sonst None (feste Regel wie bisher)."""
+    from .steuerfaelle import land_code
+
+    if len(ein) < 3:
+        return None
+    land = land_code(ein[-1][1])
+    if not land or land == "DE":
+        return None
+    oben = ein[-2][1]
+    m = _AUSLAND_PLZ_ORT.match(oben)
+    if m:
+        ergebnis = (m.group(1), m.group(2).strip(), land)
+    else:
+        m = _AUSLAND_ORT_PLZ.match(oben)
+        if not m:
+            return None
+        ergebnis = (m.group(3), f"{m.group(1).strip()}, {m.group(2)}", land)
+    ein.pop()
+    return ergebnis
 
 
 def anschrift_teilen(zeilen: list[str]) -> dict[str, str]:

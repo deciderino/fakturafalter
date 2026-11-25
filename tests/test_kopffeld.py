@@ -240,10 +240,15 @@ def test_ausnahmen_schritt3():
         "BT-53": "12345",
         "BT-52": "Ort",
     }
-    assert (
-        z(["Muster AG", "Bahnhofstr. 3", "6020 Innsbruck", "ÖSTERREICH"])[0]["BT-50"]
-        == "6020 Innsbruck"
-    )
+    # Ausland mit Landzeile (ab 0.9.7): PLZ/Ort in ausländischer Form + BT-55
+    assert z(["Muster AG", "Bahnhofstr. 3", "6020 Innsbruck", "ÖSTERREICH"])[0] == {
+        "BT-44": "Muster AG",
+        "BT-50": "Bahnhofstr. 3",
+        "BT-53": "6020",
+        "BT-52": "Innsbruck",
+        "BT-55": "AT",
+    }
+    assert z(["Muster AG", "Bahnhofstr. 3", "6020 Innsbruck"])[0]["BT-50"] == "6020 Innsbruck"  # ohne Land: N1
     faelle = {f["id"]: f for f in kopffeld_messung.messen(SET)}
     for vid in ("g4-n1", "g4-n2", "g4-n3", "g5-n1", "g5-n2", "g5-n3", "h6", "h7", "h8"):
         for w in kopffeld_messung.WEGE:

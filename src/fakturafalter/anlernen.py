@@ -483,7 +483,8 @@ class Sitzung:
             return None
         v = {**v, "bereiche": self.zonen}  # Bereiche dieser Sitzung (evtl. gerade geändert)
         regeln = v.get("felder") or {}
-        if feld in pdferkennung.BLOCKFELDER and pdferkennung.ANSCHRIFT_BLOCK in regeln:
+        blockfeld = feld in pdferkennung.BLOCKFELDER or (feld == "BT-55" and feld not in regeln)
+        if blockfeld and pdferkennung.ANSCHRIFT_BLOCK in regeln:  # BT-55: Landzeile im Block (ab 0.9.7)
             br: dict[str, str] = {}
             teile = pdferkennung.vorlage_anschrift_lesen(
                 v, regeln[pdferkennung.ANSCHRIFT_BLOCK], self.zeilen, br
@@ -507,7 +508,8 @@ class Sitzung:
                     return erg
         if feld == "BT-119":
             st = (v.get("positionen") or {}).get("steuer_fest")
-            if st:
+            if st and st.get("BT-151", "S") == "S" and ("fall" not in st or "BT-152" in st):
+                # Steuerfall-Vorlagen (AE/K/…, „je Rechnung“ ohne Satz): kein 0 % als Steuersatz vorgeben
                 s = Decimal(str(st.get("BT-152", "0")))
                 return f"{pdferkennung._satz(s)} %", []
         return None
@@ -1128,6 +1130,11 @@ class Sitzung:
 
     def _steuer_heuristik(self, feld: str) -> tuple[str, str]:
         """Steuerhinweis, Währung, Kurs und USt in EUR aus dem Druck vorschlagen (ab 0.9.7)."""
+        if feld == "BT-55":  # Landzeile unter „PLZ Ort“ im Anschriftfeld (Bereich oder von unten gelesen)
+            teile = self._anschrift_aus_zone() or {}
+            if not teile.get("BT-55") and self._block_vorschlag:
+                teile = self._block_vorschlag[2]
+            return (teile.get("BT-55", ""), "Land aus der Anschrift gelesen.") if teile.get("BT-55") else ("", "")
         kopf: dict = {}
         pdferkennung.steuer_kopf_ergaenzen(kopf, self.zeilen, None)
         w = kopf.get(feld, (None,))[0]
@@ -1998,6 +2005,7 @@ class Sitzung:
             pv.update(pdferkennung.einheit_ohne_spalte(pos, t.einheiten))
         satz = self.wert("BT-119")
         fall = self.steuerfall_wirksam()
+        alt_fest = ((self.vorlage or {}).get("positionen") or {}).get("steuer_fest") or {}
         if "steuer" in pv["spalten"]:
             # Steuerspalte: Steuerfall je Position (ab 0.9.7 auch „RC“, „igL“, „0 %“ mit Hinweis; Auswahl je Wert)
             st = {}
@@ -2037,6 +2045,8 @@ class Sitzung:
             satz is not None
         ):  # ohne Steuersatz kein stiller Standard (19 %): Positionen bleiben „prüfen“
             pv["steuer_fest"] = {"BT-151": "S", "BT-152": str(satz)}
+        elif not self.steuerfall and isinstance(alt_fest, dict) and alt_fest.get("fall") == "hinweis":
+            pv["steuer_fest"] = dict(alt_fest)  # Vorlage „je Rechnung“: bleibt; Satz dann aus dem Druck
         return pv
 
     def steuerwerte_offen(self) -> dict[str, str]:
@@ -2340,6 +2350,7 @@ class Sitzung:
             "einheiten": pdferkennung.einheiten_mapping(pv, [roh["BT-130"][0] for roh in pos]),
             "steuer": pdferkennung.steuer_zuordnung(pv),
         }
+        pdferkennung.steuer_fest_aus_druck(definition["mappings"]["steuer"], kopf, self.zeilen)
         for f, t_ in self._kaeufer_nebenfelder().items():
             kopf.setdefault(f, (t_, h))
         r = rechnung_bauen(kopf, pos, definition, self.k, quelle=str(self.pfad))
