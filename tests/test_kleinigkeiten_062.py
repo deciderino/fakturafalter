@@ -117,6 +117,7 @@ def test_gtin_in_beispielen_gueltig(konfig):
     assert not any("GTIN" in (h.text or "") for h in v.hinweise)
 
 
-def test_leitweg_pruefung_bleibt_inaktiv():
+def test_leitweg_pruefung_ab_097_aktiv():
+    """0.6.2 ließ die Leitweg-Prüfung aus; ab 0.9.7 ist sie aktiv (nur für Werte, die wie eine Leitweg-ID aussehen)."""
     regel = next(g for g in pp.REGELN if g.id == "xrechnung_leitweg")
-    assert regel.aktiv is False
+    assert regel.aktiv is True

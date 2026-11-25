@@ -14,7 +14,7 @@ from pathlib import Path
 
 import yaml
 
-from . import codelisten
+from . import codelisten, steuerfaelle
 from .pdferkennung import einheit_code
 from .werte import csv_lesen, dekodieren, trennzeichen_erkennen
 
@@ -103,6 +103,13 @@ FELDER: list[tuple[str, str, str, str, bool]] = [
     ("BT-128", "Objektkennung (Position)", "position", "text", False),
     ("BT-143", "Zuschlag % (Position)", "position", "prozent", False),
     ("BT-144", "Zuschlaggrund (Position)", "position", "text", False),
+    # ab 0.9.7: Steuer-Sonderfälle und Fremdwährung
+    ("BT-47", "Kunde – Handelsregister / Registernummer", "kopf", "text", False),
+    ("steuerhinweis", "Steuerhinweis (z. B. Reverse Charge)", "kopf", "text", False),
+    ("BT-5", "Währung (z. B. EUR, USD)", "kopf", "text", False),
+    ("kurs", "Umrechnungskurs (1 EUR = … Fremdwährung)", "kopf", "zahl", False),
+    ("kursdatum", "Kursdatum", "kopf", "datum", False),
+    ("BT-111", "Umsatzsteuer in EUR", "kopf", "zahl", False),
 ]
 FELD = {f[0]: f for f in FELDER}
 # Freiwillige Felder ab 0.6.0 nur bei genauem Spaltennamen vorschlagen (kein Wortanfang: „Versanddatum“ ≠ Fracht)
@@ -184,6 +191,12 @@ _SYNONYME = {
     "BT-128": "objektkennungposition positionsobjekt",
     "BT-143": "zuschlagprozent zuschlagsatz",
     "BT-144": "zuschlaggrundposition",
+    "BT-47": "handelsregister registernummer kundenregister hrb",
+    "steuerhinweis": "steuerhinweis steuervermerk steuertext mwsthinweis",
+    "BT-5": "waehrung währung currency whg",
+    "kurs": "kurs umrechnungskurs wechselkurs exchangerate devisenkurs",
+    "kursdatum": "kursdatum kursvom wechselkursdatum",
+    "BT-111": "usteur steuereur mwsteur vateur umsatzsteuereur",
 }
 DATUMSFORMATE = ("%d.%m.%Y", "%Y-%m-%d", "%d.%m.%y", "%d/%m/%Y", "%Y%m%d")
 SAETZE = (19, 7, 0, 16, 5)
@@ -191,11 +204,17 @@ SAETZE = (19, 7, 0, 16, 5)
 STEUER_WAHL: dict[str, dict | None] = {
     "19 %": {"BT-151": "S", "BT-152": 19},
     "7 %": {"BT-151": "S", "BT-152": 7},
-    "0 % – Steuerschuldnerschaft des Leistungsempfängers": {
-        "BT-151": "AE", "BT-152": 0, "BT-120": "Steuerschuldnerschaft des Leistungsempfängers", "BT-121": "VATEX-EU-AE"},
+    "0 % – Steuerschuldnerschaft des Leistungsempfängers": steuerfaelle.mapping("AE"),
+    "0 % – innergemeinschaftliche Lieferung": steuerfaelle.mapping("K"),
+    "0 % – Ausfuhrlieferung (Drittland)": steuerfaelle.mapping("G"),
+    "0 % – nicht im Inland steuerbar": steuerfaelle.mapping("O"),
+    "0 % – Kleinunternehmer (§ 19 UStG)": steuerfaelle.mapping("KU"),
     "0 % – steuerfrei": {"BT-151": "E", "BT-152": 0, "BT-120": "Steuerfrei", "BT-121": ""},
     "prüfen": None,
 }
+_FALL_WAHL = {"AE": "0 % – Steuerschuldnerschaft des Leistungsempfängers",
+              "K": "0 % – innergemeinschaftliche Lieferung", "G": "0 % – Ausfuhrlieferung (Drittland)",
+              "O": "0 % – nicht im Inland steuerbar", "KU": "0 % – Kleinunternehmer (§ 19 UStG)"}
 
 
 def _norm(s: str) -> str:
@@ -318,11 +337,14 @@ def steuer_ist_satz(werte: list[str]) -> bool:
 
 
 def steuer_vorschlag(werte: list[str]) -> dict[str, str]:
-    """Steuerwert -> Anzeige aus STEUER_WAHL. Schlüssel (1, 2 …) werden nicht geraten: „prüfen“."""
+    """Steuerwert -> Anzeige aus STEUER_WAHL. Schlüssel (1, 2 …) werden nicht geraten: „prüfen“. Eindeutige
+    Kürzel/Texte der Sonderfälle („RC“, „igL“, „Reverse Charge“, „§ 19“) werden vorgeschlagen (ab 0.9.7)."""
     aus = {}
     for w in sorted({w for w in werte if w}):
         z = _zahl(w)
-        aus[w] = "19 %" if z == 19 else "7 %" if z == 7 else "prüfen"
+        fall = steuerfaelle.erkennen_kurz(w) or steuerfaelle.erkennen(w)
+        aus[w] = ("19 %" if z == 19 else "7 %" if z == 7 else _FALL_WAHL[fall] if fall in _FALL_WAHL
+                  else "prüfen")
     return aus
 
 
@@ -355,7 +377,7 @@ def profil_bauen(name: str, datei: Path, fmt: Format, zuordnung: dict[str, str],
             d["optional"] = True
         (kopf if teil == "kopf" else pos)[f] = d
     kopf["BT-3"] = {"fest": "380"}
-    kopf["BT-5"] = {"fest": "EUR"}
+    kopf.setdefault("BT-5", {"fest": "EUR"})
     st: dict = {w: STEUER_WAHL[a] for w, a in steuer.items() if STEUER_WAHL.get(a)}
     st["unbekannt"] = "satz" if steuer_ist_satz(list(steuer)) else "pruefen"
     eh: dict = {w: c for w, c in einheiten.items() if c}

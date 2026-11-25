@@ -11,7 +11,7 @@ from datetime import date, datetime, timedelta
 from decimal import Decimal
 from pathlib import Path
 
-from . import sicht, zahlungsziel
+from . import sicht, steuerfaelle, zahlungsziel
 from .konfig import Konfig, bemerkungen_aus, kundenstamm_fuer, partei_aus, zahlung_aus
 from .modell import (
     Anhang,
@@ -41,6 +41,7 @@ KAEUFER_FELDER = {
     "BT-52": "anschrift.ort",
     "BT-55": "anschrift.land",
     "BT-48": "ust_id",
+    "BT-47": "register",  # ab 0.9.7: Registerkennung des Käufers (Reverse Charge ohne USt-IdNr.)
     "BT-49": "elektronische_adresse",
     "BT-56": "kontakt_name",
     "BT-57": "kontakt_telefon",
@@ -235,6 +236,8 @@ def rechnung_bauen(
 ) -> Rechnung:
     r = Rechnung(quelle=quelle)
     mappings = definition.get("mappings", {})
+    stamm = stammdaten_aus_definition(definition, konfig)
+    ku = stamm[0].kleinunternehmer  # § 19 UStG: alle Positionen E/0 mit Hinweistext
 
     def wert(feld, default=None):
         v = kopf.get(feld)
@@ -246,7 +249,9 @@ def rechnung_bauen(
     r.nummer = str(wert("BT-1", ""))
     r.datum = wert("BT-2")
     r.art = str(wert("BT-3", "380"))
-    r.waehrung = str(wert("BT-5", "EUR"))
+    r.waehrung = waehrung_code(wert("BT-5", "EUR"))
+    r.steuerhinweis = " ".join(str(wert("steuerhinweis", "") or "").split())
+    _kurs_setzen(r, wert)
     r.leistungsdatum = wert("BT-72")
     r.leistung_von = wert("BT-73")  # BG-14 Rechnungszeitraum
     r.leistung_bis = wert("BT-74")
@@ -355,16 +360,15 @@ def rechnung_bauen(
             )
             pos.einheit = code or ""  # nicht zugeordnet -> bereits als Prüffall markiert
         st = g("steuer", "")
-        code, ok = _map(
-            mappings.get("steuer", {}), str(st), "Steuerschlüssel", r, f"Pos {pos.nr} BT-151"
-        )
-        if isinstance(code, dict):
-            pos.steuer = Steuer(
-                str(code.get("BT-151", "S")),
-                Decimal(str(code.get("BT-152", 0))),
-                str(code.get("BT-120", "") or ""),
-                str(code.get("BT-121", "") or ""),
+        if ku:
+            pos.steuer = _ku_steuer(r, stamm[0], st, mappings, pos.nr)
+        else:
+            code, ok = _map(
+                mappings.get("steuer", {}), str(st), "Steuerschlüssel", r, f"Pos {pos.nr} BT-151"
             )
+            neu = steuer_aus_code(code, r.steuerhinweis)
+            if neu is not None:
+                pos.steuer = neu
         _position_ergaenzen(pos, g)
         if not pos.bezeichnung:
             r.hinweis("pruefen", "Bezeichnung fehlt", f"Pos {pos.nr} BT-153")
@@ -372,9 +376,7 @@ def rechnung_bauen(
     _vorzeichen(r)
 
     # --- Stammdaten -----------------------------------------------------------
-    r.verkaeufer, r.zahlung, r.bemerkungen, aus_profil = stammdaten_aus_definition(
-        definition, konfig
-    )
+    r.verkaeufer, r.zahlung, r.bemerkungen, aus_profil = stamm
     r.herkunft["verkaeufer"] = Herkunft("profil" if aus_profil else "konfig", 1.0)
     basis = Path(definition.get("_basis", konfig.basis))
     ks = kundenstamm_fuer(definition.get("kundenstamm"), basis)
@@ -392,6 +394,9 @@ def rechnung_bauen(
     for f in aus_quelle:
         _setzen(r.kaeufer, KAEUFER_FELDER[f], str(wert(f)).strip())
     _namenszeilen(r, wert)
+    for a in (r.kaeufer.anschrift, r.lieferung.anschrift):  # „Österreich“ -> AT
+        if a.land and not re.fullmatch(r"[A-Z]{2}", a.land):
+            a.land = steuerfaelle.land_code(a.land) or a.land
     if aus_quelle and not r.kaeufer.kennung:
         r.kaeufer.kennung = r.kundennummer  # BT-46
     if wert("BT-10") is not None:
@@ -462,6 +467,82 @@ def rechnung_bauen(
             )
     sicht.gutschrift_zahlung_setzen(r)
     return r
+
+
+def waehrung_code(v) -> str:
+    """„EUR“, „usd“, „$“, „US$“ -> ISO-4217-Code; Unbekanntes bleibt (Pflichtprüfung meldet es)."""
+    t = " ".join(str(v or "").split())
+    if re.fullmatch(r"[A-Za-z]{3}", t):
+        return t.upper()
+    gef = steuerfaelle.waehrungen_im_text(t)
+    return gef[0] if len(gef) == 1 else (t or "EUR")
+
+
+def _kurs_setzen(r: Rechnung, wert) -> None:
+    """Fremdwährung (ab 0.9.7): Kurs „1 EUR = x BT-5“ (Zahl oder Kurszeile), Kursdatum, USt in EUR (BT-111)."""
+    k = wert("kurs")
+    if k is not None:
+        if isinstance(k, Decimal):
+            r.kurs = k
+        else:
+            kurs, fw = steuerfaelle.kurs_lesen(str(k), r.waehrung)
+            if kurs is None:
+                kurs = steuerfaelle.dezimal(str(k))
+            r.kurs = kurs
+            if fw and fw != r.waehrung and r.waehrung == "EUR":
+                r.waehrung = fw  # Kurszeile nennt die Rechnungswährung, die Quelle hatte keine
+            if kurs is None:
+                r.hinweis("pruefen", f"Umrechnungskurs „{k}“ nicht lesbar (erwartet z. B. 1,0850)", "kurs")
+    kd = wert("kursdatum")
+    if kd is not None:
+        r.kursdatum = kd if isinstance(kd, date) else None
+    u = wert("BT-111")
+    if u is not None:
+        r.ust_eur_quelle = u if isinstance(u, Decimal) else steuerfaelle.dezimal(str(u))
+
+
+def steuer_aus_code(code, hinweis: str = "") -> Steuer | None:
+    """Steuer-Mapping eines Profils -> Steuer. Werte: {BT-151, BT-152, BT-120, BT-121}, ein Steuerfall („AE“,
+    „K“, „G“, „O“, „KU“) oder {fall: AE, BT-120: Text}. Mit ``fall: hinweis`` entscheidet der Hinweistext der
+    Rechnung (Druck), sonst gilt das Mapping selbst (Regelbesteuerung)."""
+    if isinstance(code, str) and code in steuerfaelle.FAELLE:
+        return steuerfaelle.steuer(code, hinweis if steuerfaelle.erkennen(hinweis) == code else "")
+    if not isinstance(code, dict):
+        return None
+    fall = str(code.get("fall") or "")
+    if fall == "hinweis":
+        erkannt = steuerfaelle.erkennen(hinweis)
+        if erkannt:
+            return steuerfaelle.steuer(erkannt, hinweis)
+    elif fall in steuerfaelle.FAELLE:
+        passt = hinweis if steuerfaelle.erkennen(hinweis) == fall else ""
+        return steuerfaelle.steuer(fall, str(code.get("BT-120") or "") or passt)
+    return Steuer(
+        str(code.get("BT-151", "S")),
+        Decimal(str(code.get("BT-152", 0))),
+        str(code.get("BT-120", "") or ""),
+        str(code.get("BT-121", "") or ""),
+    )
+
+
+def _ku_steuer(r: Rechnung, vk, st, mappings: dict, nr: str) -> Steuer:
+    """Kleinunternehmer: jede Position E/0 mit Hinweistext. Liefert die Quelle trotzdem einen Satz > 0, hält die
+    Rechnung an (nicht still überschreiben)."""
+    if st not in (None, ""):
+        code = (mappings.get("steuer") or {}).get(str(st))
+        if code is None and str(st).replace(",", ".").replace("%", "").strip() not in ("0", "0.0", "0.00"):
+            try:
+                satz = Decimal(str(st).replace("%", "").replace(",", ".").strip())
+            except ArithmeticError:
+                satz = None
+            if satz:
+                code = {"BT-151": "S", "BT-152": satz}
+        alt = steuer_aus_code(code, r.steuerhinweis) if code is not None else None
+        if alt is not None and alt.kategorie == "S" and alt.satz > 0:
+            r.hinweis("pruefen", (f"Absender ist Kleinunternehmer (§ 19 UStG), die Quelle nennt für Position {nr} "
+                                  f"aber {alt.satz:g} % Umsatzsteuer – Einstellung oder Quelle prüfen."),
+                      f"Pos {nr} BT-152")
+    return steuerfaelle.steuer("KU", vk.kleinunternehmer_text or "")
 
 
 def _zelle(v) -> str:

@@ -20,7 +20,7 @@ from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfgen import canvas
 
-from . import zahlungsziel
+from . import steuerfaelle, zahlungsziel
 from .modell import Rechnung
 
 # Einheiten im Sichtteil als Klartext (im XML bleibt der UN/ECE-Code): Code -> (kurz, lang) je Sprache
@@ -135,11 +135,14 @@ def preis_text(
     preiseinheit: Decimal | None,
     code: str = "",
     sprache: str | None = None,
+    waehrung: str = "EUR",
 ) -> str:
-    """Einzelpreis mit Preiseinheit (BT-149) für den Sichtteil: „3,40“ oder „3,40 € / 10 Stück“."""
+    """Einzelpreis mit Preiseinheit (BT-149) für den Sichtteil: „3,40“ oder „3,40 € / 10 Stück“ (Fremdwährung:
+    „3,40 USD / 10 Stück“)."""
     if preiseinheit is None or preiseinheit == 1:
         return eur(einzelpreis)
-    return f"{eur(einzelpreis)} € / {menge(preiseinheit)} {einheit_text(code, sprache, lang=True)}".rstrip()
+    zeichen = "€" if (waehrung or "EUR").upper() == "EUR" else waehrung.upper()
+    return f"{eur(einzelpreis)} {zeichen} / {menge(preiseinheit)} {einheit_text(code, sprache, lang=True)}".rstrip()
 
 
 def umbrechen(c, text: str, font: str, groesse: float, breite: float) -> list[str]:
@@ -206,6 +209,54 @@ def eur(d: Decimal | None) -> str:
         return ""
     s = f"{d.quantize(Decimal('0.01')):,.2f}"
     return s.replace(",", "X").replace(".", ",").replace("X", ".")
+
+
+def summen_zeilen(r: Rechnung) -> list[tuple[str, str]]:
+    """Summenblock (Standardlayout und Layoutvorlage). Ab 0.9.7: Währung aus BT-5 statt fest „EUR“, keine
+    USt-Zeile beim Kleinunternehmer (§ 19 UStG – dort steht nur der Hinweis)."""
+    s = r.summen
+    w = (r.waehrung or "EUR").upper()
+    zeilen = []
+    if r.zu_abschlaege:  # BG-20/BG-21
+        zeilen.append(("Summe Positionen", eur(s.positionen_netto)))
+        zeilen += [_za_text(za) for za in r.zu_abschlaege]
+    ku = bool(s.steuerzeilen) and all(steuerfaelle.fall_von(z.steuer) == "KU" for z in s.steuerzeilen)
+    zeilen.append(("Rechnungsbetrag" if ku else "Nettobetrag", eur(s.netto)))
+    for z in s.steuerzeilen:
+        if steuerfaelle.fall_von(z.steuer) == "KU":
+            continue
+        zeilen.append((f"USt {menge(z.steuer.satz)} % auf {eur(z.basis)}", eur(z.betrag)))
+    zeilen.append((f"Gesamtbetrag {w}", eur(s.brutto)))
+    if s.vorausbezahlt or s.rundung:  # BT-113/114/115
+        if s.vorausbezahlt:
+            zeilen.append(("Bereits gezahlt", "−" + eur(s.vorausbezahlt)))
+        if s.rundung:
+            zeilen.append(("Rundung", eur(s.rundung)))
+        zeilen.append((f"Zahlbetrag {w}", eur(s.zahlbar)))
+    return zeilen
+
+
+def steuer_texte(r: Rechnung) -> list[str]:
+    """Texte unter den Summen: Befreiungsgründe/Hinweise (§ 14 Abs. 4 Nr. 8, § 14a UStG) und bei Fremdwährung
+    die Umsatzsteuer in EUR mit Kurs (§ 16 Abs. 6 UStG)."""
+    texte = []
+    for z in r.summen.steuerzeilen:
+        t = z.steuer.befreiungsgrund
+        if t and t not in texte:
+            texte.append(t)
+    kt = steuerfaelle.kurs_text(r)
+    if r.summen.ust_steuerwaehrung is not None:
+        texte.append(f"Umsatzsteuer in EUR: {eur(r.summen.ust_steuerwaehrung)} €" + (f" ({kt})" if kt else ""))
+    elif kt:
+        texte.append(kt)
+    return texte
+
+
+def kaeufer_ust_info(r: Rechnung) -> list[tuple[str, str]]:
+    """§ 14a UStG: bei Reverse Charge / innergemeinschaftlicher Lieferung die USt-IdNr. des Kunden."""
+    if r.kaeufer.ust_id and any(z.steuer.kategorie in ("AE", "K") for z in r.summen.steuerzeilen):
+        return [("Ihre USt-IdNr.", r.kaeufer.ust_id)]
+    return []
 
 
 def menge(d: Decimal | None) -> str:
@@ -593,6 +644,7 @@ def _erzeugen_standard(r: Rechnung, sprache: str | None = None) -> bytes:
             info.append(("Zu Rechnung", b.nummer + (f" vom {datum(b.datum)}" if b.datum else "")))
         if r.kundennummer:
             info.append(("Kunden-Nr.", r.kundennummer))
+        info += kaeufer_ust_info(r)
         info.append(leistung(r))
         if r.bestellnummer:
             info.append(("Ihre Bestellung", r.bestellnummer))
@@ -700,7 +752,7 @@ def _erzeugen_standard(r: Rechnung, sprache: str | None = None) -> bytes:
         bez = umbrechen(c, p.bezeichnung, "ER-Sans", 9, BEZ_BREITE)
         pg, preis = einpassen(
             c,
-            [preis_text(p.einzelpreis, p.preiseinheit, p.einheit, sprache)],
+            [preis_text(p.einzelpreis, p.preiseinheit, p.einheit, sprache, r.waehrung)],
             "ER-Sans",
             9,
             PREIS_BREITE,
@@ -737,20 +789,7 @@ def _erzeugen_standard(r: Rechnung, sprache: str | None = None) -> bytes:
     s = r.summen
     c.line(L + 100 * mm, y, R, y)
     y -= 5 * mm
-    zeilen = []
-    if r.zu_abschlaege:  # BG-20/BG-21
-        zeilen.append(("Summe Positionen", eur(s.positionen_netto)))
-        zeilen += [_za_text(za) for za in r.zu_abschlaege]
-    zeilen.append(("Nettobetrag", eur(s.netto)))
-    for z in s.steuerzeilen:
-        zeilen.append((f"USt {menge(z.steuer.satz)} % auf {eur(z.basis)}", eur(z.betrag)))
-    zeilen.append(("Gesamtbetrag EUR", eur(s.brutto)))
-    if s.vorausbezahlt or s.rundung:  # BT-113/114/115
-        if s.vorausbezahlt:
-            zeilen.append(("Bereits gezahlt", "−" + eur(s.vorausbezahlt)))
-        if s.rundung:
-            zeilen.append(("Rundung", eur(s.rundung)))
-        zeilen.append(("Zahlbetrag EUR", eur(s.zahlbar)))
+    zeilen = summen_zeilen(r)
     for i, (a, b) in enumerate(zeilen):
         a = a if len(a) <= 40 else a[:39] + "…"  # langer Rabattgrund bleibt links vom Betrag
         c.setFont(
@@ -761,9 +800,9 @@ def _erzeugen_standard(r: Rechnung, sprache: str | None = None) -> bytes:
         y -= 5 * mm
     y -= 4 * mm
     c.setFont("ER-Sans", 9)
-    for z in s.steuerzeilen:
-        if z.steuer.befreiungsgrund:
-            c.drawString(L, y, z.steuer.befreiungsgrund)
+    for t in steuer_texte(r):
+        for zt in umbrechen(c, t, "ER-Sans", 9, R - L):
+            c.drawString(L, y, zt)
             y -= 4.5 * mm
     gutschrift = ist_gutschrift(r, s.zahlbar)
     if r.zahlung.bedingungen and not gutschrift:

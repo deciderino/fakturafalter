@@ -10,8 +10,9 @@ vom 15.10.2025 (Rn. 35) müssen die Angaben im XML stehen. Details: docs/recherc
 Aufbau:
 - Jede Regel ist eine Funktion ``(Rechnung, Kontext) -> Iterable[(feld, text)]`` und trägt einen
   ``umfang``: ``alle`` | ``inland`` | ``ausland`` | ``xrechnung``.
-- Version 1 prüft ``alle`` + ``inland`` (Käufer und Verkäufer in Deutschland, ZUGFeRD EN16931,
-  keine Leitweg-ID). Regeln für ``ausland``/``xrechnung`` sind als TODO-Stubs angelegt und inaktiv.
+- Ab 0.9.7 sind alle Umfänge aktiv: Käufer im Ausland, Steuerfälle (Reverse Charge, innergemeinschaftliche
+  Lieferung, Ausfuhr, nicht steuerbar, Kleinunternehmer), Fremdwährung und Leitweg-ID. Der Verkäufer sitzt
+  weiterhin in Deutschland. ``xrechnung_kontakt`` bleibt ein inaktiver Stub.
 - Jeder Treffer hält die Rechnung an (Stufe ``pruefen`` -> Ordner „Zu prüfen“). Gibt es zum selben Feld
   schon einen anhaltenden Hinweis (z. B. aus ``aufbau``), wird kein zweiter angehängt.
 """
@@ -28,7 +29,8 @@ from .codelisten import EINHEITEN, WAEHRUNGEN
 from .modell import Partei, Rechnung
 
 STUFE = "pruefen"
-UMFAENGE_V1 = frozenset({"alle", "inland"})
+UMFAENGE_V1 = frozenset({"alle", "inland", "ausland", "xrechnung"})  # ab 0.9.7 alle aktiv
+UMFAENGE = UMFAENGE_V1
 
 Treffer = tuple[str, str]                      # (feld, text)
 
@@ -224,8 +226,10 @@ def _verkaeufer_steuer_id(r: Rechnung, k: Kontext):
         yield "BT-32", f"Verkäufer – Steuernummer (BT-32) „{v.steuernummer}“ hat kein gültiges Format (10–13 Ziffern)."
     if _leer(v.ust_id) and _leer(v.register):
         # BR-CO-26: BT-29, BT-30 oder BT-31 nötig – nur Steuernummer (BT-32) reicht der EN 16931 nicht.
+        ku = " Auch als Kleinunternehmer (§ 19 UStG) – die USt-IdNr. kann beim BZSt beantragt werden." \
+            if v.kleinunternehmer else ""
         yield "BT-30", ("Verkäufer hat nur eine Steuernummer: Dann ist die Registernummer (BT-30, z. B. "
-                        "„Amtsgericht … HRB …“) oder die USt-IdNr. (BT-31) nötig (EN 16931, BR-CO-26).")
+                        "„Amtsgericht … HRB …“) oder die USt-IdNr. (BT-31) nötig (EN 16931, BR-CO-26)." + ku)
 
 
 @regel("kaeufer_ust_id", "alle", "USt-IdNr. BT-48 des Käufers: Prüfziffer wie BT-31")
@@ -343,17 +347,54 @@ def _lieferanschrift(r: Rechnung, k: Kontext):
         yield "BT-78", f"Lieferanschrift – Postleitzahl (BT-78) „{a.plz}“ hat nicht 5 Ziffern."
 
 
-# ------------------------------------------------------------------ Regeln: Inland (Version 1)
-NICHT_UNTERSTUETZT = "wird in dieser Version nicht unterstützt (nur Inland, Regelbesteuerung)"
+# ------------------------------------------------------------------ Regeln: Länder, Steuerfälle, Währung (ab 0.9.7)
+NICHT_UNTERSTUETZT = "wird nicht unterstützt"
+SAETZE_S = (Decimal("19"), Decimal("7"))
+NULL_KATEGORIEN = ("E", "AE", "K", "G", "O")
 
 
-@regel("inland_laender", "inland", "Verkäufer und Käufer in Deutschland")
-def _inland_laender(r: Rechnung, k: Kontext):
-    for p, verkaeufer in ((r.verkaeufer, True), (r.kaeufer, False)):
-        rolle, bt = _rolle(verkaeufer)
-        land = (p.anschrift.land or "DE").strip().upper()
-        if land != "DE":
-            yield bt["land"], f"{rolle} im Ausland (Land {bt['land']} = „{land}“) {NICHT_UNTERSTUETZT}."
+def leitweg_aehnlich(wert: str) -> bool:
+    """Sieht der Wert wie eine Leitweg-ID aus (Ziffern am Anfang, Bindestrich, zweistellige Prüfziffer am Ende)?
+    Nur solche Werte werden streng geprüft; andere Käuferreferenzen (z. B. Kundennummer) bleiben frei."""
+    v = (wert or "").strip()
+    return bool(re.fullmatch(r"\d{2,}[0-9A-Za-z-]*-\d{1,3}", v))
+
+
+def leitweg_gueltig(wert: str) -> bool:
+    """Leitweg-ID: Grobadressierung (2–12 Ziffern) [-Feinadressierung (bis 30 Zeichen A–Z/0–9)]-Prüfziffer (2),
+    höchstens 46 Zeichen; Prüfziffer nach ISO/IEC 7064 Mod 97-10 über die ID ohne Bindestriche (A=10 … Z=35)."""
+    v = (wert or "").strip().upper()
+    if len(v) > 46 or not re.fullmatch(r"\d{2,12}(?:-[A-Z0-9]{1,30})?-\d{2}", v):
+        return False
+    zahl = "".join(str(int(c, 36)) for c in v.replace("-", ""))
+    return int(zahl) % 97 == 1
+
+
+def _land(p: Partei) -> str:
+    return (p.anschrift.land or "DE").strip().upper()
+
+
+def _lieferland(r: Rechnung) -> str:
+    a = r.lieferung.anschrift
+    return (a.land or "").strip().upper() if _bg15_vorhanden(a) and (a.land or "").strip() else _land(r.kaeufer)
+
+
+def _kategorien(r: Rechnung) -> set[str]:
+    out = {p.steuer.kategorie for p in r.positionen}
+    out |= {za.steuer.kategorie for za in r.zu_abschlaege if za.steuer is not None}
+    return out
+
+
+@regel("laender", "alle", "Verkäufer in Deutschland; Länder nach ISO 3166-1")
+def _laender(r: Rechnung, k: Kontext):
+    from .codelisten import LAENDER
+
+    if _land(r.verkaeufer) != "DE":
+        yield "BT-40", (f"Verkäufer im Ausland (Land BT-40 = „{_land(r.verkaeufer)}“) {NICHT_UNTERSTUETZT} – "
+                        "Fakturafalter schreibt Rechnungen deutscher Unternehmer.")
+    for land, bt, wer in ((_land(r.kaeufer), "BT-55", "Käufer"), (_lieferland(r), "BT-80", "Lieferanschrift")):
+        if land and land not in LAENDER:
+            yield bt, f"{wer} – Land ({bt}) „{land}“ ist kein Ländercode nach ISO 3166-1 (z. B. AT, CH)."
 
 
 @regel("inland_plz", "inland", "Deutsche Postleitzahl hat 5 Ziffern")
@@ -361,33 +402,29 @@ def _inland_plz(r: Rechnung, k: Kontext):
     for p, verkaeufer in ((r.verkaeufer, True), (r.kaeufer, False)):
         rolle, bt = _rolle(verkaeufer)
         plz = (p.anschrift.plz or "").strip()
-        if plz and not re.fullmatch(r"\d{5}", plz):
+        if plz and _land(p) == "DE" and not re.fullmatch(r"\d{5}", plz):
             yield bt["plz"], f"{rolle} – Postleitzahl ({bt['plz']}) „{plz}“ hat nicht 5 Ziffern."
 
 
-@regel("inland_waehrung", "inland", "Rechnungswährung EUR")
-def _inland_waehrung(r: Rechnung, k: Kontext):
-    w = (r.waehrung or "").strip()
-    if w in WAEHRUNGEN and w != "EUR":
-        # TODO(ausland): Fremdwährung braucht die Steuer zusätzlich in EUR (BT-6/BT-111, § 16 Abs. 6 UStG).
-        yield "BT-5", f"Rechnungswährung {w} (BT-5) {NICHT_UNTERSTUETZT}; nur EUR."
+def _ist_ku(st) -> bool:
+    from .steuerfaelle import fall_von
+
+    return fall_von(st) == "KU"
 
 
-SAETZE_S = (Decimal("19"), Decimal("7"))
-_RC_KU = re.compile(r"§\s*13b|13b\s*UStG|§\s*19\b|19\s*(Abs\.?\s*1\s*)?UStG|Kleinunternehmer|Steuerschuldnerschaft",
-                    re.IGNORECASE)
+@regel("steuer", "alle", "Steuerkategorie und Satz passen zusammen; Pflichtangaben je Steuerfall")
+def _steuer(r: Rechnung, k: Kontext):
+    from .steuerfaelle import EU, FAELLE, NAMEN, erkennen
 
-
-@regel("inland_steuer", "inland", "Steuerkategorie und Satz passen zusammen (S 19/7, Z 0 ohne Grund, E 0 mit Grund)")
-def _inland_steuer(r: Rechnung, k: Kontext):
     gesehen = set()
+    v, kd = r.verkaeufer, r.kaeufer
+    kats = _kategorien(r)
     for p in r.positionen:
         st = p.steuer
-        key = st.schluessel
-        if key in gesehen:
-            continue
-        gesehen.add(key)
         kat, satz, grund = st.kategorie, st.satz, (st.befreiungsgrund or st.befreiungscode).strip()
+        if (kat, satz, grund) in gesehen:
+            continue
+        gesehen.add((kat, satz, grund))
         f = f"Pos {p.nr} BT-151"
         txt = f"Steuer {kat} {satz:g} % (Position {p.nr})"
         if kat == "S":
@@ -395,48 +432,111 @@ def _inland_steuer(r: Rechnung, k: Kontext):
                 yield f, f"{txt}: Kategorie S (BT-151) braucht 19 % oder 7 % (BT-152)."
             if grund:
                 yield f, f"{txt}: Kategorie S darf keinen Befreiungsgrund (BT-120/121) haben (EN 16931, BR-S-10)."
-        elif kat == "Z":
+            if v.kleinunternehmer:
+                yield f, (f"{txt}: Absender ist als Kleinunternehmer (§ 19 UStG) eingestellt – dann wird keine "
+                          "Umsatzsteuer ausgewiesen. Steuerschlüssel oder Einstellung prüfen.")
+            continue
+        if kat == "Z":
             if satz != 0:
                 yield f, f"{txt}: Kategorie Z (Nullsatz) braucht 0 % (BT-152) (EN 16931, BR-Z-05)."
             if grund:
                 yield f, f"{txt}: Kategorie Z darf keinen Befreiungsgrund (BT-120/121) haben (EN 16931, BR-Z-10)."
-        elif kat == "E":
-            if _RC_KU.search(grund):
-                yield f, f"{txt}: Kleinunternehmer (§ 19 UStG) bzw. Reverse Charge (§ 13b UStG) {NICHT_UNTERSTUETZT}."
-                continue
-            if satz != 0:
-                yield f, f"{txt}: Kategorie E (steuerfrei) braucht 0 % (BT-152) (EN 16931, BR-E-05)."
-            if not grund:
-                yield f, (f"{txt}: Kategorie E braucht einen Befreiungsgrund (BT-120/121), § 14 Abs. 4 Nr. 8 UStG "
-                          "(EN 16931, BR-E-10).")
-        elif kat in ("AE", "K", "G", "O", "L", "M"):
-            art = {"AE": "Reverse Charge (§ 13b UStG / Steuerschuldnerschaft des Leistungsempfängers)",
-                   "K": "Innergemeinschaftliche Lieferung", "G": "Ausfuhrlieferung",
-                   "O": "Nicht steuerbare Leistung", "L": "Kanarische Inseln (IGIC)", "M": "Ceuta/Melilla (IPSI)"}[kat]
+            continue
+        if kat in ("L", "M"):
+            art = {"L": "Kanarische Inseln (IGIC)", "M": "Ceuta/Melilla (IPSI)"}[kat]
             yield f, f"{txt}: {art} (Kategorie {kat}) {NICHT_UNTERSTUETZT}."
-        else:
+            continue
+        if kat not in NULL_KATEGORIEN:
             yield f, f"{txt}: Steuerkategorie „{kat}“ (BT-151) ist unbekannt."
+            continue
+        name = NAMEN.get("KU" if kat == "E" and _ist_ku(st) else kat, "Steuerbefreiung (Kategorie E)")
+        if satz != 0:
+            yield f, f"{txt}: {name} braucht 0 % (BT-152) (EN 16931, BR-{'IC' if kat == 'K' else kat}-05)."
+        if not grund:
+            yield f, (f"{txt}: {name} braucht einen Hinweis bzw. Befreiungsgrund (BT-120/121), "
+                      "§ 14 Abs. 4 Nr. 8 UStG bzw. § 14a UStG.")
+        if kat == "E" and (anders := erkennen(grund)) in ("AE", "K", "G", "O"):
+            yield f, (f"{txt}: Der Befreiungsgrund „{grund}“ beschreibt {NAMEN[anders]} – dafür gilt Kategorie "
+                      f"{FAELLE[anders].kategorie}, nicht E. Steuerschlüssel im Profil anpassen.")
+        if kat == "AE":
+            if _leer(kd.ust_id) and _leer(kd.register):
+                yield "BT-48", ("Reverse Charge: USt-IdNr. des Käufers (BT-48) fehlt (EN 16931 BR-AE-02; § 14a UStG). "
+                                "Bei § 13b im Inland ersatzweise die Registerkennung des Käufers (BT-47).")
+            elif _leer(kd.ust_id) and _land(kd) in EU and _land(kd) != "DE":
+                yield "BT-48", ("Reverse Charge an einen Unternehmer im EU-Ausland: USt-IdNr. des Käufers (BT-48) "
+                                "ist Pflicht (§ 14a Abs. 1 UStG).")
+        elif kat == "K":
+            if _leer(v.ust_id):
+                yield "BT-31", ("Innergemeinschaftliche Lieferung: USt-IdNr. des Verkäufers (BT-31) fehlt – die "
+                                "Steuernummer genügt hier nicht (§ 14a Abs. 3 UStG, EN 16931 BR-IC-02).")
+            if _leer(kd.ust_id):
+                yield "BT-48", ("Innergemeinschaftliche Lieferung: USt-IdNr. des Käufers (BT-48) fehlt "
+                                "(§ 14a Abs. 3 UStG, EN 16931 BR-IC-02).")
+            elif kd.ust_id.strip().upper().startswith("DE"):
+                yield "BT-48", ("Innergemeinschaftliche Lieferung: Die USt-IdNr. des Käufers muss aus einem anderen "
+                                f"EU-Land stammen, nicht „{kd.ust_id}“.")
+            land = _lieferland(r)
+            if land == "DE" or land not in EU:
+                yield "BT-80", (f"Innergemeinschaftliche Lieferung: Lieferland „{land}“ ist kein anderes EU-Land. "
+                                "Lieferanschrift (BT-80) bzw. Land des Käufers (BT-55) prüfen.")
+        elif kat == "G":
+            if _leer(v.ust_id):
+                yield "BT-31", ("Ausfuhrlieferung: USt-IdNr. des Verkäufers (BT-31) fehlt – die Steuernummer genügt "
+                                "hier nicht (EN 16931, BR-G-02).")
+            land = _lieferland(r)
+            if land in EU:
+                yield "BT-80", (f"Ausfuhrlieferung: Lieferland „{land}“ liegt in der EU – Ausfuhr gilt nur für "
+                                "Drittländer (sonst innergemeinschaftliche Lieferung, Kategorie K).")
+        elif kat == "O":
+            if kats - {"O"}:
+                yield f, ("Nicht steuerbare Leistung (O) darf nicht mit anderen Steuerkategorien in einer Rechnung "
+                          f"stehen (EN 16931, BR-O-11 bis 14); gefunden: {', '.join(sorted(kats))}.")
+            if _leer(v.register) and _leer(v.kennung):
+                yield "BT-30", ("Nicht steuerbare Leistung: Die USt-IdNr. darf im XML nicht stehen (BR-O-02); dann "
+                                "braucht der Verkäufer eine Registernummer (BT-30), damit er erkennbar bleibt "
+                                "(EN 16931, BR-CO-26).")
+    for za in r.zu_abschlaege:
+        st = za.steuer
+        if st is not None and st.kategorie in NULL_KATEGORIEN and st.satz != 0:
+            yield "BT-96", (f"Zu-/Abschlag „{za.grund}“: Kategorie {st.kategorie} braucht 0 % "
+                            "(EN 16931, BR-AE/IC/G/O/E-06/07).")
 
 
-# ------------------------------------------------------------------ Stubs für später (inaktiv)
-@regel("ausland_ust_id", "ausland", "TODO: § 14a UStG – USt-IdNr. beider Parteien bei AE/K, BZSt-Länderformate",
-       aktiv=False)
+@regel("ausland_ust_id", "ausland", "USt-IdNr. im Format des Landes (BZSt-Aufbau, offline)")
 def _ausland_ust_id(r: Rechnung, k: Kontext):
-    # TODO: AE (BR-AE-02: BT-31/32 + BT-48 oder BT-47, Hinweis „Steuerschuldnerschaft des Leistungsempfängers“),
-    #       K (BR-IC-02/11/12: BT-31 + BT-48, BT-72/BG-14 und Lieferland BT-80 – BG-15 fehlt noch in cii.py),
-    #       ausländische USt-IdNr. mit ISO-Präfix (BR-CO-09, Griechenland EL), Länder BT-40/BT-55 gegen ISO 3166.
-    return ()
+    from .steuerfaelle import ust_id_format_ok
+
+    for p, bt, rolle in ((r.verkaeufer, "BT-31", "Verkäufer"), (r.kaeufer, "BT-48", "Käufer")):
+        u = (p.ust_id or "").strip()
+        if not u or u.upper().startswith("DE"):
+            continue  # DE: Prüfziffer in eigener Regel
+        if ust_id_format_ok(u) is False:
+            yield bt, (f"{rolle} – USt-IdNr. ({bt}) „{u}“ passt nicht zum Aufbau des Landes "
+                       "(Länderpräfix + Ziffernfolge laut BZSt; Griechenland: EL).")
 
 
-@regel("ausland_waehrung", "ausland", "TODO: Fremdwährung mit Steuerbetrag in EUR (BT-6/BT-111)", aktiv=False)
+@regel("ausland_waehrung", "ausland", "Fremdwährung: USt zusätzlich in EUR (BT-6/BT-111), Kurs aus den Daten")
 def _ausland_waehrung(r: Rechnung, k: Kontext):
-    return ()
+    w = (r.waehrung or "").strip().upper()
+    if w == "EUR" or w not in WAEHRUNGEN:
+        return
+    if r.kurs is not None and not (Decimal("0.0001") <= r.kurs <= Decimal("100000")):
+        yield "kurs", f"Umrechnungskurs {r.kurs} ist nicht plausibel (erwartet 1 EUR = x {w})."
+    if r.summen.ust != 0 and r.kurs is None and r.ust_eur_quelle is None:
+        yield "BT-111", (f"Rechnung in {w}: Die Umsatzsteuer muss zusätzlich in EUR stehen (Art. 230 MwStSystRL, "
+                         "§ 16 Abs. 6 UStG). Kurs („1 EUR = x“) oder USt in EUR (BT-111) fehlt in den Daten – "
+                         "Fakturafalter ruft keinen Kurs ab.")
+    if r.kursdatum and r.datum and r.kursdatum > r.datum:
+        yield "kurs", f"Kursdatum {r.kursdatum:%d.%m.%Y} liegt nach dem Rechnungsdatum {r.datum:%d.%m.%Y}."
 
 
-@regel("xrechnung_leitweg", "xrechnung", "TODO: Leitweg-ID BT-10 (Format + Prüfziffer ISO 7064 Mod 97-10)", aktiv=False)
+@regel("xrechnung_leitweg", "alle", "Leitweg-ID BT-10: Format + Prüfziffer ISO 7064 Mod 97-10 (nur, wenn der Wert "
+       "wie eine Leitweg-ID aussieht)")
 def _xrechnung_leitweg(r: Rechnung, k: Kontext):
-    # TODO: BR-DE-15 (BT-10 Pflicht), bei Behörden kein Rückfall auf die Kundennummer.
-    return ()
+    v = (r.leitweg_id or "").strip()
+    if v and leitweg_aehnlich(v) and not leitweg_gueltig(v):
+        yield "BT-10", (f"Leitweg-ID (BT-10) „{v}“ ist ungültig (Aufbau Grob-[Fein-]Prüfziffer oder Prüfziffer "
+                        "nach Mod 97-10 stimmt nicht). Bitte im Kundenstamm bzw. in der Quelle prüfen.")
 
 
 @regel("xrechnung_kontakt", "xrechnung", "TODO: BT-34, BT-49, Verkäuferkontakt BG-6, BG-16 (BR-DE-1/2/5/6/7)",

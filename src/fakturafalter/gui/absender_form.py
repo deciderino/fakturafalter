@@ -8,7 +8,7 @@ from __future__ import annotations
 import logging
 from pathlib import Path
 
-from PySide6.QtWidgets import QFileDialog, QHBoxLayout, QLineEdit, QVBoxLayout, QWidget
+from PySide6.QtWidgets import QCheckBox, QFileDialog, QHBoxLayout, QLineEdit, QVBoxLayout, QWidget
 
 from .. import adapter_pdf, pdferkennung
 from ..absender import Absender, aus_csv, erkennen_aus_zeilen
@@ -47,6 +47,7 @@ AUS_ABSENDER = {
     "iban": "iban",
     "bic": "bic",
     "register": "register",
+    "kleinunternehmer": "kleinunternehmer",
     "telefon": "kontakt_telefon",
     "email": "kontakt_email",
 }
@@ -73,6 +74,7 @@ def aus_roh(roh: dict) -> dict[str, str]:
         "kontakt_name": kon.get("name", ""),
         "kontakt_telefon": kon.get("telefon", ""),
         "kontakt_email": kon.get("email", ""),
+        "kleinunternehmer": "1" if a.get("kleinunternehmer") else "",
     }
 
 
@@ -100,6 +102,10 @@ def in_roh(r: dict, e: dict[str, str]) -> None:
         "email": e["kontakt_email"],
     }
     a["register"] = e["register"]
+    if e.get("kleinunternehmer"):
+        a["kleinunternehmer"] = True  # ab 0.9.7: § 19 UStG
+    else:
+        a.pop("kleinunternehmer", None)
     z = r.setdefault("zahlung", {}) or {}
     r["zahlung"] = z
     z["iban"] = e["iban"].replace(" ", "").upper()
@@ -115,7 +121,10 @@ def in_roh(r: dict, e: dict[str, str]) -> None:
 def pflicht_fehlt(e: dict[str, str]) -> list[str]:
     """Deutsche Feldnamen (für die Anzeige übersetzen)."""
     f = [name for schl, name, p in FELDER if p and not e.get(schl, "").strip()]
-    if not (e.get("ust_id", "").strip() or e.get("steuernummer", "").strip()):
+    if e.get("kleinunternehmer"):  # BR-CO-26: auch die Registernummer (BT-30) reicht
+        if not any(e.get(k, "").strip() for k in ("ust_id", "steuernummer", "register")):
+            f.append("USt-IdNr., Steuernummer oder Handelsregister")
+    elif not (e.get("ust_id", "").strip() or e.get("steuernummer", "").strip()):
         f.append("USt-IdNr. oder Steuernummer")
     return f
 
@@ -169,15 +178,29 @@ class AbsenderFormular(QWidget):
                     )
                 )
             self.felder[schl] = e
+        # ab 0.9.7: Kleinunternehmer – alle Rechnungen ohne Umsatzsteuer, Hinweis nach § 19 UStG
+        self.ku = QCheckBox(_("Kleinunternehmer (§ 19 UStG) – Rechnungen ohne Umsatzsteuer"))
+        self.ku.setObjectName("abs_kleinunternehmer")
+        self.ku.setChecked(bool(werte.get("kleinunternehmer")))
+        v.addWidget(self.ku)
+        v.addWidget(lbl(_("Dann steht auf jeder Rechnung „Gemäß § 19 UStG wird keine Umsatzsteuer berechnet.“ "
+                          "Liefert eine Quelle trotzdem einen Steuersatz, wird die Rechnung angehalten."),
+                        "hinweis", umbruch=True))
 
     def werte(self) -> dict[str, str]:
-        return {s: " ".join(e.text().split()) for s, e in self.felder.items()}
+        w = {s: " ".join(e.text().split()) for s, e in self.felder.items()}
+        w["kleinunternehmer"] = "1" if self.ku.isChecked() else ""
+        return w
 
     def uebernehmen(self, a: Absender) -> int:
         n = 0
         for feld, schl in AUS_ABSENDER.items():
             w = getattr(a, feld)
-            if w:
+            if feld == "kleinunternehmer":
+                if w:
+                    self.ku.setChecked(True)
+                    n += 1
+            elif w:
                 self.felder[schl].setText(w)
                 n += 1
         return n

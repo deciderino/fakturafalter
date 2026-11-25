@@ -61,6 +61,7 @@ class Absender:
     telefon: str = ""
     email: str = ""
     register: str = ""
+    kleinunternehmer: bool = False  # ab 0.9.7: § 19 UStG (Schalter am Absender)
 
     def gefunden(self) -> list[str]:
         return [f.name for f in fields(self) if getattr(self, f.name)]
@@ -84,6 +85,8 @@ class Absender:
         for schl in ("ust_id", "steuernummer", "register"):
             if getattr(self, schl):
                 vk[schl] = getattr(self, schl)
+        if self.kleinunternehmer:
+            vk["kleinunternehmer"] = True
         kon = {k: w for k, w in (("telefon", self.telefon), ("email", self.email)) if w}
         if kon:
             vk["kontakt"] = {"name": self.name, **kon}
@@ -112,6 +115,7 @@ class Absender:
             telefon=s(kon, "telefon"),
             email=s(kon, "email") or s(vk, "elektronische_adresse"),
             register=s(vk, "register"),
+            kleinunternehmer=bool(vk.get("kleinunternehmer")),
         )
 
 
@@ -152,6 +156,8 @@ def erkennen(zeilen: list[str]) -> Absender:
         r"((?:Amtsgericht|AG)\s+[^\W\d_][\w.äöüÄÖÜß-]*(?:\s[^\W\d_][\w.]*)?,?\s+HR[AB]\s?\d+\s?[A-Z]?)\b",
         text,
     )
+    # § 19 UStG im Druck: Kleinunternehmer (Schalter wird vorbelegt, der Assistent zeigt ihn zum Prüfen)
+    a.kleinunternehmer = bool(re.search(r"§\s*19\b(?:\s*Abs\.?\s*\d)?\s*UStG|Kleinunternehmer", text, re.I))
     a.telefon = _erstes(r"\bTel(?:efon)?\.?[:\s]*(\+?[\d][\d /()-]{5,}\d)", text)
     a.email = _erstes(r"\b([\w.+-]+@[\w-]+(?:\.[\w-]+)+)\b", text)
 

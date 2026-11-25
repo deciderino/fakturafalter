@@ -9,7 +9,7 @@ from dataclasses import replace
 from decimal import ROUND_HALF_UP, Decimal
 
 from . import sicht
-from .modell import Rechnung, Steuer, Summen, SteuerZeile, ZuAbschlag
+from .modell import Rechnung, Steuer, SteuerZeile, Summen, ZuAbschlag
 
 # Die Geld-Toleranzen der Erkennung und Rechnung – nur hier festlegen:
 CENT = Decimal("0.01")                  # Rundung auf ganze Cent
@@ -62,6 +62,38 @@ def _preis_ergaenzen(r: Rechnung, p) -> None:
                   f"{p.einzelpreis}", f"Pos {p.nr} BT-146")
 
 
+def _text_abgleichen(r: Rechnung, erste: Steuer, st: Steuer) -> None:
+    """Eine Gruppe je Kategorie: weicht der Befreiungstext einer weiteren Position ab, gilt der erste (Hinweis)."""
+    if erste is st or erste.kategorie not in EINE_GRUPPE:
+        return
+    a, b = (erste.befreiungsgrund or "").strip(), (st.befreiungsgrund or "").strip()
+    if a and b and a != b and not any(h.feld == "BT-120" and b in h.text for h in r.hinweise):
+        r.hinweis("warnung", f"Kategorie {st.kategorie}: abweichender Befreiungsgrund „{b}“ – in der "
+                  f"Steueraufschlüsselung gilt „{a}“ (eine Gruppe je Kategorie, EN 16931)", "BT-120")
+
+
+def _steuerwaehrung(r: Rechnung, s: Summen) -> None:
+    """Fremdwährung: USt zusätzlich in EUR (BT-6/BT-111, Art. 230 MwStSystRL, Umrechnung § 16 Abs. 6 UStG).
+    Kurs „1 EUR = x BT-5“ und/oder BT-111 kommen aus den Daten; ohne beides hält die Pflichtprüfung an."""
+    r.steuerwaehrung = ""
+    s.ust_steuerwaehrung = None
+    if (r.waehrung or "EUR").strip().upper() == "EUR" or s.ust == 0:
+        return
+    berechnet = runden(s.ust / r.kurs) if r.kurs and r.kurs > 0 else None
+    quelle = r.ust_eur_quelle
+    if berechnet is None and quelle is None:
+        return
+    r.steuerwaehrung = "EUR"
+    if quelle is not None and berechnet is not None:
+        tol = TOLERANZ * max(1, len(s.steuerzeilen))
+        if abs(abs(quelle) - berechnet) > tol:
+            r.hinweis("pruefen", f"USt in EUR laut Quelle {quelle} ≠ USt {s.ust} {r.waehrung} ÷ Kurs {r.kurs} = "
+                      f"{berechnet} EUR", "BT-111")
+        s.ust_steuerwaehrung = runden(abs(quelle))
+    else:
+        s.ust_steuerwaehrung = berechnet if berechnet is not None else runden(abs(quelle))
+
+
 def _beleg_steuer_zuordnen(r: Rechnung, gruppen: "OrderedDict[tuple, list]") -> None:
     """Belegebene ohne Steuersatz: bei nur einem Satz diesen nehmen; Prozent-Nachlässe bei mehreren Sätzen je
     Satz aufteilen (Basis = Gruppenbetrag); feste Beträge bei mehreren Sätzen nicht still verteilen."""
@@ -84,6 +116,15 @@ def _beleg_steuer_zuordnen(r: Rechnung, gruppen: "OrderedDict[tuple, list]") -> 
     r.zu_abschlaege = neu
 
 
+# Kategorien, die in BG-23 genau eine Gruppe bilden (BR-AE-01, BR-IC-01, BR-G-01, BR-O-01, BR-E-01): gruppiert
+# wird nur nach der Kategorie, nicht nach dem Befreiungstext.
+EINE_GRUPPE = ("AE", "K", "G", "O", "E")
+
+
+def gruppe(st: Steuer) -> tuple:
+    return (st.kategorie,) if st.kategorie in EINE_GRUPPE else (st.kategorie, st.satz)
+
+
 def berechnen(r: Rechnung) -> Summen:
     gruppen: "OrderedDict[tuple, list]" = OrderedDict()
     for p in r.positionen:
@@ -97,13 +138,14 @@ def berechnen(r: Rechnung) -> Summen:
                      TOLERANZ)
             r.hinweis("pruefen", f"Positionsbetrag {p.netto} weicht von Quelle {p.kontrolle_gesamt} ab",
                       f"Pos {p.nr} BT-131")
-        g = gruppen.setdefault(p.steuer.schluessel, [p.steuer, Decimal("0")])
+        g = gruppen.setdefault(gruppe(p.steuer), [p.steuer, Decimal("0")])
+        _text_abgleichen(r, g[0], p.steuer)
         g[1] += p.netto
     s = Summen()
     s.positionen_netto = sum((p.netto for p in r.positionen), Decimal("0"))   # BT-106
     _beleg_steuer_zuordnen(r, gruppen)
     for za in r.zu_abschlaege:                                                 # BG-20/BG-21
-        g = gruppen.setdefault(za.steuer.schluessel, [za.steuer, Decimal("0")])
+        g = gruppen.setdefault(gruppe(za.steuer), [za.steuer, Decimal("0")])
         wert = _za_rechnen(za, g[1])
         g[1] += wert
         if za.zuschlag:
@@ -115,6 +157,7 @@ def berechnen(r: Rechnung) -> Summen:
         betrag = runden(basis * st.satz / Decimal(100))                       # BT-117 je Kategorie/Satz
         s.steuerzeilen.append(SteuerZeile(st, runden(basis), betrag))
     s.ust = sum((z.betrag for z in s.steuerzeilen), Decimal("0"))             # BT-110
+    _steuerwaehrung(r, s)                                                      # BT-6 / BT-111
     s.brutto = s.netto + s.ust                                                 # BT-112
     s.vorausbezahlt = runden(r.vorausbezahlt or Decimal("0"))                  # BT-113
     s.rundung = runden(r.rundung or Decimal("0"))                              # BT-114

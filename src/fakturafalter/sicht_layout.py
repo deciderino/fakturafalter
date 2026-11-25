@@ -29,16 +29,18 @@ from .sicht import (
     GRAU,
     UNTERZEILE_PT,
     _schriften,
-    _za_text,
     datum,
     einheit_text,
     einpassen,
     eur,
     ist_gutschrift,
+    kaeufer_ust_info,
     leistung,
     menge,
     preis_text,
     satz,
+    steuer_texte,
+    summen_zeilen,
     titel,
     umbrechen,
     unterzeilen_umbrochen,
@@ -184,6 +186,7 @@ def _kopf_info(r: Rechnung, seite: int, seiten: int, kurz: bool) -> list[tuple[s
             info.append(("Zu Rechnung", b.nummer + (f" vom {datum(b.datum)}" if b.datum else "")))
     if r.kundennummer:
         info.append(("Kunden-Nr.", r.kundennummer))
+    info += kaeufer_ust_info(r)
     if not kurz:
         info.append(leistung(r))
         if r.bestellnummer:
@@ -237,22 +240,7 @@ def _kopf(c, e: lay.Element, r: Rechnung, seite: int, seiten: int, bericht) -> N
 
 
 def _summen_zeilen(r: Rechnung) -> list[tuple[str, str]]:
-    s = r.summen
-    zeilen = []
-    if r.zu_abschlaege:  # BG-20/BG-21
-        zeilen.append(("Summe Positionen", eur(s.positionen_netto)))
-        zeilen += [_za_text(za) for za in r.zu_abschlaege]
-    zeilen.append(("Nettobetrag", eur(s.netto)))
-    for z in s.steuerzeilen:
-        zeilen.append((f"USt {menge(z.steuer.satz)} % auf {eur(z.basis)}", eur(z.betrag)))
-    zeilen.append(("Gesamtbetrag EUR", eur(s.brutto)))
-    if s.vorausbezahlt or s.rundung:  # BT-113/114/115
-        if s.vorausbezahlt:
-            zeilen.append(("Bereits gezahlt", "−" + eur(s.vorausbezahlt)))
-        if s.rundung:
-            zeilen.append(("Rundung", eur(s.rundung)))
-        zeilen.append(("Zahlbetrag EUR", eur(s.zahlbar)))
-    return zeilen
+    return summen_zeilen(r)
 
 
 def _bedingungen(r: Rechnung) -> str:
@@ -270,9 +258,7 @@ def _summen(c, e: lay.Element, r: Rechnung, zusatz: list[str], bericht) -> None:
     """Beträge rechtsbündig, darunter Steuerbefreiungsgründe (§ 14 Abs. 4 Nr. 8) und ggf. die
     Entgeltminderung aus den Zahlungsbedingungen (Nr. 7), wenn „Zahlung / Bank“ ausgeblendet ist."""
     zeilen = _summen_zeilen(r)
-    texte = [
-        z.steuer.befreiungsgrund for z in r.summen.steuerzeilen if z.steuer.befreiungsgrund
-    ] + zusatz
+    texte = steuer_texte(r) + zusatz
     breite = e.breite * mm
     g = e.schrift
     while True:
@@ -406,7 +392,7 @@ def _zeilen_bauen(r: Rechnung, e: lay.Element, sprache) -> list[_Zeile]:
         bez = umbrechen(_Breite, p.bezeichnung, F, g, bez_b)
         pg, preis = einpassen(
             _Breite,
-            [preis_text(p.einzelpreis, p.preiseinheit, p.einheit, sprache)],
+            [preis_text(p.einzelpreis, p.preiseinheit, p.einheit, sprache, r.waehrung)],
             F,
             g,
             preis_b,

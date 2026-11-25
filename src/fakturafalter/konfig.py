@@ -49,6 +49,10 @@ def partei_aus(a: dict, basis: Partei | None = None) -> Partei:
         kontakt_email=w(kon, "email", b.kontakt_email),
         register=w(a, "register", b.register),
         kennung=b.kennung,
+        # ab 0.9.7: Kleinunternehmer (§ 19 UStG) – Schalter beim Absender
+        kleinunternehmer=bool(a["kleinunternehmer"]) if a.get("kleinunternehmer") is not None
+        else b.kleinunternehmer,
+        kleinunternehmer_text=w(a, "kleinunternehmer_text", b.kleinunternehmer_text),
     )
 
 
@@ -316,6 +320,7 @@ class Kundenstamm:
             anschrift=Anschrift(r.get("strasse", ""), r.get("plz", ""), r.get("ort", ""), r.get("land", "DE") or "DE",
                                 r.get("zusatz", "")),
             ust_id=r.get("ust_id", ""),
+            register=r.get("register", ""),  # ab 0.9.7: BT-47 (Reverse Charge ohne USt-IdNr.)
             elektronische_adresse=r.get("elektr_adresse_bt49", ""),
             kontakt_email=r.get("kontakt_email", ""),
             kennung=nr,

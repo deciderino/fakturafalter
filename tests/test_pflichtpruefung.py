@@ -84,14 +84,17 @@ def test_name_und_anschrift_pflicht(wer, attr, bt):
     assert r.status == "pruefen"
 
 
-def test_ausland_nicht_unterstuetzt():
+def test_kaeufer_im_ausland_erlaubt_verkaeufer_nicht():
     r = gueltig()
     r.kaeufer.anschrift.land = "AT"
-    f = felder(r)
-    assert "nicht unterstützt" in f["BT-55"]
+    r.kaeufer.anschrift.plz = "1010"          # ausländische PLZ: keine 5-Ziffern-Regel
+    assert felder(r) == {}
     r = gueltig()
-    r.kaeufer.anschrift.land = "DE"
-    assert "BT-55" not in felder(r)
+    r.verkaeufer.anschrift.land = "AT"
+    assert "nicht unterstützt" in felder(r)["BT-40"]
+    r = gueltig()
+    r.kaeufer.anschrift.land = "XX"
+    assert "ISO 3166" in felder(r)["BT-55"]
 
 
 def test_plz_fuenfstellig():
@@ -182,16 +185,17 @@ def test_steuer_kategorie_und_satz(kat, satz, grund, ok):
     assert ("Pos 1 BT-151" not in f) is ok, f
 
 
-@pytest.mark.parametrize("st", [Steuer("AE", D("0"), "Steuerschuldnerschaft des Leistungsempfängers"),
-                                Steuer("K", D("0"), "Innergemeinschaftliche Lieferung"),
-                                Steuer("G", D("0"), "Ausfuhr"), Steuer("O", D("0"), "nicht steuerbar"),
-                                Steuer("E", D("0"), "Kein Steuerausweis, Kleinunternehmer gem. § 19 UStG"),
-                                Steuer("E", D("0"), "Steuerschuldnerschaft nach § 13b UStG")])
-def test_reverse_charge_kleinunternehmer_ausland_nicht_unterstuetzt(st):
+@pytest.mark.parametrize("st,ok", [(Steuer("E", D("0"), "Kein Steuerausweis, Kleinunternehmer gem. § 19 UStG"), True),
+                                   (Steuer("E", D("0"), "Steuerschuldnerschaft nach § 13b UStG"), False),
+                                   (Steuer("L", D("0"), "IGIC"), False), (Steuer("M", D("0"), "IPSI"), False)])
+def test_kleinunternehmer_ja_e_mit_rc_text_und_l_m_nein(st, ok):
+    """Ab 0.9.7: Kleinunternehmer (E + § 19-Text) läuft durch; E mit Reverse-Charge-Text verlangt Kategorie AE;
+    Kanaren/Ceuta bleiben „nicht unterstützt“. Die übrigen Steuerfälle: tests/test_steuerfaelle.py."""
     r = gueltig()
     r.positionen[0].steuer = st
     rechnen.berechnen(r)
-    assert "nicht unterstützt" in felder(r)["Pos 1 BT-151"]
+    f = felder(r)
+    assert ("Pos 1 BT-151" not in f) is ok, f
 
 
 # ------------------------------------------------------------------ Leistungszeit
@@ -289,11 +293,11 @@ def test_nummer_und_datum_fehlen():
     assert "BT-1" in f and "BT-2" in f
 
 
-@pytest.mark.parametrize("w,bt", [("EURO", "BT-5"), ("USD", "BT-5")])
+@pytest.mark.parametrize("w,bt", [("EURO", "BT-5"), ("USD", "BT-111")])
 def test_waehrung(w, bt):
     f = felder(gueltig(waehrung=w))
     assert bt in f
-    assert ("ISO-4217" in f[bt]) if w == "EURO" else ("nicht unterstützt" in f[bt])
+    assert ("ISO-4217" in f[bt]) if w == "EURO" else ("Kurs" in f[bt])
 
 
 @pytest.mark.parametrize("attr,bt", [("kontakt_email", "BT-43"), ("elektronische_adresse", "BT-34")])
@@ -310,9 +314,9 @@ def test_email_format(attr, bt):
 def test_regeln_nach_umfang_und_stubs_inaktiv():
     umf = {g.umfang for g in pp.REGELN}
     assert {"alle", "inland", "ausland", "xrechnung"} <= umf
-    aktiv = pp.aktive_regeln(CTX)
-    assert all(g.umfang in ("alle", "inland") for g in aktiv)
-    assert not [g for g in pp.REGELN if g.umfang in ("ausland", "xrechnung") and g.aktiv]
+    aktiv = {g.id for g in pp.aktive_regeln(CTX)}
+    assert {"ausland_ust_id", "ausland_waehrung", "xrechnung_leitweg", "steuer", "laender"} <= aktiv
+    assert [g.id for g in pp.REGELN if not g.aktiv] == ["xrechnung_kontakt"]
 
 
 def test_kein_doppelter_hinweis_zum_selben_feld():

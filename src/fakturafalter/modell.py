@@ -55,13 +55,16 @@ class Partei:
     kontakt_name: str = ""  # BT-41 / BT-56
     kontakt_telefon: str = ""  # BT-42 / BT-57
     kontakt_email: str = ""  # BT-43 / BT-58
-    register: str = ""  # BT-30 (Handelsregister), nur Verkäufer
+    register: str = ""  # BT-30 Registernummer Verkäufer bzw. BT-47 Registerkennung Käufer (ab 0.9.7)
     kennung: str = ""  # interne Kundennummer (BT-46 Buyer identifier)
     handelsname: str = ""  # BT-28 / BT-45
     rechtliches: str = ""  # BT-33 weitere rechtliche Angaben (nur Verkäufer)
     # Käufer aus der CSV (ab 0.9.5): Kundenbezeichnung 1–3 als eigene Zeilen im Adressblock der Sichtseite.
     # ``name`` (BT-44) ist dann die Verbindung dieser Zeilen mit je einem Leerzeichen. Leer = eine Zeile ``name``.
     name_zeilen: list[str] = field(default_factory=list)
+    # Verkäufer (ab 0.9.7): Kleinunternehmer nach § 19 UStG – alle Positionen Kategorie E, 0 %, Hinweistext
+    kleinunternehmer: bool = False
+    kleinunternehmer_text: str = ""  # leer = Standardtext (steuerfaelle.FAELLE["KU"])
 
     def namenszeilen(self) -> list[str]:
         """Namenszeilen für den Adressblock. Passen die gespeicherten Zeilen nicht mehr zu ``name`` (z. B. Name
@@ -165,6 +168,7 @@ class Summen:  # BG-22
     zuschlaege: Decimal = Decimal("0")  # BT-108
     netto: Decimal = Decimal("0")  # BT-109
     ust: Decimal = Decimal("0")  # BT-110
+    ust_steuerwaehrung: Decimal | None = None  # BT-111 (nur bei BT-6, ab 0.9.7)
     brutto: Decimal = Decimal("0")  # BT-112
     vorausbezahlt: Decimal = Decimal("0")  # BT-113
     rundung: Decimal = Decimal("0")  # BT-114
@@ -258,6 +262,12 @@ class Rechnung:
     datum: date | None = None  # BT-2
     art: str = "380"  # BT-3
     waehrung: str = "EUR"  # BT-5
+    # Fremdwährung (ab 0.9.7): Steuerwährung BT-6 (immer EUR), Kurs „1 EUR = x BT-5“ aus den Daten, BT-111 laut Quelle
+    steuerwaehrung: str = ""  # BT-6
+    kurs: Decimal | None = None
+    kursdatum: date | None = None
+    ust_eur_quelle: Decimal | None = None  # BT-111 aus CSV/XML/Druck (Gegenprüfung mit dem Kurs)
+    steuerhinweis: str = ""  # Hinweistext zur Steuer aus dem Druck/der Quelle (z. B. „Steuerschuldnerschaft …“)
     leistungsdatum: date | None = None  # BT-72
     leistung_von: date | None = None  # BT-73 (BG-14 Rechnungszeitraum)
     leistung_bis: date | None = None  # BT-74

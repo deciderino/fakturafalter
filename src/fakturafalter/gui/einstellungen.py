@@ -438,6 +438,7 @@ class Einstellungen(QDialog):
         werte = aus_roh(self.abs_slots[ziel])
         for schl, e in self.abs_form.felder.items():
             e.setText(str(werte.get(schl) or ""))
+        self.abs_form.ku.setChecked(bool(werte.get("kleinunternehmer")))
         self._absender_liste()
 
     def _absender_entfernen(self) -> None:
@@ -448,6 +449,7 @@ class Einstellungen(QDialog):
         werte = aus_roh(self.abs_slots[self.abs_i])
         for schl, e in self.abs_form.felder.items():
             e.setText(str(werte.get(schl) or ""))
+        self.abs_form.ku.setChecked(bool(werte.get("kleinunternehmer")))
         self._absender_liste()
         self.toast("info", _("Absender entfernt"), (weg.get("absender") or {}).get("name", ""))
 

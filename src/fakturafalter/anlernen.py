@@ -21,7 +21,16 @@ from datetime import date
 from decimal import Decimal, InvalidOperation
 from pathlib import Path
 
-from . import adapter_pdf, dateien, pdferkennung, pflichtpruefung, protokoll, rechnen, zahlungsziel
+from . import (
+    adapter_pdf,
+    dateien,
+    pdferkennung,
+    pflichtpruefung,
+    protokoll,
+    rechnen,
+    steuerfaelle,
+    zahlungsziel,
+)
 from .absender import Absender, erkennen_aus_zeilen
 from .anschrift import _STRASSE, PLZ_ORT
 from .aufbau import rechnung_bauen
@@ -64,7 +73,20 @@ FELDER: dict[str, tuple[str, str, bool]] = {
     # Gutschrift: nur über einen Rahmen um den Titel bzw. die Bezugszeile (keine Suche auf der ganzen Seite)
     "BT-3": ("Belegart: Titel im Druck (freiwillig)", "text", False),
     "BT-25": ("Bezug: Nummer der Ursprungsrechnung (bei Gutschrift)", "text", False),
+    # ab 0.9.7: Bereich „Steuerhinweis & Kennungen“ (alles freiwillig)
+    "steuerhinweis": ("Steuerhinweis (z. B. Reverse Charge, § 19 UStG)", "text", False),
+    "BT-48": ("Käufer: USt-IdNr. (freiwillig)", "text", False),
+    "BT-47": ("Käufer: Registernummer (freiwillig)", "text", False),
+    "BT-55": ("Käufer: Land (freiwillig)", "land", False),
+    "BT-80": ("Lieferland (freiwillig)", "land", False),
+    "BT-10": ("Leitweg-ID / Käuferreferenz (freiwillig)", "text", False),
+    "BT-5": ("Währung (freiwillig, z. B. USD)", "text", False),
+    "kurs": ("Umrechnungskurs (1 EUR = …)", "kurs", False),
+    "BT-111": ("Umsatzsteuer in EUR", "betrag", False),
 }
+# Steuerfall der Vorlage (Auswahl im Assistenten): "" = aus dem Hinweistext im Druck vorschlagen
+STEUERFAELLE = ("S", *steuerfaelle.REIHENFOLGE)
+STEUERFELDER = ("steuerhinweis", "BT-48", "BT-47", "BT-55", "BT-80", "BT-10", "BT-5", "kurs", "BT-111")
 PFLICHT = [f for f, (_, _, p) in FELDER.items() if p]
 ZONEN_FELDER = pdferkennung.BEREICHE  # Bereich -> Felder (siehe „Bereiche festlegen“)
 ZONEN = tuple(pdferkennung.BEREICHE)
@@ -81,6 +103,10 @@ TYP_HINWEIS = {
     "BT-119": "Gelesener Wert ist kein Steuersatz – nicht übernommen.",
     "BT-3": "Gelesener Wert ist kein Belegtitel – nicht übernommen.",
     "BT-25": "Gelesener Wert enthält keine Rechnungsnummer – nicht übernommen.",
+    "BT-48": "Gelesener Wert ist keine USt-IdNr. – nicht übernommen.",
+    "BT-55": "Gelesener Wert ist kein Land – nicht übernommen.",
+    "BT-80": "Gelesener Wert ist kein Land – nicht übernommen.",
+    "BT-111": "Gelesener Wert ist kein Betrag – nicht übernommen.",
 }
 BELEGART_HINWEIS = {
     "381": "Gutschrift erkannt (Belegart 381).",
@@ -93,9 +119,31 @@ BEZUG_FEHLT = (
 BEZUG_NUR_GUTSCHRIFT = "Bezug gilt nur für Gutschriften – bei einer Rechnung leer lassen."
 
 
+def steuerwert_mapping(wahl: str, text: str = "") -> dict:
+    """Auswahl im Assistenten („S:19“, „S:7“, „AE“, „K“, „G“, „O“, „KU“) -> Steuer-Mapping der Vorlage."""
+    if wahl.startswith("S:"):
+        return {"BT-151": "S", "BT-152": wahl[2:]}
+    m = {"fall": wahl, **steuerfaelle.mapping(wahl, text)}
+    if not text:
+        m.pop("BT-120", None)  # Text je Rechnung aus dem Druck, sonst Standardtext
+    return m
+
+
+def steuerwert_kennung(m: dict | None) -> str:
+    """Steuer-Mapping -> Auswahlwert („S:19“, „AE“ …); "" wenn nicht zuzuordnen."""
+    if not m:
+        return ""
+    f = str(m.get("fall") or "")
+    if f in steuerfaelle.FAELLE:
+        return f
+    if str(m.get("BT-151", "S")) == "S":
+        return f"S:{pdferkennung._satz(Decimal(str(m.get('BT-152', 0))))}".replace(",", ".")
+    return ""
+
+
 def wert_passt_feld(feld: str, text: str) -> bool:
     """Typprüfung je Feld (PLZ, Datum, Betrag, Satz); Felder ohne Typregel passen immer."""
-    if feld == "leistung":
+    if feld in ("leistung", "BT-55", "BT-80", "BT-111"):
         return lesen(feld, text) is not None
     return feld not in TYP_HINWEIS or pdferkennung.wert_passt(feld, text)
 
@@ -143,6 +191,11 @@ _BESCHRIFTUNG: dict[str, str] = {
     r"purchase order|ihre referenz|referenz-?(?:nr|nummer))",
     "kundennummer": r"^(?:kunden-?(?:nr|nummer)|kd\.?-?(?:nr|nummer)|kunde\s*:|customer (?:no|id)|ihre kunden-?nr|"
     r"debitoren?-?(?:nr|nummer))",
+    # ab 0.9.7 – nur eindeutige Beschriftungen des Kunden (die eigene USt-IdNr. steht im Briefkopf/Fuß)
+    "BT-48": r"^(?:ihre\s+ust|ust-?id(?:nr)?\.?\s*(?:des\s+)?(?:kunden|empfängers|leistungsempfängers)|"
+    r"kunden-?ust|your\s+vat|customer\s+vat|vat\s+(?:no|id)\.?\s+(?:of\s+)?(?:the\s+)?customer)",
+    "BT-10": r"^(?:leitweg-?id|käuferreferenz|buyer\s+reference)",
+    "BT-111": r"^(?:ust|umsatzsteuer|mwst|vat)\.?\s+in\s+(?:eur|€)",
 }
 # Beschriftungen über dem Anschriftfeld u. Ä.: nur Text, kein Wert
 _BESCHRIFTUNG_ALLGEMEIN = (
@@ -203,6 +256,10 @@ def lesen(feld: str, text: str):
     if typ == "betrag":
         b = betraege(t) or zahlen(t)
         return b[0][0] if b else None
+    if typ == "land":
+        return steuerfaelle.land_code(t)
+    if typ == "kurs":
+        return t if pdferkennung.kurs_aus_text(t) else None
     if typ == "satz":
         m = re.search(r"(\d{1,2}(?:[.,]\d{1,2})?)\s*%?", t)
         if not m:
@@ -265,6 +322,8 @@ class Tabelle:
     # Spalten als eigene Rahmen („Spalte hinzufügen“): [Code, x0, x1], nach x0 sortiert. Sind welche da, gelten
     # sie statt grenzen/spalten; Wörter außerhalb aller Spaltenrahmen zählen nicht, die Betragsspalte trägt die Zeile.
     spaltenrahmen: list[list] = field(default_factory=list)
+    # ab 0.9.7: Wert der Steuerspalte -> Steuerfall („S:19“, „AE“, „K“ …), vom Nutzer gewählt
+    steuerwerte: dict[str, str] = field(default_factory=dict)
 
     def leer(self) -> bool:
         return self.x1 <= self.x0 or self.bottom <= self.top
@@ -343,6 +402,8 @@ class Sitzung:
         self.zonen: dict[str, dict] = pdferkennung.bereiche_laden(v)
         self.zonen_seite: dict[str, int] = {}
         self.werte: dict[str, Vorschlag] = self.vorschlagen()
+        # Steuerfall der Vorlage: "" = Vorschlag aus dem Hinweistext; sonst S/AE/K/G/O/KU (Auswahl im Assistenten)
+        self.steuerfall: str = self._steuerfall_aus_vorlage()
         self.tabelle: Tabelle = self.tabelle_vorschlagen()
         self.summen_gegenprobe()
         # nach dem Speichern: Selbstkontrolle mit der neuen Vorlage -> {Feld: (bestätigt, neu gelesen)}
@@ -503,9 +564,9 @@ class Sitzung:
         kaeufer = self._kaeufer_suchen()
         zone_kaeufer = self._anschrift_aus_zone()
         for feld in FELDER:
-            if feld in ZONEN_FELDER.get("kopf", ()) + ZONEN_FELDER.get("summen", ()) + (
-                "BT-20",
-            ) and self._zone_von(feld):
+            if feld in ZONEN_FELDER.get("kopf", ()) + ZONEN_FELDER.get("summen", ()) + ZONEN_FELDER.get(
+                "steuer", ()
+            ) + ("BT-20",) and self._zone_von(feld):
                 out[feld] = self._vorschlag_in_zone(feld)
                 continue
             if (
@@ -1021,6 +1082,8 @@ class Sitzung:
                     "Mehrere Steuersätze gefunden. Ordne in den Positionen die Spalte USt-Satz zu.",
                 )
             return (f"{saetze[0]} %", "") if saetze else ("", "")
+        if feld in STEUERFELDER and feld not in _BESCHRIFTUNG or feld == "BT-111":
+            return self._steuer_heuristik(feld)
         if feld == "BT-20":
             self._bt20_rahmen = None
             baustein = pdferkennung.zahlungsbaustein(self.zeilen)
@@ -1060,6 +1123,54 @@ class Sitzung:
                 return anzeigen(feld, d[0]), ""
             return t, ""
         return "", ""
+
+    def _steuer_heuristik(self, feld: str) -> tuple[str, str]:
+        """Steuerhinweis, Währung, Kurs und USt in EUR aus dem Druck vorschlagen (ab 0.9.7)."""
+        kopf: dict = {}
+        pdferkennung.steuer_kopf_ergaenzen(kopf, self.zeilen, None)
+        w = kopf.get(feld, (None,))[0]
+        if w is None or w == "":
+            return "", ""
+        if feld == "steuerhinweis":
+            return str(w), "Steuerhinweis im Druck gefunden. Steuerfall unten bei den Positionen prüfen."
+        if feld == "BT-5":
+            return str(w), "Fremdwährung im Druck gefunden – Kurs oder USt in EUR angeben."
+        if isinstance(w, Decimal):
+            return _de(w), ""
+        return str(w), ""
+
+    # -- Steuerfall (ab 0.9.7) ---------------------------------------------------------------------
+    def steuerfall_vorschlag(self) -> str:
+        """Steuerfall aus dem Hinweistext (Feld oder Druck), Kleinunternehmer-Schalter des Absenders, sonst S."""
+        f = steuerfaelle.erkennen(self.werte["steuerhinweis"].wert if "steuerhinweis" in self.werte else "")
+        if f:
+            return f
+        if getattr(self.absender, "kleinunternehmer", False):
+            return "KU"
+        return "S"
+
+    def steuerfall_setzen(self, fall: str) -> None:
+        """Auswahl im Assistenten ("" = Vorschlag). Kleinunternehmer ist eine Eigenschaft des Absenders: die Wahl
+        setzt dessen Schalter (wird mit der Vorlage im Profil gespeichert)."""
+        self.steuerfall = fall if fall in STEUERFAELLE else ""
+        if fall == "KU":
+            self.absender.kleinunternehmer = True
+        elif fall and self.absender.kleinunternehmer:
+            self.absender.kleinunternehmer = False
+
+    def steuerfall_wirksam(self) -> str:
+        return getattr(self, "steuerfall", "") or self.steuerfall_vorschlag()
+
+    def _steuerfall_aus_vorlage(self) -> str:
+        st = ((self.vorlage or {}).get("positionen") or {}).get("steuer_fest") or {}
+        f = str(st.get("fall") or "")
+        return f if f in steuerfaelle.FAELLE else ""
+
+    def steuerfall_text(self) -> str:
+        """BT-120 für den Steuerfall: Hinweistext aus dem Druck, sonst der Standardtext."""
+        f = self.steuerfall_wirksam()
+        t = self.werte["steuerhinweis"].wert if "steuerhinweis" in self.werte else ""
+        return t if t and steuerfaelle.erkennen(t) == f else steuerfaelle.standardtext(f)
 
     def _seite0(self) -> tuple[float, float]:
         """Breite und Höhe der ersten Seite in pt (A4, wenn unbekannt)."""
@@ -1327,8 +1438,10 @@ class Sitzung:
         return self.setzen(feld, vs.wert, vs.woerter)
 
     def fehlende(self) -> list[str]:
-        """Pflichtfelder, die noch nicht bestätigt sind (Status ≠ erkannt)."""
-        return [f for f in PFLICHT if self.werte[f].status != "erkannt"]
+        """Pflichtfelder, die noch nicht bestätigt sind (Status ≠ erkannt). Ab 0.9.7: ohne Umsatzsteuer
+        (Reverse Charge, igL, Ausfuhr, nicht steuerbar, § 19 UStG) ist der Steuersatz keine Pflicht (0 %)."""
+        frei = ("BT-119",) if self.steuerfall_wirksam() != "S" else ()
+        return [f for f in PFLICHT if f not in frei and self.werte[f].status != "erkannt"]
 
     def wert(self, feld: str):
         vs = self.werte[feld]
@@ -1422,6 +1535,8 @@ class Sitzung:
             spalten=[n for n, _ in sp],
             preiseinheit=pe,
             einheiten=dict(pv.get("einheiten") or {}),
+            steuerwerte={k: steuerwert_kennung(m) for k, m in (pv.get("steuer") or {}).items()
+                         if steuerwert_kennung(m)},
         )
         if pv.get("spalten_fest"):
             t.spaltenrahmen = [[n, a, b] for n, (a, b) in sp]
@@ -1575,6 +1690,7 @@ class Sitzung:
     def rahmen_setzen(self, seite: int, x0: float, top: float, x1: float, bottom: float) -> Tabelle:
         """Nutzer hat einen neuen Rahmen gezogen: Spalten neu erkennen, Einheiten-Änderungen behalten."""
         einh, pe = self.tabelle.einheiten, self.tabelle.preiseinheit
+        stw = self.tabelle.steuerwerte
         t = Tabelle(
             seite=seite,
             x0=min(x0, x1),
@@ -1583,6 +1699,7 @@ class Sitzung:
             bottom=max(top, bottom),
             preiseinheit=pe if pe != "spalte" else "1",
             einheiten=einh,
+            steuerwerte=stw,
         )
         kopf = self._kopf_ueber(t)
         if kopf is not None:  # Rahmen erst unter der Kopfzeile begonnen
@@ -1878,12 +1995,23 @@ class Sitzung:
         else:
             pv.update(pdferkennung.einheit_ohne_spalte(pos, t.einheiten))
         satz = self.wert("BT-119")
+        fall = self.steuerfall_wirksam()
         if "steuer" in pv["spalten"]:
+            # Steuerspalte: Steuerfall je Position (ab 0.9.7 auch „RC“, „igL“, „0 %“ mit Hinweis; Auswahl je Wert)
             st = {}
             buchstaben = pdferkennung.steuerbuchstaben_aus_zeilen(self.zeilen)
+            wahl = getattr(t, "steuerwerte", {}) or {}
             for p in pos:
+                w = wahl.get(p.steuer_text)
+                kurz = steuerfaelle.erkennen_kurz(p.steuer_text)
                 m = re.search(r"(\d{1,2}(?:,\d{1,2})?)", p.steuer_text)
-                if m:
+                if w:
+                    st[p.steuer_text] = steuerwert_mapping(w, self.steuerfall_text() if w == fall else "")
+                elif kurz:
+                    st[p.steuer_text] = steuerwert_mapping(kurz, self.steuerfall_text() if kurz == fall else "")
+                elif m and Decimal(m[1].replace(",", ".")) == 0 and fall != "S":
+                    st[p.steuer_text] = steuerwert_mapping(fall, self.steuerfall_text())
+                elif m:
                     st[p.steuer_text] = {"BT-151": "S", "BT-152": m[1].replace(",", ".")}
                 elif pdferkennung.ist_steuerbuchstabe(p.steuer_text):
                     if p.steuer_text in buchstaben:
@@ -1892,11 +2020,28 @@ class Sitzung:
                 elif satz is not None:
                     st[p.steuer_text] = {"BT-151": "S", "BT-152": str(satz)}
             pv["steuer"] = st
+        elif fall != "S":  # Steuersatz nur im Summenblock: ein Steuerfall je Rechnung
+            pv["steuer_fest"] = {"fall": fall, **steuerfaelle.mapping(fall)}
+            pv["steuer_fest"].pop("BT-120", None)  # Text kommt je Rechnung aus dem Druck (sonst Standardtext)
         elif (
             satz is not None
         ):  # ohne Steuersatz kein stiller Standard (19 %): Positionen bleiben „prüfen“
             pv["steuer_fest"] = {"BT-151": "S", "BT-152": str(satz)}
         return pv
+
+    def steuerwerte_offen(self) -> dict[str, str]:
+        """Werte der Steuerspalte -> gewählter/erkannter Steuerfall („S:19“, „AE“ …) oder "" (offen)."""
+        pv = self.pv() or {}
+        if "steuer" not in (pv.get("spalten") or {}):
+            return {}
+        wahl = getattr(self.tabelle, "steuerwerte", {}) or {}
+        out = {}
+        for text, m in (pv.get("steuer") or {}).items():
+            out[text] = wahl.get(text) or steuerwert_kennung(m)
+        for p in self.positionen():
+            if p.steuer_text and p.steuer_text not in out:
+                out[p.steuer_text] = wahl.get(p.steuer_text, "")
+        return out
 
     @staticmethod
     def _nach_tabelle(pv: dict, nach: list[Zeile], letzte_top: float) -> list[Zeile]:
@@ -2099,6 +2244,8 @@ class Sitzung:
         )
         vk, zb = self.absender.bloecke()
         prof["verkaeufer"] = {**(prof.get("verkaeufer") or {}), **vk}
+        if not self.absender.kleinunternehmer:
+            prof["verkaeufer"].pop("kleinunternehmer", None)
         prof["zahlung"] = {**(prof.get("zahlung") or {}), **zb}
         return prof
 
@@ -2140,10 +2287,13 @@ class Sitzung:
             "kundennummer",
             *KAEUFER_FELDER_ANLERNEN,
             *KAEUFER_NEBENFELDER,
+            *STEUERFELDER,
         ):
             w = self.wert(f)
             if w is not None and w != "":
                 kopf[f] = (w, h)
+        if "steuerhinweis" not in kopf and self.steuerfall_wirksam() not in ("S", "KU"):
+            kopf["steuerhinweis"] = (self.steuerfall_text(), h)
         art = self.belegart()
         if art:
             kopf["BT-3"] = (art, h)
@@ -2184,6 +2334,8 @@ class Sitzung:
             kopf.setdefault(f, (t_, h))
         r = rechnung_bauen(kopf, pos, definition, self.k, quelle=str(self.pfad))
         zahlungsziel.profiltext_sperren(r, self.volltext())
+        druck = pdferkennung.steuerhinweis_im_druck(self.zeilen)
+        pdferkennung.steuerfall_abgleichen(r, (druck[1] if druck else "") or self.werte["steuerhinweis"].wert)
         r.profil = pdferkennung.profil_name(definition)
         r.sicht_pdf = (str(self.pfad), sorted({z.seite for z in self.zeilen}))
         rechnen.berechnen(r)
@@ -2691,6 +2843,8 @@ def profil_absender_schreiben(prof: dict, a: Absender) -> None:
 
     roh = lade_datei(datei)
     roh["verkaeufer"] = {**(roh.get("verkaeufer") or {}), **vk}
+    if not a.kleinunternehmer:
+        roh["verkaeufer"].pop("kleinunternehmer", None)
     roh["zahlung"] = {**(roh.get("zahlung") or {}), **zb}
     _yaml_schreiben(datei, roh)
     prof["verkaeufer"], prof["zahlung"] = roh["verkaeufer"], roh["zahlung"]

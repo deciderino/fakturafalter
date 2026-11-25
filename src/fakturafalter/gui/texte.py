@@ -1015,6 +1015,17 @@ _ASSISTENT = {
     "Objektkennung (Position)": "Object identifier (line)",
     "Zuschlag % (Position)": "Charge % (line)",
     "Zuschlaggrund (Position)": "Charge reason (line)",
+    # ab 0.9.7: Steuer-Sonderfälle und Fremdwährung
+    "Kunde – Handelsregister / Registernummer": "Customer – trade register / registration no.",
+    "Steuerhinweis (z. B. Reverse Charge)": "Tax note (e.g. reverse charge)",
+    "Währung (z. B. EUR, USD)": "Currency (e.g. EUR, USD)",
+    "Umrechnungskurs (1 EUR = … Fremdwährung)": "Exchange rate (1 EUR = … foreign currency)",
+    "Kursdatum": "Exchange rate date",
+    "Umsatzsteuer in EUR": "VAT in EUR",
+    "0 % – innergemeinschaftliche Lieferung": "0 % – intra-community supply",
+    "0 % – Ausfuhrlieferung (Drittland)": "0 % – export (non-EU)",
+    "0 % – nicht im Inland steuerbar": "0 % – not taxable in Germany",
+    "0 % – Kleinunternehmer (§ 19 UStG)": "0 % – small business (§ 19 UStG)",
     "Gläubiger-ID (freiwillig, nur für Lastschrift)": "Creditor ID (optional, direct debit only)",
 }
 EN.update({k: v for k, v in _ASSISTENT.items() if k not in EN})

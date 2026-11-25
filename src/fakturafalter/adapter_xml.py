@@ -18,7 +18,7 @@ from pathlib import Path
 
 from lxml import etree
 
-from . import sicht
+from . import sicht, steuerfaelle
 from .konfig import Konfig
 from .modell import (
     Anhang,
@@ -344,6 +344,7 @@ def _cii(lz: _Leser, k: Konfig) -> Rechnung:
 
     se = lz.el(tx, "ram:ApplicableHeaderTradeSettlement")
     r.waehrung = lz.t(se, "ram:InvoiceCurrencyCode") or "EUR"
+    steuerwaehrung = lz.t(se, "ram:TaxCurrencyCode")  # BT-6
     befreiung = {}
     for t in lz.alle(se, "ram:ApplicableTradeTax"):
         befreiung[(lz.t(t, "ram:CategoryCode"), _dez(lz.t(t, "ram:RateApplicablePercent")))] = (
@@ -392,7 +393,7 @@ def _cii(lz: _Leser, k: Konfig) -> Rechnung:
             "BT-107": lz.t(ms, "ram:AllowanceTotalAmount"),
             "BT-108": lz.t(ms, "ram:ChargeTotalAmount"),
             "BT-109": lz.t(ms, "ram:TaxBasisTotalAmount"),
-            "BT-110": lz.t(ms, "ram:TaxTotalAmount"),
+            "BT-110": _steuerbetrag(lz.alle(ms, "ram:TaxTotalAmount"), r, steuerwaehrung),
             "BT-112": lz.t(ms, "ram:GrandTotalAmount"),
             "BT-115": lz.t(ms, "ram:DuePayableAmount"),
         },
@@ -559,6 +560,7 @@ def _ubl(lz: _Leser, k: Konfig) -> Rechnung:
         "381" if gutschrift else "380"
     )
     r.waehrung = t(root, "cbc:DocumentCurrencyCode") or "EUR"
+    steuerwaehrung = t(root, "cbc:TaxCurrencyCode")  # BT-6
     r.leitweg_id = t(root, "cbc:BuyerReference")
     ref = r.referenzen
     ref.buchung = t(root, "cbc:AccountingCost")  # BT-19
@@ -662,7 +664,9 @@ def _ubl(lz: _Leser, k: Konfig) -> Rechnung:
             "BT-107": t(ms, "cbc:AllowanceTotalAmount"),
             "BT-108": t(ms, "cbc:ChargeTotalAmount"),
             "BT-109": t(ms, "cbc:TaxExclusiveAmount"),
-            "BT-110": t(root, "cac:TaxTotal/cbc:TaxAmount"),
+            "BT-110": _steuerbetrag(
+                [lz.el(tt, "cbc:TaxAmount") for tt in lz.alle(root, "cac:TaxTotal")], r, steuerwaehrung
+            ),
             "BT-112": t(ms, "cbc:TaxInclusiveAmount"),
             "BT-115": t(ms, "cbc:PayableAmount"),
         },
@@ -760,6 +764,32 @@ def _anhang(r: Rechnung, kennung: str, beschreibung: str, uri: str, binaer) -> A
             return a
         a.daten, a.mime, a.dateiname = daten, binaer.get("mimeCode", ""), binaer.get("filename", "")
     return a
+
+
+def _steuerbetrag(elemente: list, r: Rechnung, steuerwaehrung: str) -> str:
+    """BT-110 (Rechnungswährung) aus einem oder zwei Steuerbeträgen; der in der Steuerwährung (BT-6) wird BT-111
+    und gilt ab 0.9.7 als Quelle für „USt in EUR“. Dazu der Kurs aus den Bemerkungen (eigene Ausgabe schreibt ihn
+    dort hin), falls vorhanden."""
+    els = [e for e in elemente if e is not None]
+    rw = (r.waehrung or "EUR").upper()
+    sw = (steuerwaehrung or "").upper()
+    haupt = next((e for e in els if (e.get("currencyID") or rw).upper() == rw), els[0] if els else None)
+    if sw and sw != rw:
+        neben = next((e for e in els if e is not haupt and (e.get("currencyID") or "").upper() == sw), None)
+        if sw != "EUR":
+            r.hinweis("pruefen", f"Steuerwährung (BT-6) {sw} wird nicht unterstützt – nur EUR.", "BT-6")
+        elif neben is not None:
+            r.ust_eur_quelle = _dez(neben.text or "")
+        else:
+            r.hinweis("pruefen", "Steuerwährung EUR (BT-6) angegeben, aber kein Steuerbetrag in EUR (BT-111).",
+                      "BT-111")
+    if rw != "EUR" and r.kurs is None:
+        for text, _ in r.bemerkungen:
+            kurs, fw = steuerfaelle.kurs_lesen(text, rw)
+            if kurs is not None and fw in (None, "", rw):
+                r.kurs = kurs
+                break
+    return (haupt.text or "").strip() if haupt is not None else ""
 
 
 def _kontrolle(r: Rechnung, werte: dict[str, str], vorausbezahlt: str, rundung: str = "") -> None:
