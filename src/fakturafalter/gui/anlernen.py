@@ -1572,7 +1572,9 @@ class AnlernAssistent(QDialog):
 
     def _feld_anzeigen(self, f: str, *, _kette: bool = False) -> None:
         vs = self.s.werte[f]
-        pflicht = anlernen.FELDER[f][2] and not (f == "BT-119" and self.s.steuerfall_wirksam() != "S")
+        pflicht = anlernen.FELDER[f][2] and not (
+            f == "BT-119" and self.s.steuerfall_wirksam() != "S"
+        )
         zust = vs.status if vs.status != "fehlt" or pflicht else "aus"
         zusatz = ""
         if f == "BT-20":

@@ -2,12 +2,13 @@
 # Copyright 2026 Fakturafalter-Mitwirkende
 """0.6.2: Gutschrift ohne Fälligkeit in der CII, Prüfziffer USt-IdNr. des Käufers (BT-48),
 GTIN-Warnung (BT-157). Alle Daten erfunden."""
+import pytest
 from lxml import etree
 
-import pytest
-
-from fakturafalter import cii, pflichtpruefung as pp, pipeline, rechnen, sicht
+from fakturafalter import cii, pipeline, rechnen, sicht
+from fakturafalter import pflichtpruefung as pp
 from fakturafalter.cii import NS
+
 from .conftest import BEISPIELE
 from .test_pflichtpruefung import CTX, felder, gueltig
 from .voll import volle_rechnung
@@ -96,7 +97,7 @@ def test_gtin_pruefziffer(nr, ok):
 
 
 def test_gtin_ungueltig_ist_warnung_nicht_pruefen():
-    r = trans = gueltig()
+    r = gueltig()
     r.positionen[0].standard_id, r.positionen[0].standard_schema = "4000000000017", "0160"
     assert felder(r) == {} and r.status == "ok"
     w = [h for h in r.hinweise if h.stufe == "warnung" and h.feld == "Pos 1 BT-157"]

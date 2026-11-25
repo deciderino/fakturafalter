@@ -33,7 +33,9 @@ class Fall:
 
 FAELLE: dict[str, Fall] = {
     "AE": Fall(
-        "AE", "AE", "VATEX-EU-AE",
+        "AE",
+        "AE",
+        "VATEX-EU-AE",
         "Steuerschuldnerschaft des Leistungsempfängers",
         "Reverse charge",
         "Reverse Charge (§ 13b UStG, Steuerschuldnerschaft des Leistungsempfängers)",
@@ -42,7 +44,9 @@ FAELLE: dict[str, Fall] = {
         r"rc|r\.c\.|reverse(?:\s*charge)?|13b|§\s*13b|ae",
     ),
     "K": Fall(
-        "K", "K", "VATEX-EU-IC",
+        "K",
+        "K",
+        "VATEX-EU-IC",
         "Steuerfreie innergemeinschaftliche Lieferung",
         "Intra-community supply (VAT exempt)",
         "Innergemeinschaftliche Lieferung (§ 4 Nr. 1 Buchst. b, § 6a UStG)",
@@ -51,7 +55,9 @@ FAELLE: dict[str, Fall] = {
         r"igl|ig\.?\s*l\.?|innergem\.?|ig|k",
     ),
     "G": Fall(
-        "G", "G", "VATEX-EU-G",
+        "G",
+        "G",
+        "VATEX-EU-G",
         "Steuerfreie Ausfuhrlieferung",
         "Export outside the EU (VAT exempt)",
         "Ausfuhrlieferung in ein Drittland (§ 4 Nr. 1 Buchst. a, § 6 UStG)",
@@ -60,7 +66,9 @@ FAELLE: dict[str, Fall] = {
         r"ausfuhr|export|g",
     ),
     "O": Fall(
-        "O", "O", "VATEX-EU-O",
+        "O",
+        "O",
+        "VATEX-EU-O",
         "Nicht im Inland steuerbare Leistung",
         "Not subject to German VAT",
         "Nicht steuerbare Leistung",
@@ -68,7 +76,9 @@ FAELLE: dict[str, Fall] = {
         r"n\.?\s*st\.?|nicht\s*steuerbar|o",
     ),
     "KU": Fall(
-        "KU", "E", "",
+        "KU",
+        "E",
+        "",
         "Gemäß § 19 UStG wird keine Umsatzsteuer berechnet.",
         "No VAT is charged under the small business scheme (§ 19 UStG).",
         "Kleinunternehmer (§ 19 UStG)",
@@ -78,7 +88,10 @@ FAELLE: dict[str, Fall] = {
 }
 # Reihenfolge der Erkennung: Kleinunternehmer zuerst (der Text nennt oft auch „steuerfrei“)
 REIHENFOLGE = ("KU", "AE", "K", "G", "O")
-NAMEN = {"S": "Regelbesteuerung (Steuersatz aus dem Druck)", **{k: f.name for k, f in FAELLE.items()}}
+NAMEN = {
+    "S": "Regelbesteuerung (Steuersatz aus dem Druck)",
+    **{k: f.name for k, f in FAELLE.items()},
+}
 
 
 def erkennen(text: str) -> str | None:
@@ -100,7 +113,11 @@ def alle_erkennen(text: str) -> list[str]:
 def erkennen_kurz(wert: str) -> str | None:
     """Kennzeichen einer Steuerspalte („RC“, „igL“, „0 % igL“, „Ausfuhr“) -> Kennung oder None.
     Einzelbuchstaben (außer bei vollem Wort) gelten nicht – die sind Steuerbuchstaben („A“, „B“)."""
-    t = re.sub(r"(?<![§\d])(?<!§ )\b\d+(?:[.,]\d+)?\s*%?(?!\w)", " ", str(wert or "")).strip().casefold()
+    t = (
+        re.sub(r"(?<![§\d])(?<!§ )\b\d+(?:[.,]\d+)?\s*%?(?!\w)", " ", str(wert or ""))
+        .strip()
+        .casefold()
+    )
     t = " ".join(t.split())
     if not t:
         return None
@@ -119,7 +136,11 @@ def mapping(kennung: str, text: str = "", satz: str | Decimal | None = None) -> 
     if kennung == "S":
         return {"BT-151": "S", "BT-152": str(satz if satz is not None else "19")}
     f = FAELLE[kennung]
-    m = {"BT-151": f.kategorie, "BT-152": "0", "BT-120": " ".join(str(text or "").split()) or f.text_de}
+    m = {
+        "BT-151": f.kategorie,
+        "BT-152": "0",
+        "BT-120": " ".join(str(text or "").split()) or f.text_de,
+    }
     if f.code:
         m["BT-121"] = f.code
     return m
@@ -132,7 +153,9 @@ def steuer(kennung: str, text: str = "") -> Steuer:
 
 def fall_von(st: Steuer) -> str:
     """Steuer einer Position/Zeile -> Kennung („S“, „Z“, „E“, „AE“, „K“, „G“, „O“, „KU“, „L“, „M“)."""
-    if st.kategorie == "E" and re.search(FAELLE["KU"].muster, (st.befreiungsgrund or "").casefold()):
+    if st.kategorie == "E" and re.search(
+        FAELLE["KU"].muster, (st.befreiungsgrund or "").casefold()
+    ):
         return "KU"
     return st.kategorie
 
@@ -152,22 +175,62 @@ EU = frozenset(
 UST_PRAEFIX = {"GR": "EL"}
 # Ländernamen (deutsch/englisch, kleingeschrieben) -> ISO 3166-1 alpha-2; nur die häufigen, sonst Code eintragen
 _NAMEN = {
-    "AT": "österreich austria", "BE": "belgien belgium", "BG": "bulgarien bulgaria", "CY": "zypern cyprus",
-    "CZ": "tschechien tschechische_republik czechia czech_republic", "DE": "deutschland germany brd",
-    "DK": "dänemark denmark", "EE": "estland estonia", "ES": "spanien spain españa", "FI": "finnland finland",
-    "FR": "frankreich france", "GR": "griechenland greece", "HR": "kroatien croatia", "HU": "ungarn hungary",
-    "IE": "irland ireland", "IT": "italien italy italia", "LT": "litauen lithuania", "LU": "luxemburg luxembourg",
-    "LV": "lettland latvia", "MT": "malta", "NL": "niederlande netherlands holland", "PL": "polen poland polska",
-    "PT": "portugal", "RO": "rumänien romania", "SE": "schweden sweden", "SI": "slowenien slovenia",
-    "SK": "slowakei slovakia", "CH": "schweiz switzerland suisse svizzera", "LI": "liechtenstein",
-    "NO": "norwegen norway", "IS": "island iceland", "GB": "großbritannien grossbritannien vereinigtes_königreich "
-    "united_kingdom uk england", "US": "usa vereinigte_staaten united_states", "CA": "kanada canada",
-    "CN": "china", "JP": "japan", "TR": "türkei turkey türkiye", "AU": "australien australia",
-    "IN": "indien india", "BR": "brasilien brazil", "MX": "mexiko mexico", "AE": "vereinigte_arabische_emirate "
-    "united_arab_emirates", "SG": "singapur singapore", "KR": "südkorea south_korea", "UA": "ukraine",
-    "RS": "serbien serbia", "BA": "bosnien bosnia", "MK": "nordmazedonien north_macedonia", "AL": "albanien albania",
-    "ME": "montenegro", "IL": "israel", "ZA": "südafrika south_africa", "MC": "monaco", "SM": "san_marino",
-    "AD": "andorra", "VA": "vatikan vatican",
+    "AT": "österreich austria",
+    "BE": "belgien belgium",
+    "BG": "bulgarien bulgaria",
+    "CY": "zypern cyprus",
+    "CZ": "tschechien tschechische_republik czechia czech_republic",
+    "DE": "deutschland germany brd",
+    "DK": "dänemark denmark",
+    "EE": "estland estonia",
+    "ES": "spanien spain españa",
+    "FI": "finnland finland",
+    "FR": "frankreich france",
+    "GR": "griechenland greece",
+    "HR": "kroatien croatia",
+    "HU": "ungarn hungary",
+    "IE": "irland ireland",
+    "IT": "italien italy italia",
+    "LT": "litauen lithuania",
+    "LU": "luxemburg luxembourg",
+    "LV": "lettland latvia",
+    "MT": "malta",
+    "NL": "niederlande netherlands holland",
+    "PL": "polen poland polska",
+    "PT": "portugal",
+    "RO": "rumänien romania",
+    "SE": "schweden sweden",
+    "SI": "slowenien slovenia",
+    "SK": "slowakei slovakia",
+    "CH": "schweiz switzerland suisse svizzera",
+    "LI": "liechtenstein",
+    "NO": "norwegen norway",
+    "IS": "island iceland",
+    "GB": "großbritannien grossbritannien vereinigtes_königreich united_kingdom uk england",
+    "US": "usa vereinigte_staaten united_states",
+    "CA": "kanada canada",
+    "CN": "china",
+    "JP": "japan",
+    "TR": "türkei turkey türkiye",
+    "AU": "australien australia",
+    "IN": "indien india",
+    "BR": "brasilien brazil",
+    "MX": "mexiko mexico",
+    "AE": "vereinigte_arabische_emirate united_arab_emirates",
+    "SG": "singapur singapore",
+    "KR": "südkorea south_korea",
+    "UA": "ukraine",
+    "RS": "serbien serbia",
+    "BA": "bosnien bosnia",
+    "MK": "nordmazedonien north_macedonia",
+    "AL": "albanien albania",
+    "ME": "montenegro",
+    "IL": "israel",
+    "ZA": "südafrika south_africa",
+    "MC": "monaco",
+    "SM": "san_marino",
+    "AD": "andorra",
+    "VA": "vatikan vatican",
 }
 LAENDERNAMEN = {n.replace("_", " "): code for code, ns in _NAMEN.items() for n in ns.split()}
 
@@ -190,12 +253,33 @@ def ist_eu(land: str) -> bool:
 
 # ------------------------------------------------------------------ USt-IdNr. (Aufbau laut BZSt, nur Format)
 UST_FORMATE = {
-    "AT": r"ATU\d{8}", "BE": r"BE[01]\d{9}", "BG": r"BG\d{9,10}", "CY": r"CY\d{8}[A-Z]",
-    "CZ": r"CZ\d{8,10}", "DE": r"DE\d{9}", "DK": r"DK\d{8}", "EE": r"EE\d{9}", "EL": r"EL\d{9}",
-    "ES": r"ES[A-Z0-9]\d{7}[A-Z0-9]", "FI": r"FI\d{8}", "FR": r"FR[A-HJ-NP-Z0-9]{2}\d{9}", "HR": r"HR\d{11}",
-    "HU": r"HU\d{8}", "IE": r"IE\d[A-Z0-9+*]\d{5}[A-Z]{1,2}", "IT": r"IT\d{11}", "LT": r"LT(?:\d{9}|\d{12})",
-    "LU": r"LU\d{8}", "LV": r"LV\d{11}", "MT": r"MT\d{8}", "NL": r"NL\d{9}B\d{2}", "PL": r"PL\d{10}",
-    "PT": r"PT\d{9}", "RO": r"RO\d{2,10}", "SE": r"SE\d{10}01", "SI": r"SI\d{8}", "SK": r"SK\d{10}",
+    "AT": r"ATU\d{8}",
+    "BE": r"BE[01]\d{9}",
+    "BG": r"BG\d{9,10}",
+    "CY": r"CY\d{8}[A-Z]",
+    "CZ": r"CZ\d{8,10}",
+    "DE": r"DE\d{9}",
+    "DK": r"DK\d{8}",
+    "EE": r"EE\d{9}",
+    "EL": r"EL\d{9}",
+    "ES": r"ES[A-Z0-9]\d{7}[A-Z0-9]",
+    "FI": r"FI\d{8}",
+    "FR": r"FR[A-HJ-NP-Z0-9]{2}\d{9}",
+    "HR": r"HR\d{11}",
+    "HU": r"HU\d{8}",
+    "IE": r"IE\d[A-Z0-9+*]\d{5}[A-Z]{1,2}",
+    "IT": r"IT\d{11}",
+    "LT": r"LT(?:\d{9}|\d{12})",
+    "LU": r"LU\d{8}",
+    "LV": r"LV\d{11}",
+    "MT": r"MT\d{8}",
+    "NL": r"NL\d{9}B\d{2}",
+    "PL": r"PL\d{10}",
+    "PT": r"PT\d{9}",
+    "RO": r"RO\d{2,10}",
+    "SE": r"SE\d{10}01",
+    "SI": r"SI\d{8}",
+    "SK": r"SK\d{10}",
     "XI": r"XI(?:\d{9}|\d{12}|GD\d{3}|HA\d{3})",
 }
 
@@ -222,8 +306,19 @@ def ust_id_format_ok(u: str) -> bool | None:
 
 
 # ------------------------------------------------------------------ Währung und Kurs
-SYMBOLE = {"€": "EUR", "$": "USD", "US$": "USD", "£": "GBP", "¥": "JPY", "Fr.": "CHF", "SFr.": "CHF",
-           "sFr.": "CHF", "zł": "PLN", "Kč": "CZK", "kr": None}
+SYMBOLE = {
+    "€": "EUR",
+    "$": "USD",
+    "US$": "USD",
+    "£": "GBP",
+    "¥": "JPY",
+    "Fr.": "CHF",
+    "SFr.": "CHF",
+    "sFr.": "CHF",
+    "zł": "PLN",
+    "Kč": "CZK",
+    "kr": None,
+}
 _SYM_RX = re.compile(r"US\$|SFr\.|sFr\.|Fr\.|zł|Kč|[€$£¥]")
 _CODE_RX = re.compile(r"(?<![A-Za-z])([A-Z]{3})(?![A-Za-z])")
 
@@ -232,7 +327,9 @@ def waehrungen_im_text(text: str) -> list[str]:
     """Währungscodes, die im Text vorkommen (Symbole oder ISO-Codes), in der Reihenfolge des Auftretens."""
     out: list[str] = []
     t = str(text or "")
-    for m in sorted(list(_SYM_RX.finditer(t)) + list(_CODE_RX.finditer(t)), key=lambda m: m.start()):
+    for m in sorted(
+        list(_SYM_RX.finditer(t)) + list(_CODE_RX.finditer(t)), key=lambda m: m.start()
+    ):
         c = SYMBOLE.get(m.group(0)) if m.re is _SYM_RX else m.group(1)
         if c and c in WAEHRUNGEN and c not in out:
             out.append(c)
@@ -245,7 +342,11 @@ def dezimal(text: str) -> Decimal | None:
     if not re.search(r"\d", t):
         return None
     if "," in t and "." in t:
-        t = t.replace(".", "").replace(",", ".") if t.rfind(",") > t.rfind(".") else t.replace(",", "")
+        t = (
+            t.replace(".", "").replace(",", ".")
+            if t.rfind(",") > t.rfind(".")
+            else t.replace(",", "")
+        )
     elif "," in t:
         t = t.replace(",", ".") if t.count(",") == 1 else t.replace(",", "")
     try:

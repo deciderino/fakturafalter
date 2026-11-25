@@ -370,8 +370,11 @@ def rechnung_bauen(
             if neu is not None:
                 pos.steuer = neu
             elif isinstance(code, dict):
-                r.hinweis("pruefen", "Steuerfall nicht bestimmbar: kein Steuerhinweis im Druck und kein Steuersatz",
-                          f"Pos {pos.nr} BT-151")
+                r.hinweis(
+                    "pruefen",
+                    "Steuerfall nicht bestimmbar: kein Steuerhinweis im Druck und kein Steuersatz",
+                    f"Pos {pos.nr} BT-151",
+                )
         _position_ergaenzen(pos, g)
         if not pos.bezeichnung:
             r.hinweis("pruefen", "Bezeichnung fehlt", f"Pos {pos.nr} BT-153")
@@ -407,8 +410,14 @@ def rechnung_bauen(
         if la.land == (r.kaeufer.anschrift.land or "DE"):
             la.land = ""
         else:
-            r.hinweis("pruefen", (f"Lieferland {la.land} weicht vom Land des Kunden ab – bitte die vollständige "
-                                  "Lieferanschrift (Name, Straße, PLZ, Ort) angeben."), "BT-80")
+            r.hinweis(
+                "pruefen",
+                (
+                    f"Lieferland {la.land} weicht vom Land des Kunden ab – bitte die vollständige "
+                    "Lieferanschrift (Name, Straße, PLZ, Ort) angeben."
+                ),
+                "BT-80",
+            )
     if aus_quelle and not r.kaeufer.kennung:
         r.kaeufer.kennung = r.kundennummer  # BT-46
     if wert("BT-10") is not None:
@@ -504,7 +513,9 @@ def _kurs_setzen(r: Rechnung, wert) -> None:
             if fw and fw != r.waehrung and r.waehrung == "EUR":
                 r.waehrung = fw  # Kurszeile nennt die Rechnungswährung, die Quelle hatte keine
             if kurs is None:
-                r.hinweis("pruefen", f"Umrechnungskurs „{k}“ nicht lesbar (erwartet z. B. 1,0850)", "kurs")
+                r.hinweis(
+                    "pruefen", f"Umrechnungskurs „{k}“ nicht lesbar (erwartet z. B. 1,0850)", "kurs"
+                )
     kd = wert("kursdatum")
     if kd is not None:
         r.kursdatum = kd if isinstance(kd, date) else None
@@ -544,7 +555,11 @@ def _ku_steuer(r: Rechnung, vk, st, mappings: dict, nr: str) -> Steuer:
     Rechnung an (nicht still überschreiben)."""
     if st not in (None, ""):
         code = (mappings.get("steuer") or {}).get(str(st))
-        if code is None and str(st).replace(",", ".").replace("%", "").strip() not in ("0", "0.0", "0.00"):
+        if code is None and str(st).replace(",", ".").replace("%", "").strip() not in (
+            "0",
+            "0.0",
+            "0.00",
+        ):
             try:
                 satz = Decimal(str(st).replace("%", "").replace(",", ".").strip())
             except ArithmeticError:
@@ -553,9 +568,14 @@ def _ku_steuer(r: Rechnung, vk, st, mappings: dict, nr: str) -> Steuer:
                 code = {"BT-151": "S", "BT-152": satz}
         alt = steuer_aus_code(code, r.steuerhinweis) if code is not None else None
         if alt is not None and alt.kategorie == "S" and alt.satz > 0:
-            r.hinweis("pruefen", (f"Absender ist Kleinunternehmer (§ 19 UStG), die Quelle nennt für Position {nr} "
-                                  f"aber {alt.satz:g} % Umsatzsteuer – Einstellung oder Quelle prüfen."),
-                      f"Pos {nr} BT-152")
+            r.hinweis(
+                "pruefen",
+                (
+                    f"Absender ist Kleinunternehmer (§ 19 UStG), die Quelle nennt für Position {nr} "
+                    f"aber {alt.satz:g} % Umsatzsteuer – Einstellung oder Quelle prüfen."
+                ),
+                f"Pos {nr} BT-152",
+            )
     return steuerfaelle.steuer("KU", vk.kleinunternehmer_text or "")
 
 

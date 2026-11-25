@@ -665,7 +665,9 @@ def _ubl(lz: _Leser, k: Konfig) -> Rechnung:
             "BT-108": t(ms, "cbc:ChargeTotalAmount"),
             "BT-109": t(ms, "cbc:TaxExclusiveAmount"),
             "BT-110": _steuerbetrag(
-                [lz.el(tt, "cbc:TaxAmount") for tt in lz.alle(root, "cac:TaxTotal")], r, steuerwaehrung
+                [lz.el(tt, "cbc:TaxAmount") for tt in lz.alle(root, "cac:TaxTotal")],
+                r,
+                steuerwaehrung,
             ),
             "BT-112": t(ms, "cbc:TaxInclusiveAmount"),
             "BT-115": t(ms, "cbc:PayableAmount"),
@@ -773,16 +775,25 @@ def _steuerbetrag(elemente: list, r: Rechnung, steuerwaehrung: str) -> str:
     els = [e for e in elemente if e is not None]
     rw = (r.waehrung or "EUR").upper()
     sw = (steuerwaehrung or "").upper()
-    haupt = next((e for e in els if (e.get("currencyID") or rw).upper() == rw), els[0] if els else None)
+    haupt = next(
+        (e for e in els if (e.get("currencyID") or rw).upper() == rw), els[0] if els else None
+    )
     if sw and sw != rw:
-        neben = next((e for e in els if e is not haupt and (e.get("currencyID") or "").upper() == sw), None)
+        neben = next(
+            (e for e in els if e is not haupt and (e.get("currencyID") or "").upper() == sw), None
+        )
         if sw != "EUR":
-            r.hinweis("pruefen", f"Steuerwährung (BT-6) {sw} wird nicht unterstützt – nur EUR.", "BT-6")
+            r.hinweis(
+                "pruefen", f"Steuerwährung (BT-6) {sw} wird nicht unterstützt – nur EUR.", "BT-6"
+            )
         elif neben is not None:
             r.ust_eur_quelle = _dez(neben.text or "")
         else:
-            r.hinweis("pruefen", "Steuerwährung EUR (BT-6) angegeben, aber kein Steuerbetrag in EUR (BT-111).",
-                      "BT-111")
+            r.hinweis(
+                "pruefen",
+                "Steuerwährung EUR (BT-6) angegeben, aber kein Steuerbetrag in EUR (BT-111).",
+                "BT-111",
+            )
     if rw != "EUR" and r.kurs is None:
         for text, _ in r.bemerkungen:
             kurs, fw = steuerfaelle.kurs_lesen(text, rw)

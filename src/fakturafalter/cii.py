@@ -82,7 +82,12 @@ def _anschrift(parent, a: Anschrift, land_standard: str = "DE"):
 
 
 def _partei(
-    parent, tag: str, p: Partei, verkaeufer: bool, mit_kennung: bool = True, ohne_ust_id: bool = False
+    parent,
+    tag: str,
+    p: Partei,
+    verkaeufer: bool,
+    mit_kennung: bool = True,
+    ohne_ust_id: bool = False,
 ):
     """``ohne_ust_id``: Kategorie O (nicht steuerbar) – BR-O-02 verbietet BT-31/BT-48 im XML."""
     tp = _e(parent, tag)
@@ -186,7 +191,9 @@ def bemerkungen_fuer_xml(r: Rechnung) -> list[tuple[str, str]]:
     """BG-1: Bemerkungen; bei Fremdwährung zusätzlich der Kurs (EN 16931 hat kein eigenes Kursfeld)."""
     out = list(r.bemerkungen)
     kt = kurs_text(r)
-    if kt and not any(t.strip().casefold().startswith(("umrechnungskurs", "exchange rate")) for t, _ in out):
+    if kt and not any(
+        t.strip().casefold().startswith(("umrechnungskurs", "exchange rate")) for t, _ in out
+    ):
         out.append((kt, ""))
     return out
 

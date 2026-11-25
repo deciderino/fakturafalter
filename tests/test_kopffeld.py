@@ -120,9 +120,8 @@ def test_anschrift_brueche_strukturell():
     assert set(b(_zeilen("Muster GmbH", "Talstraße 12", "Hintereingang", "12345 Ort"))) == {
         "BT-50"
     }  # ohne Ziffer
-    assert set(b(_zeilen("Muster AG", "Bahnhofstr. 3", "6020 Innsbruck", "ÖSTERREICH"))) == {
-        "BT-52"
-    }
+    # ab 0.9.7: Ausland mit Landzeile wird gelesen (PLZ/Ort/Land) – kein Bruch mehr
+    assert b(_zeilen("Muster AG", "Bahnhofstr. 3", "6020 Innsbruck", "ÖSTERREICH")) == {}
     assert set(b(_zeilen("Muster AG", "Ring 3", "A-1010 Wien"))) == {"BT-52"}
     assert set(
         b(_zeilen(("Persönlich/Vertraulich", 9.0), "Muster GmbH", "Hauptstraße 5", "12345 Ort"))
@@ -248,7 +247,9 @@ def test_ausnahmen_schritt3():
         "BT-52": "Innsbruck",
         "BT-55": "AT",
     }
-    assert z(["Muster AG", "Bahnhofstr. 3", "6020 Innsbruck"])[0]["BT-50"] == "6020 Innsbruck"  # ohne Land: N1
+    assert (
+        z(["Muster AG", "Bahnhofstr. 3", "6020 Innsbruck"])[0]["BT-52"] == "6020 Innsbruck"
+    )  # ohne Land: N1
     faelle = {f["id"]: f for f in kopffeld_messung.messen(SET)}
     for vid in ("g4-n1", "g4-n2", "g4-n3", "g5-n1", "g5-n2", "g5-n3", "h6", "h7", "h8"):
         for w in kopffeld_messung.WEGE:

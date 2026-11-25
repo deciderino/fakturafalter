@@ -55,7 +55,9 @@ class Partei:
     kontakt_name: str = ""  # BT-41 / BT-56
     kontakt_telefon: str = ""  # BT-42 / BT-57
     kontakt_email: str = ""  # BT-43 / BT-58
-    register: str = ""  # BT-30 Registernummer Verkäufer bzw. BT-47 Registerkennung Käufer (ab 0.9.7)
+    register: str = (
+        ""  # BT-30 Registernummer Verkäufer bzw. BT-47 Registerkennung Käufer (ab 0.9.7)
+    )
     kennung: str = ""  # interne Kundennummer (BT-46 Buyer identifier)
     handelsname: str = ""  # BT-28 / BT-45
     rechtliches: str = ""  # BT-33 weitere rechtliche Angaben (nur Verkäufer)
@@ -267,7 +269,9 @@ class Rechnung:
     kurs: Decimal | None = None
     kursdatum: date | None = None
     ust_eur_quelle: Decimal | None = None  # BT-111 aus CSV/XML/Druck (Gegenprüfung mit dem Kurs)
-    steuerhinweis: str = ""  # Hinweistext zur Steuer aus dem Druck/der Quelle (z. B. „Steuerschuldnerschaft …“)
+    steuerhinweis: str = (
+        ""  # Hinweistext zur Steuer aus dem Druck/der Quelle (z. B. „Steuerschuldnerschaft …“)
+    )
     leistungsdatum: date | None = None  # BT-72
     leistung_von: date | None = None  # BT-73 (BG-14 Rechnungszeitraum)
     leistung_bis: date | None = None  # BT-74

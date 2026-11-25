@@ -269,7 +269,21 @@ _ZAHL = {
 
 # Währungszeichen neben Beträgen (ab 0.9.7 nicht nur €/EUR): werden beim Lesen entfernt und zählen in der Tabelle
 # weder als Einheit noch als Steuerkennzeichen. Welche Währung gilt, ermittelt ``waehrung_im_druck``.
-WAEHRUNGSZEICHEN = ("€", "EUR", "(€)", "$", "US$", "USD", "£", "GBP", "CHF", "Fr.", "SFr.", "JPY", "¥")
+WAEHRUNGSZEICHEN = (
+    "€",
+    "EUR",
+    "(€)",
+    "$",
+    "US$",
+    "USD",
+    "£",
+    "GBP",
+    "CHF",
+    "Fr.",
+    "SFr.",
+    "JPY",
+    "¥",
+)
 _WAEHRUNG_RX = re.compile(r"\s+|€|EUR|US\$|\$|USD|£|GBP|CHF|S?Fr\.|JPY|¥")
 
 
@@ -507,7 +521,9 @@ def wert_passt(feld: str, text: str) -> bool:
     if not t:
         return False
     art = _TYP_JE_FELD.get(feld)
-    if art == "plz":  # ab 0.9.7 auch ausländische Formen („9020“, „A-9020“, „1012 AB“, „02110-1234“)
+    if (
+        art == "plz"
+    ):  # ab 0.9.7 auch ausländische Formen („9020“, „A-9020“, „1012 AB“, „02110-1234“)
         return _NUR_PLZ.match(t) is not None or _AUSLAND_PLZ.match(t) is not None
     if art == "datum":
         d = daten(t)
@@ -592,12 +608,15 @@ def soll_wert(r: Rechnung, feld: str):
         "BT-110": s.ust if s.ust else None,
         "BT-112": s.brutto,
         # nur Regelbesteuerung (S): bei AE/K/G/O/E steht kein Satz im Druck, der gelernt werden könnte
-        "BT-119": sorted({z.steuer.satz for z in s.steuerzeilen if z.steuer.kategorie == "S"}) or None,
+        "BT-119": sorted({z.steuer.satz for z in s.steuerzeilen if z.steuer.kategorie == "S"})
+        or None,
         "kundennummer": r.kundennummer or None,
         "BT-13": r.bestellnummer or None,
         "steuerhinweis": r.steuerhinweis or None,
         "BT-10": r.leitweg_id or None,
-        "BT-80": (r.lieferung.anschrift.land or None) if r.lieferung.anschrift.land not in ("", "DE") else None,
+        "BT-80": (r.lieferung.anschrift.land or None)
+        if r.lieferung.anschrift.land not in ("", "DE")
+        else None,
         "BT-5": r.waehrung if (r.waehrung or "EUR") != "EUR" else None,
         "kurs": r.kurs,
         "BT-111": r.ust_eur_quelle,
@@ -1253,7 +1272,17 @@ BEREICHE: dict[str, tuple[str, ...]] = {
     "summen": ("BT-109", "BT-110", "BT-112"),
     "zahlung": ("BT-20",),
     # ab 0.9.7: Steuerhinweis, Kennungen des Kunden, Leitweg-ID, Währung/Kurs
-    "steuer": ("steuerhinweis", "BT-48", "BT-47", "BT-55", "BT-80", "BT-10", "BT-5", "kurs", "BT-111"),
+    "steuer": (
+        "steuerhinweis",
+        "BT-48",
+        "BT-47",
+        "BT-55",
+        "BT-80",
+        "BT-10",
+        "BT-5",
+        "kurs",
+        "BT-111",
+    ),
 }
 BEREICH_NAMEN = {
     "anschrift": "Anschrift Empfänger",
@@ -2037,7 +2066,9 @@ def positionen_lernen(r: Rechnung, zeilen: list[Zeile], tol: Decimal) -> dict | 
             for k in range(len(ws)):
                 if k not in benutzt and ws[k].t not in WAEHRUNGSZEICHEN and ws[k].x1 < ws[d0].x0:
                     benutzt[k] = "ignorieren"
-            rest = [k for k in range(len(ws)) if k not in benutzt and ws[k].t not in WAEHRUNGSZEICHEN]
+            rest = [
+                k for k in range(len(ws)) if k not in benutzt and ws[k].t not in WAEHRUNGSZEICHEN
+            ]
             st = {"BT-151": p.steuer.kategorie, "BT-152": _satz(p.steuer.satz).replace(",", ".")}
             if p.steuer.befreiungsgrund:
                 st["BT-120"] = p.steuer.befreiungsgrund
@@ -2159,7 +2190,9 @@ def _zuordnen(z: Zeile, bereiche, fest: bool = False) -> dict[str, list[Wort]]:
     letzte = max(bereiche, key=lambda b: b[2])
     mb = next((b for b in bereiche if b[0] == "BT-129"), None)
     for w in z.woerter:
-        if w.t in WAEHRUNGSZEICHEN or (len(w.t) <= 3 and TRENNLINIE.match(w.t)):  # Falz-/Lochmarke „--“
+        if w.t in WAEHRUNGSZEICHEN or (
+            len(w.t) <= 3 and TRENNLINIE.match(w.t)
+        ):  # Falz-/Lochmarke „--“
             continue
         # Zahlen stehen meist rechtsbündig: rechter Rand passt -> diese Spalte, auch wenn die Zahl breiter ist
         rb = [
@@ -2917,7 +2950,9 @@ def _pos_steuer(pv: dict, p: PosRoh) -> dict | None:
 
 def _pos_gleich(pv: dict, ex: PosRoh, p, tol: Decimal, hinweis: str = "") -> bool:
     st = _pos_steuer(pv, ex) or {}
-    if "fall" in st or isinstance(st, str):  # Steuerfall (ab 0.9.7): über den Hinweis der Rechnung auflösen
+    if "fall" in st or isinstance(
+        st, str
+    ):  # Steuerfall (ab 0.9.7): über den Hinweis der Rechnung auflösen
         from .aufbau import steuer_aus_code
 
         s = steuer_aus_code(st, hinweis)
@@ -2977,8 +3012,14 @@ def bewerten(
         ergebnis[f] = bool(erg and feld_gleich(f, regel["typ"], soll, erg[0], tol))
     treffer, anzahl = sum(ergebnis.values()), len(ergebnis)
     pv = v.get("positionen")
-    if pv and isinstance(pv.get("steuer_fest"), dict) and pv["steuer_fest"].get("fall") == "hinweis":
-        m = {"*": pv["steuer_fest"]}  # „je Rechnung“ ohne Satz: Satz aus dem Druck wie beim Lesen (nur_pdf)
+    if (
+        pv
+        and isinstance(pv.get("steuer_fest"), dict)
+        and pv["steuer_fest"].get("fall") == "hinweis"
+    ):
+        m = {
+            "*": pv["steuer_fest"]
+        }  # „je Rechnung“ ohne Satz: Satz aus dem Druck wie beim Lesen (nur_pdf)
         steuer_fest_aus_druck(m, {"steuerhinweis": (r.steuerhinweis, None)}, zeilen)
         pv = {**pv, "steuer_fest": m["*"]}
     if pv:
@@ -3603,9 +3644,7 @@ BELEGART_FEHLT = (
 
 # ---------------------------------------------------------------- Steuer-Sonderfälle und Fremdwährung (ab 0.9.7)
 _WZ = r"US\$|SFr\.|sFr\.|Fr\.|[€$£¥]|(?<![A-Za-z])[A-Z]{3}(?![A-Za-z])"
-_BETRAG_MIT_WAEHRUNG = re.compile(
-    rf"(?:({_WZ})\s?-?\d[\d.,]*\d|\d[\d.,]*\d\s?({_WZ}))"
-)
+_BETRAG_MIT_WAEHRUNG = re.compile(rf"(?:({_WZ})\s?-?\d[\d.,]*\d|\d[\d.,]*\d\s?({_WZ}))")
 
 
 def waehrung_im_druck(zeilen: list[Zeile]) -> tuple[str, list[str]]:
@@ -3644,8 +3683,13 @@ def steuer_kopf_ergaenzen(kopf: dict, zeilen: list[Zeile], h) -> list[tuple[str,
     if "BT-5" not in kopf:
         code, fremd = waehrung_im_druck(zeilen)
         if len(fremd) > 1:
-            meld.append(("pruefen", f"Mehrere Währungen im Druck ({', '.join(fremd)}) – Rechnungswährung prüfen.",
-                         "BT-5"))
+            meld.append(
+                (
+                    "pruefen",
+                    f"Mehrere Währungen im Druck ({', '.join(fremd)}) – Rechnungswährung prüfen.",
+                    "BT-5",
+                )
+            )
         elif code and code != "EUR":
             kopf["BT-5"] = (code, h)
     w = str(kopf.get("BT-5", ("EUR",))[0] or "EUR").upper()
@@ -3659,18 +3703,23 @@ def steuer_kopf_ergaenzen(kopf: dict, zeilen: list[Zeile], h) -> list[tuple[str,
             if k is not None and fw in (None, "", w):
                 kopf["kurs"] = (z.text, h)
                 if "kursdatum" not in kopf:
-                    m = re.search(r"(?:stand|vom|as of|per)\s*:?\s*(\d{1,2}\.\d{1,2}\.\d{4}|\d{4}-\d{2}-\d{2})",
-                                  z.text, re.I)
+                    m = re.search(
+                        r"(?:stand|vom|as of|per)\s*:?\s*(\d{1,2}\.\d{1,2}\.\d{4}|\d{4}-\d{2}-\d{2})",
+                        z.text,
+                        re.I,
+                    )
                     d = daten(m[1]) if m else []
                     if d:
                         kopf["kursdatum"] = (d[0], h)
                 break
     if "BT-111" not in kopf:
         for z in zeilen:
-            m = re.search(r"(?:ust|umsatzsteuer|mwst|vat)\b[^0-9]{0,25}?\bin\s+(?:eur|€)\b", z.text, re.I)
+            m = re.search(
+                r"(?:ust|umsatzsteuer|mwst|vat)\b[^0-9]{0,25}?\bin\s+(?:eur|€)\b", z.text, re.I
+            )
             if not m:
                 continue
-            for tok in z.text[m.end():].split():
+            for tok in z.text[m.end() :].split():
                 b = betraege(tok.strip(":()"))
                 if b:
                     kopf["BT-111"] = (b[0][0], h)
@@ -3714,16 +3763,34 @@ def steuerfall_abgleichen(r: Rechnung, hinweis: str) -> None:
     sonder = faelle & set(steuerfaelle.FAELLE)
     mit_ust = any(p.steuer.kategorie == "S" and p.steuer.satz > 0 for p in r.positionen)
     if druck and mit_ust and not sonder:
-        r.hinweis("pruefen", (f"Der Druck nennt „{steuerfaelle.FAELLE[druck[0]].name}“, die Vorlage rechnet aber "
-                              "mit Umsatzsteuer – Steuerfall der Vorlage prüfen (Anlernen)."), "BT-151")
+        r.hinweis(
+            "pruefen",
+            (
+                f"Der Druck nennt „{steuerfaelle.FAELLE[druck[0]].name}“, die Vorlage rechnet aber "
+                "mit Umsatzsteuer – Steuerfall der Vorlage prüfen (Anlernen)."
+            ),
+            "BT-151",
+        )
         return
     for f in sorted(sonder):
         if not druck:
-            r.hinweis("pruefen", (f"Die Vorlage rechnet mit „{steuerfaelle.FAELLE[f].name}“, im Druck steht aber kein "
-                                  "passender Hinweis – Pflichtangabe auf der Rechnung prüfen."), "steuerhinweis")
+            r.hinweis(
+                "pruefen",
+                (
+                    f"Die Vorlage rechnet mit „{steuerfaelle.FAELLE[f].name}“, im Druck steht aber kein "
+                    "passender Hinweis – Pflichtangabe auf der Rechnung prüfen."
+                ),
+                "steuerhinweis",
+            )
         elif f not in druck:
-            r.hinweis("pruefen", (f"Die Vorlage rechnet mit „{steuerfaelle.FAELLE[f].name}“, der Druck nennt "
-                                  f"„{steuerfaelle.FAELLE[druck[0]].name}“ – Steuerfall prüfen."), "BT-151")
+            r.hinweis(
+                "pruefen",
+                (
+                    f"Die Vorlage rechnet mit „{steuerfaelle.FAELLE[f].name}“, der Druck nennt "
+                    f"„{steuerfaelle.FAELLE[druck[0]].name}“ – Steuerfall prüfen."
+                ),
+                "BT-151",
+            )
 
 
 def nur_pdf(

@@ -157,7 +157,9 @@ def erkennen(zeilen: list[str]) -> Absender:
         text,
     )
     # § 19 UStG im Druck: Kleinunternehmer (Schalter wird vorbelegt, der Assistent zeigt ihn zum Prüfen)
-    a.kleinunternehmer = bool(re.search(r"§\s*19\b(?:\s*Abs\.?\s*\d)?\s*UStG|Kleinunternehmer", text, re.I))
+    a.kleinunternehmer = bool(
+        re.search(r"§\s*19\b(?:\s*Abs\.?\s*\d)?\s*UStG|Kleinunternehmer", text, re.I)
+    )
     a.telefon = _erstes(r"\bTel(?:efon)?\.?[:\s]*(\+?[\d][\d /()-]{5,}\d)", text)
     a.email = _erstes(r"\b([\w.+-]+@[\w-]+(?:\.[\w-]+)+)\b", text)
 

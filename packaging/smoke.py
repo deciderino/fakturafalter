@@ -2,18 +2,19 @@
 # Copyright 2026 Fakturafalter-Mitwirkende
 """Rauchtest für ein gebautes Programm: beispiele/ einmal durchschicken (--einmal), Ausgaben prüfen.
 
-    python packaging/smoke.py -- dist/Fakturafalter-0.9.6-x86_64.AppImage
+    python packaging/smoke.py -- dist/Fakturafalter-0.9.7-x86_64.AppImage
     python packaging/smoke.py --wine -- wine dist/win/Fakturafalter/fakturafalter-cli.exe
 
 Je Beispielvariante (a/b/c/d: CSV/Text, x: PDF + XML, e: nur XML – UBL/CII mit Rabatt, Gutschrift, Lastschrift,
 l: CSV mit eigener Layout-Vorlage aus dem Layouteditor – Logo, Briefpapier-PDF, eigene Felder, k: Kundenbezeichnung
 1–3, Positions-Unterzeilen mit sehr langer Art.-Nr. und Zeichnungs-Nr./Index, Prüfmuster und eigenes
-Dateinamen-Muster je Belegart) ein eigener Arbeitsordner unter /tmp/Fakturafalter-Beispiel-smoke/ (sonst
+Dateinamen-Muster je Belegart; ab 0.9.7 s: Steuer-Sonderfälle AE/K/G/O + USD, u: Kleinunternehmer, w: XML-Eingang in
+USD mit USt in EUR, p: Nur PDF mit angelernten Vorlagen für alle Steuerfälle) ein eigener Arbeitsordner unter /tmp/Fakturafalter-Beispiel-smoke/ (sonst
 meldet Fakturafalter die gleichen Rechnungsnummern zu Recht als doppelt). Erwartet je Variante
 ZUGFeRD-PDFs im Ausgang und nichts im Fehlerordner. Das gebaute Programm prüft dabei selbst mit den
 mitgelieferten Werkzeugen (eigene Java-Laufzeit, Mustang, KoSIT): erwartet wird „gültig“ in der
 Prüfspalte von protokoll.tsv für jede Rechnung, dazu ein „--pruefe“-Aufruf auf eine Ausgabe aus a und alle
-Ausgaben aus d, e, l und k.
+Ausgaben aus d, e, l, k, s, u, w und p.
 Ab 0.9.6 zusätzlich: der Ausgang enthält nur fertige Dateien (keine .tmp/.part, kein protokoll.tsv), das Protokoll
 liegt im Ordner „Protokoll“, im System-Temp bleibt kein „fakturafalter-…“-Ordner zurück, Variante b legt die
 XRechnung-Zusatzdateien in den Unterordner „XRechnung“. Mit --headless-sekunden läuft die Überwachung ohne Netz
@@ -46,6 +47,13 @@ VARIANTEN = {
           "xml-eingang/GS-2026-0009_ubl_gutschrift.xml"],         # nur XML (UBL/CII), ohne PDF
     "l": ["variante-a_positionen_utf8.csv"],                    # eigene Layout-Vorlage (beispiele/layout/)
     "k": ["variante-k_kundenbezeichnung_erp.csv"],               # Kundenbezeichnung 1–3, Unterzeilen, Dateiname
+    # ab 0.9.7: Steuer-Sonderfälle und Fremdwährung
+    "s": ["variante-s_steuerfaelle.csv"],                        # AE, K, G, O, USD mit Kurs, gemischt
+    "u": ["variante-u_kleinunternehmer.csv"],                    # Kleinunternehmer (§ 19 UStG)
+    "w": ["xml-eingang/XU-2026-0007_ubl_usd.xml", "xml-eingang/XC-2026-0008_cii_usd.xml"],  # USD, USt in EUR
+    "p": [f"steuerfaelle/eingang/{n}.pdf" for n in (           # Nur PDF mit angelernten Vorlagen
+        "LM-26-2001", "LM-26-2002", "LM-26-2003", "LM-26-2004", "LM-26-2005", "LM-26-2006", "LM-26-2007",
+        "WE-26-0301", "WE-26-0302", "GL-26-0014", "GL-26-0015")],
 }
 # Variante k: Rechnungsnummer prüfen und Dateiname je Belegart (Einstellungen → Ausgabe, ab 0.9.5)
 NUMMERNKREISE = {
@@ -54,9 +62,9 @@ NUMMERNKREISE = {
 }
 NAMEN_K = ["2026_2026000101_Feinmechanik_Beispiel_GmbH_Werk_Sued_War.pdf",
            "2026_2026000102_Hofladen_Beispiel_Inh._Erika_Musterfrau.pdf", "Gutschrift_GS-2026-0011.pdf"]
-MODUS = {"x": "pdf_xml", "e": "pdf_xml"}
+MODUS = {"x": "pdf_xml", "e": "pdf_xml", "w": "pdf_xml"}
 XRECHNUNG_B = ["RE-2026-0102_xrechnung.xml", "RE-2026-0103_xrechnung.xml"]   # Variante b: Unterordner XRechnung
-ALLE_PRUEFEN = ("d", "e", "l", "k")
+ALLE_PRUEFEN = ("d", "e", "l", "k", "s", "u", "w", "p")
 
 
 def winpfad(p: Path) -> str:
@@ -121,11 +129,20 @@ def main() -> int:
             d.setdefault("optionen", {})["nummernkreise"] = NUMMERNKREISE
         if v == "b":
             d.setdefault("optionen", {})["xrechnung_ablage"] = "unterordner"
+        if v == "u":                                          # ab 0.9.7: Schalter Kleinunternehmer am Absender
+            d["absender"]["kleinunternehmer"] = True
+        if v == "p":                                          # ab 0.9.7: Nur PDF, Profile + angelernte Vorlagen
+            sf = BSP / "steuerfaelle"
+            for f in sf.glob("profil-*.yaml"):
+                shutil.copy(f, b / "cfg")
+            shutil.copytree(sf / "angelernt", b / "cfg" / "angelernt")
+            d = yaml.safe_load((sf / "konfiguration-nur-pdf.yaml").read_text(encoding="utf-8"))
+            d.pop("arbeitsordner", None)
         d["ordner"] = {n: pf(b / n) for n in ("eingang", "ausgang", "erledigt", "fehler", "pruefen")}
         (b / "cfg" / "konfiguration.yaml").write_text(yaml.safe_dump(d, allow_unicode=True), encoding="utf-8")
         (b / "eingang").mkdir()
         for f in dateien:
-            shutil.copy(BSP / f, b / "eingang")
+            shutil.copy(BSP / f, b / "eingang" / Path(f).name)
         cmd = a.programm + ["--config", pf(b / "cfg" / "konfiguration.yaml"), "--einmal"]
         r = subprocess.run(cmd, env=env, capture_output=True, text=True, errors="replace", timeout=600)
         neu = sorted((b / "ausgang").glob("*.pdf"))           # Variante k: eigene Dateinamen

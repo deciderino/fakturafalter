@@ -183,9 +183,16 @@ class AbsenderFormular(QWidget):
         self.ku.setObjectName("abs_kleinunternehmer")
         self.ku.setChecked(bool(werte.get("kleinunternehmer")))
         v.addWidget(self.ku)
-        v.addWidget(lbl(_("Dann steht auf jeder Rechnung „Gemäß § 19 UStG wird keine Umsatzsteuer berechnet.“ "
-                          "Liefert eine Quelle trotzdem einen Steuersatz, wird die Rechnung angehalten."),
-                        "hinweis", umbruch=True))
+        v.addWidget(
+            lbl(
+                _(
+                    "Dann steht auf jeder Rechnung „Gemäß § 19 UStG wird keine Umsatzsteuer berechnet.“ "
+                    "Liefert eine Quelle trotzdem einen Steuersatz, wird die Rechnung angehalten."
+                ),
+                "hinweis",
+                umbruch=True,
+            )
+        )
 
     def werte(self) -> dict[str, str]:
         w = {s: " ".join(e.text().split()) for s, e in self.felder.items()}

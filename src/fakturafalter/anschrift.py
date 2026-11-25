@@ -23,7 +23,9 @@ _PLZ_IN_ZEILE = re.compile(rf"(?:^|[\s,·•|]){PLZ_MUSTER}\s+[^\W\d_]")  # „F
 _LAND = re.compile(r"^(?:deutschland|germany|de|d)$", re.I)
 # Ausland (ab 0.9.7, nur mit Landzeile darunter): „9020 Klagenfurt“, „A-9020 Klagenfurt“, „1012 AB Amsterdam“,
 # „Boston, MA 02110“
-_AUSLAND_PLZ_ORT = re.compile(r"^(?:[A-Z]{1,2}-)?(\d{3,6}(?:\s?[A-Z]{2}(?=\s))?)\s+([^\W\d_][^\d]*)$")
+_AUSLAND_PLZ_ORT = re.compile(
+    r"^(?:[A-Z]{1,2}-)?(\d{3,6}(?:\s?[A-Z]{2}(?=\s))?)\s+([^\W\d_][^\d]*)$"
+)
 _AUSLAND_ORT_PLZ = re.compile(r"^([^\W\d_][^,\d]*),\s*([A-Z]{2})\s+(\d{5}(?:-\d{4})?)$")
 _STRASSE_PLZ = re.compile(rf"^(.+?{_HAUSNR})\s*,\s*({PLZ_MUSTER}\s+.+)$")
 

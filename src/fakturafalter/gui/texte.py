@@ -1312,6 +1312,7 @@ def hinweis_text(text: str) -> str:
         return _(ZAHLUNG_NICHT_AN_STELLE).format(text=m.group(1))
     return _(text)
 
+
 # Steuer-Sonderfälle, Fremdwährung, Leitweg-ID (0.9.7)
 _STEUER_097 = {
     "Ausfuhrlieferung (Drittland)": "Export (non-EU)",

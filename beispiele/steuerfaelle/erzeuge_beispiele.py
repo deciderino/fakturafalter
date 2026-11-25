@@ -13,6 +13,7 @@ Alle Namen, Anschriften, Kennungen und Bankdaten sind erfunden; USt-IdNr. und IB
 Aufruf:  python erzeuge_beispiele.py            PDFs + Absender-CSVs (deterministisch)
          python erzeuge_beispiele.py --anlernen  zusätzlich Profile + angelernte Vorlagen (braucht fakturafalter)
 """
+
 from __future__ import annotations
 
 import shutil
@@ -53,15 +54,45 @@ class Firma:
     kleinunternehmer: bool = False
 
 
-LICHTBOGEN = Firma("lichtbogen", "Lichtbogen Messtechnik GmbH", "Elbuferweg 7", "01099", "Dresden",
-                   ust_id("27182818"), "202/118/04711", iban("0027182818"), "0351 4471100",
-                   "rechnung@lichtbogen-messtechnik.invalid", "Amtsgericht Dresden HRB 990071")
-WENDEL = Firma("wendel", "Estrichbau Wendel GmbH", "Mörtelgasse 3", "34117", "Kassel",
-               ust_id("16180339"), "026/233/50918", iban("0016180339"), "0561 7703300",
-               "buero@estrichbau-wendel.invalid", "Amtsgericht Kassel HRB 990215")
-LINDNER = Firma("lindner", "Gartenpflege Lindner", "Am Rosenhang 12", "79102", "Freiburg",
-                ust_id("57721566"), "06454/90311", iban("0090311064"), "0761 5512290", "post@gartenpflege-lindner.invalid",
-                kleinunternehmer=True)
+LICHTBOGEN = Firma(
+    "lichtbogen",
+    "Lichtbogen Messtechnik GmbH",
+    "Elbuferweg 7",
+    "01099",
+    "Dresden",
+    ust_id("27182818"),
+    "202/118/04711",
+    iban("0027182818"),
+    "0351 4471100",
+    "rechnung@lichtbogen-messtechnik.invalid",
+    "Amtsgericht Dresden HRB 990071",
+)
+WENDEL = Firma(
+    "wendel",
+    "Estrichbau Wendel GmbH",
+    "Mörtelgasse 3",
+    "34117",
+    "Kassel",
+    ust_id("16180339"),
+    "026/233/50918",
+    iban("0016180339"),
+    "0561 7703300",
+    "buero@estrichbau-wendel.invalid",
+    "Amtsgericht Kassel HRB 990215",
+)
+LINDNER = Firma(
+    "lindner",
+    "Gartenpflege Lindner",
+    "Am Rosenhang 12",
+    "79102",
+    "Freiburg",
+    ust_id("57721566"),
+    "06454/90311",
+    iban("0090311064"),
+    "0761 5512290",
+    "post@gartenpflege-lindner.invalid",
+    kleinunternehmer=True,
+)
 
 
 @dataclass
@@ -101,7 +132,10 @@ class Rechnung:
         out: dict[int, Decimal] = {}
         for p in self.pos:
             out[p.satz] = out.get(p.satz, Decimal(0)) + p.betrag
-        return {s: (b, (b * s / 100).quantize(C2, ROUND_HALF_UP)) for s, b in sorted(out.items(), reverse=True)}
+        return {
+            s: (b, (b * s / 100).quantize(C2, ROUND_HALF_UP))
+            for s, b in sorted(out.items(), reverse=True)
+        }
 
     @property
     def ust(self) -> Decimal:
@@ -122,49 +156,151 @@ KUNDE_US = ["Bluewater Instruments Inc.", "200 Harbor Drive", "Boston, MA 02110"
 def rechnungen() -> list[Rechnung]:
     lb, w, li = LICHTBOGEN, WENDEL, LINDNER
     rs = [
-        Rechnung(lb, "LM-26-2001", date(2026, 11, 2), date(2026, 10, 30), KUNDE_DE,
-                 [Pos("Datenlogger DL-8 mit Netzteil", d("4"), "Stk", d("389.00"), 19),
-                  Pos("Kalibrierschein DAkkS", d("4"), "Stk", d("65.00"), 19)]),
-        Rechnung(lb, "LM-26-2002", date(2026, 11, 4), date(2026, 11, 3), KUNDE_BAU,
-                 [Pos("Montage Messanlage Tiefgarage (Bauleistung)", d("16"), "Std", d("78.00"), 0),
-                  Pos("Kabeltrassen und Sensorhalter montiert", d("1"), "pauschal", d("640.00"), 0)],
-                 RC, ust_id("31415926"), fall="AE"),
-        Rechnung(lb, "LM-26-2003", date(2026, 11, 6), date(2026, 11, 5), KUNDE_AT,
-                 [Pos("Datenlogger DL-8 mit Netzteil", d("10"), "Stk", d("389.00"), 0),
-                  Pos("Temperaturfühler PT100, 2 m", d("40"), "Stk", d("24.50"), 0)],
-                 IGL, "ATU99999999", fall="K"),
-        Rechnung(lb, "LM-26-2004", date(2026, 11, 9), date(2026, 11, 6), KUNDE_CH,
-                 [Pos("Messverstärker MV-4", d("6"), "Stk", d("512.00"), 0),
-                  Pos("Transportkiste Export", d("2"), "Stk", d("38.00"), 0)],
-                 AUSFUHR, fall="G"),
-        Rechnung(lb, "LM-26-2005", date(2026, 11, 11), date(2026, 11, 10), KUNDE_US,
-                 [Pos("Fernwartung Messsystem (Beratungsleistung)", d("12"), "Std", d("95.00"), 0),
-                  Pos("Bereitschaft Fernwartung November", d("1"), "pauschal", d("150.00"), 0)],
-                 NSTB, fall="O"),
-        Rechnung(lb, "LM-26-2006", date(2026, 11, 13), date(2026, 11, 12), KUNDE_DE,
-                 [Pos("Datenlogger DL-8, US-Ausführung", d("4"), "Stk", d("500.00"), 19),
-                  Pos("Kalibrierschein DAkkS", d("4"), "Stk", d("70.00"), 19)],
-                 waehrung="USD", kurs=d("1.0850"), kursdatum=date(2026, 10, 31), fall="S (USD)"),
-        Rechnung(lb, "LM-26-2007", date(2026, 11, 16), date(2026, 11, 13), KUNDE_BAU,
-                 [Pos("Montage Sensorik Fassade (Bauleistung)", d("12"), "Std", d("78.00"), 0),
-                  Pos("Leihgerät Datenlogger (keine Bauleistung)", d("10"), "Tage", d("9.00"), 19)],
-                 RC + " für Position 1", ust_id("31415926"), fall="AE + S"),
-        Rechnung(w, "WE-26-0301", date(2026, 11, 3), date(2026, 10, 31), ["Erika Musterfrau", "Lindenweg 2",
-                                                                          "34119 Kassel"],
-                 [Pos("Zementestrich CT-C25-F4, 50 mm", d("62"), "m²", d("21.50"), 19),
-                  Pos("Baustelleneinrichtung", d("1"), "pauschal", d("150.00"), 19)]),
-        Rechnung(w, "WE-26-0302", date(2026, 11, 10), date(2026, 11, 7), KUNDE_BAU,
-                 [Pos("Fließestrich CA-C30-F5, 45 mm, Bauabschnitt 2", d("310"), "m²", d("18.90"), 0),
-                  Pos("Baustelleneinrichtung", d("1"), "pauschal", d("350.00"), 0)],
-                 RC, ust_id("31415926"), fall="AE"),
-        Rechnung(li, "GL-26-0014", date(2026, 11, 24), date(2026, 11, 20),
-                 ["Familie Sommer", "Wiesenweg 4", "79104 Freiburg"],
-                 [Pos("Gartenpflege November", d("6"), "Std", d("32.00"), 0),
-                  Pos("Grünschnitt-Entsorgung", d("1"), "pauschal", d("25.00"), 0)], KU, fall="KU"),
-        Rechnung(li, "GL-26-0015", date(2026, 11, 24), date(2026, 11, 21),
-                 ["Hausverwaltung Bächle", "Kaiser-Joseph-Straße 99", "79098 Freiburg"],
-                 [Pos("Heckenschnitt Wohnanlage", d("9"), "Std", d("32.00"), 0),
-                  Pos("Grünschnitt-Entsorgung", d("2"), "pauschal", d("25.00"), 0)], KU, fall="KU"),
+        Rechnung(
+            lb,
+            "LM-26-2001",
+            date(2026, 11, 2),
+            date(2026, 10, 30),
+            KUNDE_DE,
+            [
+                Pos("Datenlogger DL-8 mit Netzteil", d("4"), "Stk", d("389.00"), 19),
+                Pos("Kalibrierschein DAkkS", d("4"), "Stk", d("65.00"), 19),
+            ],
+        ),
+        Rechnung(
+            lb,
+            "LM-26-2002",
+            date(2026, 11, 4),
+            date(2026, 11, 3),
+            KUNDE_BAU,
+            [
+                Pos("Montage Messanlage Tiefgarage (Bauleistung)", d("16"), "Std", d("78.00"), 0),
+                Pos("Kabeltrassen und Sensorhalter montiert", d("1"), "pauschal", d("640.00"), 0),
+            ],
+            RC,
+            ust_id("31415926"),
+            fall="AE",
+        ),
+        Rechnung(
+            lb,
+            "LM-26-2003",
+            date(2026, 11, 6),
+            date(2026, 11, 5),
+            KUNDE_AT,
+            [
+                Pos("Datenlogger DL-8 mit Netzteil", d("10"), "Stk", d("389.00"), 0),
+                Pos("Temperaturfühler PT100, 2 m", d("40"), "Stk", d("24.50"), 0),
+            ],
+            IGL,
+            "ATU99999999",
+            fall="K",
+        ),
+        Rechnung(
+            lb,
+            "LM-26-2004",
+            date(2026, 11, 9),
+            date(2026, 11, 6),
+            KUNDE_CH,
+            [
+                Pos("Messverstärker MV-4", d("6"), "Stk", d("512.00"), 0),
+                Pos("Transportkiste Export", d("2"), "Stk", d("38.00"), 0),
+            ],
+            AUSFUHR,
+            fall="G",
+        ),
+        Rechnung(
+            lb,
+            "LM-26-2005",
+            date(2026, 11, 11),
+            date(2026, 11, 10),
+            KUNDE_US,
+            [
+                Pos("Fernwartung Messsystem (Beratungsleistung)", d("12"), "Std", d("95.00"), 0),
+                Pos("Bereitschaft Fernwartung November", d("1"), "pauschal", d("150.00"), 0),
+            ],
+            NSTB,
+            fall="O",
+        ),
+        Rechnung(
+            lb,
+            "LM-26-2006",
+            date(2026, 11, 13),
+            date(2026, 11, 12),
+            KUNDE_DE,
+            [
+                Pos("Datenlogger DL-8, US-Ausführung", d("4"), "Stk", d("500.00"), 19),
+                Pos("Kalibrierschein DAkkS", d("4"), "Stk", d("70.00"), 19),
+            ],
+            waehrung="USD",
+            kurs=d("1.0850"),
+            kursdatum=date(2026, 10, 31),
+            fall="S (USD)",
+        ),
+        Rechnung(
+            lb,
+            "LM-26-2007",
+            date(2026, 11, 16),
+            date(2026, 11, 13),
+            KUNDE_BAU,
+            [
+                Pos("Montage Sensorik Fassade (Bauleistung)", d("12"), "Std", d("78.00"), 0),
+                Pos("Leihgerät Datenlogger (keine Bauleistung)", d("10"), "Tage", d("9.00"), 19),
+            ],
+            RC + " für Position 1",
+            ust_id("31415926"),
+            fall="AE + S",
+        ),
+        Rechnung(
+            w,
+            "WE-26-0301",
+            date(2026, 11, 3),
+            date(2026, 10, 31),
+            ["Erika Musterfrau", "Lindenweg 2", "34119 Kassel"],
+            [
+                Pos("Zementestrich CT-C25-F4, 50 mm", d("62"), "m²", d("21.50"), 19),
+                Pos("Baustelleneinrichtung", d("1"), "pauschal", d("150.00"), 19),
+            ],
+        ),
+        Rechnung(
+            w,
+            "WE-26-0302",
+            date(2026, 11, 10),
+            date(2026, 11, 7),
+            KUNDE_BAU,
+            [
+                Pos("Fließestrich CA-C30-F5, 45 mm, Bauabschnitt 2", d("310"), "m²", d("18.90"), 0),
+                Pos("Baustelleneinrichtung", d("1"), "pauschal", d("350.00"), 0),
+            ],
+            RC,
+            ust_id("31415926"),
+            fall="AE",
+        ),
+        Rechnung(
+            li,
+            "GL-26-0014",
+            date(2026, 11, 24),
+            date(2026, 11, 20),
+            ["Familie Sommer", "Wiesenweg 4", "79104 Freiburg"],
+            [
+                Pos("Gartenpflege November", d("6"), "Std", d("32.00"), 0),
+                Pos("Grünschnitt-Entsorgung", d("1"), "pauschal", d("25.00"), 0),
+            ],
+            KU,
+            fall="KU",
+        ),
+        Rechnung(
+            li,
+            "GL-26-0015",
+            date(2026, 11, 24),
+            date(2026, 11, 21),
+            ["Hausverwaltung Bächle", "Kaiser-Joseph-Straße 99", "79098 Freiburg"],
+            [
+                Pos("Heckenschnitt Wohnanlage", d("9"), "Std", d("32.00"), 0),
+                Pos("Grünschnitt-Entsorgung", d("2"), "pauschal", d("25.00"), 0),
+            ],
+            KU,
+            fall="KU",
+        ),
     ]
     return rs
 
@@ -178,8 +314,11 @@ def _kopf(b: Blatt, r: Rechnung) -> None:
     b.t(50, 116, f"{f.name} · {f.strasse} · {f.plz} {f.ort}", 6)
     for j, z in enumerate(r.kunde):
         b.t(50, 130 + j * 13, z, 10)
-    info = [("Rechnung Nr.:", r.nr), ("Rechnungsdatum:", f"{r.datum:%d.%m.%Y}"),
-            ("Leistungsdatum:", f"{r.leistung:%d.%m.%Y}")]
+    info = [
+        ("Rechnung Nr.:", r.nr),
+        ("Rechnungsdatum:", f"{r.datum:%d.%m.%Y}"),
+        ("Leistungsdatum:", f"{r.leistung:%d.%m.%Y}"),
+    ]
     if r.kaeufer_ust:
         info.append(("Ihre USt-IdNr.:", r.kaeufer_ust))
     for j, (lab, w) in enumerate(info):
@@ -204,16 +343,28 @@ def zeichnen(r: Rechnung, pfad: Path) -> None:
     mit_spalte = r.firma is LICHTBOGEN
     top = 240
     b.flaeche(48, top - 4, 499, 17, 0.88)
-    kopf = [(52, "Pos", False), (78, "Bezeichnung", False), (360, "Menge", True), (368, "ME", False),
-            (450, "Einzelpreis", True), (545, "Betrag", True)]
+    kopf = [
+        (52, "Pos", False),
+        (78, "Bezeichnung", False),
+        (360, "Menge", True),
+        (368, "ME", False),
+        (450, "Einzelpreis", True),
+        (545, "Betrag", True),
+    ]
     if mit_spalte:
         kopf.insert(5, (488, "USt", True))
     for x, t, rechts in kopf:
         b.t(x, top, t, 8, fett=True, rechts=rechts)
     top += 22
     for n, p in enumerate(r.pos, 1):
-        werte = [(52, str(n), False), (78, p.text, False), (360, menge_de(p.menge), True),
-                 (368, p.einheit, False), (450, de(p.preis), True), (545, de(p.betrag), True)]
+        werte = [
+            (52, str(n), False),
+            (78, p.text, False),
+            (360, menge_de(p.menge), True),
+            (368, p.einheit, False),
+            (450, de(p.preis), True),
+            (545, de(p.betrag), True),
+        ]
         if mit_spalte:
             werte.insert(5, (488, f"{p.satz} %", True))
         for x, t, rechts in werte:
@@ -239,8 +390,12 @@ def zeichnen(r: Rechnung, pfad: Path) -> None:
     top += 20
     if r.kurs:
         ust_eur = (r.ust / r.kurs).quantize(C2, ROUND_HALF_UP)
-        b.t(50, top, f"Umrechnungskurs: 1 EUR = {str(r.kurs).replace('.', ',')} USD (Stand {r.kursdatum:%d.%m.%Y})",
-            9)
+        b.t(
+            50,
+            top,
+            f"Umrechnungskurs: 1 EUR = {str(r.kurs).replace('.', ',')} USD (Stand {r.kursdatum:%d.%m.%Y})",
+            9,
+        )
         top += 13
         b.t(50, top, f"Umsatzsteuer in EUR: {de(ust_eur)} EUR", 9)
         top += 13
@@ -252,16 +407,25 @@ def zeichnen(r: Rechnung, pfad: Path) -> None:
 
 
 def absender_csv(f: Firma, pfad: Path) -> None:
-    pfad.write_text("Name;Strasse;PLZ;Ort;USt-IdNr;Steuernummer;IBAN;BIC;Telefon;E-Mail;Register\n"
-                    f"{f.name};{f.strasse};{f.plz};{f.ort};{f.ust};{f.stnr};{f.iban};;{f.telefon};{f.email};"
-                    f"{f.register}\n", encoding="utf-8")
+    pfad.write_text(
+        "Name;Strasse;PLZ;Ort;USt-IdNr;Steuernummer;IBAN;BIC;Telefon;E-Mail;Register\n"
+        f"{f.name};{f.strasse};{f.plz};{f.ort};{f.ust};{f.stnr};{f.iban};;{f.telefon};{f.email};"
+        f"{f.register}\n",
+        encoding="utf-8",
+    )
 
 
 # ------------------------------------------------------------------ Anlernen (Profile + Vorlagen)
 LERNEN = {  # Absender -> Rechnungen, die im Assistenten angelernt werden, und die Steuerfall-Auswahl
-    "lichtbogen": (["LM-26-2007", "LM-26-2002", "LM-26-2001", "LM-26-2003"], "auto"),  # Steuerspalte: 19 % -> S, 0 % -> Fall aus Hinweis
-    "wendel": (["WE-26-0302", "WE-26-0301"], "auto"),      # nur Summen: Fall je Rechnung aus dem Steuerhinweis
-    "lindner": (["GL-26-0014", "GL-26-0015"], "KU"),       # Kleinunternehmer: fest
+    "lichtbogen": (
+        ["LM-26-2007", "LM-26-2002", "LM-26-2001", "LM-26-2003"],
+        "auto",
+    ),  # Steuerspalte: 19 % -> S, 0 % -> Fall aus Hinweis
+    "wendel": (
+        ["WE-26-0302", "WE-26-0301"],
+        "auto",
+    ),  # nur Summen: Fall je Rechnung aus dem Steuerhinweis
+    "lindner": (["GL-26-0014", "GL-26-0015"], "KU"),  # Kleinunternehmer: fest
 }
 
 
@@ -278,8 +442,12 @@ def anlernen() -> None:
     shutil.rmtree(HIER / "angelernt", ignore_errors=True)
     with tempfile.TemporaryDirectory() as tmp:
         tmp = Path(tmp)
-        roh = {"arbeitsordner": str(tmp / "lauf"), "modus": "nur_pdf", "pdf_profile": [],
-               "optionen": {"sichtteil": "original", "xrechnung_zusatz": False}}
+        roh = {
+            "arbeitsordner": str(tmp / "lauf"),
+            "modus": "nur_pdf",
+            "pdf_profile": [],
+            "optionen": {"sichtteil": "original", "xrechnung_zusatz": False},
+        }
         pf = tmp / "k.yaml"
         pf.write_text(yaml.safe_dump(roh, allow_unicode=True), encoding="utf-8")
         k = konfig.lade_konfig(pf)
@@ -289,8 +457,21 @@ def anlernen() -> None:
             f = firmen[kurz]
             for nr in nummern:
                 s = al.Sitzung(Path(shutil.copy(EINGANG / f"{nr}.pdf", k.eingang)), k)
-                s.absender = absender_mod.Absender(f.name, f.strasse, "", f.plz, f.ort, f.ust, f.stnr, f.iban, "",
-                                                   f.telefon, f.email, f.register, f.kleinunternehmer)
+                s.absender = absender_mod.Absender(
+                    f.name,
+                    f.strasse,
+                    "",
+                    f.plz,
+                    f.ort,
+                    f.ust,
+                    f.stnr,
+                    f.iban,
+                    "",
+                    f.telefon,
+                    f.email,
+                    f.register,
+                    f.kleinunternehmer,
+                )
                 s.steuerfall_setzen("" if fall == "auto" else fall)
                 for feld in s.fehlende():
                     s.bestaetigen(feld)
@@ -298,9 +479,13 @@ def anlernen() -> None:
                 if v is None:
                     raise SystemExit(f"{nr}: nicht gelernt: {erg.hinweise}")
                 al.nur_pdf_schalten(s.profil, True)
-                print(f"{nr}: Vorlage {v['profil']}-{v['kennung']}, in Folge {v['statistik'].get('folge_treffer', 0)}")
+                print(
+                    f"{nr}: Vorlage {v['profil']}-{v['kennung']}, in Folge {v['statistik'].get('folge_treffer', 0)}"
+                )
         for p in tmp.glob("profil-*.yaml"):  # Beispiel: nach einer Rechnung in Folge „sicher“
-            t = p.read_text(encoding="utf-8").replace("nur_pdf_ab: 5", "nur_pdf_ab: 1  # Beispiel; üblich 5")
+            t = p.read_text(encoding="utf-8").replace(
+                "nur_pdf_ab: 5", "nur_pdf_ab: 1  # Beispiel; üblich 5"
+            )
             (HIER / p.name).write_text(t, encoding="utf-8")
         shutil.copytree(tmp / "angelernt", HIER / "angelernt")
 
