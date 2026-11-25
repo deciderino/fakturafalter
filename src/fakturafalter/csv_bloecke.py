@@ -156,6 +156,14 @@ def _feld_wert(row: dict, felder: dict, name: str):
     return (row.get(sp) if isinstance(sp, str) else "") or ""
 
 
+def _ist_kopffeld(name: str) -> bool:
+    """Positionsfelder (Bezeichnung, Menge, Preis, Steuer …) gehören nicht in den Rechnungskopf."""
+    from .csv_einrichtung import FELD
+
+    meta = FELD.get(name)
+    return True if not meta else meta[2] == "kopf"
+
+
 def feldsatz(row: dict, defs: dict, zeile: int, fehler: list, profil: dict, pfad: Path) -> dict:
     roh: dict = {}
     for feld, d in defs.items():
@@ -254,11 +262,15 @@ def lesen(text_zeilen: list[list[str]], profil: dict, pfad: Path, start: int) ->
     def defs_fuer(typ: str, art: str) -> dict:
         b = bloecke_def.get(typ) or {}
         felder = dict(b.get("felder") or {})
-        # globale felder.kopf / position als Fallback
+        if typ == "positionen" and art == "kopf":
+            for k, d in ((bloecke_def.get("kopf") or {}).get("felder") or {}).items():
+                felder.setdefault(k, d)
         global_f = (profil.get("felder") or {}).get("kopf" if art == "kopf" else "position") or {}
         for k, d in global_f.items():
             felder.setdefault(k, d)
-        return felder
+        if art == "kopf":
+            return {k: v for k, v in felder.items() if _ist_kopffeld(k)}
+        return {k: v for k, v in felder.items() if not _ist_kopffeld(k)}
 
     for bl in roh_bloecke:
         typ = typ_fuer(bl["kopf"], profil)

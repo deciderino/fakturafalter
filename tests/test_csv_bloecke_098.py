@@ -41,7 +41,7 @@ def test_hotel_beispiel_summen_und_skonto(konfig):
     assert r.zahlung.faellig == date(2026, 11, 5)
     assert "3 % Skonto innerhalb von 10 Tagen (bis 16.10.2026)" in r.zahlung.bedingungen
     assert "30 Tagen ohne Abzug (bis 05.11.2026)" in r.zahlung.bedingungen
-    assert r.status != "pruefen" or not any("Kontrollwert" in h.text for h in r.hinweise)
+    assert r.status == "ok", [str(h) for h in r.hinweise]
 
 
 def test_getrennt_textzeile_und_platzhalter(konfig):
@@ -142,3 +142,12 @@ def test_profil_reihenfolge_und_inaktiv(konfig, tmp_path):
     konfig.csv_profile = [aus, unten]
     lauf = verarbeiten([ziel], konfig, verschieben=False)
     assert lauf.ergebnisse[0].profil == "blo-unten"
+
+
+def test_positionsfelder_sind_kein_kopfkonflikt(konfig):
+    """Menge, Preis, Bezeichnung und Steuer dürfen je Zeile anders sein – das ist kein abweichender Kopfwert."""
+    r = _lesen("variante-blo_hotel.csv", konfig)
+    texte = " ".join(h.text for h in r.hinweise)
+    assert "Kopfwert" not in texte
+    assert r.status == "ok"
+    assert len(r.positionen) == 4
