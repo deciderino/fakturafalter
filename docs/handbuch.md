@@ -70,7 +70,8 @@ Einstellungen lassen sich später unter **Einstellungen** ändern.
 5. Nur beim Standardaufbau („eine Zeile je Position“): **Textzeilen** (ob
    Kommentare oder gewollte Leerzeilen vorkommen; 0 und 0,00 gelten als leer;
    Vorschau, wie die Zeilen erkannt werden) und **Darstellung auf der Rechnung**
-   (Positionsnummer, Menge exakt wie in der CSV, Einheit, Bezeichnungen auf der
+   (Positionsnummer, Menge exakt wie in der CSV, Einheit, Schalter
+   „Fehlende Einheit = Stück verwenden“, Bezeichnungen auf der
    PDF, optionale Felder ausblenden). Die Vorschläge übernimmst du mit Weiter.
    Später erreichst du die Darstellung auch über **Darstellung…** an der
    Profilkarte, ohne den ganzen Assistenten.

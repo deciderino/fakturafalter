@@ -96,11 +96,16 @@ def test_csv_assistent_textzeilen_und_darstellung_zjp(fenster, qapp):
     qapp.processEvents()
     assert d.i == 4
     assert d.c_menge_exakt.isChecked()
+    assert not d.c_einheit_fehlt_stueck.isChecked()
     p = d.profil()
     sicht = p.get("sicht") or {}
     assert sicht.get("menge_exakt") is True
     assert sicht.get("einheit") == "kurz"
     assert (p.get("aufbau") or {}).get("art") == "zeile_je_position"
+    assert "einheit_fehlt_stueck" not in (p.get("aufbau") or {})
+    d.c_einheit_fehlt_stueck.setChecked(True)
+    p2 = d.profil()
+    assert (p2.get("aufbau") or {}).get("einheit_fehlt_stueck") is True
     d.reject()
 
 
@@ -117,6 +122,8 @@ def test_csv_assistent_start_darstellung(fenster, qapp):
         qapp.processEvents()
     assert d.i == 4
     assert d.c_menge_exakt.isChecked()
+    assert hasattr(d, "c_einheit_fehlt_stueck")
+    assert not d.c_einheit_fehlt_stueck.isChecked()
     d.reject()
 
 

@@ -1,0 +1,17 @@
+﻿Position;Belegname;Belegdatum;Leistungsdatum;Kunde1;Kunde2;Kunde3;Strasse;PLZ;Ort;USt.-ID;Artikel-Nr.;Bezeichnung;Menge;Einheit;Einzelpreis;Preisbasis;Gesamtpreis;Ust-Satz;
+1;RE-2026-0901;26.11.2026;26.11.2026;Beispielbau GmbH;Werk Nord;;Musterweg 12;12345;Musterstadt;;;Unser Lieferschein B-2026-2001:;0;;0;1;0;19;
+2;RE-2026-0901;26.11.2026;26.11.2026;Beispielbau GmbH;Werk Nord;;Musterweg 12;12345;Musterstadt;;;;0;;0;1;0;19;
+3;RE-2026-0901;26.11.2026;26.11.2026;Beispielbau GmbH;Werk Nord;;Musterweg 12;12345;Musterstadt;;#ART-1001;Beispielplatte 1;120;Stück;2,50;1;300,0;19;
+4;RE-2026-0901;26.11.2026;26.11.2026;Beispielbau GmbH;Werk Nord;;Musterweg 12;12345;Musterstadt;;;1234567890;0;;0;1;0;19;
+5;RE-2026-0901;26.11.2026;26.11.2026;Beispielbau GmbH;Werk Nord;;Musterweg 12;12345;Musterstadt;;#ART-1002;Beispielplatte 2;40;Stück;3,10;1;124;19;
+6;RE-2026-0901;26.11.2026;26.11.2026;Beispielbau GmbH;Werk Nord;;Musterweg 12;12345;Musterstadt;;;2345678901;0;;0;1;0;19;
+7;RE-2026-0901;26.11.2026;26.11.2026;Beispielbau GmbH;Werk Nord;;Musterweg 12;12345;Musterstadt;;;;0;;0;1;0;19;
+8;RE-2026-0901;26.11.2026;26.11.2026;Beispielbau GmbH;Werk Nord;;Musterweg 12;12345;Musterstadt;;#ART-1003;Beispielplatte 3;15;Stück;4,20;1;63;19;
+9;RE-2026-0901;26.11.2026;26.11.2026;Beispielbau GmbH;Werk Nord;;Musterweg 12;12345;Musterstadt;;;3456789012;0;;0;1;0;19;
+10;RE-2026-0901;26.11.2026;26.11.2026;Beispielbau GmbH;Werk Nord;;Musterweg 12;12345;Musterstadt;;;;0;;0;1;0;19;
+11;RE-2026-0901;26.11.2026;26.11.2026;Beispielbau GmbH;Werk Nord;;Musterweg 12;12345;Musterstadt;;#ART-1004;Beispielplatte 4;200;Stück;1,15;1;230,0;19;
+12;RE-2026-0901;26.11.2026;26.11.2026;Beispielbau GmbH;Werk Nord;;Musterweg 12;12345;Musterstadt;;;4567890123;0;;0;1;0;19;
+13;RE-2026-0901;26.11.2026;26.11.2026;Beispielbau GmbH;Werk Nord;;Musterweg 12;12345;Musterstadt;;;;0;;0;1;0;19;
+14;RE-2026-0901;26.11.2026;26.11.2026;Beispielbau GmbH;Werk Nord;;Musterweg 12;12345;Musterstadt;;;Versandpauschale;1;;12;1;12;19;
+15;RE-2026-0901;26.11.2026;26.11.2026;Beispielbau GmbH;Werk Nord;;Musterweg 12;12345;Musterstadt;;;;0;;0;1;0;19;
+16;RE-2026-0901;26.11.2026;26.11.2026;Beispielbau GmbH;Werk Nord;;Musterweg 12;12345;Musterstadt;;;;0;;0;1;0;19;

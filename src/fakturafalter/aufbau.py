@@ -231,6 +231,25 @@ def _monat(v) -> tuple[date, date] | None:
     return date(j, m, 1), date(j, m, calendar.monthrange(j, m)[1])
 
 
+def _einheit_annehmen(pos: Position, definition: dict, r: Rechnung) -> None:
+    """Leere Einheit bei Menge und Preis optional durch Stück (H87) ersetzen.
+
+    Nur wenn ``aufbau.einheit_fehlt_stueck`` gesetzt ist. Kein Prüffall, nur ein
+    Hinweis. Kommentarzeilen kommen hier nicht an (keine Position).
+    """
+    if (pos.einheit or "").strip():
+        return
+    if not (definition.get("aufbau") or {}).get("einheit_fehlt_stueck"):
+        return
+    if pos.menge in (None, 0) or pos.einzelpreis is None:
+        return
+    pos.einheit = "H87"
+    if not str(pos.einheit_roh or "").strip():
+        pos.einheit_roh = "Stück"
+    pos.einheit_angenommen = True
+    r.hinweis("warnung", "Einheit fehlte, Stück angenommen", f"Pos {pos.nr} BT-130")
+
+
 def sicht_konfig(definition: dict) -> dict:
     """Darstellung auf der Sichtseite aus dem Profil; fehlende Schlüssel = Defaults."""
     s = dict(definition.get("sicht") or {})
@@ -389,11 +408,12 @@ def rechnung_bauen(
                 r.hinweis("pruefen", f"Preiseinheit „{pe}“ ist keine Zahl", f"Pos {pos.nr} BT-149")
         pos.kontrolle_gesamt = g("gesamt_kontrolle")
         eh = g("BT-130", "")
-        if eh:
+        if eh and str(eh).strip():
             code, ok = _map(
                 mappings.get("einheiten", {}), str(eh), "Einheit", r, f"Pos {pos.nr} BT-130"
             )
             pos.einheit = code or ""  # nicht zugeordnet -> bereits als Prüffall markiert
+        _einheit_annehmen(pos, definition, r)
         st = g("steuer", "")
         if ku:
             pos.steuer = _ku_steuer(r, stamm[0], st, mappings, pos.nr)

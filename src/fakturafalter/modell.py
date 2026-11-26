@@ -131,6 +131,7 @@ class Position:
     einheit: str = ""  # BT-130 (UN/ECE Rec 20); "" = fehlt, kein stilles C62
     menge_roh: str = ""  # Mengenangabe wie in der CSV (Sichtseite, Option menge_exakt)
     einheit_roh: str = ""  # Einheitentext wie in der CSV (Sichtseite, Option einheit=csv)
+    einheit_angenommen: bool = False  # BT-130 fehlte, Stück (H87) aus dem Profil gesetzt
     einzelpreis: Decimal | None = None  # BT-146 (netto); None = fehlt
     preiseinheit: Decimal = Decimal(
         "1"

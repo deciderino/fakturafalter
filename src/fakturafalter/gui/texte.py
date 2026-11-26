@@ -1457,6 +1457,12 @@ _PROFILE_098 = {
     "aus": "off",
     "leer = kein Platzhalter": "empty = no placeholder",
     "{t} (Zeile {n})": "{t} (line {n})",
+    "Fehlende Einheit = Stück verwenden": "Use piece as the unit when it is missing",
+    "Positionen mit Menge und Preis, aber ohne Einheit, erhalten Stück (H87). Im Protokoll erscheint der Hinweis „Einheit fehlte, Stück angenommen“ – kein Prüffall.": (
+        "Items that have a quantity and a price but no unit are given piece (H87). "
+        "The record then shows the note “Einheit fehlte, Stück angenommen” – this is not a review case."
+    ),
+    "fehlende Einheit = Stück": "missing unit = piece",
 }
 EN.update(_PROFILE_098)
 DYNAMISCH += tuple(_PROFILE_098)

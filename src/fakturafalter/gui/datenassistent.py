@@ -988,6 +988,19 @@ class CsvAssistent(_Assistent):
         )
         v.addWidget(lbl(_("Einheit auf der Sichtseite")))
         v.addWidget(self.f_einheit_sicht)
+        self.c_einheit_fehlt_stueck = QCheckBox(_("Fehlende Einheit = Stück verwenden"))
+        self.c_einheit_fehlt_stueck.setChecked(False)
+        v.addWidget(self.c_einheit_fehlt_stueck)
+        v.addWidget(
+            lbl(
+                _(
+                    "Positionen mit Menge und Preis, aber ohne Einheit, erhalten Stück (H87). "
+                    "Im Protokoll erscheint der Hinweis „Einheit fehlte, Stück angenommen“ – kein Prüffall."
+                ),
+                "hinweis",
+                umbruch=True,
+            )
+        )
         self.c_kommentar_ohne = QCheckBox(_("Bezeichnungen bei Kommentarzeilen ausblenden"))
         self.c_kommentar_ohne.setChecked(False)
         v.addWidget(self.c_kommentar_ohne)
@@ -1011,7 +1024,13 @@ class CsvAssistent(_Assistent):
         self.l_darst_vorschau = lbl("", "hinweis", umbruch=True)
         v.addWidget(self.l_darst_vorschau)
         v.addWidget(knopf(_("Sichtseite ansehen…"), klick=self._sichtseite))
-        for wdg in (self.c_posnr, self.c_menge_exakt, self.c_kommentar_ohne, self.f_einheit_sicht):
+        for wdg in (
+            self.c_posnr,
+            self.c_menge_exakt,
+            self.c_einheit_fehlt_stueck,
+            self.c_kommentar_ohne,
+            self.f_einheit_sicht,
+        ):
             if isinstance(wdg, QCheckBox):
                 wdg.toggled.connect(self._darstellung_aktualisieren)
             else:
@@ -1025,6 +1044,8 @@ class CsvAssistent(_Assistent):
             self.f_einheit_sicht.setCurrentIndex(self.f_einheit_sicht.findData(alt_s["einheit"]))
         if "kommentar_ohne_bezeichnungen" in alt_s:
             self.c_kommentar_ohne.setChecked(bool(alt_s["kommentar_ohne_bezeichnungen"]))
+        alt_a = (self.alt or {}).get("aufbau") or {}
+        self.c_einheit_fehlt_stueck.setChecked(bool(alt_a.get("einheit_fehlt_stueck")))
         return w
 
     PFLICHT_SICHT = ("BT-153", "BT-129", "BT-146", "steuer", "BT-130")
@@ -1117,6 +1138,11 @@ class CsvAssistent(_Assistent):
         teile.append(
             _("Einheit {e}").format(e="Stück" if sicht.get("einheit") == "csv" else "Stk.")
         )
+        if (
+            getattr(self, "c_einheit_fehlt_stueck", None)
+            and self.c_einheit_fehlt_stueck.isChecked()
+        ):
+            teile.append(_("fehlende Einheit = Stück"))
         self.l_darst_vorschau.setText(" · ".join(teile))
 
     # ------------------------------------------------------------------ 4 Probe
@@ -1223,6 +1249,12 @@ class CsvAssistent(_Assistent):
                 p["datei"]["muster"] = self.alt["datei"]["muster"]
             if self.art == "zeile_je_position" and getattr(self, "c_posnr", None):
                 p["sicht"] = self._sicht_aus_seite()
+        if getattr(self, "c_einheit_fehlt_stueck", None):
+            auf = p.setdefault("aufbau", {})
+            if self.c_einheit_fehlt_stueck.isChecked():
+                auf["einheit_fehlt_stueck"] = True
+            else:
+                auf.pop("einheit_fehlt_stueck", None)
         return p
 
     def _probe(self) -> None:
