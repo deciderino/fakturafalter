@@ -11,9 +11,11 @@ from PySide6.QtWidgets import (
     QComboBox,
     QFrame,
     QHBoxLayout,
+    QHeaderView,
     QLabel,
     QLineEdit,
     QPushButton,
+    QSizePolicy,
     QStyle,
     QStyledItemDelegate,
     QStyleOptionViewItem,
@@ -144,6 +146,7 @@ class BlockTabelle(QTableWidget):
         self.verticalHeader().setVisible(False)
         self.horizontalHeader().setStretchLastSection(True)
         self.setMinimumHeight(220)
+        self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
         self.setAutoScroll(True)
         self.itemSelectionChanged.connect(self._sel)
         self.setMouseTracking(True)
@@ -303,6 +306,14 @@ class BlockTabelle(QTableWidget):
         for j in range(1, n_c + 1):
             self.setColumnWidth(j, max(self.columnWidth(j), 90))
         self._stil()
+        self._zeilen_sichtbar_halten()
+
+    def _zeilen_sichtbar_halten(self) -> None:
+        """Minimale Höhe so, dass wenige Zeilen (z. B. die Summenzeile) nicht abgeschnitten werden."""
+        kopf_h = self.horizontalHeader().height() or 28
+        needed = kopf_h + sum(self.rowHeight(i) for i in range(self.rowCount())) + 6
+        self.setMinimumHeight(max(220, min(needed, 420)))
+        self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
 
     def _umfaerben(self, vorschau_start: int | None = None) -> None:
         """Nur Farben aktualisieren, Tabelle nicht neu aufbauen (Ziehen)."""
@@ -703,6 +714,7 @@ class AnfangsBox(QFrame):
         self._v = QVBoxLayout(self)
         self._v.setContentsMargins(16, 12, 16, 12)
         self.setFrameShape(QFrame.Shape.StyledPanel)
+        self.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Maximum)
         self._normal()
 
     def set_hell(self, hell: bool) -> None:
@@ -973,6 +985,7 @@ class SpaltenJeBlock(QWidget):
         self.tabelle.verticalHeader().setVisible(False)
         self.tabelle.cellClicked.connect(self._zelle)
         self.tabelle.setMinimumHeight(280)
+        self.tabelle.horizontalHeader().setStretchLastSection(True)
         v.addWidget(self.tabelle, 3)
         unten = QHBoxLayout()
         self.box_spalte = QFrame()
@@ -996,12 +1009,12 @@ class SpaltenJeBlock(QWidget):
         self.box_hinweis = QFrame()
         self.box_hinweis.setFrameShape(QFrame.Shape.StyledPanel)
         hv = QVBoxLayout(self.box_hinweis)
-        ht = QLabel(_("Hinweis"))
-        ht.setFont(ff)
-        ht.setStyleSheet(f"color: {HINWEIS_RD};")
+        self.l_hinweis_titel = QLabel(_("Hinweis"))
+        self.l_hinweis_titel.setFont(ff)
+        self.l_hinweis_titel.setStyleSheet(f"color: {HINWEIS_RD};")
         self.l_hinweis = QLabel("")
         self.l_hinweis.setWordWrap(True)
-        hv.addWidget(ht)
+        hv.addWidget(self.l_hinweis_titel)
         hv.addWidget(self.l_hinweis)
         hv.addStretch(1)
         self.box_pflicht = QFrame()
@@ -1025,10 +1038,17 @@ class SpaltenJeBlock(QWidget):
     def set_hell(self, hell: bool) -> None:
         self._hell = bool(hell)
         self._tabelle_stil()
+        if getattr(self, "l_hinweis", None) is not None:
+            self._hinweis_text()
 
     def _tabelle_stil(self) -> None:
         if self._hell:
-            self.tabelle.setStyleSheet("")
+            self.tabelle.setStyleSheet(
+                "QTableWidget { background: #ffffff; color: #1a202c; gridline-color: #d0d5dd; }"
+                "QHeaderView::section { background: #edf2f7; color: #1a202c; padding: 4px; "
+                "border: 1px solid #d0d5dd; }"
+                "QTableCornerButton::section { background: #edf2f7; border: 1px solid #d0d5dd; }"
+            )
         else:
             self.tabelle.setStyleSheet(
                 "QTableWidget { background: #1a202c; color: #e2e8f0; gridline-color: #4a5568; }"
@@ -1178,6 +1198,16 @@ class SpaltenJeBlock(QWidget):
             t.setRowHeight(ri, 26)
         t.setColumnWidth(0, 56)
         t.resizeColumnsToContents()
+        hdr = t.horizontalHeader()
+        letzte = t.columnCount() - 1
+        for i in range(t.columnCount()):
+            hdr.setSectionResizeMode(
+                i,
+                QHeaderView.ResizeMode.Stretch
+                if i == letzte
+                else QHeaderView.ResizeMode.Interactive,
+            )
+        hdr.setStretchLastSection(True)
         self._tabelle_stil()
         typn = typ_name(typ)
         zusatz = _(" (wiederholend)") if bl.get("wiederholend") else ""
@@ -1312,14 +1342,20 @@ class SpaltenJeBlock(QWidget):
         )
         self.l_hinweis.setText("\n\n".join(teile))
         if self._hell:
-            hh, hl, sh, sl = "#fffaf0", HINWEIS_RD, "#ffffff", LINIE_HELL
+            hh, hf, hl = thema.hinweis_farben(True)
+            sh, sl = "#ffffff", LINIE_HELL
             ph, pl = "#f7fafc", LINIE_HELL
         else:
-            hh, hl, sh, sl = "#3b2a16", HINWEIS_RD, "#1a202c", LINIE_DUNKEL
+            hh, hf, hl = thema.hinweis_farben(False)
+            sh, sl = "#1a202c", LINIE_DUNKEL
             ph, pl = "#1a202c", LINIE_DUNKEL
         self.box_hinweis.setStyleSheet(
             f"QFrame {{ background: {hh}; border: 1px solid {hl}; border-radius: 8px; }}"
+            f"QLabel {{ color: {hf}; }}"
         )
+        if getattr(self, "l_hinweis_titel", None) is not None:
+            self.l_hinweis_titel.setStyleSheet(f"color: {hl};")
+        self.l_hinweis.setStyleSheet(f"color: {hf};")
         self.box_spalte.setStyleSheet(
             f"QFrame {{ background: {sh}; border: 1px solid {sl}; border-radius: 8px; }}"
         )

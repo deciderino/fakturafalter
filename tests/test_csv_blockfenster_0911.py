@@ -151,6 +151,9 @@ def test_palette_kontrast_wcag_aa():
         for typ, (hg, fg, _rk) in pal.items():
             k = _kontrast(hg, fg)
             assert k >= 4.5, f"{typ} hell={hell} {hg}/{fg} = {k:.2f}"
+        hg, fg, _rk = thema.hinweis_farben(hell)
+        k = _kontrast(hg, fg)
+        assert k >= 4.5, f"hinweis hell={hell} {hg}/{fg} = {k:.2f}"
 
 
 def test_fehlende_pflicht_kaeufer_oder_kundennummer():

@@ -1197,10 +1197,11 @@ class CsvAssistent(_Assistent):
                         if s in kopf:
                             sp_zu[kopf.index(s)] = f
                     felder[i] = sp_zu
+            self.spalten_seite.set_hell(self._thema_hell())
             self.spalten_seite.setzen(zeilen, bloecke, felder)
         else:
+            self.spalten_seite.set_hell(self._thema_hell())
             self.spalten_seite.setzen(zeilen, bloecke)
-        self.spalten_seite.set_hell(self._thema_hell())
         self._spalten_je_block_weiter()
 
     def _spalten_je_block_weiter(self) -> None:

@@ -191,6 +191,15 @@ BLOCK_DUNKEL = {
 }
 
 
+# Hinweis-Kasten: (Hintergrund, Schrift, Rand/Titel). Dunkel erfüllt WCAG AA.
+HINWEIS_HELL = ("#fffaf0", "#1a202c", "#c05621")
+HINWEIS_DUNKEL = ("#3b2a16", "#ffedd5", "#fdba74")
+
+
+def hinweis_farben(hell: bool) -> tuple[str, str, str]:
+    return HINWEIS_HELL if hell else HINWEIS_DUNKEL
+
+
 def block_palette(hell: bool) -> dict[str, tuple[str, str, str]]:
     """typ → (Hintergrund, Schrift, Rand/Zeilennummer)."""
     return BLOCK_HELL if hell else BLOCK_DUNKEL
