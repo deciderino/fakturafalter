@@ -243,7 +243,7 @@ def test_sprache_und_thema_umschalten(fenster, qapp, konfig_datei):
 def test_fehlerhafte_einstellungen_werden_zurueckgerollt(fenster, qapp, konfig_datei):
     vorher = konfig_datei.read_text(encoding="utf-8")
     roh = json.loads(json.dumps(fenster.k.roh))
-    roh["csv_profile"] = ["gibt-es-nicht.yaml"]
+    roh["absender"] = "kein-block"
     assert not fenster.einstellungen_uebernehmen(roh)
     assert yaml.safe_load(konfig_datei.read_text(encoding="utf-8")) == yaml.safe_load(vorher)
 

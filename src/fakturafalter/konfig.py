@@ -15,6 +15,8 @@ import yaml
 from .modell import Anschrift, Partei, Zahlung
 from .werte import bloecke_bereinigen, dekodieren, trennzeichen_erkennen
 
+log = logging.getLogger("fakturafalter")
+
 
 def lade_datei(pfad: Path) -> dict:
     text = Path(pfad).read_text(encoding="utf-8")
@@ -294,6 +296,32 @@ def modus_und_pdf(d: dict, opt: dict | None = None) -> tuple[str, bool]:
     return modus, standard
 
 
+def _profile_laden(k: "Konfig", d: dict, liste, *, art: str) -> tuple[list[dict], list]:
+    """Profile laden. Fehlende oder unlesbare Dateien werden weggelassen, nicht als Fehler geworfen.
+
+    So bleibt ein gelöschtes (oder nicht mehr vorhandenes) Profil weg, und das Speichern der
+    restlichen Einstellungen bzw. eines anderen Profils bricht nicht mit „No such file or directory“ ab.
+    """
+    geladen, behalten = [], []
+    for p in liste or []:
+        rel = csv_eintrag_datei(p)
+        try:
+            if not rel:
+                raise ValueError("kein Dateiname")
+            prof = _profil_laden(k, d, p)
+        except (OSError, ValueError, TypeError, KeyError, yaml.YAMLError) as e:
+            log.warning(
+                "Profil %s „%s“ nicht geladen (%s) – Eintrag wird ignoriert",
+                art,
+                rel or p,
+                e,
+            )
+            continue
+        geladen.append(prof)
+        behalten.append(p)
+    return geladen, behalten
+
+
 def lade_konfig(pfad: str | Path) -> Konfig:
     pfad = Path(pfad).resolve()
     d = lade_datei(pfad)
@@ -308,17 +336,34 @@ def lade_konfig(pfad: str | Path) -> Konfig:
     prot = d.get("protokoll_ordner") or (d.get("ordner") or {}).get("protokoll")
     if prot:
         k.protokoll_ordner = _abs(basis, prot)
-    for p in d.get("csv_profile") or []:
-        k.csv_profile.append(_profil_laden(k, d, p))
-    for p in d.get("pdf_profile") or []:
-        prof = _profil_laden(k, d, p)
+    csv_profs, csv_ein = _profile_laden(k, d, d.get("csv_profile"), art="csv")
+    k.csv_profile = csv_profs
+    if list(d.get("csv_profile") or []) != csv_ein:
+        d["csv_profile"] = csv_ein
+    pdf_profs, pdf_ein = _profile_laden(k, d, d.get("pdf_profile"), art="pdf")
+    for prof in pdf_profs:
         prof.setdefault("quelle", "pdf")
-        k.pdf_profile.append(prof)
-    for p in d.get("pdf_vorlagen", []):
-        v = lade_datei(k.pfad(p))
+    k.pdf_profile = pdf_profs
+    if list(d.get("pdf_profile") or []) != pdf_ein:
+        d["pdf_profile"] = pdf_ein
+    vorlagen, vorlagen_ein = [], []
+    for p in d.get("pdf_vorlagen") or []:
+        try:
+            v = lade_datei(k.pfad(p))
+        except (OSError, ValueError, TypeError, yaml.YAMLError) as e:
+            log.warning(
+                "PDF-Vorlage „%s“ nicht geladen (%s) – Eintrag wird ignoriert",
+                p,
+                e,
+            )
+            continue
         v["_basis"] = k.pfad(p).parent
         v["_datei"] = str(k.pfad(p))
-        k.pdf_vorlagen.append(v)
+        vorlagen.append(v)
+        vorlagen_ein.append(p)
+    k.pdf_vorlagen = vorlagen
+    if list(d.get("pdf_vorlagen") or []) != vorlagen_ein:
+        d["pdf_vorlagen"] = vorlagen_ein
     opt = d.get("optionen", {})
     k.sichtteil = opt.get("sichtteil", k.sichtteil)
     k.xrechnung_zusatz = opt.get("xrechnung_zusatz", k.xrechnung_zusatz)

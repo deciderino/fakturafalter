@@ -757,10 +757,16 @@ class Hauptfenster(QMainWindow):
         orte.speichern(self.konfig_pfad, roh)
         try:
             k = _lade(self.konfig_pfad)
-        except Exception as e:  # noqa: BLE001 – z.B. Profil-Datei fehlt
+        except Exception as e:  # noqa: BLE001 – unlesbare Konfiguration
             orte.speichern(self.konfig_pfad, alt_roh)
             self.toast("fehler", _("Einstellungen nicht übernommen"), f"{type(e).__name__}: {e}")
             return False
+        # Fehlende Profildateien wurden beim Laden weggelassen – Liste dauerhaft bereinigen.
+        if any(
+            (k.roh.get(s) or []) != (roh.get(s) or [])
+            for s in ("csv_profile", "pdf_profile", "pdf_vorlagen")
+        ):
+            orte.speichern(self.konfig_pfad, k.roh)
         if autostart_an is not None:
             from . import autostart
 
