@@ -12,7 +12,7 @@ from pathlib import Path
 
 from .aufbau import Roh, rechnung_bauen
 from .konfig import Konfig
-from .modell import Herkunft, Rechnung
+from .modell import Herkunft, Hinweis, Rechnung
 from .werte import WertFehler, csv_lesen, datum, dekodieren, trennzeichen_erkennen, zahl
 
 log = logging.getLogger("fakturafalter")
@@ -167,6 +167,53 @@ def lesen(pfad: Path, profil: dict, konfig: Konfig) -> list[Rechnung]:
     return rechnungen
 
 
+def _hat_spalte_fehlt(rechnungen: list) -> bool:
+    for r in rechnungen:
+        for h in r.hinweise:
+            t = str(h.text if hasattr(h, "text") else h)
+            if "Spalte" in t and "fehlt" in t:
+                return True
+    return False
+
+
+def _praefix_spalte_fehlt(rechnungen: list, name: str) -> None:
+    for r in rechnungen:
+        ersatz = []
+        for h in r.hinweise:
+            txt = str(h.text if hasattr(h, "text") else h)
+            if "Spalte" in txt and "fehlt" in txt and f"Profil „{name}“" not in txt:
+                stufe = getattr(h, "stufe", "fehler") or "fehler"
+                feld = getattr(h, "feld", None)
+                ersatz.append(Hinweis(stufe, f"Profil „{name}“: {txt}", feld))
+            else:
+                ersatz.append(h)
+        r.hinweise[:] = ersatz
+
+
+def lesen_mit_auswahl(pfad: Path, profile: list, konfig: Konfig) -> tuple[dict | None, list]:
+    """Gleiche Erkennung und denselben Lesepfad wie der Eingang; bei „Spalte fehlt“ nächstes Profil."""
+    kandidaten = passende_profile(pfad, profile)
+    if not kandidaten:
+        return None, []
+    letzter: tuple[dict, list] | None = None
+    for prof, _g, _s in kandidaten:
+        rs = lesen(pfad, prof, konfig)
+        letzter = (prof, rs)
+        if not _hat_spalte_fehlt(rs):
+            if prof is not kandidaten[0][0]:
+                log.info(
+                    "%s: Profil „%s“ wegen fehlender Spalten übersprungen, „%s“ verwendet",
+                    pfad.name,
+                    profil_name(kandidaten[0][0]),
+                    profil_name(prof),
+                )
+            return prof, rs
+    assert letzter is not None
+    prof, rs = letzter
+    _praefix_spalte_fehlt(rs, profil_name(prof))
+    return prof, rs
+
+
 def _csv(text: str, profil: dict, pfad: Path):
     dat = profil.get("datei", {})
     trenn = dat.get("trennzeichen", "auto")
@@ -215,14 +262,25 @@ def _csv(text: str, profil: dict, pfad: Path):
         g = gruppen.setdefault(key, [None, [], []])
         if aufbau.get("art") == "satzart":
             sa = (row.get(aufbau.get("satzart_spalte", "Satzart")) or "").strip()
-            if sa == aufbau.get("kopf", "K"):
+            kenn = {
+                str(k): str(v)
+                for k, v in (aufbau.get("satzarten") or aufbau.get("kennwerte") or {}).items()
+            }
+            art_sa = kenn.get(sa)
+            if art_sa is None:
+                if sa == aufbau.get("kopf", "K"):
+                    art_sa = "kopf"
+                elif sa == aufbau.get("position", "P"):
+                    art_sa = "position"
+                elif sa == aufbau.get("rabatt", "R"):
+                    art_sa = "rabatt"
+                elif sa == aufbau.get("zuschlag", "Z"):
+                    art_sa = "zuschlag"
+            if art_sa == "kopf":
                 g[0] = feldsatz(row, felder.get("kopf", {}), zeile, g[2])
-            elif sa == aufbau.get("position", "P"):
+            elif art_sa == "position":
                 g[1].append(feldsatz(row, felder.get("position", {}), zeile, g[2]))
-            elif sa in (
-                aufbau.get("rabatt", "R"),
-                aufbau.get("zuschlag", "Z"),
-            ):  # Rabatt-/Zuschlagszeile (BG-20/21)
+            elif art_sa in ("rabatt", "zuschlag"):
                 roh = feldsatz(
                     row,
                     {**felder.get("position", {}), **felder.get("zu_abschlag", {})},
@@ -230,10 +288,12 @@ def _csv(text: str, profil: dict, pfad: Path):
                     g[2],
                 )
                 roh["zeilenart"] = (
-                    "rabatt" if sa == aufbau.get("rabatt", "R") else "zuschlag",
+                    art_sa,
                     Herkunft(f"csv:{pfad.name} Zeile {zeile} Satzart {sa}", 1.0),
                 )
                 g[1].append(roh)
+            elif art_sa in ("skip", "ignorieren", "leer"):
+                pass
             else:
                 g[2].append(f"Zeile {zeile}: unbekannte Satzart „{sa}“")
         else:  # zeile_je_position
@@ -445,38 +505,63 @@ def profil_name(profil: dict) -> str:
     )
 
 
-def profil_fuer_datei(pfad: Path, profile: list) -> tuple[dict | None, str]:
-    """Erstes aktives passendes Profil (wie der Eingang). Weitere Treffer stehen in der Begründung.
+def _zeilen_fuer_profil(pfad: Path, profil: dict) -> list[list[str]]:
+    dat = profil.get("datei", {})
+    try:
+        text, _ = dekodieren(pfad.read_bytes(), dat.get("kodierung", "auto"))
+    except (OSError, UnicodeDecodeError):
+        return []
+    trenn = dat.get("trennzeichen", "auto")
+    trenn = trennzeichen_erkennen(text) if trenn in (None, "auto") else trenn
+    zeilen = csv_lesen(text, trenn, dat.get("textbegrenzer", '"'))
+    return zeilen[int(dat.get("zeilen_ueberspringen", 0)) :]
 
-    Die Erkennung selbst (``profil_passt``) entscheidet, was passt; die Reihenfolge
-    in ``profile`` bleibt die Priorität, wenn mehrere eindeutig passen. Das
-    Standardprofil gehört ans Ende der Liste.
-    """
-    treffer: dict | None = None
-    grund_t = ""
-    weitere: list[str] = []
-    for prof in profile:
+
+def _spezifitaet(pfad: Path, profil: dict) -> int:
+    if (profil.get("aufbau") or {}).get("art") != "bloecke":
+        return 0
+    from . import csv_bloecke
+
+    zeilen = _zeilen_fuer_profil(pfad, profil)
+    if not zeilen:
+        return 0
+    return csv_bloecke.spezifitaet(profil, zeilen)
+
+
+def passende_profile(pfad: Path, profile: list) -> list[tuple[dict, str, int]]:
+    """Aktive passende Profile, spezifischste zuerst; bei Gleichstand die frühere Listenposition."""
+    roh: list[tuple[int, dict, str, int]] = []
+    for i, prof in enumerate(profile):
         if not profil_aktiv(prof):
             continue
         ok, grund = profil_passt_grund(pfad, prof)
         if not ok:
             continue
-        if treffer is None:
-            treffer, grund_t = prof, grund
-        else:
-            weitere.append(profil_name(prof))
-    if treffer is None:
+        roh.append((i, prof, grund, _spezifitaet(pfad, prof)))
+    roh.sort(key=lambda x: (-x[3], x[0]))
+    return [(p, g, s) for _i, p, g, s in roh]
+
+
+def profil_fuer_datei(pfad: Path, profile: list) -> tuple[dict | None, str]:
+    """Passendes Profil für den Eingang. Bei mehreren gewinnt das spezifischste, sonst das weiter vorne.
+
+    Das Standardprofil gehört ans Ende der Liste. Weitere Treffer stehen in der Begründung.
+    """
+    treffer_l = passende_profile(pfad, profile)
+    if not treffer_l:
         return None, "Kein passendes CSV-Profil gefunden"
+    treffer, grund_t, _s = treffer_l[0]
+    weitere = [profil_name(p) for p, _g, _s in treffer_l[1:]]
     name = profil_name(treffer)
     if weitere:
         log.info(
-            "%s: CSV-Profil „%s“ (%s); weitere passende weiter unten: %s",
+            "%s: CSV-Profil „%s“ (%s); weitere passende: %s",
             pfad.name,
             name,
             grund_t,
             ", ".join(weitere),
         )
-        grund_t = f"{grund_t}; weitere passende Profile weiter unten: {', '.join(weitere)}"
+        grund_t = f"{grund_t}; weitere passende Profile: {', '.join(weitere)}"
     else:
         log.info("%s: CSV-Profil „%s“", pfad.name, name)
     return treffer, grund_t

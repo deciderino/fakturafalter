@@ -75,16 +75,22 @@ Weichen die Spaltennamen ab, richtest du die Datei einmal ein:
    festlegen, ob jede Zeile eine Position ist, die Datei **Blöcke** hat
    (eine Datei = eine Rechnung) oder eine Satzart-Spalte Kopf und Positionen
    trennt. Sieht die Datei nach mehreren Blöcken aus, weist Fakturafalter darauf hin.
-4. **Spalten zuordnen:** Über jeder Spalte steht, wofür Fakturafalter sie nimmt.
-   Stimmt etwas nicht, wähle das Feld um oder „nicht verwenden“. Unklare
-   Steuerwerte bleiben auf „prüfen“. Bei Blöcken prüft Fakturafalter die
-   Vollständigkeit erst am Ende, wenn alle Blöcke zusammengeführt sind.
-5. Nur bei Blöcken: **Blöcke festlegen.** Je Block Typ (Kopf, Positionen, Summen,
-   Lieferung, Zahlung oder ein eigener Name), optionale Markerzeile (`#Kopf`,
-   auch ohne `#` erlaubt; `#LEER` bleibt reserviert) und die Felder, die in
-   diesem Block stehen. Genau ein Block wiederholt sich (die Positionen).
-6. **Textzeilen** und **Darstellung auf der Rechnung** (Standardaufbau und
-   Blöcke): ob Kommentare oder gewollte Leerzeilen vorkommen; 0 und 0,00 gelten
+4. **Spalten zuordnen** (nur wenn jede Zeile eine Position ist oder eine
+   Satzart-Spalte Kopf und Positionen trennt): Über jeder Spalte steht, wofür
+   Fakturafalter sie nimmt. Stimmt etwas nicht, wähle das Feld um oder
+   „nicht verwenden“. Unklare Steuerwerte bleiben auf „prüfen“.
+5. Nur bei **Blöcken** (eine Datei = eine Rechnung, ab 0.9.10): nach dem Format
+   kommt **Blöcke festlegen**. Die CSV erscheint als farbige Tabelle (Kopf blau,
+   Positionen grün, Summen orange). Grenzen ziehst du mit der Maus oder du
+   markierst Zeilen und weist sie einem Typ zu. Genau ein Block wiederholt sich
+   (die Positionen). Jeder Block braucht eine **Anfangsregel** (Marker,
+   Satzart-Wert oder Kopfzeile, in dieser Reihenfolge geprüft) – Zeilennummern
+   werden nicht gespeichert. Danach **Spalten je Block:** auf eine Spalte
+   klicken und das Feld zuordnen; dieselbe Position darf im Kopf ein anderes
+   Feld sein als in den Positionen. Ein Kopffeld in mehreren Blöcken wird
+   verglichen (Abweichung → Zu prüfen). Pflichtfelder prüft Fakturafalter erst
+   an der ganzen Rechnung.
+6. **Textzeilen** und **Darstellung** (Standardaufbau und Blöcke): ob Kommentare oder gewollte Leerzeilen vorkommen; 0 und 0,00 gelten
    als leer; Text zwischen zwei Positionen standardmäßig zur oberen Position;
    Platzhalter `#LEER`; Positionsnummer, Menge, Einheit, Schalter
    „Fehlende Einheit = Stück verwenden“. Die Darstellung erreichst du später
@@ -102,8 +108,10 @@ Weichen die Spaltennamen ab, richtest du die Datei einmal ein:
 9. Schalter **Überwachung** einschalten und die CSV in den `Eingang` legen.
 
 Satzart-Dateien richtet der Assistent ebenfalls ein, wenn eine Spalte „Satzart“
-(oder ähnlich) erkannt wird; Feineinstellungen stehen in
-[csv-format.md](csv-format.md).
+(oder ähnlich) erkannt wird; der reine Aufbau `satzart` bleibt parallel bestehen.
+In einer **Blockdatei** kann dieselbe Satzart-Spalte die Anfangsregel sein
+(K, P, S oder ein eigener Kennwert), auch zusammen mit Markern und Kopfzeilen.
+Feineinstellungen stehen in [csv-format.md](csv-format.md).
 
 ### Profile in den Einstellungen (ab 0.9.8)
 

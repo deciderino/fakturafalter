@@ -1,4 +1,4 @@
-Fakturafalter 0.9.9.1 – Testdaten
+Fakturafalter 0.9.10 – Testdaten
 ===============================
 
 Alle Firmen, Personen, Rechnungen und Kontonummern sind erfunden.
@@ -95,9 +95,9 @@ Test 7 mit variante-a_positionen_utf8.csv statt variante-d laufen lassen.
 
 Test 7: Rabatt, Gutschrift, Lastschrift (CSV und XML)
 -----------------------------------------------------
-Linux:    ./Fakturafalter-0.9.9.1-x86_64.AppImage -c beispiele/konfiguration.yaml \
+Linux:    ./Fakturafalter-0.9.10-x86_64.AppImage -c beispiele/konfiguration.yaml \
               --dateien beispiele/variante-d_rabatt_gutschrift_lastschrift.csv
-          ./Fakturafalter-0.9.9.1-x86_64.AppImage -c beispiele/xml/konfiguration-pdf-xml.yaml \
+          ./Fakturafalter-0.9.10-x86_64.AppImage -c beispiele/xml/konfiguration-pdf-xml.yaml \
               --dateien beispiele/xml-eingang/*.xml
 Windows:  fakturafalter-cli.exe mit denselben Angaben (Pfade mit \).
 Erwartet: 6 × „OK“ und „[gültig]“. In den PDFs stehen Rabatt- und Zuschlagszeilen, „Gutschrift“ mit
@@ -131,7 +131,7 @@ Test 9: Fortschritt der Verarbeitung
 
 Test 10: Nur PDF mit Anlern-Assistent (unterstützt, nicht empfohlen)
 -------------------------------------------------------------------
-Linux:    ./Fakturafalter-0.9.9.1-x86_64.AppImage -c beispiele/industrie/konfiguration-nur-pdf.yaml
+Linux:    ./Fakturafalter-0.9.10-x86_64.AppImage -c beispiele/industrie/konfiguration-nur-pdf.yaml
 Windows:  Fakturafalter.exe -c beispiele\industrie\konfiguration-nur-pdf.yaml
 
 1. Schalter oben links auf „Überwachung an“. Nur die PDFs aus beispiele/industrie/eingang/ nach
@@ -203,7 +203,7 @@ Test 14: Ausgang als Postbox, Protokollordner, XRechnung-Ablage, Updateprüfung 
 
 Test 15: Steuer-Sonderfälle, Fremdwährung, Kleinunternehmer, Leitweg-ID (neu in 0.9.8)
 -------------------------------------------------------------------------------------
-1. CSV:   ./Fakturafalter-0.9.9.1-x86_64.AppImage -c beispiele/konfiguration.yaml \
+1. CSV:   ./Fakturafalter-0.9.10-x86_64.AppImage -c beispiele/konfiguration.yaml \
               --dateien beispiele/variante-s_steuerfaelle.csv
    Erwartet: 6 × „OK“ und „[gültig]“. RE-S-2026-001 Reverse Charge (Hinweis § 13b, „Ihre USt-IdNr.“),
    002 innergemeinschaftliche Lieferung nach Österreich, 003 Ausfuhr in die Schweiz, 004 nicht steuerbar in USD,
@@ -228,7 +228,7 @@ Test 15: Steuer-Sonderfälle, Fremdwährung, Kleinunternehmer, Leitweg-ID (neu i
 
 Test 16: CSV-Blöcke und Profillogik (neu in 0.9.8)
 --------------------------------------------------
-1. CSV-Blöcke:   ./Fakturafalter-0.9.9.1-x86_64.AppImage -c beispiele/konfiguration.yaml \
+1. CSV-Blöcke:   ./Fakturafalter-0.9.10-x86_64.AppImage -c beispiele/konfiguration.yaml \
                      --dateien beispiele/variante-blo_hotel.csv
    Erwartet: 1 × „OK“ und „[gültig]“, Profil „…blo…“ im Protokoll, SK-2026-0413
    netto 574,80 / USt 101,44 / brutto 676,24, Zahlbar bis 05.11.2026, Skonto-Hinweis
@@ -237,7 +237,7 @@ Test 16: CSV-Blöcke und Profillogik (neu in 0.9.8)
    variante-blo_abweichung.csv geht nach „Zu prüfen“ (zwei Nummern, Kontrollsumme).
 2. Neue CSV einrichten… mit variante-blo_hotel.csv: Aufbau „Blöcke“ wird erkannt
    („Diese Datei sieht nach mehreren Blöcken aus.“). Zuerst Spalten zuordnen,
-   dann „Blöcke festlegen“ (Typ, optionaler Marker, Felder je Block; genau ein
+   dann „Blöcke festlegen“ (farbige Tabelle, Anfangsregel; genau ein
    wiederholender Positionsblock), dann Textzeilen und Darstellung, Probe,
    „Sichtseite ansehen…“, speichern.
 3. Einstellungen → Eingang & Vorlagen: Jede Profilkarte zeigt aktiv/aus und
@@ -249,7 +249,7 @@ Test 16: CSV-Blöcke und Profillogik (neu in 0.9.8)
    und lässt sich nur deaktivieren, nicht löschen oder verschieben.
    Eine frische Installation hat noch keine Beispielprofile in der Konfiguration;
    sie liegen im Testdaten-ZIP. Das Standardprofil ist trotzdem vorhanden.
-   Ab 0.9.9.1 greift ein Block-Profil nur, wenn seine zugeordneten Spalten als
+   Ab 0.9.10 greift ein Block-Profil nur, wenn seine zugeordneten Spalten als
    Kopfzeilen in der Datei vorkommen (ein älteres Hotel-Profil zieht also keine
    fremde Block-CSV mehr an sich). Passen mehrere Profile eindeutig, bleibt das
    oberste aktive der Gewinner; „Profil testen…“ zeigt das mit Begründung.
@@ -260,7 +260,7 @@ Test 17: Standardformat und Skonto (neu in 0.9.9)
 1. Einstellungen → Eingang & Vorlagen: Button „CSV-Vorlage speichern…“
    (Minimal / Vollständig / Beide). In einer frischen Konfiguration liegt
    unten die Karte „fakturafalter-standard“ (aktiv, nicht löschbar).
-2. CSV:   ./Fakturafalter-0.9.9.1-x86_64.AppImage -c beispiele/konfiguration.yaml \
+2. CSV:   ./Fakturafalter-0.9.10-x86_64.AppImage -c beispiele/konfiguration.yaml \
               --dateien beispiele/fakturafalter-standard-minimal.csv
    Erwartet: 2 × „OK“, Profil „fakturafalter-standard“, Rechnungen
    RE-2026-1001 und RE-2026-1002 (fiktiv). Einheit Stück wird zu H87.
@@ -276,7 +276,7 @@ Test 17: Standardformat und Skonto (neu in 0.9.9)
 
 Test 18: Blocklayout mit Markern und freien Feldern (neu in 0.9.9)
 -----------------------------------------------------------------
-1. CSV:   ./Fakturafalter-0.9.9.1-x86_64.AppImage -c beispiele/konfiguration.yaml \
+1. CSV:   ./Fakturafalter-0.9.10-x86_64.AppImage -c beispiele/konfiguration.yaml \
               --dateien beispiele/beispiel-bloecke-klassisch.csv
    Erwartet: 1 × „OK“, RE-2026-2101 (fiktiv), zwei Positionen, Skonto 2 % / 10 Tage,
    zahlbar in 30 Tagen, Profil „beispiel-bloecke-klassisch“ oder ein passendes
@@ -292,3 +292,32 @@ Was zurückmelden
 - Wo du gezögert hast oder nicht wusstest, was zu tun ist.
 - Felder, die falsch erkannt wurden (Feldname, erwarteter Wert).
 - Fehlermeldungen: Hauptfenster → „Protokoll“ (Strg+L) und die Logdatei.
+
+Test 19: Blockdateien mit Satzart (neu in 0.9.10)
+-------------------------------------------------
+Nur fiktive Daten. Im Assistenten: Format → Blöcke festlegen → Spalten je Block
+→ Textzeilen → Darstellung → Probe.
+
+1. beispiele/beispiel-satzart-bloecke-koepfe.csv
+   Satzart plus eigene Kopfzeile je Block, unterschiedliche Namen.
+   Erwartet: RE-2026-2201, Mustertechnik Nord GmbH, 2 Positionen
+   (Dichtungssatz DN 40, Montage vor Ort), Summe 185,50 / 35,25 / 220,75.
+2. beispiele/beispiel-satzart-bloecke-marker.csv
+   wie zuvor, plus #Kopf / #Positionen / #Summen, Kommentar und #LEER.
+   Erwartet: RE-2026-2202, Beispiel Elektro KG, 2 Positionen, Kommentar
+   „bitte nicht lackieren“ an der ersten Position, Summe 178,00 / 33,82 / 211,82.
+3. beispiele/beispiel-satzart-gleiche-positionen.csv
+   eine gemeinsame Kopfzeile, Spalte 2 ist im Kopf die Rechnungsnr und in den
+   Positionen die Bezeichnung.
+   Erwartet: RE-2026-2203, Feinwerk Muster AG, 2 Positionen (Führungsbuchse,
+   Anpassung Welle).
+4. beispiele/beispiel-satzart-ohne-blockkopf.csv
+   nur Satzart-Werte K/P/S, ohne Block-Kopfzeile (Spalten über die Position).
+   Erwartet: RE-2026-2204, Lagerhaus Beispiel GmbH, 2 Positionen, Summe 72,00 /
+   13,68 / 85,68, Zahlungsziel 30 Tage.
+
+Linux (Beispiel zu 1):
+  ./Fakturafalter-0.9.10-x86_64.AppImage -c beispiele/konfiguration.yaml \
+      --dateien beispiele/beispiel-satzart-bloecke-koepfe.csv
+  (Profil zuerst im Assistenten einrichten oder die mitgelieferte
+  profil-beispiel-satzart-bloecke-koepfe.yaml in die Konfiguration übernehmen.)

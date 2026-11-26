@@ -638,7 +638,9 @@ def bloecke_erkannt(fmt: Format) -> bool:
             marker += 1
         elif csv_bloecke.ist_kopfzeile(row, namen, 2):
             kopfzeilen += 1
-    return kopfzeilen >= 2 or marker >= 2 or (marker >= 1 and kopfzeilen >= 1)
+    if kopfzeilen >= 2 or marker >= 2 or (marker >= 1 and kopfzeilen >= 1):
+        return True
+    return _satzart_sieht_nach_einer_rechnung_aus(rows)
 
 
 def bloecke_schneiden_fmt(fmt: Format) -> list[dict]:
@@ -750,6 +752,298 @@ def positionsfelder() -> set[str]:
     return {f for f, _n, teil, _t, _p in FELDER if teil == "position"}
 
 
+
+
+def _satzart_sieht_nach_einer_rechnung_aus(zeilen: list[list[str]]) -> bool:
+    """Eine Satzart-Datei mit einem Kopf-Lauf und einem Positions-Lauf (optional Summen)."""
+    sa = satzart_spalte_erkennen(zeilen)
+    if sa is None:
+        return False
+    namen = synonym_namen()
+    from . import csv_bloecke
+
+    laeufe: list[str] = []
+    kopf = []
+    for row in zeilen:
+        if csv_bloecke._leer_zeile(row) or csv_bloecke.sieht_nach_marker_heuristik(row):
+            continue
+        if csv_bloecke.ist_kopfzeile(row, namen, 2) or (
+            not isinstance(sa, int) and any(_norm(c) == _norm(str(sa)) for c in row)
+        ):
+            if not kopf:
+                kopf = [c.strip() for c in row]
+            continue
+        if isinstance(sa, int):
+            i = sa - 1
+            wert = (row[i] or "").strip() if 0 <= i < len(row) else ""
+        else:
+            wert = ""
+            for i, name in enumerate(kopf or row):
+                if _norm(name) == _norm(str(sa)) and i < len(row):
+                    wert = (row[i] or "").strip()
+                    break
+        typ = typ_aus_satzart_wert(wert)
+        if not typ:
+            continue
+        if not laeufe or laeufe[-1] != typ:
+            laeufe.append(typ)
+    if laeufe.count("kopf") > 1:
+        return False
+    if "kopf" in laeufe and "positionen" in laeufe:
+        return True
+    if not kopf and laeufe:
+        return True
+    return False
+
+
+def typ_aus_satzart_wert(wert: str) -> str:
+    """K/P/S und gängige Wörter → Blocktyp; unbekannte Werte bleiben leer (Nutzer trägt nach)."""
+    from . import csv_bloecke
+
+    n = csv_bloecke.name_norm((wert or "").lstrip("#"))
+    return {
+        "k": "kopf",
+        "kopf": "kopf",
+        "header": "kopf",
+        "head": "kopf",
+        "p": "positionen",
+        "pos": "positionen",
+        "position": "positionen",
+        "positionen": "positionen",
+        "s": "summen",
+        "summe": "summen",
+        "summen": "summen",
+        "r": "zahlung",
+        "zahlung": "zahlung",
+        "l": "lieferung",
+        "lieferung": "lieferung",
+    }.get(n, "")
+
+
+def satzart_spalte_erkennen(zeilen: list[list[str]]):
+    """Name oder 1-basierte Nummer der Satzart-Spalte, sonst None."""
+    from . import csv_bloecke
+
+    if not zeilen:
+        return None
+    # Namens-Treffer in einer Kopfzeile
+    for row in zeilen:
+        if csv_bloecke._leer_zeile(row):
+            continue
+        if csv_bloecke.sieht_nach_marker_heuristik(row):
+            continue
+        if csv_bloecke.ist_kopfzeile(row, synonym_namen(), 2) or any(
+            _norm(c) in ("satzart", "satztyp", "zeilentyp", "recordtype") for c in row
+        ):
+            for c in row:
+                if _norm(c) in ("satzart", "satztyp", "zeilentyp", "recordtype"):
+                    return c.strip()
+            break
+    # Werte: kurze wiederholte Kennzeichen
+    max_cols = max((len(r) for r in zeilen), default=0)
+    beste = None
+    best_score = 0
+    for i in range(max_cols):
+        werte = []
+        for row in zeilen:
+            if csv_bloecke._leer_zeile(row) or csv_bloecke.sieht_nach_marker_heuristik(row):
+                continue
+            if csv_bloecke.ist_kopfzeile(row, synonym_namen(), 2):
+                continue
+            if i >= len(row):
+                continue
+            w = (row[i] or "").strip()
+            if w:
+                werte.append(w)
+        if len(werte) < 2:
+            continue
+        unique = set(werte)
+        if not (2 <= len(unique) <= 8):
+            continue
+        if not all(len(u) <= 12 and typ_aus_satzart_wert(u) for u in unique):
+            continue
+        score = len(werte) + (5 if i == 0 else 0)
+        if score > best_score:
+            best_score = score
+            beste = i + 1
+    return beste
+
+
+def _spaeter_andere_koepfe(zeilen, ab, dieser, namen, sa) -> bool:
+    """True, wenn nach dieser Zeile eine Kopfzeile mit anderen Namen folgt."""
+    from . import csv_bloecke
+
+    dieser_n = [csv_bloecke.name_norm(c) for c in dieser]
+    for row in zeilen[ab + 1 :]:
+        if csv_bloecke._leer_zeile(row) or csv_bloecke.sieht_nach_marker_heuristik(row):
+            continue
+        ist_sa_kopf = sa is not None and not isinstance(sa, int) and any(
+            csv_bloecke.name_norm(c) == csv_bloecke.name_norm(str(sa)) for c in row
+        )
+        if csv_bloecke.ist_kopfzeile(row, namen, 2) or ist_sa_kopf:
+            andere = [csv_bloecke.name_norm(c) for c in row]
+            if andere != dieser_n:
+                return True
+    return False
+
+
+def bloecke_vorschlagen(fmt: Format) -> tuple[list[dict], object]:
+    """Blöcke und optionale Satzart-Spalte aus der Datei vorschlagen (Assistent)."""
+    from . import csv_bloecke
+
+    zeilen = [fmt.kopf] + list(fmt.zeilen or [])
+    namen = synonym_namen()
+    sa = satzart_spalte_erkennen(zeilen)
+    aus: list[dict] = []
+    aktuell: dict | None = None
+    gemeinsame_kopf: list[str] | None = None
+    nr0 = 1
+
+    def _sa_wert(row, kopf):
+        if sa is None:
+            return ""
+        if isinstance(sa, int):
+            i = sa - 1
+            return (row[i] or "").strip() if 0 <= i < len(row) else ""
+        for i, name in enumerate(kopf or []):
+            if csv_bloecke.name_norm(name) == csv_bloecke.name_norm(str(sa)) and i < len(row):
+                return (row[i] or "").strip()
+        return ""
+
+    def _neu(nr, typ, **extra):
+        nonlocal aktuell
+        bl = {
+            "typ": typ,
+            "start": nr,
+            "kopf": list(extra.pop("kopf", []) or []),
+            "daten": [],
+            "anfang": list(extra.pop("anfang", []) or []),
+            "wiederholend": typ == "positionen",
+            "ohne_anfang": bool(extra.pop("ohne_anfang", False)),
+            **extra,
+        }
+        aus.append(bl)
+        aktuell = bl
+        return bl
+
+    for i, row in enumerate(zeilen):
+        nr = nr0 + i
+        if csv_bloecke._leer_zeile(row):
+            continue
+        if csv_bloecke.sieht_nach_marker_heuristik(row):
+            wort = next((str(c).strip() for c in row if str(c).strip()), "")
+            typ = typ_aus_marker(wort)
+            _neu(
+                nr,
+                typ,
+                marker=wort,
+                marker_wort=wort,
+                anfang=[{"art": "marker", "wert": wort}],
+                ohne_kopfzeile=True,
+            )
+            # nächste Zeile kann Kopfzeile sein: wird unten gesetzt
+            aktuell["_wartet_kopf"] = True
+            continue
+        if aktuell is not None and aktuell.pop("_wartet_kopf", False):
+            if csv_bloecke.ist_kopfzeile(row, namen, 2) or not typ_aus_satzart_wert(
+                _sa_wert(row, gemeinsame_kopf)
+            ):
+                if csv_bloecke.ist_kopfzeile(row, namen, 2) or all(
+                    not (c or "").strip().isdigit() for c in row
+                ):
+                    aktuell["kopf"] = [c.strip() for c in row]
+                    aktuell["ohne_kopfzeile"] = False
+                    if not any(r.get("art") == "kopfzeile" for r in aktuell["anfang"]):
+                        aktuell["anfang"].append({"art": "kopfzeile"})
+                    continue
+        kopf_ctx = (aktuell or {}).get("kopf") or gemeinsame_kopf or []
+        wert = _sa_wert(row, kopf_ctx)
+        # Die Kopfzelle „Satzart“ ist kein Satzart-Wert
+        if wert and sa is not None and _norm(str(wert)) == _norm(str(sa) if not isinstance(sa, int) else "satzart"):
+            wert = ""
+        typ_sa = typ_aus_satzart_wert(wert) if wert else ""
+        if typ_sa:
+            if aktuell is not None and typ_sa == aktuell.get("typ"):
+                aktuell["daten"].append((nr, row))
+                continue
+            kopf = list(gemeinsame_kopf or [])
+            anfang = [{"art": "satzart", "wert": wert}]
+            _neu(
+                nr,
+                typ_sa,
+                kopf=kopf,
+                satzart=True,
+                satzart_wert=wert,
+                anfang=anfang,
+                ohne_kopfzeile=not bool(kopf),
+            )
+            aktuell["daten"].append((nr, row))
+            continue
+        ist_sa_kopf = sa is not None and not isinstance(sa, int) and any(
+            _norm(c) == _norm(str(sa)) for c in row
+        )
+        if csv_bloecke.ist_kopfzeile(row, namen, 2) or ist_sa_kopf:
+            typ = typ_vorschlag([c.strip() for c in row])
+            dieser = [c.strip() for c in row]
+            if sa is not None and aktuell is None and not aus:
+                gemeinsame_kopf = dieser
+                # Eigene Kopfzeile je Block (später andere Namen) beginnt hier.
+                # Eine gemeinsame Kopfzeile (gleiche Positionen) bleibt nur Kontext.
+                if not _spaeter_andere_koepfe(zeilen, i, dieser, namen, sa):
+                    continue
+            _neu(
+                nr,
+                typ,
+                kopf=dieser,
+                anfang=[{"art": "kopfzeile"}],
+            )
+            continue
+        if aktuell is None:
+            _neu(
+                nr,
+                "kopf",
+                kopf=list(gemeinsame_kopf or []),
+                ohne_anfang=True,
+                ohne_kopfzeile=not bool(gemeinsame_kopf),
+            )
+            aktuell["daten"].append((nr, row))
+        else:
+            aktuell["daten"].append((nr, row))
+
+    # genau ein wiederholender: der Positionsblock, sonst der längste Datenblock
+    if not any(b.get("wiederholend") for b in aus):
+        kandidat = next((b for b in aus if b.get("typ") == "positionen"), None)
+        if kandidat is None and aus:
+            kandidat = max(aus, key=lambda b: len(b.get("daten") or []))
+        if kandidat is not None:
+            kandidat["typ"] = "positionen"
+            kandidat["wiederholend"] = True
+    if sa is not None:
+        for b in aus:
+            for _nr, row in b.get("daten") or []:
+                w = _sa_wert(row, b.get("kopf") or gemeinsame_kopf or [])
+                typ = typ_aus_satzart_wert(w)
+                if typ and typ == b.get("typ"):
+                    if not any(r.get("art") == "satzart" for r in (b.get("anfang") or [])):
+                        b.setdefault("anfang", []).append({"art": "satzart", "wert": w})
+                    break
+    for b in aus:
+        b["wiederholend"] = b.get("typ") == "positionen" or bool(b.get("wiederholend"))
+        if b["wiederholend"]:
+            b["typ"] = b.get("typ") or "positionen"
+    # nur ein wiederholender
+    gesehen = False
+    for b in aus:
+        if b.get("wiederholend"):
+            if gesehen:
+                b["wiederholend"] = False
+                if b.get("typ") == "positionen":
+                    b["typ"] = typ_vorschlag(b.get("kopf") or []) or "summen"
+            else:
+                gesehen = True
+    return aus, sa
+
+
 def typ_vorschlag(kopf: list[str]) -> str:
     n = set()
     from . import csv_bloecke
@@ -762,14 +1056,14 @@ def typ_vorschlag(kopf: list[str]) -> str:
         return "positionen"
     if n & {
         csv_bloecke.name_norm(x)
-        for x in ("skonto", "zahlungsziel", "zahlungszielohneabzug", "iban")
-    }:
-        return "zahlung"
-    if n & {
-        csv_bloecke.name_norm(x)
         for x in ("gesamtbrutto", "gesamtnetto", "gesamtust", "summebrutto", "summenetto")
     }:
         return "summen"
+    if n & {
+        csv_bloecke.name_norm(x)
+        for x in ("skonto", "zahlungsziel", "zahlungszielohneabzug", "iban")
+    }:
+        return "zahlung"
     if n & {csv_bloecke.name_norm(x) for x in ("liefername", "lieferstrasse", "lieferort")}:
         return "lieferung"
     if n & {csv_bloecke.name_norm(x) for x in ("rechnungsnr", "rechnungsnummer", "kunde", "datum")}:
@@ -811,6 +1105,7 @@ def profil_bauen_bloecke(
     einheiten: dict[str, str],
     textzeile: dict,
     kundenstamm: str | None,
+    satzart_spalte=None,
 ) -> dict:
     """Profil art=bloecke aus dem Assistenten."""
     st: dict = {w: STEUER_WAHL[a] for w, a in steuer.items() if STEUER_WAHL.get(a)}
@@ -838,6 +1133,15 @@ def profil_bauen_bloecke(
                 continue
             _f, _anz, teil, typf, pflicht = FELD[f]
             d: dict = {"spalte": sp}
+            kopf_namen = list(b.get("kopf") or b.get("kopfzeile") or [])
+            pos_map = b.get("feld_pos") or {}
+            if f in pos_map:
+                try:
+                    d["position"] = int(pos_map[f])
+                except (TypeError, ValueError):
+                    pass
+            elif sp in kopf_namen:
+                d["position"] = kopf_namen.index(sp) + 1
             if typf != "text":
                 d["typ"] = typf
             if f in ("BT-112", "BT-109", "BT-110"):
@@ -864,6 +1168,8 @@ def profil_bauen_bloecke(
         }
         if str(b.get("marker") or "").strip():
             ein["marker"] = str(b.get("marker")).strip()
+        if b.get("anfang"):
+            ein["anfang"] = [dict(r) for r in b["anfang"] if isinstance(r, dict)]
         aus_bloecke.append(ein)
     p = {
         "profil": name,
@@ -882,6 +1188,20 @@ def profil_bauen_bloecke(
         "bloecke": aus_bloecke,
         "mappings": {"einheiten": eh, "steuer": st},
     }
+    sa = satzart_spalte
+    if sa in (None, ""):
+        sa = next(
+            ((b.get("satzart_spalte") or None) for b in bloecke if b.get("satzart_spalte")),
+            None,
+        )
+    if sa in (None, ""):
+        for b in bloecke:
+            for r in b.get("anfang") or []:
+                if isinstance(r, dict) and r.get("art") == "satzart" and r.get("spalte"):
+                    sa = r.get("spalte")
+                    break
+    if sa not in (None, ""):
+        p["aufbau"]["satzart_spalte"] = sa
     if kundenstamm:
         p["kundenstamm"] = {"datei": kundenstamm, "schluessel": "kundennummer", "fehlt": "pruefen"}
     return p

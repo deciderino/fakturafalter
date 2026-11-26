@@ -1,0 +1,14 @@
+﻿#Kopf
+Satzart;Rechnungsnr;Datum;Leistungsdatum;Kundennummer;Kunde
+K;RE-2026-2202;16.11.2026;16.11.2026;K-2202;Beispiel Elektro KG
+
+#Positionen
+Satzart;Artikel;Menge;Einheit;Einzelpreis;USt-Satz
+P;Schaltaktor 8-fach;1;Stück;129,00;19
+P;# bitte nicht lackieren;;;;;
+P;#LEER;;;;;
+P;Einbau pauschal;1;pauschal;49,00;19
+
+#Summen
+Satzart;Gesamt Netto;Gesamt USt;Gesamt Brutto;Zahlungsziel ohne Abzug
+S;178,00;33,82;211,82;14

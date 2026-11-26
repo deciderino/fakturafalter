@@ -34,7 +34,7 @@ richtest du weiterhin mit „Neue CSV einrichten…“ ein.
 | Kopfzeile / Zeilen überspringen | ja/nein, Anzahl |
 | Zahlen | Dezimal- und Tausenderzeichen frei (`1.234,50` oder `1,234.50`) |
 | Datum | jedes feste Format, z. B. `%d.%m.%Y`, `%d.%m.%y`, `%Y-%m-%d` |
-| Aufbau | `zeile_je_position` (Standard, mehrere Rechnungen je Datei), `bloecke` (ab 0.9.8, eine Datei = eine Rechnung; ab 0.9.9: genutzte Spalten, optionale Marker, freie Felder je Block), `satzart` (Kopf- und Positionszeilen, z. B. K/P), `feste_breite` |
+| Aufbau | `zeile_je_position` (Standard, mehrere Rechnungen je Datei), `bloecke` (ab 0.9.8, eine Datei = eine Rechnung; ab 0.9.9: Marker und freie Felder; ab 0.9.10: Satzart als Anfangsregel, Spalten je Block), `satzart` (Kopf- und Positionszeilen, z. B. K/P), `feste_breite` |
 | Spaltennamen | frei; das Profil ordnet jede Spalte einem Feld zu |
 | Einheiten, Steuer | Hausbezeichnungen (`Stk`, `Std`, Steuerschlüssel `1`/`2` …) werden im Profil übersetzt |
 
@@ -112,8 +112,17 @@ Zeilensteuer, …) gehören nur in den **einen wiederholenden** Block
 - **Gewollte Leerzeile** auf der Sichtseite: Platzhalter (Standard `#LEER`)
   und/oder eine Zeile, die nur Kopffelder trägt (`leerzeile_modus`).
 - Steht nur der Preis, entscheidet `preis_ohne_menge` (`pruefen` / `eins` / `kommentar`).
-- Im Assistenten: zuerst die Spalten zuordnen, dann die Blöcke festlegen
-  (Typ, optionaler Marker, Felder je Block), dann Textzeilen und Darstellung.
+- Im Assistenten (ab 0.9.10): nach dem Format **Blöcke festlegen** (farbige
+  Tabelle, Grenzen ziehen oder Zeilen markieren und zuweisen). Jeder Block
+  braucht eine Anfangsregel, geprüft in dieser Reihenfolge: Marker, Satzart-Wert,
+  Kopfzeile (*verfügbar ab 0.9.10*; Marker *verfügbar ab 0.9.9*). Danach
+  **Spalten je Block** – dieselbe Position darf je Block ein anderes Feld sein.
+  Gespeichert werden Name und 1-basierte Position; beim Lesen hat der Name
+  Vorrang, wenn die Kopfzeile ihn trägt. Pflichtprüfung erst an der ganzen
+  Rechnung. Ein Kopffeld in mehreren Blöcken wird verglichen (Abweichung →
+  Zu prüfen). Probe und Eingang nutzen denselben Lesepfad.
+- Der Aufbau `satzart` bleibt parallel bestehen; alte Profile ohne `anfang`
+  werden aus `marker` bzw. `kopfzeile` abgeleitet und laufen unverändert.
 - Bestehende Block-Profile ohne `marker` und `wiederholend` laufen unverändert weiter.
 
 
@@ -147,6 +156,11 @@ Ab 0.9.9 außerdem `beispiele/beispiel-bloecke-klassisch.csv` (Kopf, Positionen,
 Zahlung), `beispiele/beispiel-bloecke-frei.csv` (Felder frei verteilt, Kommentar
 und `#LEER`) und `beispiele/beispiel-bloecke-marker.csv` (Erkennung über `#Kopf`,
 `#Positionen`, `#Summen`) mit den zugehörigen `profil-beispiel-bloecke-*.yaml`.
+Ab 0.9.10 außerdem `beispiele/beispiel-satzart-bloecke-koepfe.csv` (Satzart und eigene Kopfzeile je Block),
+`beispiele/beispiel-satzart-bloecke-marker.csv`,
+`beispiele/beispiel-satzart-gleiche-positionen.csv` (gleiche Spaltenposition, andere Bedeutung) und
+`beispiele/beispiel-satzart-ohne-blockkopf.csv` (nur Satzart K/P/S) mit den zugehörigen
+`profil-beispiel-satzart-*.yaml`.
 Standardaufbau: `beispiele/variante-zjp_textzeilen.csv` (fiktiv, RE-2026-0818:
 Kommentar und Leerzeile über der Position, Kommentar darunter; netto 394,40 /
 USt 74,94 / brutto 469,34). Profil: `beispiele/profil-variante-zjp-textzeilen.yaml`.
@@ -162,7 +176,7 @@ In den Aufbauten `zeile_je_position` und `bloecke` gilt:
 - `sicht.einheit: csv` zeigt den Einheitentext aus der CSV; Standard `kurz` (z. B. `Stk.`). In der XML steht weiter der Rec-20-Code in BT-130.
 - `aufbau.einheit_fehlt_stueck: true` (ab 0.9.8.3): Positionen mit Menge und Preis, aber leerer Einheit, erhalten Stück (Rec 20 H87, auf der Sichtseite der Text „Stück“). Im Protokoll erscheint der Hinweis „Einheit fehlte, Stück angenommen“ (kein Prüffall). Standard `false`: fehlende Einheit bleibt „Zu prüfen“. Die Option wirkt in der gemeinsamen Rechnungserzeugung, also auch in anderen Aufbauten, wenn sie im Profil steht. Kommentarzeilen bleiben unverändert.
 - Kommentarzeilen stehen auf der Sichtseite ohne Vorsatz „Beschreibung:“ direkt unter der Position (XML: BT-154). Der Vorsatz gilt nur für eine eigene Beschreibungsspalte. `sicht.kommentar_ohne_bezeichnungen: true` blendet auch Labels wie „Art.-Nr.:“ an Kommentarzeilen aus.
-- Im Assistenten folgen nach der Spaltenzuordnung (beim Blockaufbau danach „Blöcke festlegen“) die Schritte „Textzeilen“ und „Darstellung auf der Rechnung“ (PDF-Bezeichnung umbenennen, optionale Felder ausblenden, Schalter „Fehlende Einheit = Stück verwenden“). „Darstellung…“ ist später auch direkt in den Einstellungen am Profil erreichbar.
+- Im Assistenten folgen (beim Blockaufbau nach „Blöcke festlegen“ und „Spalten je Block“) die Schritte „Textzeilen“ und „Darstellung“ (PDF-Bezeichnung umbenennen, optionale Felder ausblenden, Schalter „Fehlende Einheit = Stück verwenden“). „Darstellung…“ ist später auch direkt in den Einstellungen am Profil erreichbar.
 
 ## Profile in den Einstellungen (ab 0.9.8)
 
@@ -174,8 +188,10 @@ Block-Profil passt ab 0.9.9.1 nur, wenn seine zugeordneten Spalten als
 Kopfzeilen in der Datei vorkommen (nicht schon bei ein paar gemeinsamen Namen).
 Das Protokoll (`protokoll.tsv`) hat eine neunte Spalte mit dem Profilnamen;
 weitere passende Profile weiter unten werden dort erwähnt.
-Ein überarbeiteter Assistent mit farbigem Festlegen der Blöcke und Spalten je
-Block ist geplant und nicht Teil von 0.9.9.1.
+Ab 0.9.10 richtet der Assistent Blockdateien farbig ein (Blöcke festlegen,
+Spalten je Block, Satzart als Anfangsregel). Probe und Eingang nutzen denselben
+Lesepfad; bei mehreren passenden Profilen gewinnt das spezifischste, bei
+Gleichstand das weiter vorne in der Liste.
 
 ## Rabatt, Zuschlag, Gutschrift, Lastschrift und weitere Felder (ab 0.6.0)
 

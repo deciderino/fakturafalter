@@ -1,0 +1,56 @@
+profil: beispiel-satzart-ohne-blockkopf
+version: 1
+beschreibung: 'Nur Satzart-Werte K/P/S, ohne Block-Kopfzeile (fiktiv, ab 0.9.10).'
+datei:
+  muster: beispiel-satzart-ohne-blockkopf.csv
+  kodierung: utf-8-sig
+  trennzeichen: ;
+  textbegrenzer: '"'
+  kopfzeile: false
+zahlen:
+  dezimal: ','
+  tausender: .
+datum:
+  format: '%d.%m.%Y'
+aufbau:
+  art: bloecke
+  kopfzeile_schwelle: 2
+  satzart_spalte: 1
+bloecke:
+- typ: kopf
+  wiederholend: false
+  anfang:
+  - {art: satzart, wert: K}
+  felder:
+    BT-1: {position: 2}
+    BT-2: {position: 3, typ: datum, optional: true}
+    kundennummer: {position: 4, optional: true}
+    BT-44: {position: 5, optional: true}
+    BT-3: {fest: '380'}
+    BT-5: {fest: EUR}
+- typ: positionen
+  wiederholend: true
+  anfang:
+  - {art: satzart, wert: P}
+  felder:
+    BT-153: {position: 2, optional: true}
+    BT-129: {position: 3, typ: zahl, optional: true}
+    BT-130: {position: 4, optional: true, mapping: einheiten}
+    BT-146: {position: 5, typ: zahl, optional: true}
+    steuer: {position: 6, optional: true, mapping: steuer}
+- typ: summen
+  wiederholend: false
+  anfang:
+  - {art: satzart, wert: S}
+  felder:
+    BT-109: {position: 2, typ: zahl, optional: true, zweck: pruefung}
+    BT-110: {position: 3, typ: zahl, optional: true, zweck: pruefung}
+    BT-112: {position: 4, typ: zahl, optional: true, zweck: pruefung}
+    zahlungsziel_tage: {position: 5, typ: tage, optional: true}
+mappings:
+  einheiten:
+    Stück: H87
+    Stunde: HUR
+    unbekannt: pruefen
+  steuer:
+    unbekannt: satz

@@ -1,0 +1,64 @@
+profil: beispiel-satzart-bloecke-koepfe
+version: 1
+beschreibung: 'Blöcke mit Satzart und eigener Kopfzeile je Block (fiktiv, ab 0.9.10).'
+datei:
+  muster: beispiel-satzart-bloecke-koepfe.csv
+  kodierung: utf-8-sig
+  trennzeichen: ;
+  textbegrenzer: '"'
+  kopfzeile: false
+zahlen:
+  dezimal: ','
+  tausender: .
+datum:
+  format: '%d.%m.%Y'
+aufbau:
+  art: bloecke
+  kopfzeile_schwelle: 2
+  satzart_spalte: Satzart
+bloecke:
+- typ: kopf
+  wiederholend: false
+  anfang:
+  - {art: satzart, wert: K}
+  - {art: kopfzeile}
+  kopfzeile: [Satzart, Rechnungsnr, Datum, Leistungsdatum, Kundennummer, Kunde]
+  felder:
+    BT-1: {spalte: Rechnungsnr, position: 2}
+    BT-2: {spalte: Datum, typ: datum, optional: true, position: 3}
+    BT-72: {spalte: Leistungsdatum, typ: datum, optional: true, position: 4}
+    kundennummer: {spalte: Kundennummer, optional: true, position: 5}
+    BT-44: {spalte: Kunde, optional: true, position: 6}
+    BT-3: {fest: '380'}
+    BT-5: {fest: EUR}
+- typ: positionen
+  wiederholend: true
+  anfang:
+  - {art: satzart, wert: P}
+  - {art: kopfzeile}
+  kopfzeile: [Satzart, Artikel, Menge, Einheit, Einzelpreis, USt-Satz]
+  felder:
+    BT-153: {spalte: Artikel, optional: true, position: 2}
+    BT-129: {spalte: Menge, typ: zahl, optional: true, position: 3}
+    BT-130: {spalte: Einheit, optional: true, mapping: einheiten, position: 4}
+    BT-146: {spalte: Einzelpreis, typ: zahl, optional: true, position: 5}
+    steuer: {spalte: USt-Satz, optional: true, mapping: steuer, position: 6}
+- typ: summen
+  wiederholend: false
+  anfang:
+  - {art: satzart, wert: S}
+  - {art: kopfzeile}
+  kopfzeile: [Satzart, Gesamt Netto, Gesamt USt, Gesamt Brutto, Zahlungsziel ohne Abzug]
+  felder:
+    BT-109: {spalte: Gesamt Netto, typ: zahl, optional: true, zweck: pruefung, position: 2}
+    BT-110: {spalte: Gesamt USt, typ: zahl, optional: true, zweck: pruefung, position: 3}
+    BT-112: {spalte: Gesamt Brutto, typ: zahl, optional: true, zweck: pruefung, position: 4}
+    zahlungsziel_tage: {spalte: Zahlungsziel ohne Abzug, typ: tage, optional: true, position: 5}
+mappings:
+  einheiten:
+    Stück: H87
+    Stunde: HUR
+    pauschal: LS
+    unbekannt: pruefen
+  steuer:
+    unbekannt: satz

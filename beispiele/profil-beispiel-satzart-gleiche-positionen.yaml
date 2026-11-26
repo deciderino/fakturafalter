@@ -1,0 +1,49 @@
+profil: beispiel-satzart-gleiche-positionen
+version: 1
+beschreibung: 'Eine gemeinsame Kopfzeile, gleiche Position, andere Bedeutung (fiktiv, ab 0.9.10).'
+datei:
+  muster: beispiel-satzart-gleiche-positionen.csv
+  kodierung: utf-8-sig
+  trennzeichen: ;
+  textbegrenzer: '"'
+  kopfzeile: false
+zahlen:
+  dezimal: ','
+  tausender: .
+datum:
+  format: '%d.%m.%Y'
+aufbau:
+  art: bloecke
+  kopfzeile_schwelle: 2
+  satzart_spalte: Satzart
+bloecke:
+- typ: kopf
+  wiederholend: false
+  anfang:
+  - {art: satzart, wert: K}
+  kopfzeile: [Satzart, Spalte2, Spalte3, Spalte4, Spalte5, Spalte6]
+  felder:
+    BT-1: {spalte: Spalte2, position: 2}
+    BT-2: {spalte: Spalte3, typ: datum, optional: true, position: 3}
+    kundennummer: {spalte: Spalte4, optional: true, position: 4}
+    BT-44: {spalte: Spalte5, optional: true, position: 5}
+    BT-3: {fest: '380'}
+    BT-5: {fest: EUR}
+- typ: positionen
+  wiederholend: true
+  anfang:
+  - {art: satzart, wert: P}
+  kopfzeile: [Satzart, Spalte2, Spalte3, Spalte4, Spalte5, Spalte6]
+  felder:
+    BT-153: {spalte: Spalte2, optional: true, position: 2}
+    BT-129: {spalte: Spalte3, typ: zahl, optional: true, position: 3}
+    BT-130: {spalte: Spalte4, optional: true, mapping: einheiten, position: 4}
+    BT-146: {spalte: Spalte5, typ: zahl, optional: true, position: 5}
+    steuer: {spalte: Spalte6, optional: true, mapping: steuer, position: 6}
+mappings:
+  einheiten:
+    Stück: H87
+    Stunde: HUR
+    unbekannt: pruefen
+  steuer:
+    unbekannt: satz

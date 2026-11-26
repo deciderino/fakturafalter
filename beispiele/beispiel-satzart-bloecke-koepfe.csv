@@ -1,0 +1,9 @@
+﻿Satzart;Rechnungsnr;Datum;Leistungsdatum;Kundennummer;Kunde
+K;RE-2026-2201;16.11.2026;16.11.2026;K-2201;Mustertechnik Nord GmbH
+
+Satzart;Artikel;Menge;Einheit;Einzelpreis;USt-Satz
+P;Dichtungssatz DN 40;3;Stück;18,50;19
+P;Montage vor Ort;2;Stunde;65,00;19
+
+Satzart;Gesamt Netto;Gesamt USt;Gesamt Brutto;Zahlungsziel ohne Abzug
+S;185,50;35,25;220,75;30

@@ -168,13 +168,13 @@ def test_csv_assistent_erkennt_bloecke(fenster, qapp):
     d.b_weiter.click()
     assert d.i == 1 and d.b_weiter.isEnabled()
     d.b_weiter.click()
-    # Schritt „Spalten zuordnen“
-    assert d.i == 2 and d.b_weiter.isEnabled(), d._alle_zuordnungen()
-    assert not d.box_bloecke.isVisibleTo(d)
-    d.b_weiter.click()
     # Schritt „Blöcke festlegen“
+    assert d.i == 2
+    assert d.t_block.rowCount() >= 2
+    assert d.b_weiter.isEnabled()
+    d.b_weiter.click()
+    # Schritt „Spalten je Block“
     assert d.i == 3
-    assert d.t_bloecke_neu.rowCount() >= 2
     assert d.b_weiter.isEnabled()
     p = d.profil()
     assert (p.get("aufbau") or {}).get("art") == "bloecke"
@@ -304,3 +304,45 @@ def test_assistent_auswahltexte_uebersetzt():
         *ce.STEUER_WAHL,
     ]
     assert not [a for a in alle if a not in texte.EN]
+
+
+def test_csv_assistent_bloecke_satzart_koepfe(fenster, qapp):
+    from fakturafalter.gui.datenassistent import CsvAssistent
+
+    d = CsvAssistent(fenster, fenster)
+    d.datei_setzen(BEISPIELE / "beispiel-satzart-bloecke-koepfe.csv")
+    d.name.setText("Satzart-Köpfe")
+    assert d.art == "bloecke"
+    d.b_weiter.click()  # Format
+    assert d.i == 1
+    d.b_weiter.click()  # Blöcke festlegen
+    assert d.i == 2
+    typen = [b.get("typ") for b in d.t_block.bloecke]
+    assert typen == ["kopf", "positionen", "summen"] or typen[:2] == ["kopf", "positionen"]
+    assert all((b.get("anfang") or []) and not b.get("ohne_anfang") for b in d.t_block.bloecke)
+    assert d.b_weiter.isEnabled()
+    d.b_weiter.click()  # Spalten je Block
+    assert d.i == 3
+    p = d.profil()
+    assert p["aufbau"].get("satzart_spalte") == "Satzart"
+    assert any(r.get("art") == "satzart" for b in p["bloecke"] for r in (b.get("anfang") or []))
+    d.reject()
+
+
+def test_csv_assistent_ohne_anfang_sperrt_weiter(fenster, qapp, tmp_path):
+    from fakturafalter.gui.datenassistent import CsvAssistent
+
+    f = tmp_path / "ohne.csv"
+    f.write_text("a;b;c\n1;2;3\n4;5;6\n", encoding="utf-8-sig")
+    d = CsvAssistent(fenster, fenster)
+    d.datei_setzen(f)
+    d.name.setText("Ohne")
+    d.f_art.setCurrentIndex(max(0, d.f_art.findData("bloecke")))
+    d._art_geaendert()
+    d.b_weiter.click()
+    d.b_weiter.click()
+    assert d.i == 2
+    # Wenn kein Anfang erkannt ist, bleibt Weiter aus
+    if d._bloecke_ohne_anfang():
+        assert not d.b_weiter.isEnabled()
+    d.reject()

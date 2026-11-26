@@ -228,19 +228,17 @@ def einlesen(datei: Path, k: Konfig) -> tuple[str, list[Rechnung]]:
         )
         return "pdf", adapter_pdf.lesen(datei, v, k, seiten)
     if suf in CSV_ENDUNGEN:
-        prof, _grund = adapter_csv.profil_fuer_datei(datei, k.csv_profile)
-        if prof is None:
-            raise ValueError("Kein passendes CSV-Profil gefunden")
         try:
-            return "csv", adapter_csv.lesen(datei, prof, k)
+            prof, rs = adapter_csv.lesen_mit_auswahl(datei, k.csv_profile, k)
         except adapter_csv.ProfilFehler:
             raise
         except (ValueError, IndexError, KeyError) as e:
-            name = adapter_csv.profil_name(prof)
             raise ValueError(
-                f"Datei ähnelt dem Profil „{name}“, ist damit aber nicht lesbar "
-                f"({type(e).__name__}: {e})"
+                f"CSV nicht lesbar ({type(e).__name__}: {e})"
             ) from e
+        if prof is None:
+            raise ValueError("Kein passendes CSV-Profil gefunden")
+        return "csv", rs
     if suf == ".xml":
         return "xml", adapter_xml.lesen(datei, k)
     raise ValueError(f"Dateityp {suf or '(ohne Endung)'} wird nicht verarbeitet")
