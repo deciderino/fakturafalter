@@ -34,7 +34,7 @@ richtest du weiterhin mit „Neue CSV einrichten…“ ein.
 | Kopfzeile / Zeilen überspringen | ja/nein, Anzahl |
 | Zahlen | Dezimal- und Tausenderzeichen frei (`1.234,50` oder `1,234.50`) |
 | Datum | jedes feste Format, z. B. `%d.%m.%Y`, `%d.%m.%y`, `%Y-%m-%d` |
-| Aufbau | `zeile_je_position` (Standard), `bloecke` (ab 0.9.8, Blöcke mit eigener Kopfzeile, eine Datei = eine Rechnung), `satzart` (Kopf- und Positionszeilen, z. B. K/P), `feste_breite` |
+| Aufbau | `zeile_je_position` (Standard, mehrere Rechnungen je Datei), `bloecke` (ab 0.9.8, eine Datei = eine Rechnung; ab 0.9.9: genutzte Spalten, optionale Marker, freie Felder je Block), `satzart` (Kopf- und Positionszeilen, z. B. K/P), `feste_breite` |
 | Spaltennamen | frei; das Profil ordnet jede Spalte einem Feld zu |
 | Einheiten, Steuer | Hausbezeichnungen (`Stk`, `Std`, Steuerschlüssel `1`/`2` …) werden im Profil übersetzt |
 
@@ -76,33 +76,46 @@ und das Profil einen Kundenstamm (eigene CSV) nennt.
   „Preis pro 100 Stk“. Fehlt die Spalte oder ist die Zelle leer, gilt `1`. Gesamt = Menge × Einzelpreis
   ÷ Preiseinheit (500 Stk zu 4,80 € pro 100 Stk = 24,00 €). Im Profil: `BT-149: {spalte: Preiseinheit, typ: zahl}`
 
-## Blöcke mit eigener Kopfzeile (ab 0.9.8)
+## Blöcke mit eigener Kopfzeile (ab 0.9.8, überarbeitet ab 0.9.9)
 
 Manche Exporte legen in **einer Datei eine Rechnung** ab, aber in mehreren
 Abschnitten: zuerst die Positionen, darunter Zahlung oder Summen – jeder Abschnitt
-mit einer eigenen Kopfzeile. Im Profil: `aufbau.art: bloecke`.
+mit einer eigenen Kopfzeile. Im Profil: `aufbau.art: bloecke`. Welche Felder in
+welchem Block stehen, ist frei wählbar; die Pflichtprüfung läuft am Ende über die
+zusammengeführte Rechnung. Positionsfelder (Bezeichnung, Menge, Preis, Einheit,
+Zeilensteuer, …) gehören nur in den **einen wiederholenden** Block
+(`wiederholend: true`; in älteren Profilen: `typ: positionen`).
 
 - Eine Zeile gilt als neue Block-Kopfzeile, wenn mindestens *n* Zellen (Standard
-  `kopfzeile_schwelle: 2`) bekannte oder im Profil zugeordnete Spaltennamen sind.
-  Die Reihenfolge der Spalten ist egal, unbekannte Spalten sind erlaubt.
+  `kopfzeile_schwelle: 2`) **zugeordnete** Spaltennamen sind, oder wenn sie
+  **exakt** einer im Profil gespeicherten `kopfzeile` entspricht. Unbenutzte Namen
+  zählen nicht für die Schwelle, dürfen aber stehen. Beginnt die Datei weder mit
+  einer Kopfzeile noch mit einem Marker, geht die Rechnung nach „Zu prüfen“.
+- Optional erkennt ein Block eine **Markerzeile** (`bloecke[].marker`, z. B.
+  `#Kopf`, `#Positionen`; auch ohne `#` erlaubt). Vergleich: erste nicht-leere
+  Zelle, ohne Groß/Klein-Unterschied (`name_norm`), alle anderen Zellen leer,
+  exakter Wortlaut. Die Markerzeile erscheint nicht auf der Rechnung. Die nächste
+  Zeile darf eine Kopfzeile sein; kennt das Profil die Spalten schon und die
+  nächste Zeile ist keine Kopfzeile, sind das bereits Daten. `#LEER` (bzw. der
+  eingestellte Platzhalter) kann kein Marker sein. Ein Kommentar wie
+  `# bitte nicht …` ist kein Marker.
 - Leere Zeilen zwischen Blöcken trennen nur; sie erscheinen nicht auf der Sichtseite.
-- Kopffelder (Rechnungsnummer, Datum, Kunde …) dürfen in jeder Positionszeile
-  stehen oder einmal in einem eigenen Kopfblock. Gleiche Werte werden
+- Kopffelder (Rechnungsnummer, Datum, Kunde, Skonto, Summen, Lieferanschrift …)
+  dürfen in jedem Block stehen, auch wiederholt. Gleiche Werte werden
   zusammengeführt, abweichende Werte halten die Rechnung in „Zu prüfen“ an.
-- **Textzeilen** (ab 0.9.8.1 auch bei `zeile_je_position`): Menge und Preis leer,
-  Text vorhanden → der Text hängt standardmäßig als Beschreibung (BT-154) an der
-  Position darüber (umstellbar auf Bezeichnung BT-153). Eine Textzeile *vor* der
-  ersten Position erscheint auf der Sichtseite an Ort und Stelle über der
-  ersten Position; in der XML wird sie standardmäßig Hinweistext der Rechnung
-  (BT-22). Optional (`aufbau.textzeile.verwaist: naechste`) gehört sie zur
-  folgenden Position (BT-154). Text *zwischen* zwei Positionen hängt
-  standardmäßig an der vorherigen (`zwischen: vorher`); `nachher` legt ihn als
-  Vorspann über die folgende Position.
-- **Gewollte Leerzeile** auf der Sichtseite: Platzhalter (Standard `#LEER`, im
-  Profil unter `aufbau.textzeile.platzhalter` frei wählbar oder leer lassbar)
-  und/oder eine Zeile, die Kopffelder trägt, aber Menge, Preis und Text leer
-  lässt (`leerzeile_modus`: `beides` / `platzhalter` / `kopffeldzeile`).
-- Die Sichtseite behält Zeilenumbrüche und Leerzeilen in der Beschreibung.
+  Zwei verschiedene Rechnungsnummern oder ein zweiter Positionsblock → „Zu prüfen“.
+- **Textzeilen** (wie im Standardaufbau, ab 0.9.9 vollständig angeschlossen):
+  Menge und Preis leer oder `0` / `0,00`, Text vorhanden → der Text hängt
+  standardmäßig als Beschreibung (BT-154) an der Position darüber (`zwischen:
+  vorher`; Option `nachher`: untere Position). Eine Textzeile *vor* der ersten
+  Position: Standard Hinweistext (BT-22), optionale `verwaist`.
+- **Gewollte Leerzeile** auf der Sichtseite: Platzhalter (Standard `#LEER`)
+  und/oder eine Zeile, die nur Kopffelder trägt (`leerzeile_modus`).
+- Steht nur der Preis, entscheidet `preis_ohne_menge` (`pruefen` / `eins` / `kommentar`).
+- Im Assistenten: zuerst die Spalten zuordnen, dann die Blöcke festlegen
+  (Typ, optionaler Marker, Felder je Block), dann Textzeilen und Darstellung.
+- Bestehende Block-Profile ohne `marker` und `wiederholend` laufen unverändert weiter.
+
 
 Skonto und Zahlungsziel stehen in eigenen Spalten (`Skonto`, `Zahlungsziel mit
 Skonto`, `Zahlungsziel`). Fakturafalter setzt das Fälligkeitsdatum (BT-9) auf
@@ -128,17 +141,19 @@ Verzug oder Mahnung nur als Klartext ohne `#`, etwa in der Bemerkung (BT-22).
 Eine Zeile `#VERZUG#` ist in XRechnung 3.0.2 unzulässig und wird nicht erzeugt.
 Einzelheiten: [csv-standard.md](csv-standard.md#46-zahlung-und-skonto).
 
-Beispiele: `beispiele/variante-blo_hotel.csv` (fiktiv, SK-2026-0413: netto 574,80 /
-USt 101,44 / brutto 676,24, fällig 05.11.2026) und
-`beispiele/variante-blo_getrennt.csv` (Kopf, Positionen mit Textzeile und `#LEER`,
-Zahlung getrennt). Profil: `beispiele/profil-variante-blo.yaml`.
+Beispiele (fiktiv): `beispiele/variante-blo_hotel.csv` (SK-2026-0413) und
+`beispiele/variante-blo_getrennt.csv`. Profil: `beispiele/profil-variante-blo.yaml`.
+Ab 0.9.9 außerdem `beispiele/beispiel-bloecke-klassisch.csv` (Kopf, Positionen,
+Zahlung), `beispiele/beispiel-bloecke-frei.csv` (Felder frei verteilt, Kommentar
+und `#LEER`) und `beispiele/beispiel-bloecke-marker.csv` (Erkennung über `#Kopf`,
+`#Positionen`, `#Summen`) mit den zugehörigen `profil-beispiel-bloecke-*.yaml`.
 Standardaufbau: `beispiele/variante-zjp_textzeilen.csv` (fiktiv, RE-2026-0818:
 Kommentar und Leerzeile über der Position, Kommentar darunter; netto 394,40 /
 USt 74,94 / brutto 469,34). Profil: `beispiele/profil-variante-zjp-textzeilen.yaml`.
 
-## Textzeilen, Darstellung und Mengen (ab 0.9.8.1, Standardaufbau)
+## Textzeilen, Darstellung und Mengen (ab 0.9.8.1, ab 0.9.9 auch im Blockaufbau)
 
-Im Aufbau `zeile_je_position` (nicht bei `bloecke`) gilt zusätzlich:
+In den Aufbauten `zeile_je_position` und `bloecke` gilt:
 
 - **Leer** sind leere Zellen, nur Leerzeichen sowie `0` / `0,00`. Menge *und* Preis leer oder 0 → keine Position (Textzeile oder gewollte Leerzeile). Steht nur die Menge, ist es eine Position. Steht nur der Preis, entscheidet `aufbau.textzeile.preis_ohne_menge`: `pruefen` (Standard), `eins` (Menge 1) oder `kommentar`.
 - Spalten auf „nicht verwenden“ zählen nirgends mit, auch nicht bei der Erkennung von Kommentar- und Leerzeilen.
@@ -147,7 +162,7 @@ Im Aufbau `zeile_je_position` (nicht bei `bloecke`) gilt zusätzlich:
 - `sicht.einheit: csv` zeigt den Einheitentext aus der CSV; Standard `kurz` (z. B. `Stk.`). In der XML steht weiter der Rec-20-Code in BT-130.
 - `aufbau.einheit_fehlt_stueck: true` (ab 0.9.8.3): Positionen mit Menge und Preis, aber leerer Einheit, erhalten Stück (Rec 20 H87, auf der Sichtseite der Text „Stück“). Im Protokoll erscheint der Hinweis „Einheit fehlte, Stück angenommen“ (kein Prüffall). Standard `false`: fehlende Einheit bleibt „Zu prüfen“. Die Option wirkt in der gemeinsamen Rechnungserzeugung, also auch in anderen Aufbauten, wenn sie im Profil steht. Kommentarzeilen bleiben unverändert.
 - Kommentarzeilen stehen auf der Sichtseite ohne Vorsatz „Beschreibung:“ direkt unter der Position (XML: BT-154). Der Vorsatz gilt nur für eine eigene Beschreibungsspalte. `sicht.kommentar_ohne_bezeichnungen: true` blendet auch Labels wie „Art.-Nr.:“ an Kommentarzeilen aus.
-- Im Assistenten folgen nach der Spaltenzuordnung die Schritte „Textzeilen“ und „Darstellung auf der Rechnung“ (PDF-Bezeichnung umbenennen, optionale Felder ausblenden, Schalter „Fehlende Einheit = Stück verwenden“). „Darstellung…“ ist später auch direkt in den Einstellungen am Profil erreichbar.
+- Im Assistenten folgen nach der Spaltenzuordnung (beim Blockaufbau danach „Blöcke festlegen“) die Schritte „Textzeilen“ und „Darstellung auf der Rechnung“ (PDF-Bezeichnung umbenennen, optionale Felder ausblenden, Schalter „Fehlende Einheit = Stück verwenden“). „Darstellung…“ ist später auch direkt in den Einstellungen am Profil erreichbar.
 
 ## Profile in den Einstellungen (ab 0.9.8)
 

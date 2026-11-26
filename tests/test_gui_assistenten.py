@@ -168,11 +168,19 @@ def test_csv_assistent_erkennt_bloecke(fenster, qapp):
     d.b_weiter.click()
     assert d.i == 1 and d.b_weiter.isEnabled()
     d.b_weiter.click()
-    assert d.i == 2 and d.box_bloecke.isVisibleTo(d) and d.box_text.isVisibleTo(d)
-    assert d.f_block.count() >= 2
-    assert d.b_weiter.isEnabled(), d._alle_zuordnungen()
+    # Schritt „Spalten zuordnen“
+    assert d.i == 2 and d.b_weiter.isEnabled(), d._alle_zuordnungen()
+    assert not d.box_bloecke.isVisibleTo(d)
+    d.b_weiter.click()
+    # Schritt „Blöcke festlegen“
+    assert d.i == 3
+    assert d.t_bloecke_neu.rowCount() >= 2
+    assert d.b_weiter.isEnabled()
     p = d.profil()
     assert (p.get("aufbau") or {}).get("art") == "bloecke"
+    typen = [b.get("typ") for b in (p.get("bloecke") or [])]
+    assert "positionen" in typen
+    assert any(b.get("wiederholend") for b in p.get("bloecke") or [])
     d.reject()
 
 

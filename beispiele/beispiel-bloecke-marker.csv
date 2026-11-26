@@ -1,0 +1,14 @@
+﻿#Kopf
+Rechnungsnr;Datum;Leistungsdatum;Kundennummer;Kunde
+RE-2026-2103;14.11.2026;14.11.2026;K-2103;Beispiel Werkstätten GmbH
+
+#Positionen
+Artikel;Menge;Einheit;Einzelpreis;USt-Satz
+Dichtungssatz DN 50;4;Stück;12,50;19
+# bitte nicht mit Lösungsmitteln reinigen;;;
+#LEER;;;
+Einbau pauschal;1;pauschal;80,00;19
+
+#Summen
+Gesamt Netto;Gesamt USt;Gesamt Brutto;Zahlungsziel ohne Abzug
+130,00;24,70;154,70;14

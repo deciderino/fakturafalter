@@ -1,0 +1,129 @@
+profil: beispiel-bloecke-marker
+version: 1
+beschreibung: 'Beispiel C: Erkennung über Marker #Kopf, #Positionen, #Summen (fiktiv).'
+datei:
+  muster: beispiel-bloecke-*.csv
+  kodierung: utf-8-sig
+  trennzeichen: ;
+  textbegrenzer: '"'
+  kopfzeile: false
+zahlen:
+  dezimal: ','
+  tausender: .
+datum:
+  format: '%d.%m.%Y'
+aufbau:
+  art: bloecke
+  kopfzeile_schwelle: 2
+  textzeile:
+    leer:
+    - BT-129
+    - BT-146
+    - text
+    text_spalte: Artikel
+    ziel: BT-154
+    trenner: '
+
+      '
+    platzhalter: '#LEER'
+    verwaist: BT-22
+    leerzeile_modus: beides
+    zwischen: vorher
+    preis_ohne_menge: pruefen
+bloecke:
+- typ: kopf
+  wiederholend: false
+  marker: '#Kopf'
+  kopfzeile:
+  - Rechnungsnr
+  - Datum
+  - Leistungsdatum
+  - Kundennummer
+  - Kunde
+  felder:
+    BT-1:
+      spalte: Rechnungsnr
+    BT-2:
+      spalte: Datum
+      typ: datum
+      optional: true
+    BT-72:
+      spalte: Leistungsdatum
+      typ: datum
+      optional: true
+    kundennummer:
+      spalte: Kundennummer
+      optional: true
+    BT-44:
+      spalte: Kunde
+      optional: true
+    BT-3:
+      fest: '380'
+    BT-5:
+      fest: EUR
+- typ: positionen
+  wiederholend: true
+  marker: '#Positionen'
+  kopfzeile:
+  - Artikel
+  - Menge
+  - Einheit
+  - Einzelpreis
+  - USt-Satz
+  felder:
+    BT-153:
+      spalte: Artikel
+      optional: true
+    BT-129:
+      spalte: Menge
+      typ: zahl
+      optional: true
+    BT-130:
+      spalte: Einheit
+      optional: true
+      mapping: einheiten
+    BT-146:
+      spalte: Einzelpreis
+      typ: zahl
+      optional: true
+    steuer:
+      spalte: USt-Satz
+      optional: true
+      mapping: steuer
+- typ: summen
+  wiederholend: false
+  marker: '#Summen'
+  kopfzeile:
+  - Gesamt Netto
+  - Gesamt USt
+  - Gesamt Brutto
+  - Zahlungsziel ohne Abzug
+  felder:
+    BT-109:
+      spalte: Gesamt Netto
+      typ: zahl
+      optional: true
+      zweck: pruefung
+    BT-110:
+      spalte: Gesamt USt
+      typ: zahl
+      optional: true
+      zweck: pruefung
+    BT-112:
+      spalte: Gesamt Brutto
+      typ: zahl
+      optional: true
+      zweck: pruefung
+    zahlungsziel_tage:
+      spalte: Zahlungsziel ohne Abzug
+      typ: tage
+      optional: true
+mappings:
+  einheiten:
+    Stück: H87
+    Stk: H87
+    Stunde: HUR
+    pauschal: LS
+    unbekannt: pruefen
+  steuer:
+    unbekannt: satz

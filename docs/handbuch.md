@@ -72,35 +72,34 @@ Weichen die Spaltennamen ab, richtest du die Datei einmal ein:
    wählen (sie wird nur gelesen). Der Zuordnung einen Namen geben und **Weiter**.
 3. **Format:** Trennzeichen, Zeichensatz, Dezimalzeichen und Datumsformat sind
    erkannt. Passt die Vorschau nicht, stelle sie um. Unter **Aufbau** kannst du
-   festlegen, ob jede Zeile eine Position ist, die Datei **Blöcke mit eigener
-   Kopfzeile** hat oder eine Satzart-Spalte Kopf und Positionen trennt.
-   Fakturafalter schlägt den erkannten Aufbau vor.
-4. **Vorschau:** Über jeder Spalte steht, wofür Fakturafalter sie nimmt.
-   Stimmt etwas nicht, wähle das Feld um. Unklare Steuerwerte bleiben auf
-   „prüfen“. Bei Blöcken typisierst du die erkannten Blöcke (Kopf, Positionen,
-   Zahlung …) und ordnest die Spalten je Block zu. Textzeilen ohne Menge und
-   Preis hängen standardmäßig als Beschreibung (BT-154) an der Position darüber;
-   eine gewollte Leerzeile auf der Sichtseite erkennst du mit dem Platzhalter
-   `#LEER` (änderbar) oder einer Zeile, die nur Kopffelder trägt.
-5. Nur beim Standardaufbau („eine Zeile je Position“): **Textzeilen** (ob
-   Kommentare oder gewollte Leerzeilen vorkommen; 0 und 0,00 gelten als leer;
-   Vorschau, wie die Zeilen erkannt werden) und **Darstellung auf der Rechnung**
-   (Positionsnummer, Menge exakt wie in der CSV, Einheit, Schalter
-   „Fehlende Einheit = Stück verwenden“, Bezeichnungen auf der
-   PDF, optionale Felder ausblenden). Die Vorschläge übernimmst du mit Weiter.
-   Später erreichst du die Darstellung auch über **Darstellung…** an der
-   Profilkarte, ohne den ganzen Assistenten.
-6. **Probe:** zeigt je Rechnung „bereit“ oder „braucht Prüfung“ – es wird
+   festlegen, ob jede Zeile eine Position ist, die Datei **Blöcke** hat
+   (eine Datei = eine Rechnung) oder eine Satzart-Spalte Kopf und Positionen
+   trennt. Sieht die Datei nach mehreren Blöcken aus, weist Fakturafalter darauf hin.
+4. **Spalten zuordnen:** Über jeder Spalte steht, wofür Fakturafalter sie nimmt.
+   Stimmt etwas nicht, wähle das Feld um oder „nicht verwenden“. Unklare
+   Steuerwerte bleiben auf „prüfen“. Bei Blöcken prüft Fakturafalter die
+   Vollständigkeit erst am Ende, wenn alle Blöcke zusammengeführt sind.
+5. Nur bei Blöcken: **Blöcke festlegen.** Je Block Typ (Kopf, Positionen, Summen,
+   Lieferung, Zahlung oder ein eigener Name), optionale Markerzeile (`#Kopf`,
+   auch ohne `#` erlaubt; `#LEER` bleibt reserviert) und die Felder, die in
+   diesem Block stehen. Genau ein Block wiederholt sich (die Positionen).
+6. **Textzeilen** und **Darstellung auf der Rechnung** (Standardaufbau und
+   Blöcke): ob Kommentare oder gewollte Leerzeilen vorkommen; 0 und 0,00 gelten
+   als leer; Text zwischen zwei Positionen standardmäßig zur oberen Position;
+   Platzhalter `#LEER`; Positionsnummer, Menge, Einheit, Schalter
+   „Fehlende Einheit = Stück verwenden“. Die Darstellung erreichst du später
+   auch über **Darstellung…** an der Profilkarte.
+7. **Probe:** zeigt je Rechnung „bereit“ oder „braucht Prüfung“ – es wird
    nichts erzeugt. Optional **Sichtseite ansehen…**. Dann **Speichern**. Die
    Zuordnung erscheint als Karte unter „CSV-Zuordnungen“.
-7. Den Haken **„Zusätzlich das PDF der Rechnung verwenden“** nur setzen, wenn
+8. Den Haken **„Zusätzlich das PDF der Rechnung verwenden“** nur setzen, wenn
    der Original-Druck die Sichtseite bleiben soll. Ohne Haken (Standard für eine
    neue CSV-Einstellung) baut Fakturafalter die Sichtseite aus den Daten neu
    (Layout unter Absender → „Layout gestalten…“) und wartet nicht auf ein PDF.
    Liegt trotzdem ein PDF mit gleichem Dateinamen daneben, wird es nicht als
    Sichtseite und nicht als eigene Rechnung genommen; es wandert mit der CSV
    nach `Erledigt`.
-8. Schalter **Überwachung** einschalten und die CSV in den `Eingang` legen.
+9. Schalter **Überwachung** einschalten und die CSV in den `Eingang` legen.
 
 Satzart-Dateien richtet der Assistent ebenfalls ein, wenn eine Spalte „Satzart“
 (oder ähnlich) erkannt wird; Feineinstellungen stehen in

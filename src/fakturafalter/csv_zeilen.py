@@ -2,8 +2,8 @@
 # Copyright 2026 Fakturafalter-Mitwirkende
 """Text-/Leerzeilen und leere Mengen/Preise im Aufbau „eine Zeile je Position“.
 
-Die Block-Logik (csv_bloecke) bleibt unberührt: 0 gilt dort weiterhin nicht automatisch
-als leer, und unzugeordnete Spalten können weiter mitzählen.
+Ab 0.9.9 gilt 0 / 0,00 auch im Blockmodus als leer; unzugeordnete Spalten zählen
+dort nicht mehr für die Kopfzeilen-Schwelle.
 """
 
 from __future__ import annotations

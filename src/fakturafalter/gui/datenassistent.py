@@ -228,6 +228,9 @@ class CsvAssistent(_Assistent):
         self.block_typ: dict[int, QComboBox] = {}
         self.f_art = None
         self._start = start
+        self.block_felder: dict[int, set[str]] = {}
+        self.block_marker: dict[int, str] = {}
+        self.block_wiederholend: dict[int, bool] = {}
         for s in (
             self._seite_datei(),
             self._seite_format(),
@@ -236,6 +239,7 @@ class CsvAssistent(_Assistent):
             self._seite_darstellung(),
             self._seite_probe(),
             self._seite_fertig(),
+            self._seite_bloecke(),
         ):
             self.stapel.addWidget(rollen(s))
         self._schritte_anpassen()
@@ -405,16 +409,30 @@ class CsvAssistent(_Assistent):
         fmt = self.fmt
         if fmt:
             self._art_vorschlagen()
+            self._schritte_anpassen()
         if not fmt:
             return
         t = self.t_format
         t.clear()
-        t.setColumnCount(len(fmt.kopf))
-        t.setHorizontalHeaderLabels(fmt.kopf)
-        t.setRowCount(min(VORSCHAU_ZEILEN, len(fmt.zeilen)))
-        for i, z in enumerate(fmt.zeilen[:VORSCHAU_ZEILEN]):
-            for j, w in enumerate(z[: len(fmt.kopf)]):
-                t.setItem(i, j, QTableWidgetItem(w))
+        from .. import csv_bloecke
+
+        rows = [list(fmt.kopf)] + [list(z) for z in fmt.zeilen]
+        if csv_bloecke.sieht_nach_marker_heuristik(fmt.kopf):
+            # Erste Zeile ist ein Marker, keine Datei-Kopfzeile: alle Spalten zeigen.
+            breit = max((len(r) for r in rows), default=1)
+            t.setColumnCount(breit)
+            t.setHorizontalHeaderLabels([str(j + 1) for j in range(breit)])
+            t.setRowCount(min(VORSCHAU_ZEILEN, len(rows)))
+            for i, z in enumerate(rows[:VORSCHAU_ZEILEN]):
+                for j, w in enumerate(z[:breit]):
+                    t.setItem(i, j, QTableWidgetItem(w))
+        else:
+            t.setColumnCount(len(fmt.kopf))
+            t.setHorizontalHeaderLabels(fmt.kopf)
+            t.setRowCount(min(VORSCHAU_ZEILEN, len(fmt.zeilen)))
+            for i, z in enumerate(fmt.zeilen[:VORSCHAU_ZEILEN]):
+                for j, w in enumerate(z[: len(fmt.kopf)]):
+                    t.setItem(i, j, QTableWidgetItem(w))
         t.resizeColumnsToContents()
 
     def _art_erkannt(self) -> str:
@@ -437,7 +455,7 @@ class CsvAssistent(_Assistent):
         else:
             self.art = erkannt
         texte = {
-            "bloecke": _("Mehrere Blöcke mit eigener Kopfzeile erkannt."),
+            "bloecke": _("Diese Datei sieht nach mehreren Blöcken aus."),
             "satzart": _(
                 "Kennwort-Spalte (Satzart) erkannt. Kopf- und Positionszeilen werden getrennt gelesen."
             ),
@@ -590,11 +608,30 @@ class CsvAssistent(_Assistent):
             return
         bloecke = self.art == "bloecke"
         if getattr(self, "box_bloecke", None):
-            self.box_bloecke.setVisible(bloecke)
-            self.box_text.setVisible(bloecke)
+            self.box_bloecke.setVisible(False)
+        # box_text liegt auf der Textzeilen-Seite und darf hier nicht versteckt werden.
         if bloecke:
-            self._bloecke_tabelle()
-            self._vorschau_bauen_block()
+            kopf = ce.einzigartige_spalten(fmt) or list(fmt.kopf)
+            vorschlag = ce.spalten_vorschlagen(kopf, fmt.zeilen)
+            if self.alt:
+                alt = {f: s for f, s in ce.profil_zuordnung(self.alt).items() if s in kopf}
+                if alt:
+                    vorschlag = alt
+            je_spalte = {s: f for f, s in vorschlag.items()}
+            zeilen = self._vorschauwerte_fuer(kopf)
+            self._map_tabelle(kopf, zeilen, je_spalte)
+            if getattr(self, "l_fehlt", None):
+                self.l_fehlt.setText(
+                    _(
+                        "Ob die Rechnung vollständig ist, prüft Fakturafalter am Ende, "
+                        "wenn alle Blöcke zusammengeführt sind."
+                    )
+                )
+                self.l_fehlt.setVisible(True)
+                self.l_fehlt.setObjectName("hinweis")
+                self.l_fehlt.setStyleSheet("")
+                self.l_fehlt.style().unpolish(self.l_fehlt)
+                self.l_fehlt.style().polish(self.l_fehlt)
             return
         vorschlag = ce.spalten_vorschlagen(fmt.kopf, fmt.zeilen)
         if self.alt:
@@ -713,13 +750,7 @@ class CsvAssistent(_Assistent):
 
     def _alle_zuordnungen(self) -> dict[str, str]:
         """Bei Blöcken Pflichtfelder über alle typisierten Blöcke prüfen, nicht nur den sichtbaren."""
-        if self.art != "bloecke":
-            return self.zuordnung()
-        alle: dict[str, str] = {}
-        for z in self.zuordnung_je.values():
-            alle.update(z)
-        alle.update(self.zuordnung())
-        return alle
+        return self.zuordnung()
 
     def _zuordnung_geaendert(self, spalte: int | None) -> None:
         if spalte is not None:  # jedes Feld nur einmal: gleiches Feld an anderer Spalte lösen
@@ -730,17 +761,41 @@ class CsvAssistent(_Assistent):
                     b.setCurrentIndex(0)
                     b.blockSignals(False)
         z = self.zuordnung()
-        if self.art == "bloecke":
-            b = self._aktueller_block()
-            if b and b.get("typ"):
-                self.zuordnung_je[b["typ"]] = dict(z)
         fehlt = ce.fehlende_pflicht(self._alle_zuordnungen())
-        self.l_fehlt.setText(
-            _("Noch zuordnen: {was}").format(was=", ".join(_(x) for x in fehlt)) if fehlt else ""
-        )
-        self.l_fehlt.setVisible(bool(fehlt))
+        if self.art == "bloecke":
+            self.l_fehlt.setText(
+                _(
+                    "Ob die Rechnung vollständig ist, prüft Fakturafalter am Ende, "
+                    "wenn alle Blöcke zusammengeführt sind."
+                )
+                + (
+                    (
+                        " "
+                        + _("Noch nicht zugeordnet, aber empfohlen: {was}.").format(
+                            was=", ".join(_(x) for x in fehlt)
+                        )
+                    )
+                    if fehlt
+                    else ""
+                )
+            )
+            self.l_fehlt.setVisible(True)
+            self.l_fehlt.setObjectName("hinweis")
+            self.l_fehlt.setStyleSheet("")
+            self.l_fehlt.style().unpolish(self.l_fehlt)
+            self.l_fehlt.style().polish(self.l_fehlt)
+        else:
+            self.l_fehlt.setText(
+                _("Noch zuordnen: {was}").format(was=", ".join(_(x) for x in fehlt))
+                if fehlt
+                else ""
+            )
+            self.l_fehlt.setVisible(bool(fehlt))
         self._steuer_bauen(z.get("steuer"))
-        eh = ce.einheiten_vorschlag(ce.spalte(self.fmt, z["BT-130"])) if z.get("BT-130") else {}
+        einheit_werte = (
+            ce.spalte_in_datei(self.fmt, z["BT-130"]) if z.get("BT-130") and self.fmt else []
+        )
+        eh = ce.einheiten_vorschlag(einheit_werte) if einheit_werte else {}
         unbekannt = [w for w, c in eh.items() if not c]
         self.l_einheit.setText(
             _("Einheiten ohne Zuordnung (kommen zur Prüfung): {e}").format(e=", ".join(unbekannt))
@@ -757,7 +812,7 @@ class CsvAssistent(_Assistent):
             if w:
                 w.deleteLater()
         self.steuer_wahl = {}
-        werte = ce.spalte(self.fmt, spalte) if spalte else []
+        werte = ce.spalte_in_datei(self.fmt, spalte) if spalte and self.fmt else []
         self.k_steuer.setVisible(bool(spalte))
         if not spalte:
             return
@@ -795,15 +850,304 @@ class CsvAssistent(_Assistent):
             self.g_steuer.addWidget(b, i, 1)
             self.steuer_wahl[w] = b
 
-    def _folge(self) -> list[tuple[int, str]]:
-        """Seitenindex und Schrittname. Neue Schritte nur bei „eine Zeile je Position“."""
-        basis = [(0, "Datei"), (1, "Format"), (2, "Vorschau")]
-        extra = (
-            [(3, "Textzeilen"), (4, "Darstellung auf der Rechnung")]
-            if self.art == "zeile_je_position"
-            else []
+    def _vorschauwerte_fuer(self, kopf: list[str]) -> list[list[str]]:
+        """Beispielwerte zu den einzigartigen Spaltennamen, über alle Blöcke."""
+        aus: list[list[str]] = []
+        for sp in kopf:
+            werte = ce.spalte_in_datei(self.fmt, sp) if self.fmt else []
+            for i, w in enumerate(werte[:8]):
+                while len(aus) <= i:
+                    aus.append([""] * len(kopf))
+                aus[i][kopf.index(sp)] = w
+        return aus
+
+    def _seite_bloecke(self) -> QWidget:
+        w, v = _seite()
+        v.addWidget(lbl(_("Blöcke in dieser Datei"), "titel", umbruch=True))
+        v.addWidget(
+            lbl(
+                _("eine Datei = eine Rechnung. Zuerst die Spalten, jetzt die Blöcke. ")
+                + _(
+                    "Felder je Block sind frei wählbar. Genau ein Block wiederholt sich (Positionen)."
+                ),
+                "sub",
+                umbruch=True,
+            )
         )
-        return basis + extra + [(5, "Probe"), (6, "Fertig")]
+        self.t_bloecke_neu = QTableWidget(0, 4)
+        self.t_bloecke_neu.setHorizontalHeaderLabels(
+            [_("Zeile"), _("Typ"), _("Marker (optional)"), _("Spalten in diesem Block")]
+        )
+        self.t_bloecke_neu.verticalHeader().setVisible(False)
+        self.t_bloecke_neu.setSelectionBehavior(QTableWidget.SelectionBehavior.SelectRows)
+        self.t_bloecke_neu.setSelectionMode(QTableWidget.SelectionMode.SingleSelection)
+        self.t_bloecke_neu.setMinimumHeight(180)
+        self.t_bloecke_neu.itemSelectionChanged.connect(self._block_auswahl_geaendert)
+        v.addWidget(self.t_bloecke_neu)
+        self.c_wiederholend = QCheckBox(_("Dieser Block wiederholt sich (Positionsblock)."))
+        self.c_wiederholend.toggled.connect(self._block_wiederholend_geaendert)
+        v.addWidget(self.c_wiederholend)
+        v.addWidget(
+            lbl(
+                _(
+                    "Genau ein Block darf das sein. Positionsfelder (Bezeichnung, Menge, Preis, Einheit, "
+                    "Steuer der Zeile, …) gehören in diesen Block."
+                ),
+                "hinweis",
+                umbruch=True,
+            )
+        )
+        v.addWidget(lbl(_("Felder in diesem Block (frei wählbar)")))
+        self.box_block_felder = QWidget()
+        self.lay_block_felder = QVBoxLayout(self.box_block_felder)
+        self.lay_block_felder.setContentsMargins(0, 0, 0, 0)
+        v.addWidget(self.box_block_felder)
+        v.addWidget(
+            lbl(
+                _(
+                    "Marker (optional): steht in der Datei eine eigene Zeile wie #Kopf, trage den Wortlaut "
+                    "hier ein. Die Markerzeile erscheint nicht auf der Rechnung. Ohne Marker erkennt "
+                    "Fakturafalter den Block an seiner Kopfzeile."
+                ),
+                "hinweis",
+                umbruch=True,
+            )
+        )
+        self.l_block_fehler = lbl("", "warn", umbruch=True)
+        v.addWidget(self.l_block_fehler)
+        return w
+
+    def _bloecke_seite_bauen(self) -> None:
+        if not self.fmt:
+            return
+        zu = self.zuordnung()
+        alt = self.alt if (self.alt or {}).get("aufbau", {}).get("art") == "bloecke" else None
+        if alt:
+            self.bloecke = ce.bloecke_schneiden_zuordnung(self.fmt, zu, alt)
+        else:
+            self.bloecke = ce.bloecke_schneiden_zuordnung(self.fmt, zu)
+        typen_fest = [
+            ("kopf", _("Kopf")),
+            ("positionen", _("Positionen")),
+            ("summen", _("Summen")),
+            ("lieferung", _("Lieferung")),
+            ("zahlung", _("Zahlung")),
+        ]
+        self.block_typ = {}
+        self.block_marker_edit: dict[int, QLineEdit] = {}
+        t = self.t_bloecke_neu
+        t.blockSignals(True)
+        t.setRowCount(len(self.bloecke))
+        alt_bloecke = list((alt or {}).get("bloecke") or [])
+        for i, b in enumerate(self.bloecke):
+            typ = b.get("typ") or ce.typ_vorschlag(b.get("kopf") or [])
+            if not typ and i < len(alt_bloecke):
+                typ = str(alt_bloecke[i].get("typ") or typ)
+            if not typ:
+                typ = "kopf"
+            b["typ"] = typ
+            if i not in self.block_wiederholend:
+                if i < len(alt_bloecke) and "wiederholend" in alt_bloecke[i]:
+                    self.block_wiederholend[i] = bool(alt_bloecke[i]["wiederholend"])
+                else:
+                    self.block_wiederholend[i] = typ == "positionen"
+            if i not in self.block_marker:
+                if i < len(alt_bloecke) and alt_bloecke[i].get("marker"):
+                    self.block_marker[i] = str(alt_bloecke[i]["marker"])
+                elif b.get("marker_wort"):
+                    self.block_marker[i] = str(b.get("marker_wort") or "")
+                else:
+                    treffer = next(
+                        (x for x in alt_bloecke if x.get("typ") == typ and x.get("marker")), None
+                    )
+                    self.block_marker[i] = str((treffer or {}).get("marker") or "")
+            t.setItem(i, 0, QTableWidgetItem(str(b.get("start") or "")))
+            cb = QComboBox()
+            cb.setEditable(True)
+            for code, text in typen_fest:
+                cb.addItem(text, code)
+            j = cb.findData(typ)
+            if j >= 0:
+                cb.setCurrentIndex(j)
+            else:
+                cb.addItem(typ, typ)
+                cb.setCurrentIndex(cb.findData(typ))
+            cb.currentIndexChanged.connect(lambda *_a, n=i: self._block_typ_seite_geaendert(n))
+            cb.editTextChanged.connect(lambda *_a, n=i: self._block_typ_seite_geaendert(n))
+            t.setCellWidget(i, 1, cb)
+            self.block_typ[i] = cb
+            ed = QLineEdit(self.block_marker.get(i) or "")
+            ed.setPlaceholderText(_("z. B. #Kopf"))
+            ed.setMinimumHeight(40)
+            ed.textChanged.connect(lambda txt, n=i: self._block_marker_geaendert(n, txt))
+            t.setCellWidget(i, 2, ed)
+            self.block_marker_edit[i] = ed
+            t.setItem(i, 3, QTableWidgetItem(", ".join(c for c in (b.get("kopf") or []) if c)))
+            # default fields: assigned columns that appear in this header
+            if i not in self.block_felder:
+                namen = {ce._norm(c) for c in (b.get("kopf") or [])}
+                felder = {f for f, s in zu.items() if ce._norm(s) in namen}
+                if alt:
+                    for ab in alt_bloecke:
+                        if ab.get("typ") == typ:
+                            felder |= {
+                                f
+                                for f, d in (ab.get("felder") or {}).items()
+                                if isinstance(d, dict) and d.get("spalte")
+                            }
+                self.block_felder[i] = felder
+        t.blockSignals(False)
+        t.resizeColumnsToContents()
+        if self.bloecke and t.currentRow() < 0:
+            t.selectRow(0)
+        self._block_auswahl_geaendert()
+        self._block_pruefen()
+
+    def _block_typ_seite_geaendert(self, i: int) -> None:
+        cb = self.block_typ.get(i)
+        if not cb or i >= len(self.bloecke):
+            return
+        typ = cb.currentData() or cb.currentText().strip()
+        self.bloecke[i]["typ"] = typ
+        if typ == "positionen" and i not in self.block_wiederholend:
+            self.block_wiederholend[i] = True
+        self._block_pruefen()
+
+    def _block_marker_geaendert(self, i: int, txt: str) -> None:
+        self.block_marker[i] = txt
+        self._block_pruefen()
+
+    def _block_wiederholend_geaendert(self, an: bool) -> None:
+        i = self.t_bloecke_neu.currentRow()
+        if i < 0:
+            return
+        self.block_wiederholend[i] = an
+        self._block_pruefen()
+
+    def _block_auswahl_geaendert(self) -> None:
+        i = self.t_bloecke_neu.currentRow()
+        while self.lay_block_felder.count():
+            item = self.lay_block_felder.takeAt(0)
+            w = item.widget()
+            if w:
+                w.hide()
+                w.setParent(None)
+                w.deleteLater()
+        self._block_feld_boxen: dict[str, QCheckBox] = {}
+        if i < 0 or i >= len(self.bloecke):
+            return
+        self.c_wiederholend.blockSignals(True)
+        self.c_wiederholend.setChecked(bool(self.block_wiederholend.get(i)))
+        self.c_wiederholend.blockSignals(False)
+        zu = self.zuordnung()
+        belegt = self.block_felder.get(i) or set()
+        for f, anz, *_r in ce.FELDER:
+            if f not in zu and f not in belegt:
+                continue
+            box = QCheckBox(_(anz) + (f" ({zu[f]})" if f in zu else ""))
+            box.setChecked(f in belegt)
+            box.toggled.connect(lambda an, feld=f: self._block_feld_toggeln(feld, an))
+            self.lay_block_felder.addWidget(box)
+            self._block_feld_boxen[f] = box
+
+    def _block_feld_toggeln(self, feld: str, an: bool) -> None:
+        i = self.t_bloecke_neu.currentRow()
+        if i < 0:
+            return
+        s = self.block_felder.setdefault(i, set())
+        if an:
+            s.add(feld)
+        else:
+            s.discard(feld)
+        self._block_pruefen()
+
+    def _block_pruefen(self) -> tuple[bool, str]:
+        texte: list[str] = []
+        n_w = sum(1 for i in range(len(self.bloecke)) if self.block_wiederholend.get(i))
+        if n_w != 1:
+            texte.append(_("Es muss genau einen wiederholenden Block (Positionen) geben."))
+        pf = {f for f in ce.positionsfelder() if not str(f).endswith("_kontrolle")}
+        for i in range(len(self.bloecke)):
+            if self.block_wiederholend.get(i):
+                continue
+            falsch = (self.block_felder.get(i) or set()) & pf
+            if falsch:
+                texte.append(
+                    _("Positionsfelder dürfen nur im wiederholenden Block liegen ({t}).").format(
+                        t=", ".join(sorted(falsch))
+                    )
+                )
+        platz = (self._textzeile() or {}).get("platzhalter") or "#LEER"
+        zu_namen = {ce._norm(s) for s in self.zuordnung().values() if s}
+        for i, m in self.block_marker.items():
+            m = (m or "").strip()
+            if not m:
+                continue
+            from .. import csv_bloecke
+
+            if csv_bloecke.name_norm(m) == csv_bloecke.name_norm(platz):
+                texte.append(
+                    _(
+                        "„{p}“ bleibt für gewollte Leerzeilen reserviert und kann kein Marker sein."
+                    ).format(p=platz)
+                )
+            elif csv_bloecke.name_norm(m) in zu_namen:
+                texte.append(_("Hinweis: Der Marker „{m}“ gleicht einem Spaltennamen.").format(m=m))
+        # warnings vs errors: name clash is warning (still allowed)
+        fehler = [x for x in texte if not x.startswith("Hinweis:")]
+        self.l_block_fehler.setText(" ".join(texte))
+        self.l_block_fehler.setVisible(bool(texte))
+        self.l_block_fehler.setObjectName("warn" if fehler else "hinweis")
+        self.l_block_fehler.setStyleSheet("")
+        self.l_block_fehler.style().unpolish(self.l_block_fehler)
+        self.l_block_fehler.style().polish(self.l_block_fehler)
+        ok = not fehler and bool(self.bloecke)
+        if getattr(self, "b_weiter", None) and self.stapel.currentIndex() == 7:
+            self.b_weiter.setEnabled(ok)
+        return ok, " ".join(fehler)
+
+    def _bloecke_fuer_profil(self) -> list[dict]:
+        aus = []
+        for i, roh in enumerate(self.bloecke):
+            typ = (
+                (self.block_typ[i].currentData() or self.block_typ[i].currentText().strip())
+                if i in self.block_typ
+                else roh.get("typ") or ce.typ_vorschlag(roh.get("kopf") or [])
+            )
+            aus.append(
+                {
+                    **roh,
+                    "typ": typ,
+                    "wiederholend": bool(self.block_wiederholend.get(i, typ == "positionen")),
+                    "marker": (self.block_marker.get(i) or "").strip(),
+                    "kopf": list(roh.get("kopf") or []),
+                    "felder_wahl": set(self.block_felder.get(i) or []),
+                }
+            )
+        return aus
+
+    def _folge(self) -> list[tuple[int, str]]:
+        """Seitenindex und Schrittname. Bei Blöcken: Spalten, dann Blöcke, dann Textzeilen."""
+        if self.art == "bloecke":
+            return [
+                (0, "Datei"),
+                (1, "Format"),
+                (2, "Spalten zuordnen"),
+                (7, "Blöcke festlegen"),
+                (3, "Textzeilen"),
+                (4, "Darstellung auf der Rechnung"),
+                (5, "Probe"),
+                (6, "Fertig"),
+            ]
+        return [
+            (0, "Datei"),
+            (1, "Format"),
+            (2, "Vorschau"),
+            (3, "Textzeilen"),
+            (4, "Darstellung auf der Rechnung"),
+            (5, "Probe"),
+            (6, "Fertig"),
+        ]
 
     def _schritte_anpassen(self) -> None:
         namen = [_(n) for _st, n in self._folge()]
@@ -870,7 +1214,8 @@ class CsvAssistent(_Assistent):
         v.addWidget(self.c_leer_menge)
         v.addWidget(self.c_leer_preis)
         v.addWidget(self.c_leer_text)
-        v.addWidget(lbl(_("Platzhalter für eine gewollte Leerzeile (optional)")))
+        self.l_platz_zjp = lbl(_("Platzhalter für eine gewollte Leerzeile (optional)"))
+        v.addWidget(self.l_platz_zjp)
         self.f_platz_zjp = QLineEdit("#LEER")
         self.f_platz_zjp.setMinimumHeight(48)
         v.addWidget(self.f_platz_zjp)
@@ -918,6 +1263,15 @@ class CsvAssistent(_Assistent):
             self.f_preis_ohne.setCurrentIndex(
                 self.f_preis_ohne.findData(alt_tz["preis_ohne_menge"])
             )
+        if getattr(self, "box_text", None):
+            self.box_text.setParent(w)
+            # nach der Einleitung, vor den weiteren Optionen
+            v.insertWidget(2, self.box_text)
+            self.box_text.setVisible(True)
+            # Platzhalter steht bereits in box_text – nicht zweimal anbieten.
+            self.l_platz_zjp.setVisible(False)
+            self.f_platz_zjp.setVisible(False)
+            self.f_platz.textChanged.connect(self.f_platz_zjp.setText)
         return w
 
     def _textzeilen_vorschau_fuellen(self) -> None:
@@ -939,27 +1293,72 @@ class CsvAssistent(_Assistent):
             (p.get("felder") or {}).get("position") or {},
             (p.get("felder") or {}).get("kopf") or {},
         )
-        daten = list(self.fmt.zeilen)
-        t.setRowCount(min(len(daten), 40))
         namen = {
             "position": _("Position"),
             "text": _("Kommentarzeile"),
             "leer": _("Leerzeile"),
             "skip": _("wird ignoriert"),
             "preis_ohne_menge": _("Preis ohne Menge"),
+            "marker": _("Marker"),
+            "kopfzeile": _("Kopfzeile"),
         }
-        for i, werte in enumerate(daten[:40]):
-            row = dict(zip(self.fmt.kopf, werte))
-            art = csv_zeilen.erkennen(row, pos, kopf, tz)
-            if art is None:
-                kind, inhalt = "position", row.get(z.get("BT-153") or "", "") or ""
-            else:
-                kind, inhalt = art[0], art[1]
-            t.setItem(i, 0, QTableWidgetItem(str(i + 2)))
-            t.setItem(i, 1, QTableWidgetItem(namen.get(kind, kind)))
-            t.setItem(
-                i, 2, QTableWidgetItem(str(inhalt or row.get(z.get("BT-153") or "", "") or ""))
-            )
+        if self.art == "bloecke":
+            try:
+                bloecke = csv_bloecke.schneiden_profil(
+                    [self.fmt.kopf] + list(self.fmt.zeilen or []), 1, p
+                )
+            except Exception:
+                bloecke = []
+            wieder = csv_bloecke.wiederholender_typ(p)
+            zeilen_info: list[tuple[int, dict, str]] = []
+            for bl in bloecke:
+                typ = str(bl.get("typ") or csv_bloecke.typ_fuer(bl["kopf"], p) or "")
+                if typ != wieder and typ != "positionen":
+                    continue
+                for nr, werte in bl.get("daten") or []:
+                    row = dict(zip(bl.get("kopf") or [], werte))
+                    zeilen_info.append((nr, row, typ))
+            t.setRowCount(min(len(zeilen_info), 40))
+            for i, (nr, row, typ) in enumerate(zeilen_info[:40]):
+                art = csv_zeilen.erkennen(
+                    row, pos if pos else (p.get("bloecke") or [{}])[0].get("felder") or {}, kopf, tz
+                )
+                # use positions fields from profile
+                if not pos:
+                    bdef = next(
+                        (
+                            b
+                            for b in (p.get("bloecke") or [])
+                            if b.get("typ") in (wieder, "positionen")
+                        ),
+                        {},
+                    )
+                    pos = bdef.get("felder") or {}
+                    art = csv_zeilen.erkennen(row, pos, kopf, tz)
+                if art is None:
+                    kind, inhalt = "position", row.get(z.get("BT-153") or "", "") or ""
+                else:
+                    kind, inhalt = art[0], art[1]
+                t.setItem(i, 0, QTableWidgetItem(str(nr)))
+                t.setItem(i, 1, QTableWidgetItem(namen.get(kind, kind)))
+                t.setItem(
+                    i, 2, QTableWidgetItem(str(inhalt or row.get(z.get("BT-153") or "", "") or ""))
+                )
+        else:
+            daten = list(self.fmt.zeilen)
+            t.setRowCount(min(len(daten), 40))
+            for i, werte in enumerate(daten[:40]):
+                row = dict(zip(self.fmt.kopf, werte))
+                art = csv_zeilen.erkennen(row, pos, kopf, tz)
+                if art is None:
+                    kind, inhalt = "position", row.get(z.get("BT-153") or "", "") or ""
+                else:
+                    kind, inhalt = art[0], art[1]
+                t.setItem(i, 0, QTableWidgetItem(str(i + 2)))
+                t.setItem(i, 1, QTableWidgetItem(namen.get(kind, kind)))
+                t.setItem(
+                    i, 2, QTableWidgetItem(str(inhalt or row.get(z.get("BT-153") or "", "") or ""))
+                )
         t.resizeColumnsToContents()
 
     def _seite_darstellung(self) -> QWidget:
@@ -1171,35 +1570,25 @@ class CsvAssistent(_Assistent):
         steuer = {w: b.currentData() for w, b in self.steuer_wahl.items()}
         if not steuer and z.get("steuer"):
             try:
-                steuer = {w: "prüfen" for w in set(ce.spalte(self.fmt, z["steuer"])) if w}
+                steuer = {w: "prüfen" for w in set(ce.spalte_in_datei(self.fmt, z["steuer"])) if w}
             except ValueError:
                 steuer = {}
         try:
-            eh = ce.einheiten_vorschlag(ce.spalte(self.fmt, z["BT-130"])) if z.get("BT-130") else {}
+            eh = (
+                ce.einheiten_vorschlag(ce.spalte_in_datei(self.fmt, z["BT-130"]))
+                if z.get("BT-130") and self.fmt
+                else {}
+            )
         except ValueError:
             eh = {}
         if self.art == "bloecke":
-            bloecke = []
+            bloecke = self._bloecke_fuer_profil() if self.bloecke else []
+            zu = self.zuordnung()
             zu_je: dict[str, dict[str, str]] = {}
-            # aktuelle Zuordnung dem sichtbaren Block zuordnen; andere Blöcke über Vorschlag
-            for i, roh in enumerate(self.bloecke):
-                typ = (
-                    self.block_typ[i].currentData()
-                    if i in self.block_typ
-                    else ce.typ_vorschlag(roh.get("kopf") or [])
-                )
-                b = {**roh, "typ": typ}
-                bloecke.append(b)
-                if typ in self.zuordnung_je:
-                    zu_je[typ] = dict(self.zuordnung_je[typ])
-                else:
-                    zu_je[typ] = ce.spalten_vorschlagen(
-                        roh.get("kopf") or [], [w for _n, w in roh.get("daten") or []]
-                    )
-            if z:
-                sichtbar = self._aktueller_block()
-                if sichtbar and sichtbar.get("typ"):
-                    zu_je[sichtbar["typ"]] = dict(z)
+            for b in bloecke:
+                typ = str(b.get("typ") or "")
+                wahl = b.get("felder_wahl") or set()
+                zu_je[typ] = {f: s for f, s in zu.items() if f in wahl} or dict(zu)
             p = ce.profil_bauen_bloecke(
                 self.name.text().strip() or "csv",
                 self.datei,
@@ -1363,9 +1752,16 @@ class CsvAssistent(_Assistent):
         elif i == 1:
             self.b_weiter.setEnabled(bool(self.fmt))
         elif i == 2:
-            self.b_weiter.setEnabled(not ce.fehlende_pflicht(self._alle_zuordnungen()))
+            if self.art == "bloecke":
+                self.b_weiter.setEnabled(bool(self.zuordnung()))
+            else:
+                self.b_weiter.setEnabled(not ce.fehlende_pflicht(self._alle_zuordnungen()))
+        elif i == 7:
+            self._bloecke_seite_bauen()
         elif i == 3:
             self.b_weiter.setEnabled(True)
+            if getattr(self, "box_text", None):
+                self.box_text.setVisible(True)
             self._textzeilen_vorschau_fuellen()
         elif i == 4:
             self.b_weiter.setEnabled(True)

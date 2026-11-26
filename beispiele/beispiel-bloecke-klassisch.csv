@@ -1,0 +1,9 @@
+﻿Rechnungsnr;Datum;Leistungsdatum;Kundennummer;Kunde;Strasse;PLZ;Ort
+RE-2026-2101;12.11.2026;11.11.2026;K-2101;Beispiel Technik GmbH;Musterweg 4;38100;Braunschweig
+
+Rechnungsnr;Artikel;Menge;Einheit;Einzelpreis;USt-Satz
+RE-2026-2101;Schutzblech hinten;2;Stück;49,00;19
+RE-2026-2101;Montage vor Ort;1;Stunde;65,00;19
+
+Skonto;Zahlungsziel mit Skonto;Zahlungsziel ohne Abzug;Gesamt Netto;Gesamt Brutto
+2,00;10;30;163,00;193,97

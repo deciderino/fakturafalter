@@ -2,7 +2,8 @@
 # Copyright 2026 Fakturafalter-Mitwirkende
 """CSV-Aufbau „bloecke“: eine Kopfzeile mit Spaltennamen kündigt einen Block an.
 
-Eine Datei ergibt eine Rechnung. Siehe docs/csv-format.md und skizze-098-csv-bloecke.md.
+Eine Datei ergibt eine Rechnung. Erkennung über genutzte Spalten und optionale Marker.
+Siehe docs/csv-format.md und docs/csv-standard.md.
 """
 
 from __future__ import annotations
@@ -42,13 +43,10 @@ def schwelle(profil: dict) -> int:
     return max(1, int((profil.get("aufbau") or {}).get("kopfzeile_schwelle") or 2))
 
 
-def bekannte_namen(profil: dict) -> set[str]:
-    """Alle im Profil genannten Spaltennamen (Block-Kopfzeilen und Feldzuordnungen)."""
+def genutzte_namen(profil: dict) -> set[str]:
+    """Nur zugeordnete Spalten (`felder.spalte`) – unbenutzte Namen zählen nicht für die Schwelle."""
     aus: set[str] = set()
     for b in profil.get("bloecke") or []:
-        for n in b.get("kopfzeile") or []:
-            if n:
-                aus.add(name_norm(str(n)))
         for d in (b.get("felder") or {}).values():
             if isinstance(d, dict) and d.get("spalte"):
                 aus.add(name_norm(str(d["spalte"])))
@@ -61,11 +59,128 @@ def bekannte_namen(profil: dict) -> set[str]:
     return aus
 
 
+def bekannte_namen(profil: dict) -> set[str]:
+    """Ab 0.9.9: nur noch genutzte Spalten. Exakte Kopfzeilen prüft `ist_exakte_kopfzeile`."""
+    return genutzte_namen(profil)
+
+
+def _norm_zeile(zellen: list[str]) -> list[str]:
+    aus = [name_norm(str(c).strip()) for c in zellen]
+    while aus and not aus[-1]:
+        aus.pop()
+    return aus
+
+
+def gespeicherte_kopfzeilen(profil: dict, typ: str | None = None) -> list[list[str]]:
+    aus: list[list[str]] = []
+    for b in profil.get("bloecke") or []:
+        if typ is not None and str(b.get("typ") or "") != typ:
+            continue
+        k = _norm_zeile([str(x) for x in (b.get("kopfzeile") or []) if x is not None])
+        if k:
+            aus.append(k)
+    return aus
+
+
+def ist_exakte_kopfzeile(zellen: list[str], profil: dict, typ: str | None = None) -> bool:
+    haben = _norm_zeile(zellen)
+    if not haben:
+        return False
+    return any(haben == soll for soll in gespeicherte_kopfzeilen(profil, typ))
+
+
+def block_wiederholend(b: dict) -> bool:
+    """Altes Profil ohne Flag: typ positionen gilt als wiederholend."""
+    if "wiederholend" in b:
+        return bool(b.get("wiederholend"))
+    return str(b.get("typ") or "") == "positionen"
+
+
+def wiederholender_typ(profil: dict) -> str:
+    for b in profil.get("bloecke") or []:
+        if block_wiederholend(b) and b.get("typ"):
+            return str(b["typ"])
+    return "positionen"
+
+
+def kopfzeile_des_typs(profil: dict, typ: str) -> list[str]:
+    for b in profil.get("bloecke") or []:
+        if str(b.get("typ") or "") == typ:
+            return [str(x) for x in (b.get("kopfzeile") or [])]
+    return []
+
+
+def platzhalter_von(profil: dict) -> str:
+    p = ((profil.get("aufbau") or {}).get("textzeile") or {}).get("platzhalter")
+    return "#LEER" if p is None else str(p)
+
+
+def marker_im_profil(profil: dict) -> list[tuple[str, str]]:
+    """[(typ, normierter Marker), …] – Platzhalter #LEER kann kein Marker sein."""
+    platz = name_norm(platzhalter_von(profil))
+    aus: list[tuple[str, str]] = []
+    for b in profil.get("bloecke") or []:
+        m = str(b.get("marker") or "").strip()
+        if not m:
+            continue
+        n = name_norm(m)
+        if not n or n == platz:
+            continue
+        aus.append((str(b.get("typ") or ""), n))
+    return aus
+
+
+def ist_markerzeile(zellen: list[str], profil: dict) -> str:
+    """Typ, wenn die erste nicht-leere Zelle exakt einem Marker entspricht und der Rest leer ist."""
+    if not marker_im_profil(profil):
+        return ""
+    erste = ""
+    for c in zellen:
+        if not (c or "").strip():
+            continue
+        if erste:
+            return ""
+        erste = c.strip()
+    if not erste:
+        return ""
+    if name_norm(erste) == name_norm(platzhalter_von(profil)):
+        return ""
+    n = name_norm(erste)
+    for typ, mn in marker_im_profil(profil):
+        if n == mn:
+            return typ
+    return ""
+
+
+def sieht_nach_marker_heuristik(zellen: list[str]) -> bool:
+    """Format-Schritt: eine einzelne Zelle der Form #Wort ohne Leerzeichen, nicht #LEER.
+
+    Kommentare wie „# bitte nicht …“ sind keine Marker. Ohne „#“ prüft erst das Profil.
+    """
+    fuell = [(c or "").strip() for c in zellen if (c or "").strip()]
+    if len(fuell) != 1:
+        return False
+    t0 = fuell[0]
+    if not t0.startswith("#") or len(t0) < 2:
+        return False
+    if name_norm(t0) == name_norm("#LEER"):
+        return False
+    wort = t0[1:]
+    return bool(wort) and not any(ch.isspace() for ch in wort)
+
+
 def ist_kopfzeile(zellen: list[str], namen: set[str], n: int) -> bool:
     if not namen:
         return False
     treffer = sum(1 for c in zellen if name_norm(c) and name_norm(c) in namen)
     return treffer >= n
+
+
+def ist_block_kopfzeile(zellen: list[str], profil: dict) -> bool:
+    """Genutzte Namen ab Schwelle, oder exakt eine gespeicherte Kopfzeile."""
+    if ist_kopfzeile(zellen, genutzte_namen(profil), schwelle(profil)):
+        return True
+    return ist_exakte_kopfzeile(zellen, profil)
 
 
 def _leer_zeile(werte: list[str]) -> bool:
@@ -85,6 +200,67 @@ def schneiden(zeilen: list[list[str],], start: int, namen: set[str], n: int) -> 
             aus.append(aktuell)
         elif aktuell is None:
             aktuell = {"kopf": [], "start": nr, "daten": [(nr, row)], "ohne_kopfzeile": True}
+            aus.append(aktuell)
+        else:
+            aktuell["daten"].append((nr, row))
+    return aus
+
+
+def schneiden_profil(zeilen: list[list[str]], start: int, profil: dict) -> list[dict]:
+    """Zerlegen nach Profil: Marker, genutzte Spalten, exakte Kopfzeile. Leere Zeilen trennen nur."""
+    namen = genutzte_namen(profil)
+    n = schwelle(profil)
+    hat_marker = bool(marker_im_profil(profil))
+    aus: list[dict] = []
+    aktuell: dict | None = None
+    optional_kopf = False
+    for i, row in enumerate(zeilen):
+        nr = start + i
+        if _leer_zeile(row):
+            continue
+        typ_m = ist_markerzeile(row, profil) if hat_marker else ""
+        if typ_m:
+            wort = next((str(c).strip() for c in row if str(c).strip()), "")
+            aktuell = {
+                "kopf": kopfzeile_des_typs(profil, typ_m),
+                "start": nr,
+                "daten": [],
+                "typ": typ_m,
+                "marker": True,
+                "marker_wort": wort,
+                "ohne_kopfzeile": True,
+            }
+            aus.append(aktuell)
+            optional_kopf = True
+            continue
+        if optional_kopf and aktuell is not None:
+            optional_kopf = False
+            typ = str(aktuell.get("typ") or "")
+            if (
+                ist_kopfzeile(row, namen, n)
+                or ist_exakte_kopfzeile(row, profil, typ)
+                or ist_exakte_kopfzeile(row, profil)
+            ):
+                aktuell["kopf"] = [c.strip() for c in row]
+                aktuell["ohne_kopfzeile"] = False
+                continue
+        if ist_kopfzeile(row, namen, n) or ist_exakte_kopfzeile(row, profil):
+            typ = typ_fuer([c.strip() for c in row], profil)
+            aktuell = {
+                "kopf": [c.strip() for c in row],
+                "start": nr,
+                "daten": [],
+                "typ": typ,
+            }
+            aus.append(aktuell)
+        elif aktuell is None:
+            aktuell = {
+                "kopf": [],
+                "start": nr,
+                "daten": [(nr, row)],
+                "ohne_kopfzeile": True,
+                "ohne_anfang": True,
+            }
             aus.append(aktuell)
         else:
             aktuell["daten"].append((nr, row))
@@ -123,8 +299,6 @@ def typ_fuer(kopf: list[str], profil: dict) -> str:
         if treffer > punkte:
             best, punkte = typ, treffer
     if punkte <= 0:
-        if _sieht_nach_positionen_aus(kopf):
-            return "positionen"
         return ""
     # eindeutiger Höchstwert
     if sum(1 for t, typ in treffer_je if t == punkte) > 1:
@@ -242,10 +416,14 @@ def zeile_ohne_inhalt(werte) -> bool:
 
 def textzeile_erkennen(row: dict, felder: dict, tz: dict) -> tuple[str, str] | None:
     """None = normale Positionszeile. Sonst ('text', Inhalt), ('leer', '') oder ('skip', '')."""
+    from . import csv_zeilen
+
     menge = (_feld_wert(row, felder, "BT-129") or "").strip()
     preis = (_feld_wert(row, felder, "BT-146") or "").strip()
-    if _ist_fuellung(menge) or _ist_fuellung(preis):
+    if not csv_zeilen.wert_ist_leer(menge):
         return None
+    if not csv_zeilen.wert_ist_leer(preis):
+        return ("preis_ohne_menge", _text_aus_zeile(row, felder, tz))
     text = _text_aus_zeile(row, felder, tz)
     modus = str(tz.get("leerzeile_modus") or "beides")
     platz = tz.get("platzhalter")
@@ -278,9 +456,8 @@ def _ist_fuellung(val) -> bool:
 
 def lesen(text_zeilen: list[list[str]], profil: dict, pfad: Path, start: int) -> OrderedDict:
     """-> {schlüssel: (kopf, positionen, fehler)} – im Block-Modus höchstens eine Rechnung."""
-    namen = bekannte_namen(profil)
-    n = schwelle(profil)
-    roh_bloecke = schneiden(text_zeilen, start, namen, n)
+    roh_bloecke = schneiden_profil(text_zeilen, start, profil)
+    wieder = wiederholender_typ(profil)
     tz = textzeile_konfig(profil)
     modus = str(tz.get("leerzeile_modus") or "beides")
     platz = str(tz.get("platzhalter") if tz.get("platzhalter") is not None else "#LEER")
@@ -301,9 +478,12 @@ def lesen(text_zeilen: list[list[str]], profil: dict, pfad: Path, start: int) ->
     def defs_fuer(typ: str, art: str) -> dict:
         b = bloecke_def.get(typ) or {}
         felder = dict(b.get("felder") or {})
-        if typ == "positionen" and art == "kopf":
+        if (typ == "positionen" or typ == wieder) and art == "kopf":
             for k, d in ((bloecke_def.get("kopf") or {}).get("felder") or {}).items():
-                felder.setdefault(k, d)
+                if k not in felder:
+                    d2 = dict(d)
+                    d2["optional"] = True
+                    felder[k] = d2
         global_f = (profil.get("felder") or {}).get("kopf" if art == "kopf" else "position") or {}
         for k, d in global_f.items():
             felder.setdefault(k, d)
@@ -312,8 +492,15 @@ def lesen(text_zeilen: list[list[str]], profil: dict, pfad: Path, start: int) ->
         return {k: v for k, v in felder.items() if not _ist_kopffeld(k)}
 
     for bl in roh_bloecke:
-        typ = typ_fuer(bl["kopf"], profil)
-        if typ == "positionen":
+        typ = str(bl.get("typ") or typ_fuer(bl["kopf"], profil) or "")
+        if bl.get("ohne_anfang"):
+            fehler.append(
+                _pruefen(
+                    f"Zeile {bl['start']}: Datei beginnt nicht mit einer Kopfzeile oder einem Marker"
+                )
+            )
+        ist_pos = typ == wieder or typ == "positionen"
+        if ist_pos:
             gesehen_positionen += 1
             if gesehen_positionen > 1:
                 fehler.append(
@@ -321,11 +508,11 @@ def lesen(text_zeilen: list[list[str]], profil: dict, pfad: Path, start: int) ->
                         f"Zeile {bl['start']}: weitere Rechnung in derselben Datei – im Block-Modus nicht vorgesehen"
                     )
                 )
-        if typ == "positionen":
+        if ist_pos:
             _positionsblock(
                 bl,
-                defs_fuer("positionen", "position"),
-                defs_fuer("positionen", "kopf"),
+                defs_fuer(typ or "positionen", "position"),
+                defs_fuer(typ or "positionen", "kopf"),
                 profil,
                 pfad,
                 kopf,
@@ -408,61 +595,58 @@ def _positionsblock(
         if roh_kopf.get("BT-1") and roh_kopf["BT-1"][0] not in (None, ""):
             nummern.add(str(roh_kopf["BT-1"][0]).strip())
 
-        text = _text_aus_zeile(row, felder, tz)
-        menge = roh_pos.get("BT-129", (None,))[0]
-        preis = roh_pos.get("BT-146", (None,))[0]
-        hat_menge, hat_preis = _ist_fuellung(menge), _ist_fuellung(preis)
-        hat_text = bool(text)
+        from . import csv_zeilen
 
-        if hat_menge or hat_preis:
-            if ziel_feld == "BT-154" and text and not roh_pos.get("BT-154"):
-                # Text in der Positionszeile selbst ist die Bezeichnung, nicht die Beschreibung
-                pass
+        art = csv_zeilen.erkennen(row, pos_felder, kopf_felder, tz)
+        if art and art[0] == "preis_ohne_menge":
+            pom = str(tz.get("preis_ohne_menge") or "pruefen")
+            if pom == "kommentar":
+                art = ("text", art[1])
+            else:
+                if pom == "eins":
+                    roh_pos["_menge_eins"] = True
+                art = None
+        if art is None:
+            wartend = bl.setdefault("_zeilen_davor", [])
+            if wartend:
+                verw = str(tz.get("verwaist") or "BT-22")
+                if not positionen and verw == "naechste":
+                    for txt in wartend:
+                        text_an_roh(roh_pos, txt, txt == "", tz, zeile, pfad)
+                elif not positionen:
+                    notiz_teile.extend(wartend)
+                else:
+                    for txt in wartend:
+                        text_an_roh(roh_pos, txt, txt == "", tz, zeile, pfad)
+                wartend.clear()
             positionen.append(roh_pos)
             continue
 
-        # weder Menge noch Preis
-        leerzeile = False
-        if hat_text and platz and text == platz and modus in ("platzhalter", "beides"):
-            leerzeile = True
-            text = ""
-        elif (
-            not hat_text
-            and modus in ("kopffeldzeile", "beides")
-            and _kopffelder_ohne_leerpflicht(row, felder, tz)
-        ):
-            leerzeile = True
-
-        if not leerzeile and not hat_text:
-            continue  # nichts zu tun (z. B. unvollständig leere Zeile)
-
+        kind, text = art
+        if kind == "skip":
+            continue
+        leerzeile = kind == "leer"
+        zwischen = str(tz.get("zwischen") or "vorher")
         if not positionen:
             if verwaist == "pruefen":
                 fehler.append(_pruefen(f"Zeile {zeile}: Textzeile ohne Position"))
+            elif verwaist == "naechste" or zwischen == "nachher":
+                bl.setdefault("_zeilen_davor", []).append("" if leerzeile else text)
             else:
-                if leerzeile:
-                    notiz_teile.append("")
-                elif text:
-                    notiz_teile.append(text)
+                notiz_teile.append("" if leerzeile else text)
             continue
-
+        if zwischen == "nachher":
+            bl.setdefault("_zeilen_davor", []).append("" if leerzeile else text)
+            continue
         last = positionen[-1]
-        if ziel_feld == "BT-153":
-            alt = str((last.get("BT-153") or ("",))[0] or "")
-            last["BT-153"] = (
-                _anhaengen(alt, text, trenner, leerzeile=leerzeile),
-                Herkunft(f"csv:{pfad.name} Zeile {zeile} Textzeile", 1.0),
-            )
-            if leerzeile:
-                # gewollte Leerzeile zusätzlich in BT-154, damit sie in der E-Rechnung bleibt
-                alt4 = str((last.get("BT-154") or ("",))[0] or "")
-                last["BT-154"] = (_anhaengen(alt4, "", "\n", leerzeile=True), last["BT-153"][1])
-        else:
-            alt = str((last.get("BT-154") or ("",))[0] or "")
-            last["BT-154"] = (
-                _anhaengen(alt, text, trenner, leerzeile=leerzeile),
-                Herkunft(f"csv:{pfad.name} Zeile {zeile} Textzeile", 1.0),
-            )
+        text_an_roh(last, text, leerzeile, tz, zeile, pfad)
+
+    # Rest nach der letzten Position (zwischen=nachher)
+    rest = bl.get("_zeilen_davor") or []
+    if rest and positionen:
+        for txt in rest:
+            text_an_roh(positionen[-1], txt, txt == "", tz, 0, pfad)
+        rest.clear()
 
 
 def _kopffelder_ohne_leerpflicht(row: dict, felder: dict, tz: dict) -> bool:
@@ -492,29 +676,17 @@ def _kopffelder_ohne_leerpflicht(row: dict, felder: dict, tz: dict) -> bool:
 
 
 def passt(zeilen: list[list[str]], profil: dict) -> tuple[bool, str]:
-    """Ob die Datei zu diesem Block-Profil passt. -> (ja/nein, Begründung)."""
-    namen = bekannte_namen(profil)
-    if not namen:
+    """Ob die Datei zu diesem Block-Profil passt. Pflichtprüfung erst an der Rechnung."""
+    if not genutzte_namen(profil) and not any(
+        (b.get("kopfzeile") or b.get("marker")) for b in (profil.get("bloecke") or [])
+    ):
         return False, "Im Profil sind keine Spaltennamen hinterlegt"
-    n = schwelle(profil)
-    bloecke = schneiden(zeilen, 1, namen, n)
+    bloecke = schneiden_profil(zeilen, 1, profil)
     if not bloecke:
         return False, "Keine Block-Kopfzeile erkannt"
-    typen = [typ_fuer(b["kopf"], profil) for b in bloecke]
-    if "positionen" not in typen:
-        # vielleicht ein einziger Block, der wie Positionen aussieht und die Pflichtspalten trägt
-        if len(bloecke) == 1 and _sieht_nach_positionen_aus(bloecke[0]["kopf"]):
-            typen[0] = "positionen"
-        else:
-            return False, "Kein Positionsblock erkannt (Kopfzeile ohne Artikel/Menge/Preis)"
-    pos = next(b for b, t in zip(bloecke, typen) if t == "positionen")
-    haben = {name_norm(c) for c in pos["kopf"]}
-    bdef = next((b for b in (profil.get("bloecke") or []) if b.get("typ") == "positionen"), {})
-    noetig = []
-    for feld, d in (bdef.get("felder") or {}).items():
-        if isinstance(d, dict) and d.get("spalte") and not d.get("optional") and "fest" not in d:
-            noetig.append(str(d["spalte"]))
-    fehlt = [s for s in noetig if name_norm(s) not in haben]
-    if fehlt:
-        return False, "Im Positionsblock fehlen Pflichtspalten: " + ", ".join(fehlt)
+    wieder = wiederholender_typ(profil)
+    typen = [str(b.get("typ") or typ_fuer(b["kopf"], profil) or "") for b in bloecke]
+    if wieder not in typen and "positionen" not in typen:
+        return False, "Kein Positionsblock erkannt"
+    pos = next(b for b, typ in zip(bloecke, typen) if typ == wieder or typ == "positionen")
     return True, f"{len(bloecke)} Block/Blöcke erkannt, Positionsblock in Zeile {pos['start']}"

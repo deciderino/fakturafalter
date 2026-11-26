@@ -482,13 +482,57 @@ def profil_bauen(
 
 def profil_zuordnung(profil: dict) -> dict[str, str]:
     """Vorhandenes Assistenten-Profil -> {Feld: Spalte} (zum Ändern)."""
+    aus: dict[str, str] = {}
     f = profil.get("felder", {})
-    return {
-        k: d["spalte"]
-        for teil in ("kopf", "position")
-        for k, d in (f.get(teil) or {}).items()
-        if isinstance(d, dict) and "spalte" in d
-    }
+    for teil in ("kopf", "position"):
+        for k, d in (f.get(teil) or {}).items():
+            if isinstance(d, dict) and d.get("spalte"):
+                aus[k] = d["spalte"]
+    for b in profil.get("bloecke") or []:
+        for k, d in (b.get("felder") or {}).items():
+            if isinstance(d, dict) and d.get("spalte"):
+                aus[k] = d["spalte"]
+    return aus
+
+
+def spalte_in_datei(fmt: Format, name: str) -> list[str]:
+    """Werte einer Spalte über alle Blöcke, nicht nur die erste Kopfzeile."""
+    from . import csv_bloecke
+
+    if not name:
+        return []
+    try:
+        return spalte(fmt, name)
+    except ValueError:
+        pass
+    rows = [fmt.kopf] + list(fmt.zeilen or [])
+    namen = synonym_namen()
+    aus: list[str] = []
+    idx = None
+    kopf: list[str] = []
+    for row in rows:
+        if csv_bloecke._leer_zeile(row):
+            continue
+        if csv_bloecke.sieht_nach_marker_heuristik(row):
+            idx = None
+            continue
+        if csv_bloecke.ist_kopfzeile(row, namen, 2) or (
+            idx is None
+            and any(csv_bloecke.name_norm(c) == csv_bloecke.name_norm(name) for c in row)
+        ):
+            kopf = [c.strip() for c in row]
+            try:
+                idx = next(
+                    i
+                    for i, c in enumerate(kopf)
+                    if csv_bloecke.name_norm(c) == csv_bloecke.name_norm(name)
+                )
+            except StopIteration:
+                idx = None
+            continue
+        if idx is not None and idx < len(row) and (row[idx] or "").strip():
+            aus.append(row[idx].strip())
+    return aus
 
 
 def bearbeitbar(profil: dict) -> bool:
@@ -582,17 +626,19 @@ def synonym_namen() -> set[str]:
 
 
 def bloecke_erkannt(fmt: Format) -> bool:
-    """Mehr als eine Kopfzeile mit bekannten Spaltennamen?"""
+    """Mehr als eine Kopfzeile oder erkennbare Marker? Nur Hinweis im Format-Schritt."""
     from . import csv_bloecke
 
     namen = synonym_namen()
     kopfzeilen = 0
-    # erste Zeile ist fmt.kopf, weitere in fmt.zeilen? Format: kopf + daten
+    marker = 0
     rows = [fmt.kopf] + list(fmt.zeilen or [])
     for row in rows:
-        if csv_bloecke.ist_kopfzeile(row, namen, 2):
+        if csv_bloecke.sieht_nach_marker_heuristik(row):
+            marker += 1
+        elif csv_bloecke.ist_kopfzeile(row, namen, 2):
             kopfzeilen += 1
-    return kopfzeilen >= 2
+    return kopfzeilen >= 2 or marker >= 2 or (marker >= 1 and kopfzeilen >= 1)
 
 
 def bloecke_schneiden_fmt(fmt: Format) -> list[dict]:
@@ -601,6 +647,107 @@ def bloecke_schneiden_fmt(fmt: Format) -> list[dict]:
     rows = [fmt.kopf] + list(fmt.zeilen or [])
     # format_erkennen already used first row as header; include it as row 1
     return csv_bloecke.schneiden(rows, 1, synonym_namen(), 2)
+
+
+def einzigartige_spalten(fmt: Format) -> list[str]:
+    """Einmalige Spaltennamen aller Kopfzeilen (und der Zeile nach einem Marker)."""
+    from . import csv_bloecke
+
+    namen = synonym_namen()
+    rows = [fmt.kopf] + list(fmt.zeilen or [])
+    gesehen: list[str] = []
+    gesehen_n: set[str] = set()
+    nach_marker = False
+    for row in rows:
+        if csv_bloecke._leer_zeile(row):
+            continue
+        if csv_bloecke.sieht_nach_marker_heuristik(row):
+            nach_marker = True
+            continue
+        kopf = csv_bloecke.ist_kopfzeile(row, namen, 2) or nach_marker
+        nach_marker = False
+        if not kopf:
+            continue
+        for c in row:
+            s = (c or "").strip()
+            if not s:
+                continue
+            n = csv_bloecke.name_norm(s)
+            if n in gesehen_n:
+                continue
+            gesehen_n.add(n)
+            gesehen.append(s)
+    return gesehen
+
+
+def typ_aus_marker(wort: str) -> str:
+    """#Kopf / Positionen / Summen → typ; unbekannte Wortlaute bleiben als typ erhalten."""
+    from . import csv_bloecke
+
+    n = csv_bloecke.name_norm((wort or "").lstrip("#"))
+    return {
+        "kopf": "kopf",
+        "header": "kopf",
+        "positionen": "positionen",
+        "position": "positionen",
+        "pos": "positionen",
+        "summen": "summen",
+        "summe": "summen",
+        "zahlung": "zahlung",
+        "zahlungsbedingungen": "zahlung",
+        "lieferung": "lieferung",
+        "lieferanschrift": "lieferung",
+    }.get(n, n or "kopf")
+
+
+def marker_aus_datei(fmt: Format) -> list[dict]:
+    """Marker-ähnliche Zeilen der Datei als vorläufige Block-Liste (für den Assistenten)."""
+    from . import csv_bloecke
+
+    rows = [fmt.kopf] + list(fmt.zeilen or [])
+    namen = synonym_namen()
+    aus: list[dict] = []
+    i = 0
+    while i < len(rows):
+        row = rows[i]
+        if csv_bloecke._leer_zeile(row):
+            i += 1
+            continue
+        if csv_bloecke.sieht_nach_marker_heuristik(row):
+            wort = next((str(c).strip() for c in row if str(c).strip()), "")
+            typ = typ_aus_marker(wort)
+            kopf: list[str] = []
+            j = i + 1
+            while j < len(rows) and csv_bloecke._leer_zeile(rows[j]):
+                j += 1
+            if j < len(rows) and not csv_bloecke.sieht_nach_marker_heuristik(rows[j]):
+                if csv_bloecke.ist_kopfzeile(rows[j], namen, 2):
+                    kopf = [c.strip() for c in rows[j]]
+            aus.append({"typ": typ, "marker": wort, "kopfzeile": kopf})
+        i += 1
+    return aus
+
+
+def bloecke_schneiden_zuordnung(
+    fmt: Format, zuordnung: dict[str, str], profil: dict | None = None
+) -> list[dict]:
+    """Blöcke über zugeordnete Spalten; erkannte Marker werden ohne gespeichertes Profil mitgeführt."""
+    from . import csv_bloecke
+
+    if profil:
+        return csv_bloecke.schneiden_profil([fmt.kopf] + list(fmt.zeilen or []), 1, profil)
+    spalten = [s for s in zuordnung.values() if s]
+    felder = {f"f{i}": {"spalte": s} for i, s in enumerate(spalten)}
+    roh = {
+        "aufbau": {"art": "bloecke", "kopfzeile_schwelle": 2},
+        "felder": {"kopf": felder},
+        "bloecke": marker_aus_datei(fmt),
+    }
+    return csv_bloecke.schneiden_profil([fmt.kopf] + list(fmt.zeilen or []), 1, roh)
+
+
+def positionsfelder() -> set[str]:
+    return {f for f, _n, teil, _t, _p in FELDER if teil == "position"}
 
 
 def typ_vorschlag(kopf: list[str]) -> str:
@@ -614,9 +761,15 @@ def typ_vorschlag(kopf: list[str]) -> str:
     }:
         return "positionen"
     if n & {
-        csv_bloecke.name_norm(x) for x in ("skonto", "zahlungsziel", "gesamtbrutto", "gesamtnetto")
+        csv_bloecke.name_norm(x)
+        for x in ("skonto", "zahlungsziel", "zahlungszielohneabzug", "iban")
     }:
         return "zahlung"
+    if n & {
+        csv_bloecke.name_norm(x)
+        for x in ("gesamtbrutto", "gesamtnetto", "gesamtust", "summebrutto", "summenetto")
+    }:
+        return "summen"
     if n & {csv_bloecke.name_norm(x) for x in ("liefername", "lieferstrasse", "lieferort")}:
         return "lieferung"
     if n & {csv_bloecke.name_norm(x) for x in ("rechnungsnr", "rechnungsnummer", "kunde", "datum")}:
@@ -701,7 +854,17 @@ def profil_bauen_bloecke(
             felder.setdefault("BT-5", {"fest": "EUR"})
         if tz.get("text_spalte") and typ == "positionen":
             pass
-        aus_bloecke.append({"typ": typ, "kopfzeile": list(b.get("kopf") or []), "felder": felder})
+        ein: dict = {
+            "typ": typ,
+            "wiederholend": bool(b.get("wiederholend"))
+            if "wiederholend" in b
+            else typ == "positionen",
+            "kopfzeile": list(b.get("kopf") or b.get("kopfzeile") or []),
+            "felder": felder,
+        }
+        if str(b.get("marker") or "").strip():
+            ein["marker"] = str(b.get("marker")).strip()
+        aus_bloecke.append(ein)
     p = {
         "profil": name,
         "version": 1,

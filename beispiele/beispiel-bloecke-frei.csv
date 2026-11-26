@@ -1,0 +1,14 @@
+﻿Rechnungsnr;Datum;Leistungsdatum;Kundennummer;Kunde;Strasse;PLZ;Ort;Skonto;Zahlungsziel mit Skonto;Zahlungsziel ohne Abzug
+RE-2026-2102;13.11.2026;13.11.2026;K-2102;Beispiel Handel GmbH;Beispielweg 5;12345;Musterstadt;2,00;10;30
+
+Liefername;Lieferstrasse;Liefer-PLZ;Lieferort;Lieferland
+Lager Nord;Industriestr. 8;12347;Musterstadt;DE
+
+Artikel;Menge;Einheit;Einzelpreis;USt-Satz
+Bürostuhl Modell Münster;2;Stück;149,00;19
+Lieferung frei Haus;;;
+#LEER;;;
+Montage vor Ort;1;Stunde;65,00;19
+
+Gesamt Netto;Gesamt USt;Gesamt Brutto
+363,00;68,97;431,97

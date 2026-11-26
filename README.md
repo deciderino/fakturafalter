@@ -111,6 +111,7 @@ XRechnung (CII), wenn der Kundenstamm sie verlangt – neben der PDF, im Unteror
   Fakturafalter ruft keinen Kurs ab.
 - Leitweg-ID (XRechnung) mit Prüfziffer nach Mod 97-10.
 - Strukturiertes Skonto in den Zahlungsbedingungen (BT-20, `#SKONTO#`, bis zwei Stufen); auf der Sichtseite nur der Klartext.
+- CSV-Blöcke (eine Datei = eine Rechnung): freie Felder je Block, optionale Marker, Textzeilen wie im Standardaufbau (ab 0.9.9).
 
 **Nur PDF.** Du kannst aus einem fertigen Rechnungsdruck eine gültige ZUGFeRD-Rechnung erzeugen: das Layout einmal
 anlernen, danach derselbe Ablauf über den Eingangsordner und dieselben Pflicht- und Validierungsprüfungen wie bei

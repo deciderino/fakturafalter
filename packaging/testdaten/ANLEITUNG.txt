@@ -235,8 +235,11 @@ Test 16: CSV-Blöcke und Profillogik (neu in 0.9.8)
    (3 % in 10 Tagen). Sichtseite: Beschreibungen dürfen Zeilenumbrüche behalten.
    Ebenso variante-blo_getrennt.csv (Textzeile + Leerzeile mit #LEER).
    variante-blo_abweichung.csv geht nach „Zu prüfen“ (zwei Nummern, Kontrollsumme).
-2. Neue CSV einrichten… mit variante-blo_hotel.csv: Aufbau „Blöcke“ wird erkannt.
-   Blöcke typisieren, Probe und „Sichtseite ansehen…“, speichern.
+2. Neue CSV einrichten… mit variante-blo_hotel.csv: Aufbau „Blöcke“ wird erkannt
+   („Diese Datei sieht nach mehreren Blöcken aus.“). Zuerst Spalten zuordnen,
+   dann „Blöcke festlegen“ (Typ, optionaler Marker, Felder je Block; genau ein
+   wiederholender Positionsblock), dann Textzeilen und Darstellung, Probe,
+   „Sichtseite ansehen…“, speichern.
 3. Einstellungen → Eingang & Vorlagen: Jede Profilkarte zeigt aktiv/aus und
    erkannte Merkmale. Profil ausknipsen ohne Löschen, Reihenfolge mit Hoch/Runter.
    „Profil testen…“ mit variante-blo_hotel.csv: das Block-Profil greift, die
@@ -265,6 +268,19 @@ Test 17: Standardformat und Skonto (neu in 0.9.9)
 4. Eine eigene Spalte mit abweichendem Namen (z. B. RabattIntern) wird
    ignoriert; im Protokoll steht ein Hinweis, die Rechnung geht nicht allein
    deshalb nach „Zu prüfen“.
+
+
+Test 18: Blocklayout mit Markern und freien Feldern (neu in 0.9.9)
+-----------------------------------------------------------------
+1. CSV:   ./Fakturafalter-0.9.9-x86_64.AppImage -c beispiele/konfiguration.yaml \
+              --dateien beispiele/beispiel-bloecke-klassisch.csv
+   Erwartet: 1 × „OK“, RE-2026-2101 (fiktiv), zwei Positionen, Skonto 2 % / 10 Tage,
+   zahlbar in 30 Tagen, Profil „beispiel-bloecke-klassisch“ oder ein passendes
+   Block-Profil. Ebenso beispiel-bloecke-frei.csv (RE-2026-2102, Kommentar
+   „Lieferung frei Haus“ und Leerzeile unter Position 1) und
+   beispiel-bloecke-marker.csv (RE-2026-2103, Erkennung über #Kopf / #Positionen /
+   #Summen; „# bitte nicht mit Lösungsmitteln reinigen“ ist ein Kommentar, #LEER
+   eine Leerzeile, kein Marker).
 
 
 Was zurückmelden

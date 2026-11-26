@@ -1,6 +1,6 @@
 # CSV-Exportspezifikation für Fakturafalter
 
-**Spezifikation 1.2** · Stand 26.11.2026 (Europe/Berlin) · Grundlage App **0.9.9**
+**Spezifikation 1.3** · Stand 26.11.2026 (Europe/Berlin) · Grundlage App **0.9.9**
 
 Diese Beschreibung richtet sich an Systemadmins und Entwickler einer
 **Warenwirtschaft (ERP)**. Sie legt fest, wie ein Rechnungs-CSV aussehen soll,
@@ -57,7 +57,7 @@ ZUGFeRD erzeugt.
 | Datum | **`TT.MM.JJJJ`** (`02.11.2026`) | Andere Formate nur mit abweichendem Profil. |
 | Leere Zelle | kein Wert | Nur Leerzeichen gilt als leer. Bei **Menge** und **Einzelpreis** gelten außerdem `0`, `0,00` und `0.0` als leer (keine Position). |
 | Dateiname | Extension `.csv`, kein führender Punkt oder `~` | Dateien, deren Name mit `.` oder `~` beginnt oder auf `.tmp`, `.part` bzw. `.crdownload` endet, **werden ignoriert**. Groß/Kleinschreibung der Endung ist egal. Ein festes Namensmuster ist nicht vorgeschrieben; sinnvoll z. B. `RE-2026-1001.csv` oder eine Sammeldatei `rechnungen-2026-11-26.csv`. |
-| Rechnungen je Datei | **eine oder mehrere** | Im Standardaufbau (eine Zeile je Position) bilden alle Zeilen mit derselben Rechnungsnummer eine Rechnung. Der Blockmodus (eine Datei = eine Rechnung) ist **nicht** Bestandteil dieses Standards. |
+| Rechnungen je Datei | **eine oder mehrere** | Im Standardaufbau (eine Zeile je Position) bilden alle Zeilen mit derselben Rechnungsnummer eine Rechnung. Der Blockmodus (eine Datei = eine Rechnung, optionale Marker, freie Felder je Block, Textzeilen wie hier) ist ein **anderer, optionaler Eingang** (*verfügbar ab 0.9.9*), nicht Bestandteil dieses Export-Standards. Wer neu exportiert, liefert weiter eine Zeile je Position. Einzelheiten: [csv-format.md](csv-format.md#blöcke-mit-eigener-kopfzeile-ab-098-überarbeitet-ab-099). |
 
 ### Hotfolder (Eingangsordner)
 
@@ -616,3 +616,4 @@ Spezifikation erhöhen und die Änderung in der Liste unten eintragen.
 | 1.0 | 26.11.2026 | Erste Fassung, gilt für App 0.9.8.4. |
 | 1.1 | 26.11.2026 | Statusmarker vereinheitlicht. Strukturiertes Skonto (`#SKONTO#` in BT-20, inkl. Basisbetrag und Stufe 2) und Verzug als Klartext: *verfügbar ab 0.9.9*. Abschnitt 8 aufgeteilt in geplant / nicht vorgesehen. Abschlags-/Schlussrechnung (875/876/877) und eingebettete Anlagen: *geplant, später*. Dieser Pflegeabschnitt ergänzt. |
 | 1.2 | 26.11.2026 | Eingebautes Standardprofil und strukturiertes Skonto (`#SKONTO#` in BT-20, inkl. Basisbetrag und Stufe 2) sowie Verzug nur als Klartext in `Bemerkung`: *verfügbar ab 0.9.9*. Vollvorlage um die neuen Skonto-Spalten ergänzt. Diese Datei liegt jetzt im Repository.
+| 1.3 | 26.11.2026 | Optionaler Block-Eingang (freie Felder je Block, optionale Marker, Textzeilen einschließlich `zwischen` und `0` / `0,00`) als *verfügbar ab 0.9.9* beschrieben. Der Export-Standard bleibt eine Zeile je Position.
