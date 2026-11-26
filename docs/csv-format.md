@@ -4,6 +4,14 @@ Fakturafalter liest Rechnungsdaten aus einem CSV-Export der Warenwirtschaft (ERP
 (YAML-Datei) beschreibt, wie der Export aussieht. Hier steht, welches Format erwartet wird und
 welche Spalten mindestens vorhanden sein müssen.
 
+Wer den Export festlegen oder in der Warenwirtschaft implementieren will, nimmt die
+[CSV-Exportspezifikation](csv-standard.md) (ab 0.9.9). Trägt die Kopfzeile die neun
+Pflichtnamen (`Rechnungsnummer`, `Rechnungsdatum`, `Leistungsdatum`, `Kundennummer`,
+`Bezeichnung`, `Menge`, `Einheit`, `Einzelpreis`, `Steuersatz`), greift das **eingebaute
+Standardprofil** – ohne Assistenten, mit letzter Priorität. Vorlagen speicherst du unter
+Einstellungen → Eingang & Vorlagen → „CSV-Vorlage speichern…“. Abweichende Spaltennamen
+richtest du weiterhin mit „Neue CSV einrichten…“ ein.
+
 ## Erwartete Form
 
 - Kodierung **UTF-8**
@@ -96,10 +104,29 @@ mit einer eigenen Kopfzeile. Im Profil: `aufbau.art: bloecke`.
   lässt (`leerzeile_modus`: `beides` / `platzhalter` / `kopffeldzeile`).
 - Die Sichtseite behält Zeilenumbrüche und Leerzeilen in der Beschreibung.
 
-Skonto und Zahlungsziel können in einem Zahlungsblock stehen (`3 %` oder `3`,
-`10 Tage` oder `10`). Fakturafalter schreibt daraus den Hinweistext (BT-20) und
-setzt das Fälligkeitsdatum (BT-9) auf Rechnungsdatum plus Nettotage. In EN 16931
-gibt es kein strukturiertes Skontofeld.
+Skonto und Zahlungsziel stehen in eigenen Spalten (`Skonto`, `Zahlungsziel mit
+Skonto`, `Zahlungsziel`). Fakturafalter setzt das Fälligkeitsdatum (BT-9) auf
+Rechnungsdatum plus **Nettotage** – das Skontodatum ersetzt BT-9 nicht. Sobald
+Satz *und* Tage einer Stufe gesetzt sind, stehen in BT-20 zuerst maschinenlesbare
+Zeilen der XRechnung-Konvention, danach der bisherige deutsche Klartext:
+
+```
+#SKONTO#TAGE=10#PROZENT=2.00#
+2 % Skonto innerhalb von 10 Tagen (bis 10.12.2026), zahlbar innerhalb von 14 Tagen ohne Abzug (bis 14.12.2026).
+```
+
+In der CSV bleibt das Dezimalkomma (`2` oder `2,00`); in der Konventionszeile
+steht der Dezimalpunkt mit genau zwei Nachkommastellen, und nach jeder Stufe
+folgt ein Zeilenumbruch. Optional: `Skonto-Basisbetrag`, wenn nicht der volle
+Zahlbetrag gilt, sowie eine zweite Stufe (`Skonto 2`, `Zahlungsziel mit Skonto 2`,
+`Skonto-Basisbetrag 2`). Fehlt Satz oder Tage einer Stufe, entfällt die
+Konventionszeile. Der Sichtteil der PDF zeigt nur den Klartext. Werte können
+auch aus dem Kundenstamm oder als Profil-Standard kommen (CSV hat Vorrang).
+Bei Gutschrift (381) entfällt strukturiertes Skonto typischerweise.
+
+Verzug oder Mahnung nur als Klartext ohne `#`, etwa in der Bemerkung (BT-22).
+Eine Zeile `#VERZUG#` ist in XRechnung 3.0.2 unzulässig und wird nicht erzeugt.
+Einzelheiten: [csv-standard.md](csv-standard.md#46-zahlung-und-skonto).
 
 Beispiele: `beispiele/variante-blo_hotel.csv` (fiktiv, SK-2026-0413: netto 574,80 /
 USt 101,44 / brutto 676,24, fällig 05.11.2026) und

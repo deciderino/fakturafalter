@@ -740,7 +740,9 @@ class Einstellungen(QDialog):
                         "_fehler": str(ex),
                     }
                 )
-        return aus
+        from .. import csv_standard
+
+        return csv_standard.anhaengen(aus, self.roh)
 
     def _csv_rel(self, datei: str) -> str:
         k = self.haupt.k
@@ -774,6 +776,7 @@ class Einstellungen(QDialog):
                 klick=lambda: self._csv_assistent(),
             )
         )
+        h.addWidget(knopf(_("CSV-Vorlage speichern…"), klick=self._csv_vorlage_speichern))
         h.addWidget(knopf(_("Profil übernehmen…"), klick=self._csv_uebernehmen))
         h.addWidget(knopf(_("Profil testen…"), klick=self._csv_testen))
         h.addStretch(1)
@@ -843,7 +846,22 @@ class Einstellungen(QDialog):
                 QCheckBox(),
             )  # drittes wie bisher (nur_pdf-Haken ungenutzt bei CSV)
             self.pdf[name][2].setChecked(False)
+        from .. import csv_standard
+
         unten = QHBoxLayout()
+        if csv_standard.ist_standard(prof):
+            kv.addWidget(
+                lbl(
+                    _(
+                        "Eingebautes Standardprofil, greift zuletzt. Lässt sich nicht löschen oder verschieben."
+                    ),
+                    "hinweis",
+                    umbruch=True,
+                )
+            )
+            kv.addLayout(unten)
+            v.addWidget(kt)
+            return
         unten.addWidget(
             knopf(
                 _("Ändern…"),
@@ -882,8 +900,57 @@ class Einstellungen(QDialog):
         kv.addLayout(unten)
         v.addWidget(kt)
 
+    def _csv_vorlage_speichern(self) -> None:
+        from .. import csv_standard
+
+        box = QMessageBox(self)
+        box.setWindowTitle(_("CSV-Vorlage speichern"))
+        box.setText(
+            _(
+                "Eine CSV-Vorlage im Standardformat speichern (UTF-8 mit BOM, Semikolon). "
+                "Absender und Kundenstamm müssen gepflegt sein."
+            )
+        )
+        b_min = box.addButton(_("Minimal"), QMessageBox.ActionRole)
+        b_voll = box.addButton(_("Vollständig"), QMessageBox.ActionRole)
+        b_beide = box.addButton(_("Beide"), QMessageBox.ActionRole)
+        box.addButton(_("Abbrechen"), QMessageBox.RejectRole)
+        box.exec()
+        geklickt = box.clickedButton()
+        welche = {b_min: "minimal", b_voll: "voll", b_beide: "beide"}.get(geklickt)
+        if not welche:
+            return
+        if welche == "beide":
+            ordner = QFileDialog.getExistingDirectory(self, _("Ordner für die Vorlagen"))
+            if not ordner:
+                return
+            dateien = csv_standard.vorlage_schreiben(Path(ordner), "beide")
+        else:
+            name = (
+                "fakturafalter-standard-minimal.csv"
+                if welche == "minimal"
+                else "fakturafalter-standard-voll.csv"
+            )
+            pfad, _f = QFileDialog.getSaveFileName(
+                self, _("CSV-Vorlage speichern"), str(Path.home() / name), _("CSV-Dateien (*.csv)")
+            )
+            if not pfad:
+                return
+            dateien = csv_standard.vorlage_schreiben(Path(pfad), welche)
+        self.toast(
+            "ok",
+            _("Vorlage gespeichert"),
+            ", ".join(p.name for p in dateien),
+        )
+
     def _csv_aktiv(self, index: int, an: bool) -> None:
         ein = self._csv_eintraege()
+        if index == len(ein):
+            from .. import csv_standard
+
+            csv_standard.aktiv_setzen(self.roh, an)
+            self._vorlagen_neu_ohne_laden()
+            return
         if not (0 <= index < len(ein)):
             return
         e = ein[index]

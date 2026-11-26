@@ -442,7 +442,9 @@ def erzeugen(r: Rechnung, profil: str = "EN16931") -> bytes:
     if r.art == "381":
         bedingungen, faellig = sicht.satz("gutschrift", r, "de"), None  # wie Sichtteil, ohne BT-9
     else:
-        bedingungen, faellig = z.bedingungen, z.faellig
+        from . import zahlungsziel as _zz
+
+        bedingungen, faellig = _zz.bt20_bauen(z.skonto, z.bedingungen), z.faellig
     if bedingungen or faellig or mandat:
         pt = _e(se, "ram:SpecifiedTradePaymentTerms")  # BT-20 / BT-9 / BT-89
         if bedingungen:

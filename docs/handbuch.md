@@ -56,6 +56,17 @@ Einstellungen lassen sich später unter **Einstellungen** ändern.
 
 ## 3. Schnellstart: CSV
 
+Trägt deine CSV die neun Pflichtnamen des [Standardformats](csv-standard.md)
+(`Rechnungsnummer`, `Rechnungsdatum`, `Leistungsdatum`, `Kundennummer`,
+`Bezeichnung`, `Menge`, `Einheit`, `Einzelpreis`, `Steuersatz`), brauchst du
+keinen Assistenten: das **eingebaute Standardprofil** (ab 0.9.9) greift mit
+letzter Priorität, sobald kein eigenes aktives Profil passt. Unter
+Einstellungen → Eingang & Vorlagen → **CSV-Vorlage speichern…** kannst du eine
+Minimal- oder Vollvorlage (UTF-8 mit BOM, Semikolon) ablegen; Absender und
+Kundenstamm müssen trotzdem gepflegt sein.
+
+Weichen die Spaltennamen ab, richtest du die Datei einmal ein:
+
 1. Einstellungen → **Eingang & Vorlagen** → Eingangsformat **CSV**.
 2. **Neue CSV einrichten…** Eine echte Export-Datei aus der Warenwirtschaft
    wählen (sie wird nur gelesen). Der Zuordnung einen Namen geben und **Weiter**.
@@ -103,10 +114,25 @@ löschen, und die Reihenfolge mit **Hoch** / **Runter** ändern. Passen mehrere
 Profile zu einer Datei, gewinnt das **oberste aktive**. Protokoll und
 Rechnungsseite nennen je Datei das verwendete Profil. Mit **Profil testen…**
 wählst du eine CSV und siehst, welches Profil greifen würde und warum die
-anderen nicht. Alle Profile, auch mitgelieferte, sind bearbeit- und löschbar.
+anderen nicht. Eigene und übernommene Profile sind bearbeit- und löschbar. Das eingebaute
+Standardprofil steht immer zuletzt, lässt sich deaktivieren, aber nicht
+löschen oder verschieben.
 Beispielprofile (Varianten a/b/c/d/k/s und das Block-Beispiel) liegen im
 Testdaten-ZIP und lassen sich mit **Profil übernehmen…** in deine Konfiguration
-holen; eine frische Installation startet ohne diese Beispiele.
+holen; eine frische Installation startet ohne diese Beispiele, das Standardprofil
+ist trotzdem vorhanden.
+
+### Skonto (ab 0.9.9)
+
+In der CSV, im Kundenstamm oder als Profil-Vorgabe kannst du bis zu zwei
+Skonto-Stufen angeben (`Skonto` / `Zahlungsziel mit Skonto`, optional
+`Skonto-Basisbetrag`, und dieselben Felder mit „2“). Sobald Satz und Tage einer
+Stufe stehen, schreibt Fakturafalter in die Zahlungsbedingungen (BT-20) zuerst
+die maschinenlesbare Zeile `#SKONTO#TAGE=…#PROZENT=…#`, danach denselben
+deutschen Klartext wie bisher. Der Sichtteil der PDF zeigt nur den Klartext.
+Das Fälligkeitsdatum (BT-9) bleibt das Netto-Ziel. Verzug oder Mahnung nur als
+normalen Satz ohne `#` in die Bemerkung, nie als `#VERZUG#`. Einzelheiten:
+[csv-standard.md, § 4.6](csv-standard.md#46-zahlung-und-skonto).
 
 ## 4. Schnellstart: XML
 

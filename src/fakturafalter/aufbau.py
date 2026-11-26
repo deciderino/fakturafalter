@@ -489,22 +489,45 @@ def rechnung_bauen(
         r.leitweg_id = str(wert("BT-10")).strip()
     faellig_druck = None
     if "BT-20" in kopf:  # Zahlungsbedingung aus der Quelle/dem Druck: gilt statt des Profils
-        zz = zahlungsziel.lesen(str(kopf["BT-20"][0] or ""))
+        roh_bt20 = str(kopf["BT-20"][0] or "")
+        stufen_q, klar_q, probleme_q = zahlungsziel.bt20_zerlegen(roh_bt20)
+        for p_ in probleme_q:
+            r.hinweis("pruefen", p_, "BT-20")
+        zz = zahlungsziel.lesen(klar_q or roh_bt20)
         r.herkunft["BT-20"] = kopf["BT-20"][1]
         r.zahlung.bedingungen = (
-            zz.text
-        )  # "" = im Druck erwartet, aber nicht gelesen: kein Profiltext
+            klar_q if (stufen_q or roh_bt20.lstrip().startswith("#")) else zz.text
+        )
+        r.zahlung.skonto = stufen_q
         r.zahlung.ziel_tage = zz.tage  # kein Zahlungsziel aus dem Profil, wenn der Druck eins trägt
         faellig_druck = zz.faellig
     else:
         r.herkunft["BT-20"] = Herkunft("profil", 1.0)  # Standardtext des Profils
     if wert("zahlungsziel_tage") is not None:
         r.zahlung.ziel_tage = int(Decimal(str(wert("zahlungsziel_tage"))))
-    if wert("skonto_satz") is not None or wert("skonto_tage") is not None:
-        r.zahlung.bedingungen = zahlungsziel.aus_feldern(
-            r.datum, wert("skonto_satz"), wert("skonto_tage"), r.zahlung.ziel_tage
+    csv_skonto = any(
+        wert(f) is not None
+        for f in (
+            "skonto_satz",
+            "skonto_tage",
+            "skonto_basisbetrag",
+            "skonto_satz_2",
+            "skonto_tage_2",
+            "skonto_basisbetrag_2",
         )
-        r.herkunft["BT-20"] = Herkunft("csv:skonto", 1.0)
+    )
+    stufen = _skonto_stufen(wert, eintrag or {}, r.zahlung.skonto, aus_csv=csv_skonto)
+    if csv_skonto or (stufen and "BT-20" not in kopf):
+        r.zahlung.skonto = stufen
+        r.zahlung.bedingungen = zahlungsziel.aus_stufen(r.datum, stufen, r.zahlung.ziel_tage)
+        if csv_skonto:
+            r.herkunft["BT-20"] = Herkunft("csv:skonto", 1.0)
+        elif eintrag and (
+            eintrag.get("skonto_satz") or eintrag.get("skonto") or eintrag.get("skonto_tage")
+        ):
+            r.herkunft["BT-20"] = Herkunft(f"kundenstamm:{r.kundennummer}", 1.0)
+        else:
+            r.herkunft["BT-20"] = Herkunft("profil", 1.0)
     bt44_offen = any(h.feld == "BT-44" for h in r.hinweise)  # z. B. Kundenbezeichnung 1 fehlt
     if bt44_offen:
         pass
@@ -810,6 +833,43 @@ def _vorzeichen(r: Rechnung) -> None:
                 "negativer Preis als negative Menge übernommen (BR-27)",
                 f"Pos {p.nr} BT-146",
             )
+
+
+def _skonto_feld(wert, eintrag: dict, *namen):
+    v = None
+    for n in namen:
+        v = wert(n)
+        if v is not None:
+            return v
+    for n in namen:
+        roh = eintrag.get(n)
+        if roh not in (None, ""):
+            return roh
+    return None
+
+
+def _skonto_stufen(wert, eintrag: dict, profil_stufen: list, aus_csv: bool) -> list:
+    """Stufen aus CSV (Vorrang), Kundenstamm und Profil-Standard, höchstens zwei."""
+    profil = list(profil_stufen or [])
+    stufen = []
+    paare = (
+        (("skonto_satz", "skonto"), ("skonto_tage",), ("skonto_basisbetrag",), 0),
+        (("skonto_satz_2", "skonto_2"), ("skonto_tage_2",), ("skonto_basisbetrag_2",), 1),
+    )
+    for satz_n, tage_n, basis_n, i in paare:
+        satz = _skonto_feld(wert, eintrag, *satz_n)
+        tage = _skonto_feld(wert, eintrag, *tage_n)
+        basis = _skonto_feld(wert, eintrag, *basis_n)
+        if satz is None and i < len(profil):
+            satz = profil[i].satz
+        if tage is None and i < len(profil):
+            tage = profil[i].tage
+        if basis is None and i < len(profil):
+            basis = profil[i].basisbetrag
+        stufe = zahlungsziel.stufe_aus_werten(tage, satz, basis)
+        if stufe:
+            stufen.append(stufe)
+    return stufen
 
 
 def _zahlung_aus_quelle(r: Rechnung, wert, mappings: dict, eintrag: dict) -> None:

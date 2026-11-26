@@ -10,8 +10,9 @@ eindeutig ist:
 * „zahlbar bis 28.11.2026 ohne Abzug“ -> BT-9 = 28.11.2026
 * „14 Tage 2 % Skonto, 30 Tage netto“ -> Zahlungsziel 30 Tage (das Netto-Ziel, nicht die Skontofrist)
 
-Strukturiertes Skonto (ApplicableTradePaymentDiscountTerms) gibt es im Profil EN 16931 nicht; der Freitext in
-BT-20 genügt (BMF-Schreiben vom 15.10.2025, Abschn. 14.5 Abs. 19 UStAE).
+Strukturiertes Skonto (ApplicableTradePaymentDiscountTerms) gibt es im Profil EN 16931 nicht.
+XRechnung 3.0 übermittelt es maschinenlesbar in BT-20 als ``#SKONTO#``-Zeilen (BR-DE-18);
+der Klartext folgt danach. Der Sichtteil zeigt nur den Klartext. ``#VERZUG#`` ist unzulässig.
 """
 
 from __future__ import annotations
@@ -22,6 +23,7 @@ from datetime import date, timedelta
 from decimal import Decimal, InvalidOperation
 
 from . import rechnen
+from .modell import SkontoStufe
 
 _DATUM = r"(\d{1,2})\.\s?(\d{1,2})\.\s?(\d{4}|\d{2})(?!\d)"
 _NETTO = r"(?:ohne\s+(?:jeden\s+)?abzug|rein\s+netto|netto(?:\s+kasse)?|net)\b"
@@ -274,17 +276,167 @@ def profilziel_anpassen(r, quelltext: str) -> bool:
     return False
 
 
-def aus_feldern(datum: date | None, satz, skonto_tage, netto_tage) -> str:
-    """BT-20 aus getrennten Spalten (Skonto-Satz, Skonto-Tage, Netto-Tage)."""
+def aus_feldern(datum: date | None, satz, skonto_tage, netto_tage, basis=None) -> str:
+    """BT-20-Klartext aus getrennten Spalten (Skonto-Satz, Skonto-Tage, Netto-Tage, optional Basis)."""
+    stufen = []
+    stufe = stufe_aus_werten(skonto_tage, satz, basis)
+    if stufe:
+        stufen.append(stufe)
+    elif satz not in (None, ""):
+        # bisher: Satz ohne Tage ergibt trotzdem einen Klartext-Satz ohne Frist
+        sdec = satz if isinstance(satz, Decimal) else _dezimal(satz)
+        if sdec is not None:
+            st = format(sdec.normalize(), "f").replace(".", ",")
+            teile = [f"{st} % Skonto"]
+            if netto_tage is not None:
+                s = f"zahlbar innerhalb von {int(netto_tage)} Tagen ohne Abzug"
+                if datum:
+                    s += f" (bis {datum + timedelta(days=int(netto_tage)):%d.%m.%Y})"
+                teile.append(s)
+            return (", ".join(teile) + ".") if teile else ""
+    return aus_stufen(datum, stufen, netto_tage)
+
+
+# XRechnung 3.0.2 / KoSIT BR-DE-18: eine Zeile, Großbuchstaben, kein Whitespace in der Zeile,
+# Dezimalpunkt, genau zwei Nachkommastellen, schließendes #, Umbruch nach jeder Stufe.
+SKONTO_ZEILE_RE = re.compile(
+    r"^#SKONTO#TAGE=([0-9]+)#PROZENT=([0-9]+\.[0-9]{2})(?:#BASISBETRAG=(-?[0-9]+\.[0-9]{2}))?#$"
+)
+_MAX_STUFEN = 2
+
+
+def _dezimal(wert) -> Decimal | None:
+    if wert in (None, ""):
+        return None
+    if isinstance(wert, Decimal):
+        return wert
+    if isinstance(wert, bool):
+        return None
+    if isinstance(wert, int):
+        return Decimal(wert)
+    s = str(wert).strip().replace("%", "").replace(" ", "")
+    if "," in s:
+        s = s.replace(".", "").replace(",", ".")
+    try:
+        return Decimal(s)
+    except InvalidOperation:
+        return None
+
+
+def _tage_wert(wert) -> int | None:
+    if wert in (None, ""):
+        return None
+    if isinstance(wert, bool):
+        return None
+    if isinstance(wert, int):
+        return wert if wert >= 0 else None
+    m = re.match(r"\s*(\d+)", str(wert).strip())
+    return int(m[1]) if m else None
+
+
+def _xr_zahl(d: Decimal) -> str:
+    return f"{d.quantize(Decimal('0.01')):.2f}"
+
+
+def stufe_aus_werten(tage, satz, basis=None) -> SkontoStufe | None:
+    """Stufe nur, wenn Satz *und* Tage gesetzt und gültig sind. Sonst None (keine #SKONTO#-Zeile)."""
+    t = _tage_wert(tage)
+    s = _dezimal(satz)
+    if t is None or s is None or s < 0:
+        return None
+    b = _dezimal(basis)
+    return SkontoStufe(tage=t, satz=s, basisbetrag=b)
+
+
+def skonto_zeile(stufe: SkontoStufe) -> str:
+    """Eine BR-DE-18-konforme Konventionszeile inklusive schließendem #."""
+    text = f"#SKONTO#TAGE={int(stufe.tage)}#PROZENT={_xr_zahl(stufe.satz)}"
+    if stufe.basisbetrag is not None:
+        text += f"#BASISBETRAG={_xr_zahl(stufe.basisbetrag)}"
+    return text + "#"
+
+
+def klartext_ohne_hash(text: str | None) -> str:
+    """Hash-Zeilen (Konvention oder unzulässiges #VERZUG# u. ä.) aus einem BT-20-Text entfernen."""
+    if not text:
+        return ""
+    teile = []
+    for zeile in str(text).splitlines():
+        s = zeile.strip()
+        if s.startswith("#"):
+            continue
+        teile.append(zeile)
+    return "\n".join(teile).strip()
+
+
+def klartext_fuer_sicht(text: str | None) -> str:
+    """Sichtteil: nur Klartext, ohne #SKONTO#-Zeilen und ohne verbleibendes #."""
+    t = klartext_ohne_hash(text)
+    return t.replace("#", "")
+
+
+def bt20_zerlegen(text: str | None) -> tuple[list[SkontoStufe], str, list[str]]:
+    """BT-20 in Stufen und Klartext zerlegen.
+
+    -> (Stufen, Klartext, Probleme). Unzulässige Hash-Zeilen (z. B. ``#VERZUG#``) und ``#`` im
+    Klartext erscheinen in *Probleme* und nicht im Klartext bzw. nicht als Stufe.
+    """
+    stufen: list[SkontoStufe] = []
+    klar: list[str] = []
+    probleme: list[str] = []
+    if not text:
+        return stufen, "", probleme
+    for roh in str(text).splitlines():
+        s = roh.strip()
+        if not s:
+            if klar and klar[-1] != "":
+                klar.append("")
+            continue
+        if s.startswith("#"):
+            m = SKONTO_ZEILE_RE.fullmatch(s)
+            if not m:
+                probleme.append(f"Unzulässige Kennzeichnung in den Zahlungsbedingungen: {s}")
+                continue
+            if len(stufen) >= _MAX_STUFEN:
+                probleme.append(
+                    "Mehr als zwei Skontostufen – nur die ersten zwei werden übernommen"
+                )
+                continue
+            basis = Decimal(m[3]) if m[3] else None
+            stufen.append(SkontoStufe(tage=int(m[1]), satz=Decimal(m[2]), basisbetrag=basis))
+            continue
+        if "#" in roh:
+            probleme.append(
+                "Die Zahlungsbedingungen enthalten „#“ im Klartext; das Zeichen wird entfernt"
+            )
+            roh = roh.replace("#", "")
+        klar.append(roh)
+    return stufen, "\n".join(klar).strip(), probleme
+
+
+def bt20_bauen(stufen: list[SkontoStufe] | None, klartext: str | None) -> str:
+    """BT-20: Konventionszeilen, nach jeder ein Zeilenumbruch (auch nach der letzten), dann Klartext.
+
+    Der Klartext enthält kein ``#``. Es wird niemals ``#VERZUG#`` geschrieben. Höchstens zwei Stufen.
+    """
+    klar = klartext_fuer_sicht(klartext)
+    zeilen = [skonto_zeile(s) for s in (stufen or [])[:_MAX_STUFEN]]
+    if not zeilen:
+        return klar
+    return "\n".join(zeilen) + "\n" + klar
+
+
+def aus_stufen(datum: date | None, stufen: list[SkontoStufe] | None, netto_tage) -> str:
+    """Deutschen Klartext (ohne #) aus Skontostufen und Nettotagen bauen."""
     teile: list[str] = []
-    if satz not in (None, ""):
-        sdec = satz if isinstance(satz, Decimal) else Decimal(str(satz))
-        st = format(sdec.normalize(), "f").replace(".", ",")
-        s = f"{st} % Skonto"
-        if skonto_tage is not None:
-            s += f" innerhalb von {int(skonto_tage)} Tagen"
-            if datum:
-                s += f" (bis {datum + timedelta(days=int(skonto_tage)):%d.%m.%Y})"
+    for i, stufe in enumerate(stufen or []):
+        st = format(stufe.satz.normalize(), "f").replace(".", ",")
+        s = f"{st} % Skonto" if i == 0 else f"{st} %"
+        s += f" innerhalb von {int(stufe.tage)} Tagen"
+        if datum:
+            s += f" (bis {datum + timedelta(days=int(stufe.tage)):%d.%m.%Y})"
+        if stufe.basisbetrag is not None:
+            s += f", bezogen auf {_de(stufe.basisbetrag, 2)} EUR"
         teile.append(s)
     if netto_tage is not None:
         s = f"zahlbar innerhalb von {int(netto_tage)} Tagen ohne Abzug"

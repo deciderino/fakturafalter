@@ -120,6 +120,21 @@ def _feste_breite_passt(pfad: Path, profil: dict) -> bool:
     return arten[0] == aufbau.get("kopf", "K") and all(a in saetze for a in arten)
 
 
+def _dateikopf(pfad: Path, profil: dict) -> list[str]:
+    """Erste Kopfzeile der CSV, für Hinweise zu unbekannten Spalten."""
+    dat = profil.get("datei", {})
+    try:
+        text, _ = dekodieren(pfad.read_bytes(), dat.get("kodierung", "auto"))
+    except (OSError, UnicodeDecodeError):
+        return []
+    trenn = dat.get("trennzeichen", "auto")
+    trenn = trennzeichen_erkennen(text) if trenn in (None, "auto") else trenn
+    zeilen = csv_lesen(text, trenn, dat.get("textbegrenzer", '"'))
+    if not zeilen:
+        return []
+    return [c.strip() for c in zeilen[0]]
+
+
 def lesen(pfad: Path, profil: dict, konfig: Konfig) -> list[Rechnung]:
     raw = pfad.read_bytes()
     dat = profil.get("datei", {})
@@ -141,6 +156,11 @@ def lesen(pfad: Path, profil: dict, konfig: Konfig) -> list[Rechnung]:
             profil.get("profil") or profil.get("name") or Path(profil.get("_datei", "profil")).stem
         )
         rechnungen.append(r)
+    from . import csv_standard
+
+    if csv_standard.ist_standard(profil) and rechnungen:
+        for r in rechnungen:
+            csv_standard.hinweise_unbekannt(r, _dateikopf(pfad, profil), profil)
     return rechnungen
 
 
@@ -221,7 +241,9 @@ def _csv(text: str, profil: dict, pfad: Path):
                 for f in aufbau.get("kopf_muss_gleich_sein", []):
                     if row.get(f) != g[0].get("_roh_" + f, (row.get(f),))[0]:
                         g[2].append(
-                            f"Zeile {zeile}: Kopfwert „{f}“ weicht innerhalb der Rechnung ab"
+                            Pruefen(
+                                f"Zeile {zeile}: Kopfwert „{f}“ weicht innerhalb der Rechnung ab"
+                            )
                         )
             for f in aufbau.get("kopf_muss_gleich_sein", []):
                 g[0].setdefault("_roh_" + f, (row.get(f), None))

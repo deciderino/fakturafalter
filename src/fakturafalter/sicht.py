@@ -975,11 +975,12 @@ def _erzeugen_standard(r: Rechnung, sprache: str | None = None) -> bytes:
             y -= 4.5 * mm
     gutschrift = ist_gutschrift(r, s.zahlbar)
     if r.zahlung.bedingungen and not gutschrift:
-        # Text wie gedruckt; „Fällig am“ nur, wenn das Netto-Datum eindeutig ist und nicht schon im Text steht
+        # nur Klartext, keine #SKONTO#-Zeilen; „Fällig am“ nur, wenn das Netto-Datum nicht schon im Text steht
         f = r.zahlung.faellig
-        txt = r.zahlung.bedingungen + (
+        bed = zahlungsziel.klartext_fuer_sicht(r.zahlung.bedingungen)
+        txt = bed + (
             f" Fällig am {datum(f)}."
-            if f and not zahlungsziel.datum_im_text(f, r.zahlung.bedingungen)
+            if f and bed and not zahlungsziel.datum_im_text(f, bed)
             else ""
         )
         g, zs = einpassen(c, [txt], "ER-Sans", 9, R - L, 8, max_zeilen=4)

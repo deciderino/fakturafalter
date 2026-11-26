@@ -1,0 +1,466 @@
+profil: fakturafalter-standard
+version: 1
+beschreibung: 'Eingebautes Standardformat (DE: UTF-8 mit BOM, Semikolon, Dezimalkomma,
+  TT.MM.JJJJ). Greift nur, wenn die Kopfzeile die 9 Pflichtnamen trägt und kein früheres
+  aktives Profil passt.'
+datei:
+  muster: '*.csv'
+  kodierung: utf-8-sig
+  trennzeichen: ;
+  textbegrenzer: '"'
+  kopfzeile: true
+zahlen:
+  dezimal: ','
+  tausender: .
+datum:
+  format: '%d.%m.%Y'
+aufbau:
+  art: zeile_je_position
+  rechnung_schluessel: Rechnungsnummer
+  kopf_muss_gleich_sein:
+  - Rechnungsnummer
+  - Rechnungsdatum
+  - Leistungsdatum
+  - Kundennummer
+  - Belegart
+  - Währung
+  - Leistung von
+  - Leistung bis
+  - Bestellnummer
+  - Leitweg-ID
+  - Summe netto
+  - Summe USt
+  - Summe brutto
+  textzeile:
+    ziel: BT-154
+    platzhalter: '#LEER'
+    leerzeile_modus: beides
+    verwaist: BT-22
+    zwischen: vorher
+    preis_ohne_menge: pruefen
+    trenner: '
+
+      '
+    leer:
+    - BT-129
+    - BT-146
+    - text
+felder:
+  kopf:
+    BT-1:
+      spalte: Rechnungsnummer
+    BT-2:
+      spalte: Rechnungsdatum
+      typ: datum
+    BT-72:
+      spalte: Leistungsdatum
+      typ: datum
+    kundennummer:
+      spalte: Kundennummer
+    belegart:
+      spalte: Belegart
+      mapping: belegart
+      optional: true
+    BT-5:
+      spalte: Währung
+      optional: true
+    BT-73:
+      spalte: Leistung von
+      typ: datum
+      optional: true
+    BT-74:
+      spalte: Leistung bis
+      typ: datum
+      optional: true
+    BT-13:
+      spalte: Bestellnummer
+      optional: true
+    BT-10:
+      spalte: Leitweg-ID
+      optional: true
+    BT-109:
+      spalte: Summe netto
+      typ: zahl
+      optional: true
+    BT-110:
+      spalte: Summe USt
+      typ: zahl
+      optional: true
+    BT-112:
+      spalte: Summe brutto
+      typ: zahl
+      optional: true
+    BT-44:
+      spalte: Kundenname
+      optional: true
+    kaeufer_name_2:
+      spalte: Kundenbezeichnung 2
+      optional: true
+    kaeufer_name_3:
+      spalte: Kundenbezeichnung 3
+      optional: true
+    BT-50:
+      spalte: Straße
+      optional: true
+    BT-51:
+      spalte: Adresszusatz
+      optional: true
+    BT-53:
+      spalte: PLZ
+      optional: true
+    BT-52:
+      spalte: Ort
+      optional: true
+    BT-55:
+      spalte: Land
+      optional: true
+    BT-48:
+      spalte: Kunde-USt-IdNr.
+      optional: true
+    BT-49:
+      spalte: E-Rechnungsadresse
+      optional: true
+    BT-47:
+      spalte: Handelsregister
+      optional: true
+    BT-70:
+      spalte: Liefername
+      optional: true
+    BT-75:
+      spalte: Lieferstraße
+      optional: true
+    BT-78:
+      spalte: Liefer-PLZ
+      optional: true
+    BT-77:
+      spalte: Lieferort
+      optional: true
+    BT-80:
+      spalte: Lieferland
+      optional: true
+    zahlungsziel_tage:
+      spalte: Zahlungsziel
+      typ: tage
+      optional: true
+    skonto_satz:
+      spalte: Skonto
+      typ: prozent
+      optional: true
+    skonto_tage:
+      spalte: Zahlungsziel mit Skonto
+      typ: tage
+      optional: true
+    skonto_basisbetrag:
+      spalte: Skonto-Basisbetrag
+      typ: zahl
+      optional: true
+    skonto_satz_2:
+      spalte: Skonto 2
+      typ: prozent
+      optional: true
+    skonto_tage_2:
+      spalte: Zahlungsziel mit Skonto 2
+      typ: tage
+      optional: true
+    skonto_basisbetrag_2:
+      spalte: Skonto-Basisbetrag 2
+      typ: zahl
+      optional: true
+    zahlungsart:
+      spalte: Zahlungsart
+      mapping: zahlungsart
+      optional: true
+    BT-83:
+      spalte: Verwendungszweck
+      optional: true
+    BT-89:
+      spalte: Mandatsreferenz
+      optional: true
+    BT-90:
+      spalte: Gläubiger-ID
+      optional: true
+    BT-91:
+      spalte: Kunden-IBAN
+      optional: true
+    BT-59:
+      spalte: Zahlungsempfänger
+      optional: true
+    BT-94:
+      spalte: Belegrabatt Prozent
+      typ: prozent
+      optional: true
+    BT-92:
+      spalte: Belegrabatt Betrag
+      typ: zahl
+      optional: true
+    BT-97:
+      spalte: Belegrabattgrund
+      optional: true
+    BT-99:
+      spalte: Fracht
+      typ: zahl
+      optional: true
+    BT-101:
+      spalte: Zuschlag Prozent
+      typ: prozent
+      optional: true
+    BT-104:
+      spalte: Zuschlaggrund
+      optional: true
+    BT-113:
+      spalte: Anzahlung
+      typ: zahl
+      optional: true
+    BT-14:
+      spalte: Auftragsnummer
+      optional: true
+    BT-11:
+      spalte: Projektnummer
+      optional: true
+    BT-12:
+      spalte: Vertragsnummer
+      optional: true
+    BT-16:
+      spalte: Lieferscheinnummer
+      optional: true
+    BT-15:
+      spalte: Wareneingang
+      optional: true
+    BT-17:
+      spalte: Vergabenummer
+      optional: true
+    BT-18:
+      spalte: Objektkennung
+      optional: true
+    BT-19:
+      spalte: Kostenstelle
+      optional: true
+    BT-22:
+      spalte: Bemerkung
+      optional: true
+    steuerhinweis:
+      spalte: Steuerhinweis
+      optional: true
+    kurs:
+      spalte: Kurs
+      typ: zahl
+      optional: true
+    kursdatum:
+      spalte: Kursdatum
+      typ: datum
+      optional: true
+    BT-111:
+      spalte: USt EUR
+      typ: zahl
+      optional: true
+    BT-124:
+      spalte: Link auf Unterlage
+      optional: true
+    BT-25:
+      spalte: Bezugsrechnung
+      optional: true
+    BT-26:
+      spalte: Bezugsdatum
+      typ: datum
+      optional: true
+  position:
+    BT-153:
+      spalte: Bezeichnung
+    BT-129:
+      spalte: Menge
+      typ: zahl
+    BT-130:
+      spalte: Einheit
+      mapping: einheiten
+    BT-146:
+      spalte: Einzelpreis
+      typ: zahl
+    steuer:
+      spalte: Steuersatz
+      mapping: steuer
+    BT-126:
+      spalte: Positionsnummer
+      optional: true
+    BT-155:
+      spalte: Artikelnummer
+      optional: true
+    BT-149:
+      spalte: Preiseinheit
+      typ: zahl
+      optional: true
+    gesamt_kontrolle:
+      spalte: Positionsbetrag
+      typ: zahl
+      optional: true
+    BT-127:
+      spalte: Positionstext
+      optional: true
+    BT-154:
+      spalte: Artikelbeschreibung
+      optional: true
+    BT-156:
+      spalte: Kundenartikelnummer
+      optional: true
+    BT-157:
+      spalte: GTIN
+      optional: true
+    zeichnungsnummer:
+      spalte: Zeichnungsnummer
+      optional: true
+    index:
+      spalte: Index
+      optional: true
+    BT-132:
+      spalte: Bestellposition
+      optional: true
+    BT-159:
+      spalte: Ursprungsland
+      optional: true
+    BT-158:
+      spalte: Warengruppe
+      optional: true
+    BT-128:
+      spalte: Objektkennung Position
+      optional: true
+    BT-133:
+      spalte: Buchungsreferenz Position
+      optional: true
+    BT-134:
+      spalte: Leistung von Position
+      typ: datum
+      optional: true
+    BT-135:
+      spalte: Leistung bis Position
+      typ: datum
+      optional: true
+    BT-160:
+      spalte: Merkmal
+      optional: true
+    BT-161:
+      spalte: Merkmalwert
+      optional: true
+    BT-138:
+      spalte: Rabatt Prozent
+      typ: prozent
+      optional: true
+    BT-136:
+      spalte: Rabatt Betrag
+      typ: zahl
+      optional: true
+    BT-139:
+      spalte: Rabattgrund
+      optional: true
+    BT-143:
+      spalte: Zuschlag Prozent
+      typ: prozent
+      optional: true
+    BT-141:
+      spalte: Zuschlag Betrag
+      typ: zahl
+      optional: true
+    BT-144:
+      spalte: Zuschlaggrund Position
+      optional: true
+    BT-148:
+      spalte: Bruttopreis
+      typ: zahl
+      optional: true
+    BT-147:
+      spalte: Preisnachlass
+      typ: zahl
+      optional: true
+    zeilenart:
+      spalte: Zeilenart
+      optional: true
+mappings:
+  einheiten:
+    Stück: H87
+    Stk: H87
+    Stk.: H87
+    Stck: H87
+    St.: H87
+    Stunde: HUR
+    Stunden: HUR
+    Std: HUR
+    Std.: HUR
+    h: HUR
+    m: MTR
+    Meter: MTR
+    lfm: MTR
+    m²: MTK
+    m2: MTK
+    qm: MTK
+    m³: MTQ
+    m3: MTQ
+    cbm: MTQ
+    kg: KGM
+    g: GRM
+    t: TNE
+    l: LTR
+    Ltr: LTR
+    pauschal: LS
+    pausch: LS
+    Pauschale: LS
+    psch: LS
+    Tag: DAY
+    Tage: DAY
+    Woche: WEE
+    Wochen: WEE
+    Monat: MON
+    Paar: PR
+    Set: SET
+    Satz: SET
+    Rolle: XRO
+    Karton: XCT
+    Paket: XPK
+    Pkt: XPK
+    Pak: XPK
+    unbekannt: pruefen
+  steuer:
+    19 %:
+      BT-151: S
+      BT-152: 19
+    '19':
+      BT-151: S
+      BT-152: 19
+    7 %:
+      BT-151: S
+      BT-152: 7
+    '7':
+      BT-151: S
+      BT-152: 7
+    0 %:
+      BT-151: E
+      BT-152: 0
+      BT-120: Steuerfrei
+      BT-121: ''
+    steuerfrei:
+      BT-151: E
+      BT-152: 0
+      BT-120: Steuerfrei
+      BT-121: ''
+    Reverse Charge:
+      BT-151: AE
+      BT-152: '0'
+      BT-120: Steuerschuldnerschaft des Leistungsempfängers
+      BT-121: VATEX-EU-AE
+    RC:
+      BT-151: AE
+      BT-152: '0'
+      BT-120: Steuerschuldnerschaft des Leistungsempfängers
+      BT-121: VATEX-EU-AE
+    igL:
+      BT-151: K
+      BT-152: '0'
+      BT-120: Steuerfreie innergemeinschaftliche Lieferung
+      BT-121: VATEX-EU-IC
+    EX:
+      BT-151: G
+      BT-152: '0'
+      BT-120: Steuerfreie Ausfuhrlieferung
+      BT-121: VATEX-EU-G
+    §19:
+      BT-151: E
+      BT-152: '0'
+      BT-120: Gemäß § 19 UStG wird keine Umsatzsteuer berechnet.
+    unbekannt: satz

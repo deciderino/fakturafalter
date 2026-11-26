@@ -18,7 +18,7 @@ from pathlib import Path
 
 from lxml import etree
 
-from . import sicht, steuerfaelle
+from . import sicht, steuerfaelle, zahlungsziel
 from .konfig import Konfig
 from .modell import (
     Anhang,
@@ -50,6 +50,15 @@ UBL = {
     "cbc": "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2",
 }
 _PARSER = etree.XMLParser(resolve_entities=False, no_network=True, load_dtd=False, huge_tree=False)
+
+
+def _bt20_uebernehmen(z, r) -> None:
+    """Vorhandene #SKONTO#-Zeilen aus BT-20 übernehmen; Klartext ohne Hash, kein #VERZUG#."""
+    stufen, klar, probleme = zahlungsziel.bt20_zerlegen(z.bedingungen)
+    z.skonto = stufen
+    z.bedingungen = klar
+    for p_ in probleme:
+        r.hinweis("pruefen", p_, "BT-20")
 
 
 def _baum(daten: bytes):
@@ -383,6 +392,7 @@ def _cii(lz: _Leser, k: Konfig) -> Rechnung:
     pt = lz.el(se, "ram:SpecifiedTradePaymentTerms")
     z.bedingungen = lz.t(pt, "ram:Description")
     z.faellig = _datum(lz.t(pt, "ram:DueDateDateTime/udt:DateTimeString"))
+    _bt20_uebernehmen(z, r)
     z.mandat = lz.t(pt, "ram:DirectDebitMandateID")  # BT-89
     r.zahlung = z
     ms = lz.el(se, "ram:SpecifiedTradeSettlementHeaderMonetarySummation")
@@ -643,6 +653,7 @@ def _ubl(lz: _Leser, k: Konfig) -> Rechnung:
         z.mandat = t(pm, "cac:PaymentMandate/cbc:ID")  # BT-89
         z.lastschrift_iban = t(pm, "cac:PaymentMandate/cac:PayerFinancialAccount/cbc:ID")  # BT-91
     z.bedingungen = t(root, "cac:PaymentTerms/cbc:Note")
+    _bt20_uebernehmen(z, r)
     z.faellig = _datum(t(root, "cbc:DueDate"))
     r.zahlung = z
     befreiung = {}

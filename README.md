@@ -94,7 +94,7 @@ Die Screenshots zeigen ausschließlich erfundene Beispieldaten.
 
 | Eingang | Empfehlung | Hinweis |
 |---|---|---|
-| **CSV** (Export aus der Warenwirtschaft) | empfohlen | Zuordnung einmal mit dem CSV-Assistenten; Format siehe [csv-format.md](docs/csv-format.md) |
+| **CSV** (Export aus der Warenwirtschaft) | empfohlen | Passen die neun Pflichtnamen des [Standardformats](docs/csv-standard.md), greift das eingebaute Profil (ab 0.9.9); sonst einmal zuordnen mit dem CSV-Assistenten. Format siehe [csv-format.md](docs/csv-format.md) |
 | **XML** (ZUGFeRD / Factur-X, XRechnung; CII oder UBL) | empfohlen | ohne Zuordnung; andere XML-Formate (z. B. DATEV, Lexware) werden nicht gelesen |
 | **CSV oder XML + Original-PDF** | optional | Haken „Zusätzlich das PDF der Rechnung verwenden“: der Original-Druck bleibt die Sichtseite |
 | **Nur PDF** (Angaben aus dem Rechnungsdruck) | möglich | Layout einmal anlernen; CSV oder XML sind zuverlässiger, siehe unten |
@@ -110,6 +110,7 @@ XRechnung (CII), wenn der Kundenstamm sie verlangt – neben der PDF, im Unteror
 - Rechnungen in Fremdwährung (z. B. USD) mit der Umsatzsteuer zusätzlich in EUR; der Kurs kommt aus deinen Daten,
   Fakturafalter ruft keinen Kurs ab.
 - Leitweg-ID (XRechnung) mit Prüfziffer nach Mod 97-10.
+- Strukturiertes Skonto in den Zahlungsbedingungen (BT-20, `#SKONTO#`, bis zwei Stufen); auf der Sichtseite nur der Klartext.
 
 **Nur PDF.** Du kannst aus einem fertigen Rechnungsdruck eine gültige ZUGFeRD-Rechnung erzeugen: das Layout einmal
 anlernen, danach derselbe Ablauf über den Eingangsordner und dieselben Pflicht- und Validierungsprüfungen wie bei
@@ -149,6 +150,7 @@ Konzept und Idee: deciderino. Code: geschrieben von der KI Grok Bot.
 - [docs/details.md](docs/details.md) – Eingabevarianten, Prüfung, Layout-Editor, Rechnungsnummer und Dateiname,
   Ordner und Protokoll, PDF-Erkennung
 - [docs/csv-format.md](docs/csv-format.md) – CSV-Spalten und Profile
+- [docs/csv-standard.md](docs/csv-standard.md) – CSV-Exportspezifikation für die Warenwirtschaft (Standardformat ab 0.9.9)
 
 ### Entwickeln
 

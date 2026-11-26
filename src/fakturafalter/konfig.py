@@ -12,6 +12,7 @@ from pathlib import Path
 
 import yaml
 
+from . import zahlungsziel
 from .modell import Anschrift, Partei, Zahlung
 from .werte import bloecke_bereinigen, dekodieren, trennzeichen_erkennen
 
@@ -69,6 +70,7 @@ def zahlung_aus(z: dict, basis: Zahlung | None = None, kontoinhaber: str = "") -
     b = basis or Zahlung(
         art="58", kontoinhaber=kontoinhaber, bedingungen=ZAHLUNGSBEDINGUNG, ziel_tage=14
     )
+    skonto = _skonto_aus_zahlung(z, b)
     return Zahlung(
         art=str(z.get("art", b.art)),
         iban=str(z.get("iban", b.iban) or "").replace(" ", ""),
@@ -76,10 +78,51 @@ def zahlung_aus(z: dict, basis: Zahlung | None = None, kontoinhaber: str = "") -
         kontoinhaber=str(z.get("kontoinhaber", b.kontoinhaber) or ""),
         bedingungen=str(z.get("bedingungen", b.bedingungen) or ""),
         ziel_tage=z.get("ziel_tage", b.ziel_tage),
+        skonto=skonto,
         glaeubiger_id=str(z.get("glaeubiger_id", b.glaeubiger_id) or "")
         .replace(" ", "")
         .upper(),  # BT-90
     )
+
+
+def _skonto_aus_zahlung(z: dict, basis: Zahlung) -> list:
+    """Optionale Profil-Standard-Skontostufen (Satz und Tage je Stufe)."""
+    profil = list(basis.skonto or [])
+    schluessel = (
+        "skonto_satz",
+        "skonto_tage",
+        "skonto_basisbetrag",
+        "skonto_satz_2",
+        "skonto_tage_2",
+        "skonto_basisbetrag_2",
+    )
+    if not any(z.get(k) not in (None, "") for k in schluessel):
+        return profil
+    stufen = []
+    paare = (
+        ("skonto_satz", "skonto_tage", "skonto_basisbetrag", 0),
+        ("skonto_satz_2", "skonto_tage_2", "skonto_basisbetrag_2", 1),
+    )
+    for satz_k, tage_k, basis_k, i in paare:
+        satz = (
+            z[satz_k]
+            if z.get(satz_k) not in (None, "")
+            else (profil[i].satz if i < len(profil) else None)
+        )
+        tage = (
+            z[tage_k]
+            if z.get(tage_k) not in (None, "")
+            else (profil[i].tage if i < len(profil) else None)
+        )
+        betrag = (
+            z[basis_k]
+            if z.get(basis_k) not in (None, "")
+            else (profil[i].basisbetrag if i < len(profil) else None)
+        )
+        stufe = zahlungsziel.stufe_aus_werten(tage, satz, betrag)
+        if stufe:
+            stufen.append(stufe)
+    return stufen
 
 
 def bemerkungen_aus(liste: list) -> list[tuple[str, str]]:
@@ -337,7 +380,9 @@ def lade_konfig(pfad: str | Path) -> Konfig:
     if prot:
         k.protokoll_ordner = _abs(basis, prot)
     csv_profs, csv_ein = _profile_laden(k, d, d.get("csv_profile"), art="csv")
-    k.csv_profile = csv_profs
+    from . import csv_standard
+
+    k.csv_profile = csv_standard.anhaengen(csv_profs, d)
     if list(d.get("csv_profile") or []) != csv_ein:
         d["csv_profile"] = csv_ein
     pdf_profs, pdf_ein = _profile_laden(k, d, d.get("pdf_profile"), art="pdf")

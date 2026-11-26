@@ -53,6 +53,16 @@ AUS_ABSENDER = {
 }
 
 
+SKONTO_FELDER = (
+    ("skonto_satz", "Skonto % (freiwillig)"),
+    ("skonto_tage", "Zahlungsziel mit Skonto in Tagen (freiwillig)"),
+    ("skonto_basisbetrag", "Skonto-Basisbetrag (freiwillig)"),
+    ("skonto_satz_2", "Skonto 2 % (freiwillig)"),
+    ("skonto_tage_2", "Zahlungsziel mit Skonto 2 in Tagen (freiwillig)"),
+    ("skonto_basisbetrag_2", "Skonto-Basisbetrag 2 (freiwillig)"),
+)
+
+
 def aus_roh(roh: dict) -> dict[str, str]:
     a = roh.get("absender") or {}
     adr = a.get("anschrift") or {}
@@ -75,6 +85,12 @@ def aus_roh(roh: dict) -> dict[str, str]:
         "kontakt_telefon": kon.get("telefon", ""),
         "kontakt_email": kon.get("email", ""),
         "kleinunternehmer": "1" if a.get("kleinunternehmer") else "",
+        "skonto_satz": str(z.get("skonto_satz", "") or ""),
+        "skonto_tage": str(z.get("skonto_tage", "") or ""),
+        "skonto_basisbetrag": str(z.get("skonto_basisbetrag", "") or ""),
+        "skonto_satz_2": str(z.get("skonto_satz_2", "") or ""),
+        "skonto_tage_2": str(z.get("skonto_tage_2", "") or ""),
+        "skonto_basisbetrag_2": str(z.get("skonto_basisbetrag_2", "") or ""),
     }
 
 
@@ -116,6 +132,12 @@ def in_roh(r: dict, e: dict[str, str]) -> None:
         z.pop("glaeubiger_id", None)
     if not z.get("kontoinhaber") and e["name"]:
         z["kontoinhaber"] = e["name"]
+    for schl, _n in SKONTO_FELDER:
+        w = (e.get(schl) or "").strip()
+        if w:
+            z[schl] = w
+        else:
+            z.pop(schl, None)
 
 
 def pflicht_fehlt(e: dict[str, str]) -> list[str]:
@@ -193,6 +215,27 @@ class AbsenderFormular(QWidget):
                 umbruch=True,
             )
         )
+        if not kurz:
+            v.addWidget(lbl(_("Standard-Skonto (freiwillig)"), umbruch=True))
+            v.addWidget(
+                lbl(
+                    _(
+                        "Gilt, wenn die Rechnung kein eigenes Skonto mitbringt. Satz und Tage einer "
+                        "Stufe gehören zusammen. In der E-Rechnung stehen sie maschinenlesbar "
+                        "(#SKONTO#), auf der PDF nur als Klartext. Der Basisbetrag nur, wenn nicht "
+                        "der volle Zahlbetrag gilt."
+                    ),
+                    "hinweis",
+                    umbruch=True,
+                )
+            )
+            for schl, name in SKONTO_FELDER:
+                e = QLineEdit(str(werte.get(schl) or ""))
+                e.setObjectName(f"abs_{schl}")
+                e.setAccessibleName(_(name))
+                v.addWidget(lbl(_(name), umbruch=True))
+                v.addWidget(e)
+                self.felder[schl] = e
 
     def werte(self) -> dict[str, str]:
         w = {s: " ".join(e.text().split()) for s, e in self.felder.items()}

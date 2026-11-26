@@ -189,14 +189,24 @@ class Summen:  # BG-22
 
 
 @dataclass
+class SkontoStufe:
+    """Eine maschinenlesbare Skontostufe für BT-20 (XRechnung-Konvention #SKONTO#)."""
+
+    tage: int
+    satz: Decimal
+    basisbetrag: Decimal | None = None
+
+
+@dataclass
 class Zahlung:
     art: str = "58"  # BT-81 (58 = SEPA-Überweisung)
     iban: str = ""  # BT-84
     bic: str = ""  # BT-86
     kontoinhaber: str = ""  # BT-85
-    bedingungen: str = ""  # BT-20
-    faellig: date | None = None  # BT-9
+    bedingungen: str = ""  # BT-20 Klartext, ohne #SKONTO#-Zeilen
+    faellig: date | None = None  # BT-9 (Netto-Fälligkeit, nicht das Skontodatum)
     ziel_tage: int | None = None
+    skonto: list[SkontoStufe] = field(default_factory=list)  # bis zu 2 Stufen für #SKONTO#
     verwendungszweck: str = ""  # BT-83 (leer = Rechnungsnummer)
     info: str = ""  # BT-82 Zahlungsart als Text
     mandat: str = ""  # BT-89 Mandatsreferenz (Lastschrift, BG-19)

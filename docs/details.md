@@ -180,7 +180,7 @@ Konfiguration). Gesucht wird in `$FAKTURAFALTER_WERKZEUGE`, `werkzeuge/` neben d
 `werkzeuge/` im Arbeitsverzeichnis; Java über `$FAKTURAFALTER_JAVA`, `werkzeuge/jre*/`, dann PATH.
 In der Entwicklung: `packaging/werkzeuge.sh werkzeuge linux` (siehe packaging/README.md).
 
-Welche CSV erwartet wird und welche Spalten mindestens nötig sind: [csv-format.md](csv-format.md).
+Welche CSV erwartet wird und welche Spalten mindestens nötig sind: [csv-format.md](csv-format.md). Die Exportspezifikation für die Warenwirtschaft, das eingebaute Standardprofil und strukturiertes Skonto: [csv-standard.md](csv-standard.md) (ab 0.9.9).
 
 ## Layouteditor (Sichtteil gestalten)
 

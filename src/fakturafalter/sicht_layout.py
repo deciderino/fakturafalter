@@ -253,11 +253,10 @@ def _bedingungen(r: Rechnung) -> str:
     if not r.zahlung.bedingungen or ist_gutschrift(r, r.summen.zahlbar):
         return ""
     f = r.zahlung.faellig
-    return r.zahlung.bedingungen + (
-        f" Fällig am {datum(f)}."
-        if f and not zahlungsziel.datum_im_text(f, r.zahlung.bedingungen)
-        else ""
-    )
+    bed = zahlungsziel.klartext_fuer_sicht(r.zahlung.bedingungen)
+    if not bed:
+        return ""
+    return bed + (f" Fällig am {datum(f)}." if f and not zahlungsziel.datum_im_text(f, bed) else "")
 
 
 def _summen(c, e: lay.Element, r: Rechnung, zusatz: list[str], bericht) -> None:
