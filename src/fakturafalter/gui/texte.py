@@ -838,6 +838,8 @@ EN.update(
         "Felder je Block sind frei wählbar. Genau ein Block wiederholt sich (Positionen).": "Fields per block are free to choose. Exactly one block is repeating (line items).",
         "Blöcke festlegen": "Define blocks",
         "z. B. #Kopf": "e.g. #Kopf",
+        "Hinweis: Kopffeld in mehreren Blöcken wird verglichen, Abweichung → Zu prüfen ({t}).": "Note: a header field in several blocks will be compared; a difference → needs review ({t}).",
+        "Im Eingang würde derzeit das Profil „{n}“ greifen, nicht dieses. Es steht weiter oben und passt ebenfalls. Reihenfolge in den Einstellungen prüfen.": "In the inbox, profile “{n}” would apply now, not this one. It is listed higher and also matches. Check the order in Settings.",
         "Blöcke in dieser Datei": "Blocks in this file",
         "eine Datei = eine Rechnung. Zuerst die Spalten, jetzt die Blöcke. Felder je Block sind frei wählbar. Genau ein Block wiederholt sich (Positionen).": "One file = one invoice. Columns first, then blocks. Fields per block are free to choose. Exactly one block is repeating (line items).",
         "Marker (optional)": "Marker (optional)",

@@ -110,10 +110,17 @@ Satzart-Dateien richtet der Assistent ebenfalls ein, wenn eine Spalte „Satzart
 Jede Profilkarte zeigt, ob sie **aktiv** ist und welche Spalten oder Merkmale
 sie erkennt. Du kannst ein Profil aus- und wieder einschalten, ohne es zu
 löschen, und die Reihenfolge mit **Hoch** / **Runter** ändern. Passen mehrere
-Profile zu einer Datei, gewinnt das **oberste aktive**. Protokoll und
+Profile zu einer Datei, gewinnt das **oberste aktive**. Ein Block-Profil
+passt ab 0.9.9.1 nur, wenn alle ihm zugeordneten Spalten als Kopfzeile in der
+Datei stehen – ein älteres Profil mit ein paar gleichen Namen (etwa Rechnungsnr
+und Artikel) greift sonst nicht auf eine fremde Blockdatei. Passen mehrere
+Profile in diesem Sinne, bleibt das oberste der Gewinner; das Protokoll nennt
+weitere Treffer weiter unten. Protokoll und
 Rechnungsseite nennen je Datei das verwendete Profil. Mit **Profil testen…**
 wählst du eine CSV und siehst, welches Profil greifen würde und warum die
-anderen nicht. Eigene und übernommene Profile sind bearbeit- und löschbar. Das eingebaute
+anderen nicht (fehlende Spalten stehen in der Begründung). Die Probe im
+CSV-Assistenten warnt, wenn im Eingang ein anderes, weiter oben stehendes
+Profil greifen würde. Eigene und übernommene Profile sind bearbeit- und löschbar. Das eingebaute
 Standardprofil steht immer zuletzt, lässt sich deaktivieren, aber nicht
 löschen oder verschieben.
 Beispielprofile (Varianten a/b/c/d/k/s und das Block-Beispiel) liegen im

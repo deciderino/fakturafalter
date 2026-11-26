@@ -675,8 +675,82 @@ def _kopffelder_ohne_leerpflicht(row: dict, felder: dict, tz: dict) -> bool:
     return False
 
 
+def genutzte_spalten_wortlaut(profil: dict) -> list[str]:
+    """Zugeordnete Spaltennamen in der Schreibweise des Profils (jeder normierte Name einmal)."""
+    gesehen: set[str] = set()
+    aus: list[str] = []
+
+    def add(s: str) -> None:
+        n = name_norm(s)
+        if n and n not in gesehen:
+            gesehen.add(n)
+            aus.append(s.strip())
+
+    for b in profil.get("bloecke") or []:
+        for d in (b.get("felder") or {}).values():
+            if isinstance(d, dict) and d.get("spalte"):
+                add(str(d["spalte"]))
+    for teil in (profil.get("felder") or {}).values():
+        if isinstance(teil, dict):
+            for d in teil.values():
+                if isinstance(d, dict) and d.get("spalte"):
+                    add(str(d["spalte"]))
+    return aus
+
+
+def kopf_namen_in_datei(zeilen: list[list[str]], profil: dict) -> set[str]:
+    """Normierte Namen in erkannten Kopfzeilen der Datei (nicht in gespeicherten kopfzeile-Vorgaben)."""
+    aus: set[str] = set()
+    namen = genutzte_namen(profil)
+    n = schwelle(profil)
+    nach_marker = False
+    for row in zeilen:
+        if _leer_zeile(row):
+            continue
+        if ist_markerzeile(row, profil) or (
+            not marker_im_profil(profil) and sieht_nach_marker_heuristik(row)
+        ):
+            nach_marker = True
+            continue
+        if (
+            nach_marker
+            or ist_exakte_kopfzeile(row, profil)
+            or ist_kopfzeile(row, namen, n)
+        ):
+            for c in row:
+                nn = name_norm(c)
+                if nn:
+                    aus.add(nn)
+        nach_marker = False
+    return aus
+
+
+def _namen_ohne_kopfzeile(profil: dict, bloecke: list[dict]) -> set[str]:
+    """Spalten eines per Marker ohne Kopfzeile erkannten Blocks müssen nicht in der Datei stehen."""
+    typen = {
+        str(bl.get("typ") or "")
+        for bl in bloecke
+        if bl.get("marker") and bl.get("ohne_kopfzeile")
+    }
+    typen.discard("")
+    aus: set[str] = set()
+    for b in profil.get("bloecke") or []:
+        if str(b.get("typ") or "") not in typen:
+            continue
+        for d in (b.get("felder") or {}).values():
+            if isinstance(d, dict) and d.get("spalte"):
+                aus.add(name_norm(str(d["spalte"])))
+    return aus
+
+
 def passt(zeilen: list[list[str]], profil: dict) -> tuple[bool, str]:
-    """Ob die Datei zu diesem Block-Profil passt. Pflichtprüfung erst an der Rechnung."""
+    """Ob die Datei zu diesem Block-Profil passt. Pflichtprüfung erst an der Rechnung.
+
+    Ab 0.9.9.1 müssen alle zugeordneten Spaltennamen als Kopfzeile in der Datei
+    vorkommen (außer in einem per Marker ohne Kopfzeile eröffneten Block).
+    So zieht ein älteres Profil eine fremde Datei nicht mehr nur wegen ein paar
+    gemeinsamer Namen (z. B. Rechnungsnr, Artikel) an sich.
+    """
     if not genutzte_namen(profil) and not any(
         (b.get("kopfzeile") or b.get("marker")) for b in (profil.get("bloecke") or [])
     ):
@@ -688,5 +762,14 @@ def passt(zeilen: list[list[str]], profil: dict) -> tuple[bool, str]:
     typen = [str(b.get("typ") or typ_fuer(b["kopf"], profil) or "") for b in bloecke]
     if wieder not in typen and "positionen" not in typen:
         return False, "Kein Positionsblock erkannt"
+    vorhanden = kopf_namen_in_datei(zeilen, profil)
+    erlassen = _namen_ohne_kopfzeile(profil, bloecke)
+    fehlend = [
+        w
+        for w in genutzte_spalten_wortlaut(profil)
+        if name_norm(w) not in vorhanden and name_norm(w) not in erlassen
+    ]
+    if fehlend:
+        return False, "Spalten des Profils fehlen in der Datei: " + ", ".join(fehlend)
     pos = next(b for b, typ in zip(bloecke, typen) if typ == wieder or typ == "positionen")
     return True, f"{len(bloecke)} Block/Blöcke erkannt, Positionsblock in Zeile {pos['start']}"

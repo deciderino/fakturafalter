@@ -1093,7 +1093,19 @@ class CsvAssistent(_Assistent):
                 )
             elif csv_bloecke.name_norm(m) in zu_namen:
                 texte.append(_("Hinweis: Der Marker „{m}“ gleicht einem Spaltennamen.").format(m=m))
-        # warnings vs errors: name clash is warning (still allowed)
+        in_bloecken: dict[str, int] = {}
+        for i in range(len(self.bloecke)):
+            for f in self.block_felder.get(i) or set():
+                if f in ce.FELD and ce.FELD[f][2] == "kopf":
+                    in_bloecken[f] = in_bloecken.get(f, 0) + 1
+        mehr = [ce.FELD[f][1] for f, n in in_bloecken.items() if n > 1]
+        if mehr:
+            texte.append(
+                _(
+                    "Hinweis: Kopffeld in mehreren Blöcken wird verglichen, Abweichung → Zu prüfen ({t})."
+                ).format(t=", ".join(mehr))
+            )
+        # warnings vs errors: name clash and comparison hint are warnings (still allowed)
         fehler = [x for x in texte if not x.startswith("Hinweis:")]
         self.l_block_fehler.setText(" ".join(texte))
         self.l_block_fehler.setVisible(bool(texte))
@@ -1588,7 +1600,7 @@ class CsvAssistent(_Assistent):
             for b in bloecke:
                 typ = str(b.get("typ") or "")
                 wahl = b.get("felder_wahl") or set()
-                zu_je[typ] = {f: s for f, s in zu.items() if f in wahl} or dict(zu)
+                zu_je[typ] = {f: s for f, s in zu.items() if f in wahl}
             p = ce.profil_bauen_bloecke(
                 self.name.text().strip() or "csv",
                 self.datei,
@@ -1655,6 +1667,21 @@ class CsvAssistent(_Assistent):
             self.l_probe.setObjectName("warn")
             return
         self._probe_zeigen(self.t_probe, self.l_probe, erg)
+        from .. import adapter_csv
+
+        anderes = adapter_csv.eingang_anderes_profil(
+            Path(self.datei), self.profil(), self.haupt.k.csv_profile
+        )
+        if anderes:
+            extra = _(
+                "Im Eingang würde derzeit das Profil „{n}“ greifen, nicht dieses. "
+                "Es steht weiter oben und passt ebenfalls. Reihenfolge in den Einstellungen prüfen."
+            ).format(n=anderes)
+            self.l_probe.setText((self.l_probe.text() + " " + extra).strip())
+            self.l_probe.setObjectName("warn")
+            self.l_probe.setStyleSheet("")
+            self.l_probe.style().unpolish(self.l_probe)
+            self.l_probe.style().polish(self.l_probe)
 
     def _sichtseite(self) -> None:
         """Probe-Rechnung als Sichtseite öffnen (temporäres PDF, nur lesen)."""

@@ -169,8 +169,13 @@ In den Aufbauten `zeile_je_position` und `bloecke` gilt:
 In der Konfiguration darf `csv_profile` eine Zeichenkette (Pfad) oder
 `{datei: …, aktiv: true|false}` sein. Fehlt `aktiv`, gilt das Profil als aktiv
 (bestehende Konfigurationen bleiben gültig). Die Reihenfolge in der Liste ist
-die Prüf-Reihenfolge: das erste *aktive* passende Profil gewinnt. Das Protokoll
-(`protokoll.tsv`) hat eine neunte Spalte mit dem Profilnamen.
+die Prüf-Reihenfolge: das erste *aktive* passende Profil gewinnt. Ein
+Block-Profil passt ab 0.9.9.1 nur, wenn seine zugeordneten Spalten als
+Kopfzeilen in der Datei vorkommen (nicht schon bei ein paar gemeinsamen Namen).
+Das Protokoll (`protokoll.tsv`) hat eine neunte Spalte mit dem Profilnamen;
+weitere passende Profile weiter unten werden dort erwähnt.
+Ein überarbeiteter Assistent mit farbigem Festlegen der Blöcke und Spalten je
+Block ist geplant und nicht Teil von 0.9.9.1.
 
 ## Rabatt, Zuschlag, Gutschrift, Lastschrift und weitere Felder (ab 0.6.0)
 

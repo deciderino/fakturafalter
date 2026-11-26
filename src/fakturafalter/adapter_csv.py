@@ -5,6 +5,7 @@
 from __future__ import annotations
 
 import fnmatch
+import logging
 import re
 from collections import OrderedDict
 from pathlib import Path
@@ -13,6 +14,8 @@ from .aufbau import Roh, rechnung_bauen
 from .konfig import Konfig
 from .modell import Herkunft, Rechnung
 from .werte import WertFehler, csv_lesen, datum, dekodieren, trennzeichen_erkennen, zahl
+
+log = logging.getLogger("fakturafalter")
 
 
 class ProfilFehler(Exception):
@@ -434,3 +437,67 @@ def profil_aktiv(profil: dict) -> bool:
     if "aktiv" not in profil:
         return True
     return bool(profil.get("aktiv"))
+
+
+def profil_name(profil: dict) -> str:
+    return str(
+        profil.get("profil") or profil.get("name") or Path(profil.get("_datei", "profil")).stem
+    )
+
+
+def profil_fuer_datei(pfad: Path, profile: list) -> tuple[dict | None, str]:
+    """Erstes aktives passendes Profil (wie der Eingang). Weitere Treffer stehen in der Begründung.
+
+    Die Erkennung selbst (``profil_passt``) entscheidet, was passt; die Reihenfolge
+    in ``profile`` bleibt die Priorität, wenn mehrere eindeutig passen. Das
+    Standardprofil gehört ans Ende der Liste.
+    """
+    treffer: dict | None = None
+    grund_t = ""
+    weitere: list[str] = []
+    for prof in profile:
+        if not profil_aktiv(prof):
+            continue
+        ok, grund = profil_passt_grund(pfad, prof)
+        if not ok:
+            continue
+        if treffer is None:
+            treffer, grund_t = prof, grund
+        else:
+            weitere.append(profil_name(prof))
+    if treffer is None:
+        return None, "Kein passendes CSV-Profil gefunden"
+    name = profil_name(treffer)
+    if weitere:
+        log.info(
+            "%s: CSV-Profil „%s“ (%s); weitere passende weiter unten: %s",
+            pfad.name,
+            name,
+            grund_t,
+            ", ".join(weitere),
+        )
+        grund_t = f"{grund_t}; weitere passende Profile weiter unten: {', '.join(weitere)}"
+    else:
+        log.info("%s: CSV-Profil „%s“", pfad.name, name)
+    return treffer, grund_t
+
+
+def _profil_ist(a: dict, b: dict) -> bool:
+    if a is b:
+        return True
+    na, nb = a.get("profil") or a.get("name"), b.get("profil") or b.get("name")
+    if na and nb:
+        return na == nb
+    da, db = a.get("_datei"), b.get("_datei")
+    return bool(da) and bool(db) and str(da) == str(db)
+
+
+def eingang_anderes_profil(datei: Path, dieses: dict, profile: list) -> str | None:
+    """Name des Profils, das der Eingang wählen würde, falls es nicht ``dieses`` ist."""
+    liste = list(profile)
+    if not any(_profil_ist(p, dieses) for p in liste):
+        liste = liste + [dieses]
+    gewinner, _grund = profil_fuer_datei(datei, liste)
+    if gewinner is None or _profil_ist(gewinner, dieses):
+        return None
+    return profil_name(gewinner)
