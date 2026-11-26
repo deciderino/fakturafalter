@@ -11,29 +11,40 @@ validiert nach EN 16931 und PDF/A-3</p>
   <img src="docs/bilder/ablauf.gif" width="800" alt="Schema: Eine Datei wandert aus dem Ordner Eingang zu Fakturafalter, wird geprüft, und eine ZUGFeRD-PDF wandert in den Ordner Ausgang">
 </p>
 
-Fakturafalter macht aus den Rechnungsexporten deiner Warenwirtschaft oder deines ERP gültige E-Rechnungen. Die
-Exporte kommen als CSV oder XML, heraus kommt ZUGFeRD: PDF/A-3 mit eingebetteter XML nach EN 16931. Es überwacht
-einen Eingangsordner, erzeugt und prüft jede Rechnung lokal und legt sie im Ausgang ab. Von dort übernimmt sie
-dein Archiv (z. B. ELO), ein anderes Programm oder du selbst.
+Fakturafalter macht aus den Rechnungen deiner Warenwirtschaft (ERP) gültige E-Rechnungen. Typischerweise kommen die
+Exporte als CSV oder XML; bei Bedarf erzeugst du ZUGFeRD auch aus einem fertigen Rechnungs-PDF. Heraus kommt
+immer ZUGFeRD: PDF/A-3 mit eingebetteter XML nach EN 16931. Fakturafalter überwacht einen Eingangsordner,
+erzeugt und prüft jede Rechnung lokal und legt sie im Ausgang ab. Von dort übernimmt sie dein Archiv
+(z. B. ELO), ein anderes Programm oder du selbst.
 
 Gedacht für kleine Betriebe, deren Warenwirtschaft keine E-Rechnung kann. Fakturafalter läuft im Hintergrund auf
 einem Arbeitsplatz-PC oder ohne Oberfläche (`--headless`), z. B. auf einer VM. Die Rechnungsnummern vergibt
-weiterhin dein System.
+weiterhin dein System – in der App tippst du die Rechnungsdaten nicht von Hand.
 
-## Warum Fakturafalter
+## Warum Fakturafalter?
 
-- **Lokal.** Rechnungsdaten verlassen den Rechner nicht, ohne Cloud und ohne Telemetrie.
-- **Geprüft, bevor etwas rausgeht.** Jede Rechnung wird nach der Erstellung lokal geprüft: mit Mustang (mit
-  veraPDF) für PDF/A-3 und ZUGFeRD, mit dem KoSIT-Validator für die Rechnungsdaten nach EN 16931. Dazu kommen
-  Pflichtangaben und Plausibilität (§ 14 Abs. 4 UStG, Summen, doppelte Nummern).
-  - Unklares landet in „Zu prüfen“, Ungültiges in „Fehler“ – nichts geht still raus.
-  - In den Ausgang kommt nur die fertige, geprüfte Datei. Archiv oder andere Programme dürfen ihn jederzeit
-    leeren; das Protokoll liegt getrennt im Ordner `Protokoll`.
-- **Kostenlos und offen.** Apache-2.0, für Windows und Linux. Java-Laufzeit und Prüfwerkzeuge sind im Paket
-  enthalten.
-- **Passt sich an.** CSV-Assistent für eigene Exporte – auch Dateien mit mehreren Blöcken und eigener Kopfzeile.
-  Profile in den Einstellungen an- und ausschalten, in fester Reihenfolge prüfen. Layout-Editor für die Sichtseite.
-  Optional Prüfmuster für die Rechnungsnummer und eigene Dateinamen.
+Fakturafalter ist entstanden, weil es keine passende Alternative gab: eine Anwendung mit grafischer Oberfläche,
+die einen Eingangsordner überwacht, verschiedene Eingaben verarbeitet (CSV, XML und PDF), die erzeugte
+E-Rechnung selbst prüft – und bei der die Rechnungsdaten nicht manuell in die App eingegeben, sondern automatisch
+verarbeitet werden.
+
+- **Grafische Oberfläche.** Einrichtung, Profile und Prüffälle am Bildschirm. Ohne Oberfläche läuft
+  Fakturafalter trotzdem (`--headless`), z. B. auf einer VM.
+- **Hotfolder.** Du legst Dateien in den Ordner `Eingang`. Die geprüfte ZUGFeRD-PDF liegt im `Ausgang`, die
+  Quelle wandert nach `Erledigt`. Das Protokoll liegt getrennt im Ordner `Protokoll`; Archiv oder andere
+  Programme dürfen den Ausgang jederzeit leeren.
+- **Verschiedene Eingaben.** CSV-Export aus der Warenwirtschaft, vorhandene ZUGFeRD- oder XRechnung-XML, oder
+  der fertige Rechnungsdruck als PDF.
+- **Selbstprüfung.** Jede Rechnung wird nach der Erstellung lokal geprüft: mit Mustang (mit veraPDF) für PDF/A-3
+  und ZUGFeRD, mit dem KoSIT-Validator für die Rechnungsdaten nach EN 16931. Dazu kommen Pflichtangaben und
+  Plausibilität (§ 14 Abs. 4 UStG, Summen, doppelte Nummern). Unklares landet in „Zu prüfen“, Ungültiges in
+  „Fehler“ – nichts geht still raus.
+- **Kein manuelles Tippen der Rechnungsdaten.** Die Angaben kommen aus deinen Dateien und Stammdaten (Absender,
+  Kundenstamm). Du richtest einmal ein, danach läuft die Verarbeitung automatisch.
+- **Lokal und offen.** Rechnungsdaten verlassen den Rechner nicht, ohne Cloud und ohne Telemetrie. Apache-2.0,
+  für Windows und Linux; Java-Laufzeit und Prüfwerkzeuge sind im Paket enthalten. CSV-Assistent und Layout-Editor
+  passen Fakturafalter an deinen Export und deine Sichtseite an. Optional: Prüfmuster für die Rechnungsnummer
+  und eigene Dateinamen.
 
 ## In drei Schritten
 
@@ -48,11 +59,12 @@ weiterhin dein System.
      trennt. Spalten prüfen, Probe und optional die Sichtseite ansehen, speichern. Unter Einstellungen siehst du
      je Profil, was es erkennt; mit „Profil testen…“ prüfst du, welches Profil eine Datei lesen würde.
    - **XML** (ZUGFeRD / XRechnung, CII oder UBL): Eine Zuordnung ist nicht nötig.
-3. **Überwachung einschalten.** Exporte in den Ordner `Eingang` legen. Die geprüfte ZUGFeRD-PDF liegt im
+   - **Nur PDF**: Wenn du fertige Rechnungs-PDFs verarbeiten willst, lernst du das Layout einmal als Vorlage an.
+3. **Überwachung einschalten.** Exporte oder PDFs in den Ordner `Eingang` legen. Die geprüfte ZUGFeRD-PDF liegt im
    `Ausgang`, die Quelle wandert nach `Erledigt`.
 
-Ausführlich: [Handbuch](docs/handbuch.md) · Schnellstart [CSV](docs/handbuch.md#3-schnellstart-csv) und
-[XML](docs/handbuch.md#4-schnellstart-xml).
+Ausführlich: [Handbuch](docs/handbuch.md) · Schnellstart [CSV](docs/handbuch.md#3-schnellstart-csv),
+[XML](docs/handbuch.md#4-schnellstart-xml) und [Nur PDF](docs/handbuch.md#nur-pdf).
 
 ## So sieht es aus
 
@@ -78,10 +90,10 @@ Die Screenshots zeigen ausschließlich erfundene Beispieldaten.
 
 | Eingang | Empfehlung | Hinweis |
 |---|---|---|
-| **CSV** (Export aus Warenwirtschaft/ERP) | empfohlen | Zuordnung einmal mit dem CSV-Assistenten; Format siehe [csv-format.md](docs/csv-format.md) |
+| **CSV** (Export aus der Warenwirtschaft) | empfohlen | Zuordnung einmal mit dem CSV-Assistenten; Format siehe [csv-format.md](docs/csv-format.md) |
 | **XML** (ZUGFeRD / Factur-X, XRechnung; CII oder UBL) | empfohlen | ohne Zuordnung; andere XML-Formate (z. B. DATEV, Lexware) werden nicht gelesen |
 | **CSV oder XML + Original-PDF** | optional | Haken „Zusätzlich das PDF der Rechnung verwenden“: der Original-Druck bleibt die Sichtseite |
-| **Nur PDF** | unterstützt, nicht empfohlen | siehe unten |
+| **Nur PDF** (Angaben aus dem Rechnungsdruck) | möglich | Layout einmal anlernen; CSV oder XML sind zuverlässiger, siehe unten |
 
 **Ausgabe:** ZUGFeRD als PDF/A-3 (Profil EN 16931, eingebettete `factur-x.xml`), optional zusätzlich eine
 XRechnung (CII), wenn der Kundenstamm sie verlangt – neben der PDF, im Unterordner `XRechnung` oder gar nicht
@@ -95,12 +107,17 @@ XRechnung (CII), wenn der Kundenstamm sie verlangt – neben der PDF, im Unteror
   Fakturafalter ruft keinen Kurs ab.
 - Leitweg-ID (XRechnung) mit Prüfziffer nach Mod 97-10.
 
-**Nur PDF** (Angaben allein aus dem Rechnungsdruck) wird weiterhin unterstützt, ist aber nicht der empfohlene Weg:
-Die Erkennung kann fehlgehen, Layouts müssen angelernt und Ergebnisse kontrolliert werden.
-Ist Fakturafalter richtig eingerichtet und entspricht das Eingangs-PDF den Anforderungen (Text-PDF, angelernte
-Vorlage, gleichbleibendes Layout), lässt sich auch mit reinen PDFs ein sicherer Ablauf aufbauen – jede Rechnung
-durchläuft dieselben Pflicht- und Validierungsprüfungen und landet bei Unsicherheit in „Zu prüfen“.
-Details im [Handbuch](docs/handbuch.md#nur-pdf-unterstutzt-aber-nicht-empfohlen).
+**Nur PDF.** Du kannst aus einem fertigen Rechnungsdruck eine gültige ZUGFeRD-Rechnung erzeugen: das Layout einmal
+anlernen, danach derselbe Ablauf über den Eingangsordner und dieselben Pflicht- und Validierungsprüfungen wie bei
+CSV und XML. Bei Unsicherheit landet die Rechnung in „Zu prüfen“.
+
+CSV- oder XML-Export ist zuverlässiger und der bessere Weg. Die Erkennung aus dem Druck kann fehlgehen, die
+Vorlage muss zum Layout passen, und die Ergebnisse solltest du kontrollieren. Details im
+[Handbuch](docs/handbuch.md#nur-pdf).
+
+## Geplante Funktionen
+
+- **Textdatei als Eingang**, etwa ein Rechnungsdokument aus Word oder einer anderen Textverarbeitung.
 
 ## Datenschutz und Netz
 

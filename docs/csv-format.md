@@ -1,6 +1,6 @@
 # CSV-Format für Fakturafalter
 
-Fakturafalter liest Rechnungsdaten aus einem CSV-Export der Warenwirtschaft. Ein **Profil**
+Fakturafalter liest Rechnungsdaten aus einem CSV-Export der Warenwirtschaft (ERP). Ein **Profil**
 (YAML-Datei) beschreibt, wie der Export aussieht. Hier steht, welches Format erwartet wird und
 welche Spalten mindestens vorhanden sein müssen.
 
@@ -115,7 +115,7 @@ Im Aufbau `zeile_je_position` (nicht bei `bloecke`) gilt zusätzlich:
 
 - **Leer** sind leere Zellen, nur Leerzeichen sowie `0` / `0,00`. Menge *und* Preis leer oder 0 → keine Position (Textzeile oder gewollte Leerzeile). Steht nur die Menge, ist es eine Position. Steht nur der Preis, entscheidet `aufbau.textzeile.preis_ohne_menge`: `pruefen` (Standard), `eins` (Menge 1) oder `kommentar`.
 - Spalten auf „nicht verwenden“ zählen nirgends mit, auch nicht bei der Erkennung von Kommentar- und Leerzeilen.
-- Ohne zugeordnete Positionsspalte erhalten echte Positionen die Nummern 1, 2, 3 … Mit Spalte gilt die ERP-Nummer (BT-126 in der XML immer eindeutig). `sicht.positionsnummer: false` blendet die Nummer nur auf der Sichtseite aus.
+- Ohne zugeordnete Positionsspalte erhalten echte Positionen die Nummern 1, 2, 3 … Mit Spalte gilt die Nummer aus der Warenwirtschaft (BT-126 in der XML immer eindeutig). `sicht.positionsnummer: false` blendet die Nummer nur auf der Sichtseite aus.
 - `sicht.menge_exakt: true` (Standard): die Sichtseite zeigt die Menge wie in der CSV (`40,00`). In der XML bleibt der Zahlenwert normal.
 - `sicht.einheit: csv` zeigt den Einheitentext aus der CSV; Standard `kurz` (z. B. `Stk.`). In der XML steht weiter der Rec-20-Code in BT-130.
 - Kommentarzeilen stehen auf der Sichtseite ohne Vorsatz „Beschreibung:“ direkt unter der Position (XML: BT-154). Der Vorsatz gilt nur für eine eigene Beschreibungsspalte. `sicht.kommentar_ohne_bezeichnungen: true` blendet auch Labels wie „Art.-Nr.:“ an Kommentarzeilen aus.

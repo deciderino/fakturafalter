@@ -66,7 +66,7 @@ eine Logzeile; `--einmal`/`--dateien` prüfen nicht.
 ## Eingabevarianten
 
 Der empfohlene Weg ist **CSV** oder **XML**. **Nur PDF** bleibt unterstützt, ist aber nicht empfohlen
-(Erkennung kann fehlgehen, Kontrolle nötig); siehe [Handbuch](handbuch.md#nur-pdf-unterstutzt-aber-nicht-empfohlen).
+(Erkennung kann fehlgehen, Kontrolle nötig); siehe [Handbuch](handbuch.md#nur-pdf).
 
 | Eingangsformat (Einstellungen → Eingang & Vorlagen) | Was im Eingang liegt | Schritte der Verarbeitung |
 |---|---|---|

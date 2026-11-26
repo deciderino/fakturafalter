@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "fakturafalter"
-version = "0.9.8.1"
+version = "0.9.8.2"
 description = "Fakturafalter: PDF + CSV aus Alt-WaWi/ERP lokal zu ZUGFeRD (EN 16931, PDF/A-3) und XRechnung CII"
 requires-python = ">=3.11"
 license = "Apache-2.0"

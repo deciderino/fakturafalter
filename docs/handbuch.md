@@ -41,8 +41,9 @@ Der Assistent hat vier Schritte: **Ordner** → **Absender** → **Woher kommen 
    Fehlt der Verkäufer in einer XML, gilt dieser Absender. Bei CSV kann ein Profil
    einen eigenen Verkäufer haben; sonst gilt ebenfalls dieser Absender.
 3. **Woher kommen die Daten?** Wähle **CSV** oder **XML (ZUGFeRD / XRechnung)**
-   und richte bei CSV eine Beispiel-Datei ein (Abschnitt 3). **Nur PDF** ist
-   möglich, aber nicht empfohlen (Abschnitt 9).
+   und richte bei CSV eine Beispiel-Datei ein (Abschnitt 3). **Nur PDF**
+   (Abschnitt 9) ist ein eigener Weg, wenn du fertige Rechnungs-PDFs verarbeiten
+   willst; CSV oder XML sind zuverlässiger.
 4. **Fertig.** Danach kannst du die Überwachung einschalten und Dateien in den
    Eingang legen.
 
@@ -52,7 +53,7 @@ Einstellungen lassen sich später unter **Einstellungen** ändern.
 ## 3. Schnellstart: CSV
 
 1. Einstellungen → **Eingang & Vorlagen** → Eingangsformat **CSV**.
-2. **Neue CSV einrichten…** Eine echte Export-Datei aus der Warenwirtschaft
+2. **Neue CSV einrichten…** Eine echte Export-Datei aus der Warenwirtschaft (ERP)
    wählen (sie wird nur gelesen). Der Zuordnung einen Namen geben und **Weiter**.
 3. **Format:** Trennzeichen, Zeichensatz, Dezimalzeichen und Datumsformat sind
    erkannt. Passt die Vorschau nicht, stelle sie um. Unter **Aufbau** kannst du
@@ -306,15 +307,19 @@ eine Summe nicht, geht die Datei nach `Pruefen` oder `Fehler`.
 Quellen: [§ 14 Abs. 4 UStG](https://www.gesetze-im-internet.de/ustg_1980/__14.html);
 EN 16931-1 (Pflichtfelder und BR-61, BR-CO-25, BR-CO-26).
 
-## 9. Nur PDF (unterstützt, aber nicht empfohlen)
+## 9. Nur PDF
 
-<a id="nur-pdf-unterstutzt-aber-nicht-empfohlen"></a>
+<a id="nur-pdf"></a>
 
-Fakturafalter kann Rechnungen auch **allein aus einem Druck-PDF** mit Textebene
-lesen (keine reinen Scans, keine OCR). Das bleibt unterstützt, ist aber nicht
-der empfohlene Weg: Die Erkennung hängt am angelernten Layout und kann
-fehlgehen. Ergebnisse solltest du kontrollieren, bevor du sie verschickst.
-Wenn deine Warenwirtschaft CSV oder XML liefern kann, nimm diesen Weg.
+Fakturafalter kann aus einem fertigen Rechnungsdruck eine gültige ZUGFeRD-Rechnung
+erzeugen: allein aus einem Druck-PDF mit Textebene (keine reinen Scans, keine OCR).
+Das Layout lernst du einmal an, danach gilt derselbe Ablauf über den Eingangsordner
+und dieselben Pflicht- und Validierungsprüfungen wie bei CSV und XML. Bei Unsicherheit
+landet die Rechnung in „Zu prüfen“.
+
+CSV- oder XML-Export ist zuverlässiger und der bessere Weg. Die Erkennung hängt am
+angelernten Layout und kann fehlgehen; die Vorlage muss zum Druck passen, und die
+Ergebnisse solltest du kontrollieren, bevor du sie verschickst.
 
 ### Anlernen
 
