@@ -178,12 +178,15 @@ def preis_text(
     sprache: str | None = None,
     waehrung: str = "EUR",
 ) -> str:
-    """Einzelpreis mit Preiseinheit (BT-149) für den Sichtteil: „3,40“ oder „3,40 € / 10 Stück“ (Fremdwährung:
-    „3,40 USD / 10 Stück“)."""
+    """Einzelpreis mit Preiseinheit (BT-149) für den Sichtteil: „3,40 €“ oder „3,40 € / 10 Stück“ (Fremdwährung:
+    „3,40 USD“ bzw. „3,40 USD / 10 Stück“)."""
     if preiseinheit is None or preiseinheit == 1:
-        return eur(einzelpreis)
-    zeichen = "€" if (waehrung or "EUR").upper() == "EUR" else waehrung.upper()
-    return f"{eur(einzelpreis)} {zeichen} / {menge(preiseinheit)} {einheit_text(code, sprache, lang=True)}".rstrip()
+        return betrag(einzelpreis, waehrung)
+    # Zeichen nur einmal, vor dem „/ 10 Stück“
+    return (
+        f"{betrag(einzelpreis, waehrung)} / {menge(preiseinheit)} "
+        f"{einheit_text(code, sprache, lang=True)}"
+    ).rstrip()
 
 
 def umbrechen(c, text: str, font: str, groesse: float, breite: float) -> list[str]:
@@ -256,37 +259,62 @@ def _schriften():
 
 
 def eur(d: Decimal | None) -> str:
+    """Zahl im Sichtteil ohne Währungszeichen: 1234.56 → „1.234,56“."""
     if d is None:
         return ""
     s = f"{d.quantize(Decimal('0.01')):,.2f}"
     return s.replace(",", "X").replace(".", ",").replace("X", ".")
 
 
+def waehrung_zeichen(waehrung: str | None = "EUR") -> str:
+    """EUR → „€“, sonst der ISO-Code („USD“)."""
+    w = (waehrung or "EUR").upper()
+    return "€" if w == "EUR" else w
+
+
+def betrag(d: Decimal | None, waehrung: str | None = "EUR") -> str:
+    """Geldbetrag im Sichtteil: „1.234,56 €“ bzw. „1.234,56 USD“."""
+    s = eur(d)
+    return f"{s} {waehrung_zeichen(waehrung)}" if s else ""
+
+
+def rechtsbuendig_passend(
+    c, x, y, text: str, font: str, groesse: float, breite: float, min_groesse: float = 7
+):
+    """Rechtsbündig in fester Breite zeichnen; Schrift verkleinern statt umbrechen oder überlaufen."""
+    g = groesse
+    while g > min_groesse and c.stringWidth(text, font, g) > breite:
+        g = max(min_groesse, g - 0.5)
+    c.setFont(font, g)
+    c.drawRightString(x, y, text)
+    return g
+
+
 def summen_zeilen(r: Rechnung) -> list[tuple[str, str]]:
-    """Summenblock (Standardlayout und Layoutvorlage). Ab 0.9.7: Währung aus BT-5 statt fest „EUR“, keine
-    USt-Zeile beim Kleinunternehmer (§ 19 UStG – dort steht nur der Hinweis)."""
+    """Summenblock (Standardlayout und Layoutvorlage). Beträge mit Währungszeichen aus BT-5;
+    keine USt-Zeile beim Kleinunternehmer (§ 19 UStG – dort steht nur der Hinweis)."""
     s = r.summen
-    w = (r.waehrung or "EUR").upper()
+    w = r.waehrung or "EUR"
     zeilen = []
     if r.zu_abschlaege:  # BG-20/BG-21
-        zeilen.append(("Summe Positionen", eur(s.positionen_netto)))
-        zeilen += [_za_text(za) for za in r.zu_abschlaege]
+        zeilen.append(("Summe Positionen", betrag(s.positionen_netto, w)))
+        zeilen += [_za_text(za, waehrung=w) for za in r.zu_abschlaege]
     ku = bool(s.steuerzeilen) and all(
         steuerfaelle.fall_von(z.steuer) == "KU" for z in s.steuerzeilen
     )
     if not ku:  # Kleinunternehmer: nur der Gesamtbetrag
-        zeilen.append(("Nettobetrag", eur(s.netto)))
+        zeilen.append(("Nettobetrag", betrag(s.netto, w)))
     for z in s.steuerzeilen:
         if steuerfaelle.fall_von(z.steuer) == "KU":
             continue
-        zeilen.append((f"USt {menge(z.steuer.satz)} % auf {eur(z.basis)}", eur(z.betrag)))
-    zeilen.append((f"Gesamtbetrag {w}", eur(s.brutto)))
+        zeilen.append((f"USt {menge(z.steuer.satz)} % auf {eur(z.basis)}", betrag(z.betrag, w)))
+    zeilen.append(("Gesamtbetrag", betrag(s.brutto, w)))
     if s.vorausbezahlt or s.rundung:  # BT-113/114/115
         if s.vorausbezahlt:
-            zeilen.append(("Bereits gezahlt", "−" + eur(s.vorausbezahlt)))
+            zeilen.append(("Bereits gezahlt", "−" + betrag(s.vorausbezahlt, w)))
         if s.rundung:
-            zeilen.append(("Rundung", eur(s.rundung)))
-        zeilen.append((f"Zahlbetrag {w}", eur(s.zahlbar)))
+            zeilen.append(("Rundung", betrag(s.rundung, w)))
+        zeilen.append(("Zahlbetrag", betrag(s.zahlbar, w)))
     return zeilen
 
 
@@ -414,18 +442,20 @@ def satz(schluessel: str, r: Rechnung, sprache: str | None = None) -> str:
     return _SATZ[sp][schluessel].format(titel=t)
 
 
-def _za_text(za, vorzeichen: bool = True, sprache: str | None = None) -> tuple[str, str]:
-    """Zu-/Abschlag als („Rabatt 10 % – Grund“, „−12,34“). ``sprache="en"``: „Discount“/„Charge“ (nur die
+def _za_text(
+    za, vorzeichen: bool = True, sprache: str | None = None, waehrung: str | None = "EUR"
+) -> tuple[str, str]:
+    """Zu-/Abschlag als („Rabatt 10 % – Grund“, „−12,34 €“). ``sprache="en"``: „Discount“/„Charge“ (nur die
     Unterzeilen der Positionen; ohne ``sprache`` wie bisher deutsch)."""
     en = sprache == "en"
     art = ("Charge" if en else "Zuschlag") if za.zuschlag else ("Discount" if en else "Rabatt")
     allgemein = ("rabatt", "zuschlag", "discount", "charge", art.lower())
     grund = "" if za.grund.strip().lower() in allgemein else za.grund
     teile = [art + (f" {menge(za.prozent)} %" if za.prozent is not None else ""), grund]
-    betrag = eur(za.ist_betrag)
+    wert = betrag(za.ist_betrag, waehrung)
     return " – ".join(t for t in teile if t), (
-        ("+" if za.zuschlag else "−") + betrag
-    ) if vorzeichen else betrag
+        ("+" if za.zuschlag else "−") + wert
+    ) if vorzeichen else wert
 
 
 # Unterzeilen einer Position (ab 0.9.5): Präfixe je Sprache
@@ -481,7 +511,9 @@ def _ein(t) -> str:
     return "\n".join(" ".join(z.split()) for z in str(t or "").split("\n"))
 
 
-def unterzeilen(p, sprache: str | None = None, sicht: dict | None = None) -> list[tuple[str, bool]]:
+def unterzeilen(
+    p, sprache: str | None = None, sicht: dict | None = None, waehrung: str | None = "EUR"
+) -> list[tuple[str, bool]]:
     """Belegte Zusatzangaben einer Position als Unterzeilen unter der Bezeichnung -> [(Text, grau)].
 
     Reihenfolge: Kommentarzeilen (ohne Vorsatz „Beschreibung:“) direkt unter der Position;
@@ -575,7 +607,7 @@ def unterzeilen(p, sprache: str | None = None, sicht: dict | None = None) -> lis
             if p.bruttopreis is not None
             else t["nachlass"].format(nachlass=eur(p.preisrabatt))
         )
-    for a, b in (_za_text(za, sprache=sp) for za in p.zu_abschlaege):
+    for a, b in (_za_text(za, sprache=sp, waehrung=waehrung) for za in p.zu_abschlaege):
         dazu(f"{a}: {b}")
     return aus
 
@@ -631,12 +663,19 @@ def _umbrechen_fuellend(c, text: str, font: str, groesse: float, breite: float) 
 
 
 def unterzeilen_umbrochen(
-    c, p, sprache: str | None, font: str, groesse: float, breite: float, sicht: dict | None = None
+    c,
+    p,
+    sprache: str | None,
+    font: str,
+    groesse: float,
+    breite: float,
+    sicht: dict | None = None,
+    waehrung: str | None = "EUR",
 ) -> list[tuple[str, bool]]:
     """Unterzeilen auf die Breite der Bezeichnung umbrechen (ohne Zeichenverlust) -> [(Zeile, grau)]."""
     return [
         (z, grau)
-        for text, grau in unterzeilen(p, sprache, sicht=sicht)
+        for text, grau in unterzeilen(p, sprache, sicht=sicht, waehrung=waehrung)
         for z in _umbrechen_fuellend(c, text, font, groesse, breite)
     ]
 
@@ -652,6 +691,11 @@ def erzeugen(
 
         return mit_vorlage(r, vorlage, sprache, bericht)
     return _erzeugen_standard(r, sprache)
+
+
+# Abstand des Positions-Gesamtbetrags vom rechten Rand (USt-Spalte). 10 mm lässt
+# „123.456,78 €“ in 9 pt zu; zuvor 13 mm, das war für das Zeichen zu knapp.
+GESAMT_RECHTS = 10 * mm
 
 
 def _erzeugen_standard(r: Rechnung, sprache: str | None = None) -> bytes:
@@ -827,7 +871,7 @@ def _erzeugen_standard(r: Rechnung, sprache: str | None = None) -> bytes:
             (L + 105 * mm, feld_titel(r, "BT-129", "Menge"), True, "BT-129"),
             (L + 107 * mm, feld_titel(r, "BT-130", "Einh."), False, "BT-130"),
             (L + 140 * mm, feld_titel(r, "BT-146", "Einzelpreis"), True, "BT-146"),
-            (R - 13 * mm, feld_titel(r, "gesamt", "Gesamt"), True, "gesamt"),
+            (R - GESAMT_RECHTS, feld_titel(r, "gesamt", "Gesamt"), True, "gesamt"),
             (R, feld_titel(r, "steuer", "USt"), True, "steuer"),
         ]
         for x, txt, rechts, key in koepfe:
@@ -856,7 +900,14 @@ def _erzeugen_standard(r: Rechnung, sprache: str | None = None) -> bytes:
         )
         # Unterzeilen (Art.-Nr., Zeichnung, Beschreibung, …, Rabatt), umbrochen, nie abgeschnitten
         extra = unterzeilen_umbrochen(
-            c, p, sprache, "ER-Sans", UNTERZEILE_PT, BEZ_BREITE, sicht=sicht_von(r)
+            c,
+            p,
+            sprache,
+            "ER-Sans",
+            UNTERZEILE_PT,
+            BEZ_BREITE,
+            sicht=sicht_von(r),
+            waehrung=r.waehrung,
         )
         davor: list[str] = []
         for ztext in getattr(p, "zeilen_davor", None) or []:
@@ -886,7 +937,16 @@ def _erzeugen_standard(r: Rechnung, sprache: str | None = None) -> bytes:
             c.setFont("ER-Sans", 9)
         c.drawRightString(L + 105 * mm, y_p, menge_anzeige(p, r))
         c.drawString(L + 107 * mm, y_p, einheit_anzeige(p, r, sprache))
-        c.drawRightString(R - 13 * mm, y_p, eur(p.netto))
+        rechtsbuendig_passend(
+            c,
+            R - GESAMT_RECHTS,
+            y_p,
+            betrag(p.netto, r.waehrung),
+            "ER-Sans",
+            9,
+            (R - GESAMT_RECHTS) - (L + 140 * mm),
+        )
+        c.setFont("ER-Sans", 9)
         c.drawRightString(R, y_p, f"{menge(p.steuer.satz)} %")
         c.setFont("ER-Sans", pg)
         for i, z in enumerate(preis):  # BT-149

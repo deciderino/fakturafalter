@@ -121,8 +121,9 @@ def test_sichtseite_zeigt_kommentar_und_leerzeile_an_ort(konfig):
     assert text.index("Grundplatte") < text.index("000000-1111-222/01")
     assert "Beschreibung:" not in text
     assert "40,00" in text
-    assert "394,40" in text or "394.40" in text
-    assert "469,34" in text or "469.34" in text
+    assert "394,40 €" in text or "394,40€" in text
+    assert "469,34 €" in text or "469,34€" in text
+    assert "Gesamtbetrag EUR" not in text
     # Positionsnummer ohne Spalte: 1, nicht die CSV-Zeile 003
     assert (
         " 1 " in f" {text} "

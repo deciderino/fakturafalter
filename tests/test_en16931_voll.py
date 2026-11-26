@@ -308,7 +308,7 @@ def test_sichtteil_zeigt_neue_angaben(konfig, tmp_path):
     a, g, x = text(rs["RE-2026-0201"]), text(rs["GS-2026-0007"]), text(rs["XR-2026-0301"])
     assert (
         "Summe Positionen" in a
-        and "Versandkosten +8,50" in a
+        and "Versandkosten +8,50 €" in a
         and "SEPA-Lastschrift" in a
         and "MANDAT-2026-007" in a
     )
@@ -318,8 +318,8 @@ def test_sichtteil_zeigt_neue_angaben(konfig, tmp_path):
         and "gutgeschrieben" in g
     )
     assert (
-        "Bereits gezahlt −230,70" in x
-        and "Zahlbetrag EUR 1.000,00" in x
+        "Bereits gezahlt −230,70 €" in x
+        and "Zahlbetrag 1.000,00 €" in x
         and "Listenpreis 85,00" in x
     )
     assert "Lieferanschrift: Bauhof Halle 3" in x

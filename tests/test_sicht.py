@@ -94,7 +94,7 @@ def test_einheit_text():
     )
     assert sicht.einheit_text("HUR", "de") == "Std." and sicht.einheit_text("HUR", "en") == "hr"
     assert sicht.einheit_text("XYZ", "de") == "XYZ"  # unbekannt: Code
-    assert sicht.preis_text(Decimal("3.4"), Decimal("1"), "H87", "de") == "3,40"
+    assert sicht.preis_text(Decimal("3.4"), Decimal("1"), "H87", "de") == "3,40 €"
 
 
 def test_sicht_xml_behaelt_code():

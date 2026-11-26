@@ -26,13 +26,14 @@ from . import layout as lay
 from . import zahlungsziel
 from .modell import Rechnung
 from .sicht import (
+    GESAMT_RECHTS,
     GRAU,
     UNTERZEILE_PT,
     _schriften,
+    betrag,
     datum,
     einheit_anzeige,
     einpassen,
-    eur,
     feld_sichtbar,
     feld_titel,
     ist_gutschrift,
@@ -41,6 +42,7 @@ from .sicht import (
     menge,
     menge_anzeige,
     preis_text,
+    rechtsbuendig_passend,
     satz,
     sicht_von,
     steuer_texte,
@@ -404,7 +406,14 @@ def _zeilen_bauen(r: Rechnung, e: lay.Element, sprache) -> list[_Zeile]:
             MIN_PT,
         )
         extra = unterzeilen_umbrochen(
-            _Breite, p, sprache, F, g * UNTERZEILE_PT / 9, bez_b, sicht=sicht_von(r)
+            _Breite,
+            p,
+            sprache,
+            F,
+            g * UNTERZEILE_PT / 9,
+            bez_b,
+            sicht=sicht_von(r),
+            waehrung=r.waehrung,
         )
         davor: list[str] = []
         for ztext in getattr(p, "zeilen_davor", None) or []:
@@ -485,14 +494,22 @@ def _tabelle(
     ):
         if k == "pos" and not feld_sichtbar(r, "BT-126"):
             continue
-        x = rechts - 13 * mm * f if k == "gesamt" else sp[k]
+        x = rechts - GESAMT_RECHTS * f if k == "gesamt" else sp[k]
         (c.drawRightString if r_ else c.drawString)(x, y, txt)
     c.line(e.x * mm, y - 1.5 * mm, rechts, y - 1.5 * mm)
     y -= lh + 2.5 * mm
     if vortrag is not None:
         c.setFont(F, g)
         c.drawString(sp["bez"], y, "Übertrag")
-        c.drawRightString(rechts - 13 * mm * f, y, eur(vortrag))
+        rechtsbuendig_passend(
+            c,
+            rechts - GESAMT_RECHTS * f,
+            y,
+            betrag(vortrag, r.waehrung if r else "EUR"),
+            F,
+            g,
+            (rechts - GESAMT_RECHTS * f) - sp["preis"],
+        )
         y -= lh + 2 * mm
     unten = _y(e.y + e.hoehe)
     for z in zeilen:
@@ -515,7 +532,16 @@ def _tabelle(
             c.setFont(F, g)
         c.drawRightString(sp["menge"], y_p, menge_anzeige(p, r))
         c.drawString(sp["einh"], y_p, einheit_anzeige(p, r, sprache))
-        c.drawRightString(rechts - 13 * mm * f, y_p, eur(p.netto))
+        rechtsbuendig_passend(
+            c,
+            rechts - GESAMT_RECHTS * f,
+            y_p,
+            betrag(p.netto, r.waehrung if r else "EUR"),
+            F,
+            g,
+            (rechts - GESAMT_RECHTS * f) - sp["preis"],
+        )
+        c.setFont(F, g)
         c.drawRightString(rechts, y_p, f"{menge(p.steuer.satz)} %")
         c.setFont(F, z.pg)
         for i, txt in enumerate(z.preis):  # BT-149
@@ -528,7 +554,15 @@ def _tabelle(
         c.line(e.x * mm, yu + lh + 0.5 * mm, rechts, yu + lh + 0.5 * mm)
         c.setFont(FB, g)
         c.drawString(sp["bez"], yu, "Übertrag")
-        c.drawRightString(rechts - 13 * mm * f, yu, eur(uebertrag))
+        rechtsbuendig_passend(
+            c,
+            rechts - GESAMT_RECHTS * f,
+            yu,
+            betrag(uebertrag, r.waehrung if r else "EUR"),
+            FB,
+            g,
+            (rechts - GESAMT_RECHTS * f) - sp["preis"],
+        )
 
 
 # ---------------------------------------------------------------- Seite
