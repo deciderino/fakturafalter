@@ -1,0 +1,9 @@
+Satzart;Kunde1;Kunde2;Kunde3;Kunde4;Kunde5
+#Kopf;Testkunde;Muster GmbH;Beispielweg 12;12345 Musterstadt;DE
+Satzart;Belegname;Belegdatum;Leistungsdatum;Kundennummer;Währung
+#Beleg;784395789;10.10.26;9.10.26;K-2205;EUR
+Satzart;Bezeichnung;Menge;Einheit;Einzelpreis;USt-Satz
+#Positionen;Dichtungssatz DN 40;3;Stück;18,50;19
+#Positionen;Montage vor Ort;2;Stunde;65,00;19
+Satzart;Gesamt Netto;Gesamt USt;Gesamt Brutto;Zahlungsziel ohne Abzug;
+#Summen;185,50;35,25;220,75;30;

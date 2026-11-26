@@ -165,6 +165,54 @@ def satzart_wert(zellen: list[str], profil: dict, kopf: list[str] | None = None)
     return ""
 
 
+
+def profil_block_fuer_satzart(wert: str, profil: dict) -> dict | None:
+    """Profilblock zur Satzart-Wert-Anfangsregel (auch #Beleg in einer Datenzeile)."""
+    w = (wert or "").strip()
+    if not w:
+        return None
+    for b in profil.get("bloecke") or []:
+        for r in anfang_regeln(b):
+            if r.get("art") == "satzart" and str(r.get("wert") or "").strip() == w:
+                return b
+    return None
+
+
+def profil_block_zu(bl: dict, profil: dict) -> dict:
+    """Passenden Profilblock finden: zuerst id, dann eindeutiger typ, dann Kopfzeile."""
+    bid = str(bl.get("id") or "").strip()
+    typ = str(bl.get("typ") or "").strip()
+    liste = list(profil.get("bloecke") or [])
+    if bid:
+        for b in liste:
+            if str(b.get("id") or "").strip() == bid:
+                return b
+        for b in liste:
+            if str(b.get("typ") or "").strip() == bid:
+                # nur wenn typ in diesem Profil eindeutig ist
+                if sum(1 for x in liste if str(x.get("typ") or "") == bid) == 1:
+                    return b
+    if typ:
+        treffer = [b for b in liste if str(b.get("typ") or "").strip() == typ]
+        if len(treffer) == 1:
+            return treffer[0]
+        kopf = [name_norm(x) for x in (bl.get("kopf") or [])]
+        for b in treffer:
+            soll = [name_norm(x) for x in (b.get("kopfzeile") or [])]
+            if kopf and soll and kopf == soll:
+                return b
+        if treffer:
+            return treffer[0]
+    return {}
+
+
+def profil_block_id(b: dict, index: int = 0) -> str:
+    if str(b.get("id") or "").strip():
+        return str(b.get("id")).strip()
+    typ = str(b.get("typ") or "").strip()
+    return typ or f"block{index + 1}"
+
+
 def typ_fuer_satzart(wert: str, profil: dict) -> str:
     w = (wert or "").strip()
     if not w:
@@ -398,6 +446,7 @@ def schneiden_profil(zeilen: list[list[str]], start: int, profil: dict) -> list[
         # Satzart-Wert: nur prüfen, wenn das Profil diese Anfangsregel hat
         sa_kopf = (aktuell or {}).get("kopf") or gemeinsame_kopf or kopf_fuer_satzart
         wert_sa = satzart_wert(row, profil, sa_kopf) if satzart_aktiv else ""
+        pb_sa = profil_block_fuer_satzart(wert_sa, profil) if wert_sa else None
         typ_sa = typ_fuer_satzart(wert_sa, profil) if wert_sa else ""
         if typ_sa:
             if aktuell is not None and typ_sa == str(aktuell.get("typ") or ""):
@@ -425,6 +474,7 @@ def schneiden_profil(zeilen: list[list[str]], start: int, profil: dict) -> list[
                 satzart=True,
                 satzart_wert=wert_sa,
                 ohne_kopfzeile=not bool(kopf),
+                id=profil_block_id(pb_sa) if pb_sa else typ_sa,
             )
             if typ_sa != wieder and typ_sa in gesehen_satzart_typ:
                 # already added typ; second time flagged above before add
@@ -460,6 +510,11 @@ def schneiden_profil(zeilen: list[list[str]], start: int, profil: dict) -> list[
                 "daten": [],
                 "typ": typ,
             }
+            pb = profil_block_zu(aktuell, profil)
+            if pb:
+                aktuell["id"] = profil_block_id(pb)
+                if pb.get("typ"):
+                    aktuell["typ"] = str(pb.get("typ"))
             aus.append(aktuell)
             kopf_fuer_satzart = aktuell["kopf"]
         elif aktuell is None:
@@ -689,18 +744,21 @@ def lesen(text_zeilen: list[list[str]], profil: dict, pfad: Path, start: int) ->
     gesehen_positionen = 0
     nummern: set[str] = set()
 
-    bloecke_def = {str(b.get("typ") or ""): b for b in (profil.get("bloecke") or [])}
-
-    def defs_fuer(typ: str, art: str) -> dict:
-        b = bloecke_def.get(typ) or {}
+    def defs_fuer(pdef: dict, typ: str, art: str) -> dict:
+        b = pdef or {}
         felder = dict(b.get("felder") or {})
-        if (typ == "positionen" or typ == wieder) and art == "kopf":
-            for k, d in ((bloecke_def.get("kopf") or {}).get("felder") or {}).items():
-                if k not in felder:
-                    d2 = dict(d)
-                    d2["optional"] = True
-                    d2.pop("position", None)
-                    felder[k] = d2
+        ist_pos = block_wiederholend(b) or typ == "positionen" or typ == wieder
+        if ist_pos and art == "kopf":
+            # Kopffelder aller normalen Blöcke (Kunde und Beleg nicht über typ kollidieren)
+            for pb in profil.get("bloecke") or []:
+                if block_wiederholend(pb) or str(pb.get("typ") or "") == "positionen":
+                    continue
+                for k, d in (pb.get("felder") or {}).items():
+                    if k not in felder and isinstance(d, dict):
+                        d2 = dict(d)
+                        d2["optional"] = True
+                        d2.pop("position", None)
+                        felder[k] = d2
         global_f = (profil.get("felder") or {}).get("kopf" if art == "kopf" else "position") or {}
         for k, d in global_f.items():
             felder.setdefault(k, d)
@@ -710,6 +768,9 @@ def lesen(text_zeilen: list[list[str]], profil: dict, pfad: Path, start: int) ->
 
     for bl in roh_bloecke:
         typ = str(bl.get("typ") or typ_fuer(bl["kopf"], profil) or "")
+        pdef = profil_block_zu(bl, profil)
+        if pdef.get("typ") and not typ:
+            typ = str(pdef.get("typ") or "")
         if bl.get("ohne_anfang"):
             fehler.append(
                 _pruefen(
@@ -718,7 +779,7 @@ def lesen(text_zeilen: list[list[str]], profil: dict, pfad: Path, start: int) ->
             )
         for h in bl.get("hinweise") or []:
             fehler.append(h)
-        ist_pos = typ == wieder or typ == "positionen"
+        ist_pos = typ == wieder or typ == "positionen" or block_wiederholend(pdef) or block_wiederholend(bl)
         if ist_pos:
             gesehen_positionen += 1
             if gesehen_positionen > 1:
@@ -730,8 +791,8 @@ def lesen(text_zeilen: list[list[str]], profil: dict, pfad: Path, start: int) ->
         if ist_pos:
             _positionsblock(
                 bl,
-                defs_fuer(typ or "positionen", "position"),
-                defs_fuer(typ or "positionen", "kopf"),
+                defs_fuer(pdef, typ or "positionen", "position"),
+                defs_fuer(pdef, typ or "positionen", "kopf"),
                 profil,
                 pfad,
                 kopf,
@@ -747,10 +808,10 @@ def lesen(text_zeilen: list[list[str]], profil: dict, pfad: Path, start: int) ->
                 nummern,
             )
         else:
-            felder = defs_fuer(typ, "kopf")
-            # auch Zahlungs-/Summenfelder
-            if typ:
-                felder = {**felder, **((bloecke_def.get(typ) or {}).get("felder") or {})}
+            felder = defs_fuer(pdef, typ, "kopf")
+            # auch Zahlungs-/Summenfelder des getroffenen Blocks
+            if pdef.get("felder"):
+                felder = {**felder, **(pdef.get("felder") or {})}
             for zeile, werte in bl["daten"]:
                 row = zeile_zu_row(werte, bl["kopf"])
                 roh = feldsatz(row, felder, zeile, fehler, profil, pfad)

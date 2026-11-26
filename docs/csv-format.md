@@ -112,15 +112,28 @@ Zeilensteuer, …) gehören nur in den **einen wiederholenden** Block
 - **Gewollte Leerzeile** auf der Sichtseite: Platzhalter (Standard `#LEER`)
   und/oder eine Zeile, die nur Kopffelder trägt (`leerzeile_modus`).
 - Steht nur der Preis, entscheidet `preis_ohne_menge` (`pruefen` / `eins` / `kommentar`).
-- Im Assistenten (ab 0.9.10): nach dem Format **Blöcke festlegen** (farbige
-  Tabelle, Grenzen ziehen oder Zeilen markieren und zuweisen). Jeder Block
-  braucht eine Anfangsregel, geprüft in dieser Reihenfolge: Marker, Satzart-Wert,
-  Kopfzeile (*verfügbar ab 0.9.10*; Marker *verfügbar ab 0.9.9*). Danach
-  **Spalten je Block** – dieselbe Position darf je Block ein anderes Feld sein.
-  Gespeichert werden Name und 1-basierte Position; beim Lesen hat der Name
-  Vorrang, wenn die Kopfzeile ihn trägt. Pflichtprüfung erst an der ganzen
-  Rechnung. Ein Kopffeld in mehreren Blöcken wird verglichen (Abweichung →
-  Zu prüfen). Probe und Eingang nutzen denselben Lesepfad.
+- Im Assistenten (ab 0.9.10, erweitert ab 0.9.11): nach dem Format **Blöcke festlegen**.
+  Blöcke lassen sich frei anlegen, umbenennen und als Bereich aufziehen. Die Blockart
+  (*normaler Block* oder *sich wiederholend / Positionsblock*) wählst du selbst;
+  sie wird nicht aus zugeordneten Feldern abgeleitet. Ein normaler Block liefert nur
+  einen Teil der Rechnungsinfo (z. B. Kunde, Beleg, Summen); die Rechnung entsteht
+  aus allen Blöcken zusammen. Mehrere normale Blöcke dürfen nicht kollidieren
+  (Kunde und Beleg nicht beide als Typ `kopf`). Die Anfangsregel wird aus den ersten
+  inhaltlichen Zeilen abgeleitet: Satzart-Wert (auch in einer Datenzeile, z. B.
+  `#Kopf;Testkunde;…`), dann die enge Markerform, dann Kopfzeile
+  (*verfügbar ab 0.9.10*; Marker *verfügbar ab 0.9.9*; Satzart in der Datenzeile
+  *verfügbar ab 0.9.11*). Zeilennummern werden nicht gespeichert. Blockende ist der
+  nächste erkannte Blockstart oder das Dateiende. Weiter auf dieser Seite ist nur
+  gesperrt, wenn kein Block existiert oder ein Block keine Zeilen hat; fehlende
+  Anfangsregel und abweichende Anzahl wiederholender Blöcke sind Warnungen.
+  Danach **Spalten je Block** – dieselbe Position darf je Block ein anderes Feld
+  sein. Weiter erst, wenn die Pflichtfelder zugeordnet sind: Rechnungsnummer,
+  Rechnungsdatum, Bezeichnung, Menge, Einzelpreis, Steuer, und Käufername (BT-44)
+  oder Kundennummer (über den Kundenstamm). Gespeichert werden Name und 1-basierte
+  Position; beim Lesen hat der Name Vorrang, wenn die Kopfzeile ihn trägt. Ein
+  Kopffeld in mehreren Blöcken wird verglichen (Abweichung → Zu prüfen). Probe
+  und Eingang nutzen denselben Lesepfad. Dunkles und helles Theme setzen eigene
+  Blockfarben mit fester Schriftfarbe (WCAG AA).
 - Der Aufbau `satzart` bleibt parallel bestehen; alte Profile ohne `anfang`
   werden aus `marker` bzw. `kopfzeile` abgeleitet und laufen unverändert.
 - Bestehende Block-Profile ohne `marker` und `wiederholend` laufen unverändert weiter.
@@ -161,6 +174,7 @@ Ab 0.9.10 außerdem `beispiele/beispiel-satzart-bloecke-koepfe.csv` (Satzart und
 `beispiele/beispiel-satzart-gleiche-positionen.csv` (gleiche Spaltenposition, andere Bedeutung) und
 `beispiele/beispiel-satzart-ohne-blockkopf.csv` (nur Satzart K/P/S) mit den zugehörigen
 `profil-beispiel-satzart-*.yaml`.
+Ab 0.9.11 außerdem `beispiele/beispiel-satzart-marker-in-spalte.csv` (fiktiv: `#Kopf` und `#Beleg` als Satzart-Wert in der Datenzeile, kurze Datumsangaben TT.MM.JJ, getrennte Blöcke Kunde und Beleg).
 Standardaufbau: `beispiele/variante-zjp_textzeilen.csv` (fiktiv, RE-2026-0818:
 Kommentar und Leerzeile über der Position, Kommentar darunter; netto 394,40 /
 USt 74,94 / brutto 469,34). Profil: `beispiele/profil-variante-zjp-textzeilen.yaml`.
@@ -188,7 +202,7 @@ Block-Profil passt ab 0.9.9.1 nur, wenn seine zugeordneten Spalten als
 Kopfzeilen in der Datei vorkommen (nicht schon bei ein paar gemeinsamen Namen).
 Das Protokoll (`protokoll.tsv`) hat eine neunte Spalte mit dem Profilnamen;
 weitere passende Profile weiter unten werden dort erwähnt.
-Ab 0.9.10 richtet der Assistent Blockdateien farbig ein (Blöcke festlegen,
+Ab 0.9.10 richtet der Assistent Blockdateien farbig ein (Blöcke festlegen, ab 0.9.11 frei benennbar,
 Spalten je Block, Satzart als Anfangsregel). Probe und Eingang nutzen denselben
 Lesepfad; bei mehreren passenden Profilen gewinnt das spezifischste, bei
 Gleichstand das weiter vorne in der Liste.

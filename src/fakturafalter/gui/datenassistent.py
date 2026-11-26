@@ -10,6 +10,7 @@ import json
 from pathlib import Path
 
 from PySide6.QtCore import Qt
+from PySide6.QtGui import QKeySequence, QShortcut
 from PySide6.QtWidgets import (
     QCheckBox,
     QComboBox,
@@ -18,7 +19,10 @@ from PySide6.QtWidgets import (
     QGridLayout,
     QHBoxLayout,
     QHeaderView,
+    QInputDialog,
     QLineEdit,
+    QMessageBox,
+    QPushButton,
     QStackedWidget,
     QTableWidget,
     QTableWidgetItem,
@@ -40,7 +44,7 @@ from .bausteine import (
     lbl,
     rollen,
 )
-from .blockassistent import AnfangsBox, BlockTabelle, Legende, SpaltenJeBlock
+from .blockassistent import AnfangsBox, BlockKarten, BlockTabelle, Legende, SpaltenJeBlock, typ_name
 from .texte import _
 
 TRENNZEICHEN = (
@@ -234,7 +238,7 @@ class CsvAssistent(_Assistent):
         self.block_wiederholend: dict[int, bool] = {}
         self._bloecke_init = False
         self.satzart_spalte = None
-        for s in (
+        seiten = (
             self._seite_datei(),
             self._seite_format(),
             self._seite_vorschau(),
@@ -244,8 +248,10 @@ class CsvAssistent(_Assistent):
             self._seite_fertig(),
             self._seite_bloecke(),
             self._seite_spalten_je_block(),
-        ):
-            self.stapel.addWidget(rollen(s))
+        )
+        for i, s in enumerate(seiten):
+            # Block- und Spaltenseite: nur die Tabelle scrollt, kein äußerer QScrollArea.
+            self.stapel.addWidget(s if i in (7, 8) else rollen(s))
         self._schritte_anpassen()
         ziel = 0
         if (
@@ -775,7 +781,11 @@ class CsvAssistent(_Assistent):
         }
 
     def _alle_zuordnungen(self) -> dict[str, str]:
-        """Bei Blöcken Pflichtfelder über alle typisierten Blöcke prüfen, nicht nur den sichtbaren."""
+        """Bei Blöcken Pflichtfelder über alle Blöcke zusammen prüfen, nicht nur den sichtbaren."""
+        if self.art == "bloecke" and getattr(self, "spalten_seite", None):
+            flach = self.spalten_seite.zuordnung_flach()
+            if flach:
+                return flach
         return self.zuordnung()
 
     def _zuordnung_geaendert(self, spalte: int | None) -> None:
@@ -896,13 +906,28 @@ class CsvAssistent(_Assistent):
         v.addWidget(
             lbl(
                 _(
-                    "Jede Farbe ist ein Block. Der Block läuft bis zum nächsten Anfang. "
-                    "Grenzen mit der Maus ziehen oder Zeilen markieren und zuweisen."
+                    "Blöcke selbst festlegen. Grenzen mit der Maus ziehen oder Zeilen markieren und zuweisen."
                 ),
                 "sub",
                 umbruch=True,
             )
         )
+        leiste = QHBoxLayout()
+        self.b_block_neu = knopf(_("Block hinzufügen"), klick=self._block_hinzufuegen)
+        self.b_block_weg = knopf(_("Entfernen"), klick=self._block_entfernen)
+        self.b_block_name = knopf(_("Umbenennen"), klick=self._block_umbenennen)
+        self.b_wdh = QPushButton(_("Wiederholend: aus"))
+        self.b_wdh.setCheckable(True)
+        self.b_wdh.toggled.connect(self._block_wdh_geklickt)
+        leiste.addWidget(self.b_block_neu)
+        leiste.addWidget(self.b_block_weg)
+        leiste.addWidget(self.b_block_name)
+        leiste.addWidget(self.b_wdh)
+        leiste.addStretch(1)
+        v.addLayout(leiste)
+        self.karten = BlockKarten()
+        self.karten.gewählt.connect(self._karte_gewaehlt)
+        v.addWidget(self.karten)
         self.legende = Legende()
         self.legende.typ_gewählt.connect(self._block_zuweisen)
         v.addWidget(self.legende)
@@ -910,17 +935,23 @@ class CsvAssistent(_Assistent):
         self.t_block.block_gesetzt.connect(self._bloecke_geaendert)
         self.t_block.cursor_block.connect(self._block_anzeigen)
         v.addWidget(self.t_block, 1)
+        self.l_block_warn = lbl("", "warn", umbruch=True)
+        self.l_block_warn.setVisible(False)
+        v.addWidget(self.l_block_warn)
         self.box_anfang = AnfangsBox()
         self.box_anfang.regel_gesetzt.connect(self._bloecke_geaendert)
         v.addWidget(self.box_anfang)
         # alte Tabelle bleibt als unsichtbare Kompatibilität für vorhandene Tests
         self.t_bloecke_neu = self.t_block
+        QShortcut(QKeySequence("Ctrl+N"), w, self._block_hinzufuegen)
+        QShortcut(QKeySequence("F2"), w, self._block_umbenennen)
+        QShortcut(QKeySequence("Ctrl+R"), w, self._block_wdh_umschalten)
         return w
 
     def _seite_spalten_je_block(self) -> QWidget:
         w, v = _seite()
         self.spalten_seite = SpaltenJeBlock()
-        self.spalten_seite.geaendert.connect(lambda: None)
+        self.spalten_seite.geaendert.connect(self._spalten_je_block_weiter)
         v.addWidget(self.spalten_seite, 1)
         return w
 
@@ -929,8 +960,76 @@ class CsvAssistent(_Assistent):
             return []
         return [list(self.fmt.kopf or [])] + [list(z) for z in (self.fmt.zeilen or [])]
 
+    def _thema_hell(self) -> bool:
+        from . import thema
+
+        return thema.theme_ist_hell(getattr(self, "c", None) or {})
+
+    def _bloecke_thema(self) -> None:
+        hell = self._thema_hell()
+        self.t_block.set_hell(hell)
+        self.t_block.satzart_spalte = self.satzart_spalte
+        self.legende.set_hell(hell)
+        self.karten.set_hell(hell)
+        self.box_anfang.set_hell(hell)
+        if getattr(self, "spalten_seite", None):
+            self.spalten_seite.set_hell(hell)
+
+    def _karte_gewaehlt(self, i: int) -> None:
+        if 0 <= i < len(self.t_block.bloecke):
+            start = int(self.t_block.bloecke[i].get("start") or 1)
+            self.t_block.selectRow(max(0, start - 1))
+            self._block_anzeigen(i)
+
+    def _block_hinzufuegen(self) -> None:
+        self.t_block.satzart_spalte = self.satzart_spalte
+        if not self.t_block.ausgewaehlte_nr():
+            if getattr(self, "toast", None):
+                self.toast("hinweis", _("Zuerst Zeilen markieren, dann den Block anlegen."))
+            return
+        self.t_block.neuer_block()
+
+    def _block_entfernen(self) -> None:
+        i = self.t_block.aktueller_block_index()
+        if i < 0 or i >= len(self.t_block.bloecke):
+            return
+        name = typ_name(
+            str(self.t_block.bloecke[i].get("name") or self.t_block.bloecke[i].get("typ") or "")
+        )
+        ant = QMessageBox.question(
+            self,
+            _("Block entfernen"),
+            _("Block „{n}“ entfernen? Die Dateizeilen bleiben erhalten.").format(n=name),
+        )
+        if ant != QMessageBox.StandardButton.Yes:
+            return
+        self.t_block.entfernen(i)
+
+    def _block_umbenennen(self) -> None:
+        i = self.t_block.aktueller_block_index()
+        if i < 0 or i >= len(self.t_block.bloecke):
+            return
+        alt = str(
+            self.t_block.bloecke[i].get("name") or self.t_block.bloecke[i].get("typ") or typ_name("kopf")
+        )
+        name, ok = QInputDialog.getText(self, _("Umbenennen"), _("Name des Blocks"), text=alt)
+        if ok and name.strip():
+            self.t_block.umbenennen(name, i)
+
+    def _block_wdh_geklickt(self, an: bool) -> None:
+        self.t_block.set_wiederholend(an)
+
+    def _block_wdh_umschalten(self) -> None:
+        i = self.t_block.aktueller_block_index()
+        if i < 0 or i >= len(self.t_block.bloecke):
+            return
+        an = not bool(self.t_block.bloecke[i].get("wiederholend"))
+        self.t_block.set_wiederholend(an, i)
+
     def _bloecke_laden(self) -> None:
+        self._bloecke_thema()
         if self._bloecke_init and self.t_block.bloecke:
+            self.t_block.satzart_spalte = self.satzart_spalte
             self.t_block.setzen(self._csv_zeilen(), self.t_block.bloecke)
             self.box_anfang.satzart_spalte = self.satzart_spalte
             self._block_anzeigen(self.t_block.aktueller_block_index())
@@ -954,6 +1053,7 @@ class CsvAssistent(_Assistent):
                         b["wiederholend"] = bool(alt_b[i]["wiederholend"])
             if (self.alt.get("aufbau") or {}).get("satzart_spalte"):
                 self.satzart_spalte = self.alt["aufbau"]["satzart_spalte"]
+        self.t_block.satzart_spalte = self.satzart_spalte
         self.t_block.setzen(self._csv_zeilen(), bloecke)
         self.box_anfang.satzart_spalte = self.satzart_spalte
         self._bloecke_init = True
@@ -969,11 +1069,27 @@ class CsvAssistent(_Assistent):
     def _block_anzeigen(self, i: int) -> None:
         if i < 0 or i >= len(self.t_block.bloecke):
             self.box_anfang.zeigen(None, self.satzart_spalte)
+            if getattr(self, "karten", None):
+                self.karten.setzen(self.t_block.bloecke, -1)
+            if getattr(self, "b_wdh", None):
+                self.b_wdh.blockSignals(True)
+                self.b_wdh.setChecked(False)
+                self.b_wdh.setText(_("Wiederholend: aus"))
+                self.b_wdh.blockSignals(False)
             return
-        self.box_anfang.zeigen(self.t_block.bloecke[i], self.satzart_spalte)
+        bl = self.t_block.bloecke[i]
+        self.box_anfang.zeigen(bl, self.satzart_spalte)
+        if getattr(self, "karten", None):
+            self.karten.setzen(self.t_block.bloecke, i)
+        if getattr(self, "b_wdh", None):
+            wdh = bool(bl.get("wiederholend"))
+            self.b_wdh.blockSignals(True)
+            self.b_wdh.setChecked(wdh)
+            self.b_wdh.setText(_("Wiederholend: an") if wdh else _("Wiederholend: aus"))
+            self.b_wdh.blockSignals(False)
 
     def _bloecke_geaendert(self) -> None:
-        self.t_block.setzen(self._csv_zeilen(), self.t_block.bloecke)
+        # Tabelle hat sich selbst schon gezeichnet; nicht noch einmal setzen (Scroll bleibt).
         self._block_anzeigen(self.t_block.aktueller_block_index())
         self._bloecke_weiter()
 
@@ -984,10 +1100,77 @@ class CsvAssistent(_Assistent):
                 aus.append(b)
         return aus
 
+    def _block_hat_zeilen(self, b: dict) -> bool:
+        if b.get("daten"):
+            return True
+        start = int(b.get("start") or 0)
+        zeilen = self._csv_zeilen()
+        if start < 1 or start > len(zeilen):
+            return False
+        return any(str(c).strip() for c in zeilen[start - 1])
+
+    def _anfang_schluessel(self, b: dict):
+        from .. import csv_bloecke
+
+        aus = []
+        for r in b.get("anfang") or []:
+            art = r.get("art")
+            if art == "kopfzeile":
+                aus.append((art, tuple(csv_bloecke.name_norm(x) for x in (b.get("kopf") or []))))
+            else:
+                aus.append((art, str(r.get("wert") or "")))
+        return aus
+
     def _bloecke_weiter(self) -> None:
-        ok = bool(self.t_block.bloecke) and not self._bloecke_ohne_anfang()
-        n_w = sum(1 for b in self.t_block.bloecke if b.get("wiederholend") or b.get("typ") == "positionen")
-        ok = ok and n_w == 1
+        bloecke = self.t_block.bloecke
+        leer = [b for b in bloecke if not self._block_hat_zeilen(b)]
+        ok = bool(bloecke) and not leer
+        warn: list[str] = []
+        for b in self._bloecke_ohne_anfang():
+            warn.append(
+                _(
+                    "Keine Anfangsregel für Block „{n}“ ableitbar. Du kannst trotzdem weiter; "
+                    "beim nächsten Einlesen wird dieser Block vielleicht nicht erkannt."
+                ).format(n=typ_name(str(b.get("name") or b.get("typ") or "")))
+            )
+        gesehen: dict = {}
+        for b in bloecke:
+            for sch in self._anfang_schluessel(b):
+                if not sch[1] and sch[0] != "kopfzeile":
+                    continue
+                if sch in gesehen:
+                    warn.append(
+                        _(
+                            "Anfangsregel nicht eindeutig: Block „{a}“ und Block „{b}“ hätten dieselbe Regel. "
+                            "Bitte Satzart-Wert, Marker oder Kopfzeile unterscheidbar machen, sonst wird der "
+                            "Block in der nächsten Datei möglicherweise nicht wiedergefunden."
+                        ).format(
+                            a=typ_name(str(gesehen[sch].get("name") or gesehen[sch].get("typ") or "")),
+                            b=typ_name(str(b.get("name") or b.get("typ") or "")),
+                        )
+                    )
+                else:
+                    gesehen[sch] = b
+        n_w = sum(1 for b in bloecke if b.get("wiederholend"))
+        if bloecke and n_w == 0:
+            warn.append(
+                _(
+                    "Kein Block ist als wiederholend markiert. Positionszeilen werden sonst nur einmal gelesen. "
+                    "Ein wiederholender Block (üblicherweise die Positionen) wird empfohlen."
+                )
+            )
+        elif n_w > 1:
+            warn.append(
+                _("Mehrere Blöcke sind als wiederholend markiert. Genau einer wird empfohlen.")
+            )
+        if getattr(self, "l_block_warn", None):
+            # eindeutig halten
+            einzig = []
+            for w in warn:
+                if w not in einzig:
+                    einzig.append(w)
+            self.l_block_warn.setText("\n".join(einzig))
+            self.l_block_warn.setVisible(bool(einzig))
         if getattr(self, "b_weiter", None) and self.stapel.currentIndex() == 7:
             self.b_weiter.setEnabled(ok)
 
@@ -1003,8 +1186,10 @@ class CsvAssistent(_Assistent):
                     zu = ce.spalten_vorschlagen(kopf, daten)
                     # im Positionsblock Positionsfelder bevorzugen, im Kopf Kopffelder
                     pf = ce.positionsfelder()
-                    if b.get("typ") == "positionen" or b.get("wiederholend"):
-                        zu = {f: s for f, s in zu.items() if f in pf or f in ("steuer",)}
+                    if b.get("wiederholend"):
+                        # Kopffelder dürfen im Positionsblock bleiben, wenn sie in jeder
+                        # Positionszeile stehen (eine typische Warenwirtschafts-CSV).
+                        pass
                     else:
                         zu = {f: s for f, s in zu.items() if f not in pf}
                     sp_zu: dict[int, str] = {}
@@ -1015,7 +1200,13 @@ class CsvAssistent(_Assistent):
             self.spalten_seite.setzen(zeilen, bloecke, felder)
         else:
             self.spalten_seite.setzen(zeilen, bloecke)
-        self.b_weiter.setEnabled(True)
+        self.spalten_seite.set_hell(self._thema_hell())
+        self._spalten_je_block_weiter()
+
+    def _spalten_je_block_weiter(self) -> None:
+        fehlt = ce.fehlende_pflicht(self._alle_zuordnungen())
+        if getattr(self, "b_weiter", None) and self.stapel.currentIndex() == 8:
+            self.b_weiter.setEnabled(not fehlt)
 
     def _bloecke_seite_bauen(self) -> None:
         if not self.fmt:

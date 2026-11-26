@@ -167,3 +167,39 @@ def anwenden(app, einstellung: str) -> dict[str, str]:
     c = farben(ist_hell(einstellung))
     app.setStyleSheet(css(c))
     return c
+
+
+# Blockfarben (Assistent „Blöcke festlegen“ / „Spalten je Block“). Schrift immer explizit.
+# Kontrast jeweils ≥ 4,5:1 (WCAG AA). Siehe Skizze 0.9.11.
+BLOCK_HELL = {
+    "kopf": ("#d6e8fb", "#1a202c", "#2b6cb0"),
+    "positionen": ("#d8f3e0", "#1a202c", "#2f855a"),
+    "summen": ("#fde8cf", "#1a202c", "#c05621"),
+    "zahlung": ("#e9d8fd", "#1a202c", "#6b46c1"),
+    "lieferung": ("#feebc8", "#1a202c", "#c05621"),
+    "kopfzeile": ("#edf2f7", "#1a202c", "#718096"),
+    "satzart": ("#e2e8f0", "#1a202c", "#4a5568"),
+}
+BLOCK_DUNKEL = {
+    "kopf": ("#1e3a5f", "#e8f1fb", "#2b6cb0"),
+    "positionen": ("#1b4332", "#def7e8", "#2f855a"),
+    "summen": ("#5c3310", "#ffedd5", "#c05621"),
+    "zahlung": ("#3b2d5c", "#ede9fe", "#6b46c1"),
+    "lieferung": ("#5c3a0a", "#feebc8", "#c05621"),
+    "kopfzeile": ("#2a3340", "#e2e8f0", "#718096"),
+    "satzart": ("#2d3748", "#f7fafc", "#4a5568"),
+}
+
+
+def block_palette(hell: bool) -> dict[str, tuple[str, str, str]]:
+    """typ → (Hintergrund, Schrift, Rand/Zeilennummer)."""
+    return BLOCK_HELL if hell else BLOCK_DUNKEL
+
+
+def theme_ist_hell(c: dict[str, str]) -> bool:
+    """Aus den angewendeten Farben: helles Fenster = helles Theme."""
+    w = (c or {}).get("win") or "#ffffff"
+    if not w.startswith("#") or len(w) < 7:
+        return True
+    r, g, b = int(w[1:3], 16), int(w[3:5], 16), int(w[5:7], 16)
+    return (0.2126 * r + 0.7152 * g + 0.0722 * b) > 140

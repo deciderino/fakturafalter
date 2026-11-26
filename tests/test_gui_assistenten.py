@@ -329,7 +329,7 @@ def test_csv_assistent_bloecke_satzart_koepfe(fenster, qapp):
     d.reject()
 
 
-def test_csv_assistent_ohne_anfang_sperrt_weiter(fenster, qapp, tmp_path):
+def test_csv_assistent_ohne_anfang_warnt_aber_weiter(fenster, qapp, tmp_path):
     from fakturafalter.gui.datenassistent import CsvAssistent
 
     f = tmp_path / "ohne.csv"
@@ -342,7 +342,13 @@ def test_csv_assistent_ohne_anfang_sperrt_weiter(fenster, qapp, tmp_path):
     d.b_weiter.click()
     d.b_weiter.click()
     assert d.i == 2
-    # Wenn kein Anfang erkannt ist, bleibt Weiter aus
+    # Ab 0.9.11: Weiter nur gesperrt, wenn kein Block oder ein Block ohne Zeilen.
+    # Fehlende Anfangsregel ist nur eine Warnung.
+    assert d.t_block.bloecke
+    assert all(
+        b.get("daten") or int(b.get("start") or 0) >= 1 for b in d.t_block.bloecke
+    )
+    assert d.b_weiter.isEnabled()
     if d._bloecke_ohne_anfang():
-        assert not d.b_weiter.isEnabled()
+        assert "ableitbar" in d.l_block_warn.text() or "Anfangsregel" in d.l_block_warn.text()
     d.reject()

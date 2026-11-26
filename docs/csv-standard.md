@@ -1,6 +1,6 @@
 # CSV-Exportspezifikation für Fakturafalter
 
-**Spezifikation 1.4** · Stand 26.11.2026 (Europe/Berlin) · Grundlage App **0.9.10**
+**Spezifikation 1.5** · Stand 26.11.2026 (Europe/Berlin) · Grundlage App **0.9.11**
 
 Diese Beschreibung richtet sich an Systemadmins und Entwickler einer
 **Warenwirtschaft (ERP)**. Sie legt fest, wie ein Rechnungs-CSV aussehen soll,
@@ -57,7 +57,7 @@ ZUGFeRD erzeugt.
 | Datum | **`TT.MM.JJJJ`** (`02.11.2026`) | Andere Formate nur mit abweichendem Profil. |
 | Leere Zelle | kein Wert | Nur Leerzeichen gilt als leer. Bei **Menge** und **Einzelpreis** gelten außerdem `0`, `0,00` und `0.0` als leer (keine Position). |
 | Dateiname | Extension `.csv`, kein führender Punkt oder `~` | Dateien, deren Name mit `.` oder `~` beginnt oder auf `.tmp`, `.part` bzw. `.crdownload` endet, **werden ignoriert**. Groß/Kleinschreibung der Endung ist egal. Ein festes Namensmuster ist nicht vorgeschrieben; sinnvoll z. B. `RE-2026-1001.csv` oder eine Sammeldatei `rechnungen-2026-11-26.csv`. |
-| Rechnungen je Datei | **eine oder mehrere** | Im Standardaufbau (eine Zeile je Position) bilden alle Zeilen mit derselben Rechnungsnummer eine Rechnung. Der Blockmodus (eine Datei = eine Rechnung, optionale Marker *verfügbar ab 0.9.9*, Satzart als Anfangsregel und Spalten je Block *verfügbar ab 0.9.10*, Textzeilen wie hier) ist ein **anderer, optionaler Eingang**, nicht Bestandteil dieses Export-Standards. Wer neu exportiert, liefert weiter eine Zeile je Position. Einzelheiten: [csv-format.md](csv-format.md#blöcke-mit-eigener-kopfzeile-ab-098-überarbeitet-ab-099). |
+| Rechnungen je Datei | **eine oder mehrere** | Im Standardaufbau (eine Zeile je Position) bilden alle Zeilen mit derselben Rechnungsnummer eine Rechnung. Der Blockmodus (eine Datei = eine Rechnung, optionale Marker *verfügbar ab 0.9.9*, Satzart als Anfangsregel und Spalten je Block *verfügbar ab 0.9.10*, freie Blöcke und Satzart-Wert in der Datenzeile *verfügbar ab 0.9.11*, Textzeilen wie hier) ist ein **anderer, optionaler Eingang**, nicht Bestandteil dieses Export-Standards. Wer neu exportiert, liefert weiter eine Zeile je Position. Einzelheiten: [csv-format.md](csv-format.md#blöcke-mit-eigener-kopfzeile-ab-098-überarbeitet-ab-099). |
 
 ### Hotfolder (Eingangsordner)
 
@@ -618,3 +618,4 @@ Spezifikation erhöhen und die Änderung in der Liste unten eintragen.
 | 1.2 | 26.11.2026 | Eingebautes Standardprofil und strukturiertes Skonto (`#SKONTO#` in BT-20, inkl. Basisbetrag und Stufe 2) sowie Verzug nur als Klartext in `Bemerkung`: *verfügbar ab 0.9.9*. Vollvorlage um die neuen Skonto-Spalten ergänzt. Diese Datei liegt jetzt im Repository.
 | 1.3 | 26.11.2026 | Optionaler Block-Eingang (freie Felder je Block, optionale Marker, Textzeilen einschließlich `zwischen` und `0` / `0,00`) als *verfügbar ab 0.9.9* beschrieben. Der Export-Standard bleibt eine Zeile je Position.
 | 1.4 | 26.11.2026 | Satzart als Anfangsregel im optionalen Block-Eingang, Spalten je Block (Name und Position) und farbiger Assistent: *verfügbar ab 0.9.10*. Der Export-Standard bleibt eine Zeile je Position.
+| 1.5 | 26.11.2026 | Optionaler Block-Eingang: Blöcke frei anlegen und benennen, Blockart (normal / sich wiederholend) manuell, Satzart-Wert auch in einer Datenzeile (z. B. `#Kopf`, `#Beleg`), mehrere normale Blöcke (Kunde und Beleg) ohne Kollision, Pflichtfelder inkl. Käufername oder Kundennummer vor dem Weiter im Spalten-Schritt: *verfügbar ab 0.9.11*. Der Export-Standard bleibt eine Zeile je Position.

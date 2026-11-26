@@ -79,17 +79,22 @@ Weichen die Spaltennamen ab, richtest du die Datei einmal ein:
    Satzart-Spalte Kopf und Positionen trennt): Über jeder Spalte steht, wofür
    Fakturafalter sie nimmt. Stimmt etwas nicht, wähle das Feld um oder
    „nicht verwenden“. Unklare Steuerwerte bleiben auf „prüfen“.
-5. Nur bei **Blöcken** (eine Datei = eine Rechnung, ab 0.9.10): nach dem Format
-   kommt **Blöcke festlegen**. Die CSV erscheint als farbige Tabelle (Kopf blau,
-   Positionen grün, Summen orange). Grenzen ziehst du mit der Maus oder du
-   markierst Zeilen und weist sie einem Typ zu. Genau ein Block wiederholt sich
-   (die Positionen). Jeder Block braucht eine **Anfangsregel** (Marker,
-   Satzart-Wert oder Kopfzeile, in dieser Reihenfolge geprüft) – Zeilennummern
-   werden nicht gespeichert. Danach **Spalten je Block:** auf eine Spalte
-   klicken und das Feld zuordnen; dieselbe Position darf im Kopf ein anderes
-   Feld sein als in den Positionen. Ein Kopffeld in mehreren Blöcken wird
-   verglichen (Abweichung → Zu prüfen). Pflichtfelder prüft Fakturafalter erst
-   an der ganzen Rechnung.
+5. Nur bei **Blöcken** (eine Datei = eine Rechnung, ab 0.9.10, erweitert ab 0.9.11):
+   nach dem Format kommt **Blöcke festlegen**. Die CSV erscheint als farbige Tabelle
+   (eigene Farben im hellen und dunklen Theme, mit lesbarer Schrift). Blöcke kannst
+   du selbst hinzufügen, entfernen und umbenennen; Grenzen ziehst du mit der Maus
+   oder du markierst Zeilen und weist sie zu. Die Blockart (*normal* oder
+   *sich wiederholend / Positionsblock*) wählst du selbst. Ein normaler Block
+   liefert nur einen Teil der Rechnungsinfo (z. B. Kunde oder Beleg); die Rechnung
+   entsteht aus allen Blöcken zusammen. Die **Anfangsregel** wird aus den ersten
+   inhaltlichen Zeilen abgeleitet (Satzart-Wert auch in einer Datenzeile wie
+   `#Kopf;Testkunde;…`, dann Marker, dann Kopfzeile) – Zeilennummern werden nicht
+   gespeichert. Weiter ist nur gesperrt, wenn kein Block da ist oder ein Block
+   keine Zeilen hat. Danach **Spalten je Block:** auf eine Spalte klicken und das
+   Feld zuordnen; dieselbe Position darf in einem anderen Block ein anderes Feld
+   sein. Weiter erst, wenn Rechnungsnummer, Rechnungsdatum, Bezeichnung, Menge,
+   Einzelpreis, Steuer und Käufername (oder Kundennummer) zugeordnet sind. Ein
+   Kopffeld in mehreren Blöcken wird verglichen (Abweichung → Zu prüfen).
 6. **Textzeilen** und **Darstellung** (Standardaufbau und Blöcke): ob Kommentare oder gewollte Leerzeilen vorkommen; 0 und 0,00 gelten
    als leer; Text zwischen zwei Positionen standardmäßig zur oberen Position;
    Platzhalter `#LEER`; Positionsnummer, Menge, Einheit, Schalter

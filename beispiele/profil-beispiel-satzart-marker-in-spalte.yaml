@@ -1,0 +1,188 @@
+profil: beispiel-satzart-marker-in-spalte
+version: 1
+beschreibung: 'Fiktives Beispiel 0.9.11: Satzart-Wert in der Datenzeile (#Kopf, #Beleg),
+  getrennte Blöcke Kunde und Beleg, Datumsangaben TT.MM.JJ.'
+datei:
+  muster: beispiel-satzart-marker-in-spalte.csv
+  kodierung: utf-8
+  trennzeichen: ;
+  textbegrenzer: '"'
+  kopfzeile: false
+zahlen:
+  dezimal: ','
+  tausender: .
+datum:
+  format: '%d.%m.%y'
+aufbau:
+  art: bloecke
+  kopfzeile_schwelle: 2
+  textzeile:
+    leer:
+    - BT-129
+    - BT-146
+    - text
+    ziel: BT-154
+    trenner: '
+
+      '
+    platzhalter: '#LEER'
+    verwaist: BT-22
+    leerzeile_modus: beides
+  satzart_spalte: Satzart
+bloecke:
+- id: kunde
+  typ: kunde
+  name: kunde
+  wiederholend: false
+  kopfzeile:
+  - Satzart
+  - Kunde1
+  - Kunde2
+  - Kunde3
+  - Kunde4
+  - Kunde5
+  felder:
+    kaeufer_name_2:
+      spalte: Kunde2
+      position: 3
+      optional: true
+    kaeufer_name_3:
+      spalte: Kunde3
+      position: 4
+      optional: true
+    BT-44:
+      spalte: Kunde1
+      position: 2
+      optional: true
+    BT-3:
+      fest: '380'
+    BT-5:
+      fest: EUR
+  anfang:
+  - art: kopfzeile
+  - art: satzart
+    wert: '#Kopf'
+- id: beleg
+  typ: beleg
+  name: beleg
+  wiederholend: false
+  kopfzeile:
+  - Satzart
+  - Belegname
+  - Belegdatum
+  - Leistungsdatum
+  - Kundennummer
+  - Währung
+  felder:
+    BT-2:
+      spalte: Belegdatum
+      position: 3
+      typ: datum
+      optional: true
+    BT-72:
+      spalte: Leistungsdatum
+      position: 4
+      typ: datum
+      optional: true
+    kundennummer:
+      spalte: Kundennummer
+      position: 5
+      optional: true
+    BT-5:
+      spalte: Währung
+      position: 6
+      optional: true
+    BT-1:
+      spalte: Belegname
+      position: 2
+      optional: true
+    BT-3:
+      fest: '380'
+  anfang:
+  - art: kopfzeile
+  - art: satzart
+    wert: '#Beleg'
+- id: positionen
+  typ: positionen
+  name: positionen
+  wiederholend: true
+  kopfzeile:
+  - Satzart
+  - Bezeichnung
+  - Menge
+  - Einheit
+  - Einzelpreis
+  - USt-Satz
+  felder:
+    BT-153:
+      spalte: Bezeichnung
+      position: 2
+    BT-129:
+      spalte: Menge
+      position: 3
+      typ: zahl
+    BT-130:
+      spalte: Einheit
+      position: 4
+      mapping: einheiten
+      optional: true
+    BT-146:
+      spalte: Einzelpreis
+      position: 5
+      typ: zahl
+    steuer:
+      spalte: USt-Satz
+      position: 6
+      mapping: steuer
+    BT-3:
+      fest: '380'
+    BT-5:
+      fest: EUR
+  anfang:
+  - art: kopfzeile
+  - art: satzart
+    wert: '#Positionen'
+- id: summen
+  typ: summen
+  name: summen
+  wiederholend: false
+  kopfzeile:
+  - Satzart
+  - Gesamt Netto
+  - Gesamt USt
+  - Gesamt Brutto
+  - Zahlungsziel ohne Abzug
+  - ''
+  felder:
+    BT-112:
+      spalte: Gesamt Brutto
+      position: 4
+      typ: zahl
+      zweck: pruefung
+      optional: true
+    BT-109:
+      spalte: Gesamt Netto
+      position: 2
+      typ: zahl
+      zweck: pruefung
+      optional: true
+    BT-110:
+      spalte: Gesamt USt
+      position: 3
+      typ: zahl
+      zweck: pruefung
+      optional: true
+    zahlungsziel_tage:
+      spalte: Zahlungsziel ohne Abzug
+      position: 5
+      typ: tage
+      optional: true
+  anfang:
+  - art: kopfzeile
+  - art: satzart
+    wert: '#Summen'
+mappings:
+  einheiten:
+    unbekannt: allgemein
+  steuer:
+    unbekannt: pruefen

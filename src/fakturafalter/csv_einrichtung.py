@@ -912,13 +912,19 @@ def bloecke_vorschlagen(fmt: Format) -> tuple[list[dict], object]:
 
     def _neu(nr, typ, **extra):
         nonlocal aktuell
+        kopf = list(extra.pop("kopf", []) or [])
+        vergeben = {str(b.get("typ") or "") for b in aus}
+        typ_e = eindeutiger_typ(kopf, typ or "kopf", vergeben)
+        wdh = extra.pop("wiederholend", typ == "positionen" or typ_e == "positionen")
         bl = {
-            "typ": typ,
+            "typ": typ_e,
+            "id": typ_e,
+            "name": typ_e,
             "start": nr,
-            "kopf": list(extra.pop("kopf", []) or []),
+            "kopf": kopf,
             "daten": [],
             "anfang": list(extra.pop("anfang", []) or []),
-            "wiederholend": typ == "positionen",
+            "wiederholend": bool(wdh),
             "ohne_anfang": bool(extra.pop("ohne_anfang", False)),
             **extra,
         }
@@ -963,8 +969,19 @@ def bloecke_vorschlagen(fmt: Format) -> tuple[list[dict], object]:
             wert = ""
         typ_sa = typ_aus_satzart_wert(wert) if wert else ""
         if typ_sa:
-            if aktuell is not None and typ_sa == aktuell.get("typ"):
+            rolle = typ_vorschlag((aktuell or {}).get("kopf") or []) if aktuell else ""
+            gleicher = aktuell is not None and typ_sa in {aktuell.get("typ"), rolle}
+            if (
+                not gleicher
+                and aktuell is not None
+                and typ_sa == "kopf"
+                and str(aktuell.get("typ") or "") in {"kopf", "kunde", "beleg"}
+            ):
+                gleicher = True
+            if gleicher:
                 aktuell["daten"].append((nr, row))
+                if not any(r.get("art") == "satzart" for r in (aktuell.get("anfang") or [])):
+                    aktuell.setdefault("anfang", []).append({"art": "satzart", "wert": wert})
                 continue
             kopf = list(gemeinsame_kopf or [])
             anfang = [{"art": "satzart", "wert": wert}]
@@ -1014,23 +1031,31 @@ def bloecke_vorschlagen(fmt: Format) -> tuple[list[dict], object]:
     if not any(b.get("wiederholend") for b in aus):
         kandidat = next((b for b in aus if b.get("typ") == "positionen"), None)
         if kandidat is None and aus:
-            kandidat = max(aus, key=lambda b: len(b.get("daten") or []))
+            # nur vorschlagen, wenn die Kopfzeile nach Positionen aussieht – nicht den längsten Block zwingen
+            for b in aus:
+                if typ_vorschlag(b.get("kopf") or []) == "positionen":
+                    kandidat = b
+                    break
         if kandidat is not None:
-            kandidat["typ"] = "positionen"
             kandidat["wiederholend"] = True
     if sa is not None:
         for b in aus:
             for _nr, row in b.get("daten") or []:
                 w = _sa_wert(row, b.get("kopf") or gemeinsame_kopf or [])
-                typ = typ_aus_satzart_wert(w)
-                if typ and typ == b.get("typ"):
-                    if not any(r.get("art") == "satzart" for r in (b.get("anfang") or [])):
-                        b.setdefault("anfang", []).append({"art": "satzart", "wert": w})
-                    break
+                if not w:
+                    continue
+                if not isinstance(sa, int) and csv_bloecke.name_norm(w) == csv_bloecke.name_norm(str(sa)):
+                    continue
+                if not any(r.get("art") == "satzart" for r in (b.get("anfang") or [])):
+                    b.setdefault("anfang", []).append({"art": "satzart", "wert": w})
+                break
     for b in aus:
-        b["wiederholend"] = b.get("typ") == "positionen" or bool(b.get("wiederholend"))
-        if b["wiederholend"]:
-            b["typ"] = b.get("typ") or "positionen"
+        if "wiederholend" not in b:
+            b["wiederholend"] = b.get("typ") == "positionen"
+        if not b.get("id"):
+            b["id"] = b.get("typ") or f"block{aus.index(b) + 1}"
+        if not b.get("name"):
+            b["name"] = b.get("typ") or b["id"]
     # nur ein wiederholender
     gesehen = False
     for b in aus:
@@ -1069,6 +1094,96 @@ def typ_vorschlag(kopf: list[str]) -> str:
     if n & {csv_bloecke.name_norm(x) for x in ("rechnungsnr", "rechnungsnummer", "kunde", "datum")}:
         return "kopf"
     return "kopf"
+
+
+
+def eindeutiger_typ(kopf: list[str], rolle: str, vergeben: set[str]) -> str:
+    """Anzeigename/typ, eindeutig in der Datei (Kunde und Beleg nicht beide „kopf“)."""
+    from . import csv_bloecke
+
+    rolle = rolle or "kopf"
+    n = {csv_bloecke.name_norm(c) for c in kopf}
+    if rolle == "kopf":
+        hat_beleg = any("beleg" in csv_bloecke.name_norm(c) for c in kopf)
+        hat_kunde = any(csv_bloecke.name_norm(c).startswith("kunde") for c in kopf)
+        hat_nr = n & {
+            csv_bloecke.name_norm(x)
+            for x in ("rechnungsnr", "rechnungsnummer", "belegname", "belegnr")
+        }
+        if hat_beleg or (hat_nr and "belegname" in n or "belegdatum" in n):
+            basis = "beleg"
+        elif hat_kunde and not hat_nr:
+            basis = "kunde"
+        else:
+            basis = "kopf"
+    else:
+        basis = rolle
+    name = basis
+    i = 2
+    while name in vergeben:
+        name = f"{basis}_{i}"
+        i += 1
+    return name
+
+
+def block_id_von(block: dict, index: int) -> str:
+    """Stabile Block-ID: gespeichertes id, sonst typ wenn eindeutig, sonst typ+Index."""
+    if str(block.get("id") or "").strip():
+        return str(block.get("id")).strip()
+    typ = str(block.get("typ") or "").strip()
+    return typ or f"block{index + 1}"
+
+
+def anfang_ableiten(
+    zeilen: list[list[str]], start: int, ende: int, satzart_spalte=None
+) -> list[dict]:
+    """Anfangsregeln aus den ersten inhaltlichen Zeilen eines Blocks ableiten."""
+    from . import csv_bloecke
+
+    anfang: list[dict] = []
+    kopf: list[str] = []
+    namen = synonym_namen()
+    for nr in range(start, ende + 1):
+        if nr < 1 or nr > len(zeilen):
+            continue
+        row = zeilen[nr - 1]
+        if csv_bloecke._leer_zeile(row):
+            continue
+        if csv_bloecke.sieht_nach_marker_heuristik(row):
+            wort = next((str(c).strip() for c in row if str(c).strip()), "")
+            if wort and not any(r.get("art") == "marker" for r in anfang):
+                anfang.append({"art": "marker", "wert": wort})
+            continue
+        ist_sa_titel = satzart_spalte is not None and not isinstance(satzart_spalte, int) and any(
+            csv_bloecke.name_norm(c) == csv_bloecke.name_norm(str(satzart_spalte)) for c in row
+        )
+        if (not kopf) and (csv_bloecke.ist_kopfzeile(row, namen, 2) or ist_sa_titel):
+            kopf = [c.strip() for c in row]
+            if not any(r.get("art") == "kopfzeile" for r in anfang):
+                anfang.append({"art": "kopfzeile"})
+            continue
+        # Satzart-Wert auch in einer Datenzeile (z. B. #Kopf;Testkunde;…)
+        wert = ""
+        if satzart_spalte is not None:
+            if isinstance(satzart_spalte, int):
+                i = satzart_spalte - 1
+                wert = (row[i] or "").strip() if 0 <= i < len(row) else ""
+            else:
+                suche = kopf or row
+                for i, name in enumerate(suche):
+                    if csv_bloecke.name_norm(name) == csv_bloecke.name_norm(str(satzart_spalte)) and i < len(row):
+                        wert = (row[i] or "").strip()
+                        break
+                if not wert and row:
+                    # Fallback: erste Zelle, wenn sie nach einem Markerwort aussieht
+                    w0 = (row[0] or "").strip()
+                    if w0.startswith("#") and len(w0) > 1:
+                        wert = w0
+        if wert and csv_bloecke.name_norm(wert) != csv_bloecke.name_norm(str(satzart_spalte) or "satzart"):
+            if not any(r.get("art") == "satzart" for r in anfang):
+                anfang.append({"art": "satzart", "wert": wert})
+        break
+    return anfang
 
 
 def merkmale(profil: dict) -> str:
@@ -1122,9 +1237,21 @@ def profil_bauen_bloecke(
     }
     tz.update(textzeile or {})
     aus_bloecke = []
-    for b in bloecke:
+    gesehen_ids: set[str] = set()
+    for i, b in enumerate(bloecke):
         typ = b.get("typ") or typ_vorschlag(b.get("kopf") or [])
-        zu = zuordnung_je.get(typ) or zuordnung_je.get(str(b.get("start"))) or {}
+        bid = block_id_von(b, i)
+        if bid in gesehen_ids:
+            bid = f"{bid}_{i + 1}"
+        gesehen_ids.add(bid)
+        zu = (
+            zuordnung_je.get(bid)
+            or zuordnung_je.get(str(b.get("id") or ""))
+            or zuordnung_je.get(typ)
+            or zuordnung_je.get(str(i))
+            or zuordnung_je.get(str(b.get("start")))
+            or {}
+        )
         felder = {}
         quelle = {**zu}
         # typ kopf/zahlung: kopf-Felder; positionen: beides
@@ -1153,13 +1280,15 @@ def profil_bauen_bloecke(
             if not pflicht or typ != "positionen" or teil == "kopf":
                 d["optional"] = True
             felder[f] = d
-        if typ in ("kopf", "positionen"):
+        if typ in ("kopf", "positionen", "beleg", "kunde") or bool(b.get("wiederholend")):
             felder.setdefault("BT-3", {"fest": "380"})
             felder.setdefault("BT-5", {"fest": "EUR"})
         if tz.get("text_spalte") and typ == "positionen":
             pass
         ein: dict = {
+            "id": bid,
             "typ": typ,
+            "name": str(b.get("name") or typ),
             "wiederholend": bool(b.get("wiederholend"))
             if "wiederholend" in b
             else typ == "positionen",
