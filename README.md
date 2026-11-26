@@ -17,9 +17,13 @@ immer ZUGFeRD: PDF/A-3 mit eingebetteter XML nach EN 16931. Fakturafalter überw
 erzeugt und prüft jede Rechnung lokal und legt sie im Ausgang ab. Von dort übernimmt sie dein Archiv
 (z. B. ELO), ein anderes Programm oder du selbst.
 
-Gedacht für kleine Betriebe, deren Warenwirtschaft keine E-Rechnung kann. Fakturafalter läuft im Hintergrund auf
-einem Arbeitsplatz-PC oder ohne Oberfläche (`--headless`), z. B. auf einer VM. Die Rechnungsnummern vergibt
-weiterhin dein System – in der App tippst du die Rechnungsdaten nicht von Hand.
+## Für wen ist Fakturafalter?
+
+Fakturafalter ist für den regelmäßigen Einsatz gedacht: wenn du laufend Rechnungen erzeugst und eine einfache
+Alternative brauchst, weil deine Warenwirtschaft kein ZUGFeRD kann. Typisch ist ein Volumen im vierstelligen
+Bereich pro Jahr oder mehr. Die Rechnungsnummern vergibt weiterhin dein System; in der App tippst du die
+Rechnungsdaten nicht von Hand. Für einzelne Rechnungen, die du selbst schreibst, ist ein Rechnungsprogramm
+die bessere Wahl.
 
 ## Warum Fakturafalter?
 

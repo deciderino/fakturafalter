@@ -5,6 +5,10 @@ in einen Ordner, Fakturafalter erzeugt daraus **ZUGFeRD-Rechnungen** (Profil EN 
 PDF/A-3 mit eingebettetem XML) und prüft sie lokal. Den sichtbaren Teil gestaltest du
 im Layout-Editor, wenn die Sichtseite neu gebaut wird.
 
+Fakturafalter ist für den regelmäßigen Einsatz gedacht, typisch im vierstelligen Bereich
+pro Jahr oder mehr, als einfache Alternative, wenn die Warenwirtschaft (ERP) kein ZUGFeRD
+kann. Einzelne Rechnungen von Hand schreibst du besser in einem Rechnungsprogramm.
+
 Die kurze Übersicht mit Bildern steht in der [README](../README.md).
 Technische Einzelheiten stehen in [details.md](details.md) und [csv-format.md](csv-format.md).
 
@@ -53,7 +57,7 @@ Einstellungen lassen sich später unter **Einstellungen** ändern.
 ## 3. Schnellstart: CSV
 
 1. Einstellungen → **Eingang & Vorlagen** → Eingangsformat **CSV**.
-2. **Neue CSV einrichten…** Eine echte Export-Datei aus der Warenwirtschaft (ERP)
+2. **Neue CSV einrichten…** Eine echte Export-Datei aus der Warenwirtschaft
    wählen (sie wird nur gelesen). Der Zuordnung einen Namen geben und **Weiter**.
 3. **Format:** Trennzeichen, Zeichensatz, Dezimalzeichen und Datumsformat sind
    erkannt. Passt die Vorschau nicht, stelle sie um. Unter **Aufbau** kannst du
