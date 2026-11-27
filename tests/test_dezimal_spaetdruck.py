@@ -20,7 +20,7 @@ def test_trennzeichen_zweifel(roh, dez, tau, zweifel):
 def test_punkt_im_kommaprofil_wird_pruefen_nicht_still_umgerechnet(konfig, eingang):
     (csv,) = eingang("variante-b_wawi_cp1252.csv")
     t = csv.read_bytes().decode("cp1252")
-    alt = "P;RE-2026-0102;;;;;1;C-300;\"Kabel NYM 3x1,5 mm²\";50;"
+    alt = "P;RE-2026-0102;;;;;;;;;;;;;;1;C-300;Kabel NYM 3x1,5 mm²;50;"
     assert alt in t
     csv.write_bytes(t.replace(alt, alt.replace(";50;", ";2.5;")).encode("cp1252"))
     lauf = verarbeiten([csv], konfig)
@@ -33,7 +33,7 @@ def test_punkt_im_kommaprofil_wird_pruefen_nicht_still_umgerechnet(konfig, einga
 def test_komma_im_punktprofil_wird_pruefen(konfig, eingang):
     (csv,) = eingang("variante-a_positionen_utf8.csv")
     t = csv.read_text(encoding="utf-8")
-    csv.write_text(t.replace("Montagearbeit vor Ort\",3.5,", "Montagearbeit vor Ort\",\"3,5\","), encoding="utf-8")
+    csv.write_text(t.replace("Montagearbeit vor Ort,3.5,", "Montagearbeit vor Ort,\"3,5\","), encoding="utf-8")
     erg = {e.nummer: e for e in verarbeiten([csv], konfig).ergebnisse}
     assert erg["RE-2026-0101"].status == "pruefen"
     assert not any(h.startswith("FEHLER") for h in erg["RE-2026-0101"].hinweise)

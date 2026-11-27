@@ -82,8 +82,8 @@ def pruef_fall_anlegen(k):
         csv.read_bytes()
         .decode("cp1252")
         .replace(
-            'P;RE-2026-0102;;;;;1;C-300;"Kabel NYM 3x1,5 mm²";50;',
-            'P;RE-2026-0102;;;;;1;C-300;"Kabel NYM 3x1,5 mm²";60;',
+            'P;RE-2026-0102;;;;;;;;;;;;;;1;C-300;Kabel NYM 3x1,5 mm²;50;',
+            'P;RE-2026-0102;;;;;;;;;;;;;;1;C-300;Kabel NYM 3x1,5 mm²;60;',
         )
     )
     t = t.replace(";;;;;;;;207,66", ";;;;;;;;218,25")  # CSV in sich stimmig, weicht vom Druck ab

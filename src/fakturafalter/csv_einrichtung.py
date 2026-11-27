@@ -479,6 +479,16 @@ def spalten_vorschlagen(kopf: list[str], zeilen: list[list[str]] | None = None) 
         i = kopf.index(s)
         if _sieht_nach_nummer_aus([z[i] for z in zeilen if i < len(z)]):
             aus["kundennummer"] = aus.pop("BT-44")
+    # Zweite Spalte „Kunde“ mit Werten wie K-1001, obwohl der Name schon zugeordnet ist
+    if "kundennummer" not in aus and zeilen:
+        belegt = set(aus.values())
+        for sp in kopf:
+            if not sp or sp in belegt or _norm(sp) not in _KUNDE_MEHRDEUTIG:
+                continue
+            i = kopf.index(sp)
+            if _sieht_nach_nummer_aus([z[i] for z in zeilen if i < len(z)]):
+                aus["kundennummer"] = sp
+                break
     # „Artikel“ allein ist meist die Bezeichnung; nur Artikelnummer, wenn es schon eine Bezeichnung gibt
     if "BT-153" not in aus and _norm(aus.get("BT-155") or "") == "artikel":
         aus["BT-153"] = aus.pop("BT-155")

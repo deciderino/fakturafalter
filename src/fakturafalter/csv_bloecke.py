@@ -238,12 +238,13 @@ def profil_block_zu(bl: dict, profil: dict) -> dict:
         mit_id = [b for b in liste if str(b.get("id") or "").strip() == bid]
         if len(mit_id) == 1:
             return mit_id[0]
-        getroffen = nach_kopf(mit_id) or nach_kopf(liste)
-        if getroffen:
-            return getroffen
+        if len(mit_id) > 1:
+            getroffen = nach_kopf(mit_id)
+            if getroffen:
+                return getroffen
         for b in liste:
             if str(b.get("typ") or "").strip() == bid:
-                if sum(1 for x in liste if str(x.get("typ") or "") == bid) == 1:
+                if sum(1 for x in liste if str(x.get("typ") or "").strip() == bid) == 1:
                     return b
     if typ:
         treffer = [b for b in liste if str(b.get("typ") or "").strip() == typ]

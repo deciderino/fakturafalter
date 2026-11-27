@@ -77,7 +77,7 @@ def _profil(
     return {
         "profil": "fiktiv-09112",
         "name": "fiktiv-09112",
-        "version": 1,
+        "version": 2,
         "datei": {
             "muster": "*.csv",
             "kodierung": kodierung,

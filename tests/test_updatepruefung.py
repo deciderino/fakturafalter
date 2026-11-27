@@ -195,7 +195,7 @@ def test_gui_start_und_einstellungen(qapp_gui, gui_konfig, monkeypatch, an):
             and roh["optionen"]["xrechnung_zusatz"]
         )
         assert roh["protokoll_ordner"] == str(gui_konfig.parent / "P")
-        dlg.xr.setCurrentIndex(dlg.xr.findData("keine"))
+        dlg.c_xr.setChecked(False)
         assert dlg.ergebnis()["optionen"]["xrechnung_zusatz"] is False
         dlg.reject()
         dlg.deleteLater()

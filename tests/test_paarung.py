@@ -54,8 +54,8 @@ def test_abweichung_csv_druck_geht_in_pruefung(konfig, eingang):
         csv.read_bytes()
         .decode("cp1252")
         .replace(
-            'P;RE-2026-0102;;;;;1;C-300;"Kabel NYM 3x1,5 mm²";50;',
-            'P;RE-2026-0102;;;;;1;C-300;"Kabel NYM 3x1,5 mm²";60;',
+            'P;RE-2026-0102;;;;;;;;;;;;;;1;C-300;Kabel NYM 3x1,5 mm²;50;',
+            'P;RE-2026-0102;;;;;;;;;;;;;;1;C-300;Kabel NYM 3x1,5 mm²;60;',
         )
     )
     csv.write_bytes(t.encode("cp1252"))

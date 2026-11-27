@@ -1,5 +1,5 @@
-ReNr;ReDatum;LiefDatum;KdNr;ArtNr;Text;Menge;ME;Preis;MwSt
-MK-26-0417;15.10.26;12.10.26;40125;SC-0001;Schweiﬂarbeiten Werkstatt;3;Stk;65,00;19
-MK-26-0417;15.10.26;12.10.26;40125;BL-0200;Riffelblech 2 mm verzinkt;120,5;kg;3,95;19
-MK-26-0417;15.10.26;12.10.26;40125;ST-2020;Winkelstahl 20x20x3;12;m;4,10;19
-MK-26-0417;15.10.26;12.10.26;40125;RO-0040;Quadratrohr 40x40x2;6;m;8,20;19
+ReNr;ReDatum;LiefDatum;KdNr;KdName;Strasse;PLZ;Ort;ArtNr;Text;Menge;ME;Preis;MwSt
+MK-26-0417;15.10.26;12.10.26;40125;Bauhof Ennepetal;Bahnhofstraﬂe 50;58256;Ennepetal;SC-0001;Schweiﬂarbeiten Werkstatt;3;Stk;65,00;19
+MK-26-0417;15.10.26;12.10.26;40125;Bauhof Ennepetal;Bahnhofstraﬂe 50;58256;Ennepetal;BL-0200;Riffelblech 2 mm verzinkt;120,5;kg;3,95;19
+MK-26-0417;15.10.26;12.10.26;40125;Bauhof Ennepetal;Bahnhofstraﬂe 50;58256;Ennepetal;ST-2020;Winkelstahl 20x20x3;12;m;4,10;19
+MK-26-0417;15.10.26;12.10.26;40125;Bauhof Ennepetal;Bahnhofstraﬂe 50;58256;Ennepetal;RO-0040;Quadratrohr 40x40x2;6;m;8,20;19

@@ -1,6 +1,6 @@
-ReNr;ReDatum;LiefDatum;KdNr;ArtNr;Text;Menge;ME;Preis;MwSt
-MK-26-0414;30.09.26;27.09.26;40117;BL-0200;Riffelblech 2 mm verzinkt;64;kg;3,95;19
-MK-26-0414;30.09.26;27.09.26;40117;SC-0001;Schweiﬂarbeiten Werkstatt;3;Stk;65,00;19
-MK-26-0414;30.09.26;27.09.26;40117;VZ-0100;Feuerverzinkung Lohnarbeit;120,5;kg;0,92;19
-MK-26-0414;30.09.26;27.09.26;40117;ST-4005;Flachstahl S235 40x5 mm;18,5;m;6,85;19
-MK-26-0414;30.09.26;27.09.26;40117;RO-0040;Quadratrohr 40x40x2;6;m;8,20;19
+ReNr;ReDatum;LiefDatum;KdNr;KdName;Strasse;PLZ;Ort;ArtNr;Text;Menge;ME;Preis;MwSt
+MK-26-0414;30.09.26;27.09.26;40117;Schlosserei Brandt GmbH;Hammerweg 2;58097;Hagen;BL-0200;Riffelblech 2 mm verzinkt;64;kg;3,95;19
+MK-26-0414;30.09.26;27.09.26;40117;Schlosserei Brandt GmbH;Hammerweg 2;58097;Hagen;SC-0001;Schweiﬂarbeiten Werkstatt;3;Stk;65,00;19
+MK-26-0414;30.09.26;27.09.26;40117;Schlosserei Brandt GmbH;Hammerweg 2;58097;Hagen;VZ-0100;Feuerverzinkung Lohnarbeit;120,5;kg;0,92;19
+MK-26-0414;30.09.26;27.09.26;40117;Schlosserei Brandt GmbH;Hammerweg 2;58097;Hagen;ST-4005;Flachstahl S235 40x5 mm;18,5;m;6,85;19
+MK-26-0414;30.09.26;27.09.26;40117;Schlosserei Brandt GmbH;Hammerweg 2;58097;Hagen;RO-0040;Quadratrohr 40x40x2;6;m;8,20;19

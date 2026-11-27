@@ -231,7 +231,7 @@ def test_konfig_xrechnung_ablage_und_protokollordner(tmp_path):
     k = laden({})
     assert (k.xrechnung_ablage, k.xrechnung_zusatz, k.protokoll) == (
         "ausgang",
-        True,
+        False,
         tmp_path / "R" / "Protokoll",
     )
     assert k.updatepruefung is True and k.updates_vorab is False

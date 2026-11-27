@@ -201,6 +201,7 @@ def _anschrift_in_roh(roh: Roh, text: str, herk: Herkunft) -> None:
     # Ohne explizites Land (wie bisher typisch DE in den Beispielen) nicht raten.
 
 
+def bereich_text(seite: Seite, b: dict, ignorieren: list[str] = ()) -> str:
     ws = [
         w
         for w in seite.woerter
@@ -291,7 +292,7 @@ def _kopf(teil: Teil, vorlage: dict, pfad: Path, fehler: list[str], hinweise: li
                     v = bereich_text(s, b, d.get("zeilen_ignorieren", []))
                     if v and d.get("als_anschrift"):
                         _anschrift_in_roh(
-                            roh, v, Herkunft(f"pdf:{pfad.name} S.{s.nr + 1} Bereich", S_BEREICH)
+                            roh, v, Herkunft(f"pdf:{pfad.name} S.{s.nr + 1} Bereich", S_ANKER)
                         )
                         gefunden = roh.get("BT-44")
                     elif v:

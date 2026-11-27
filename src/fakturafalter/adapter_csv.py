@@ -207,6 +207,19 @@ def lesen_mit_auswahl(pfad: Path, profile: list, konfig: Konfig) -> tuple[dict |
                     profil_name(kandidaten[0][0]),
                     profil_name(prof),
                 )
+            else:
+                weitere = [profil_name(p) for p, _g, _s in kandidaten[1:]]
+                name = profil_name(prof)
+                if weitere:
+                    log.info(
+                        "%s: CSV-Profil „%s“ (%s); weitere passende: %s",
+                        pfad.name,
+                        name,
+                        kandidaten[0][1],
+                        ", ".join(weitere),
+                    )
+                else:
+                    log.info("%s: CSV-Profil „%s“", pfad.name, name)
             return prof, rs
     assert letzter is not None
     prof, rs = letzter

@@ -55,7 +55,7 @@ def _vorschlagen():
                 v = {f: s for f, s in v.items() if f not in ce.positionsfelder()}
             zu[b.get("id") or b["typ"]] = v
     profil = ce.profil_bauen_bloecke(
-        "fiktiv-satzart-spalte", FIKTIV, fmt, bloecke, zu, {}, {}, {}, None, sa
+        "fiktiv-satzart-spalte", FIKTIV, fmt, bloecke, zu, {}, {}, {}, sa
     )
     return fmt, bloecke, sa, profil
 
@@ -156,7 +156,7 @@ def test_palette_kontrast_wcag_aa():
         assert k >= 4.5, f"hinweis hell={hell} {hg}/{fg} = {k:.2f}"
 
 
-def test_fehlende_pflicht_kaeufer_oder_kundennummer():
+def test_fehlende_pflicht_kundenname():
     basis = {
         "BT-1": "Nr",
         "BT-2": "Datum",
@@ -168,7 +168,8 @@ def test_fehlende_pflicht_kaeufer_oder_kundennummer():
     fehlt = ce.fehlende_pflicht(basis)
     assert any("Kunde" in x or "Kunden" in x for x in fehlt)
     assert not ce.fehlende_pflicht({**basis, "BT-44": "Name"})
-    assert not ce.fehlende_pflicht({**basis, "kundennummer": "Knr"})
+    # Kundennummer allein ersetzt den Pflicht-Kundennamen nicht
+    assert any("Kundenname" in x or "Kunde" in x for x in ce.fehlende_pflicht({**basis, "kundennummer": "Knr"}))
 
 
 

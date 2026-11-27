@@ -93,7 +93,7 @@ def test_waehrung_euro_zeichen_und_fest_ohne_kollision(konfig, tmp_path):
                 v = {f: s for f, s in v.items() if f not in ce.positionsfelder()}
             zu[b.get("id") or b["typ"]] = v
     profil = ce.profil_bauen_bloecke(
-        "fiktiv-waehrung", csv, fmt, bloecke, zu, {}, {}, {}, None, sa
+        "fiktiv-waehrung", csv, fmt, bloecke, zu, {}, {}, {}, sa
     )
     # wie ein älteres 0.9.11-Profil: fest EUR zusätzlich in jedem Block
     for b in profil["bloecke"]:
@@ -120,7 +120,7 @@ def test_alte_typ_kopf_profile_ueber_kopfzeile_repariert(konfig):
                 v = {f: s for f, s in v.items() if f not in ce.positionsfelder()}
             zu[b.get("id") or b["typ"]] = v
     profil = ce.profil_bauen_bloecke(
-        "fiktiv-typ-kopf", FIKTIV, fmt, bloecke, zu, {}, {}, {}, None, sa
+        "fiktiv-typ-kopf", FIKTIV, fmt, bloecke, zu, {}, {}, {}, sa
     )
     for b in profil["bloecke"]:
         if b.get("typ") in ("kunde", "beleg"):
@@ -166,7 +166,7 @@ def test_einheit_nur_leere_zelle_nicht_verlorene_spalte(konfig, tmp_path):
                 v = {f: s for f, s in v.items() if f not in ce.positionsfelder()}
             zu[b.get("id") or b["typ"]] = v
     profil = ce.profil_bauen_bloecke(
-        "fiktiv-einheit", csv, fmt, bloecke, zu, {}, {}, {}, None, sa
+        "fiktiv-einheit", csv, fmt, bloecke, zu, {}, {}, {}, sa
     )
     profil.setdefault("aufbau", {})["einheit_fehlt_stueck"] = True
     (r,) = adapter_csv.lesen(csv, profil, konfig)
@@ -191,7 +191,7 @@ def test_neue_profile_kopieren_fest_waehrung_nicht_in_jeden_block():
                 v = {f: s for f, s in v.items() if f not in ce.positionsfelder()}
             zu[b.get("id") or b["typ"]] = v
     profil = ce.profil_bauen_bloecke(
-        "fiktiv-fest", FIKTIV, fmt, bloecke, zu, {}, {}, {}, None, sa
+        "fiktiv-fest", FIKTIV, fmt, bloecke, zu, {}, {}, {}, sa
     )
     mit_fest = [
         b["id"]

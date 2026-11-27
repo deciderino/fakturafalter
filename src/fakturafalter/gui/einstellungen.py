@@ -1622,7 +1622,10 @@ class Einstellungen(QDialog):
         o["xrechnung_zusatz"] = self.c_xr.isChecked()
         o["xrechnung_liste"] = self._xr_liste_lesen()
         ablage = self.xr.currentData() or "ausgang"
-        o["xrechnung_ablage"] = ablage if ablage in ("ausgang", "unterordner") else "ausgang"
+        if ablage not in ("ausgang", "unterordner"):
+            ablage = "ausgang"
+        if ablage == "unterordner" or "xrechnung_ablage" in o:
+            o["xrechnung_ablage"] = ablage
         if self.updates.isChecked() is not True or "updatepruefung" in o:
             o["updatepruefung"] = self.updates.isChecked()
         if self.updates_vorab.isChecked() or "updates_vorab" in o:

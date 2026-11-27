@@ -61,7 +61,7 @@ def _passendes_profil(datei: Path) -> dict:
         wahl = b.get("felder_wahl") or set()
         zu_je[typ] = {f: s for f, s in zu.items() if f in wahl}
     steuer = {}
-    p = ce.profil_bauen_bloecke(datei.stem, datei, fmt, bloecke, zu_je, steuer, {}, {}, None)
+    p = ce.profil_bauen_bloecke(datei.stem, datei, fmt, bloecke, zu_je, steuer, {}, {})
     p["_basis"] = datei.parent
     p["_datei"] = str(datei.parent / "profil-satzart-bloecke.yaml")
     return p

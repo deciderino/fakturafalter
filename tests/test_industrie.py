@@ -45,7 +45,7 @@ def nummern():
 
 def test_setup_vollstaendig_und_pruefziffern(k):
     assert len(nummern()) == 8
-    (p,) = k.csv_profile
+    (p,) = [x for x in k.csv_profile if not x.get("_eingebaut")]
     assert ust_id_de_gueltig(p["verkaeufer"]["ust_id"]) and iban_gueltig(p["zahlung"]["iban"])
     a = absender.aus_csv((BSP / "absender-normteile.csv").read_bytes())
     assert a.name == "Normteile Brückner GmbH" and not a.fehlt()
@@ -63,7 +63,7 @@ def test_pdf_csv_lernt_dann_nur_pdf(k):
         ).ergebnisse
         assert e.status == "ok", e.hinweise
         assert any("ohne Abweichung" in h for h in e.hinweise)
-    (p,) = k.csv_profile
+    (p,) = [x for x in k.csv_profile if not x.get("_eingebaut")]
     (v,) = pdferkennung.vorlagen_laden(p)
     assert "steuer_fest" in v["positionen"] and "BT-149" in v["positionen"]["spalten"]
     assert pdferkennung.sicher(v, pdferkennung.einstellungen(p)), v["statistik"]
@@ -102,7 +102,7 @@ def test_adresszeile_2_als_cii_linetwo(k, tmp_path):
 
     from fakturafalter import cii
 
-    (p,) = k.csv_profile
+    (p,) = [x for x in k.csv_profile if not x.get("_eingebaut")]
     (r,) = adapter_csv.lesen(BSP / "eingang" / "normteile_NB-26-1001.csv", p, k)
     r.kaeufer.anschrift.zusatz = "Abteilung Einkauf"
     r.verkaeufer.anschrift.zusatz = "Haus B"
@@ -133,7 +133,7 @@ def test_adresszeile_3_und_kontakt_im_cii(k):
     assert aufbau.KAEUFER_FELDER["BT-163"] == "anschrift.zeile3"
     assert aufbau.KAEUFER_FELDER["BT-51"] == "anschrift.zusatz"
     assert aufbau.KAEUFER_FELDER["BT-56"] == "kontakt_name"
-    (p,) = k.csv_profile
+    (p,) = [x for x in k.csv_profile if not x.get("_eingebaut")]
     (r,) = adapter_csv.lesen(BSP / "eingang" / "normteile_NB-26-1001.csv", p, k)
     r.kaeufer.anschrift.zusatz = "Abteilung Einkauf"
     r.kaeufer.anschrift.zeile3 = "Gebäude C"

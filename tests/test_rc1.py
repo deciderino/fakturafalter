@@ -275,3 +275,90 @@ def test_startkonfig_ohne_migrationshinweis(tmp_path):
     assert k.xrechnung_zusatz is False
     assert k.xrechnung_liste == []
     assert k.konfig_hinweise == []
+
+
+
+def test_wizard_blockformat_euro_und_sub(konfig, tmp_path):
+    """Fiktive Kopie des Blockformats (Kopf-/Positionsblöcke, 0x1A-Endzeile, EURO) bis zur Rechnung."""
+    import shutil
+
+    from fakturafalter import adapter_csv, pipeline, rechnen
+    from fakturafalter.aufbau import waehrung_code
+
+    quelle = BEISPIELE / "beispiel-satzart-pos-kopf-und-restzeile.csv"
+    roh = quelle.read_bytes()
+    # DOS-Dateiende statt der Restzeile "."
+    if roh.endswith(b".\r\n"):
+        roh = roh[: -3] + b"\x1a"
+    elif roh.endswith(b".\n"):
+        roh = roh[: -2] + b"\x1a"
+    elif b"\x1a" not in roh:
+        roh = roh.rstrip() + b"\x1a"
+    datei = tmp_path / "fiktiv-block-euro-sub.csv"
+    datei.write_bytes(roh)
+    assert datei.read_bytes().endswith(b"\x1a") or b"\x1a" in datei.read_bytes()
+
+    fmt = ce.format_erkennen(datei)
+    bloecke, sa = ce.bloecke_vorschlagen(fmt)
+    assert bloecke, "keine Blöcke erkannt"
+    zu: dict[str, dict[str, str]] = {}
+    steuer, einheiten = {}, {}
+    for b in bloecke:
+        kopf = list(b.get("kopf") or [])
+        zeilen = [r for _n, r in b.get("daten") or []]
+        v = ce.spalten_vorschlagen(kopf, zeilen) if kopf else {}
+        if not b.get("wiederholend"):
+            v = {f: s for f, s in v.items() if f not in ce.positionsfelder()}
+        zu[b.get("id") or b["typ"]] = v
+    # Steuer/Einheiten aus den Positionszeilen, wie der Assistent sie vorschlägt
+    for b in bloecke:
+        if not b.get("wiederholend"):
+            continue
+        kopf = list(b.get("kopf") or [])
+        z = zu.get(b.get("id") or b["typ"]) or {}
+        if z.get("steuer"):
+            try:
+                i = kopf.index(z["steuer"])
+                werte = [r[i] for _n, r in (b.get("daten") or []) if i < len(r)]
+                steuer.update(ce.steuer_vorschlag(werte))
+            except ValueError:
+                pass
+        if z.get("BT-130"):
+            try:
+                i = kopf.index(z["BT-130"])
+                werte = [r[i] for _n, r in (b.get("daten") or []) if i < len(r)]
+                einheiten.update(ce.einheiten_vorschlag(werte))
+            except ValueError:
+                pass
+
+    profil = ce.profil_bauen_bloecke(
+        "fiktiv-rc1-block", datei, fmt, bloecke, zu, steuer, einheiten, {}, sa
+    )
+    # wie der Assistent: leere Einheit einer Positionszeile als Stück
+    profil.setdefault("aufbau", {})["einheit_fehlt_stueck"] = True
+    assert profil.get("version") == 2
+    felder_ids = set()
+    for b in profil.get("bloecke") or []:
+        felder_ids.update((b.get("felder") or {}))
+    assert "BT-44" in felder_ids
+    assert "BT-1" in felder_ids
+
+    rs = adapter_csv.lesen(datei, profil, konfig)
+    assert rs, "keine Rechnung gelesen"
+    r = rs[0]
+    rechnen.berechnen(r)
+    assert waehrung_code(r.waehrung) == "EUR" or r.waehrung in ("EUR", "EURO")
+    assert r.kaeufer.name
+    assert r.nummer
+
+    # Fertige Datei über die Pipeline (ohne Java-Nachprüfung in diesem Test)
+    ziel = konfig.eingang / datei.name
+    shutil.copy(datei, ziel)
+    # Profil in die Laufzeit-Konfig legen
+    konfig.csv_profile = [profil] + [p for p in konfig.csv_profile if not p.get("_eingebaut")]
+    lauf = pipeline.verarbeiten([ziel], konfig)
+    assert lauf.ok or lauf.ergebnisse, (getattr(lauf, "datei_fehler", None), [(e.nummer, e.hinweise) for e in (lauf.ergebnisse or [])])
+    (e,) = lauf.ergebnisse
+    assert e.dateien, e.hinweise
+    pdfs = [p for p in e.dateien if p.suffix.lower() == ".pdf"]
+    assert pdfs and pdfs[0].stat().st_size > 1000

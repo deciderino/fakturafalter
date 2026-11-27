@@ -23,7 +23,7 @@ VARIANTE_D = BEISPIELE / "variante-d_rabatt_gutschrift_lastschrift.csv"
 def test_kunde_mit_nummern_wird_kundennummer():
     fmt = ce.format_erkennen(VARIANTE_D)
     z = ce.spalten_vorschlagen(fmt.kopf, fmt.zeilen)
-    assert z["kundennummer"] == "Kunde" and "BT-44" not in z
+    assert z["kundennummer"] == "Kunde" and z["BT-44"] == "Kundenname"
     assert (z["BT-91"], z["BT-25"], z["BT-26"]) == ("IBAN Kunde", "Bezug auf", "Bezug vom")
 
 
