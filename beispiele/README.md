@@ -19,14 +19,13 @@ Absender immer **Muster GmbH**, USt-IdNr. DE123456788, Domains `*.example`. Kein
 | `variante-s_steuerfaelle.csv` | CSV (ab 0.9.7): Reverse Charge, igL nach Österreich, Ausfuhr in die Schweiz, nicht steuerbar (USD), 19 % in USD mit Kurs, gemischt RC + 19 % | UTF-8, `;`, Dezimalkomma |
 | `profil-variante-s.yaml` | Zuordnungsprofil zu S (Steuerkennzeichen RC/IGL/EX/NSTB, Währung, Kurs, Steuerhinweis) | |
 | `variante-u_kleinunternehmer.csv` | CSV (ab 0.9.7): Kleinunternehmer, Steuer 0 – braucht `absender: kleinunternehmer: true` | UTF-8, `;` |
-| `kundenstamm.csv` | Kundennummer → Name, Anschrift, USt-Id, BT-49, Leitweg-ID (BT-10), Ziel, Format | UTF-8, `;` |
 | `druckauftrag-wawi.pdf` | **Ein** Druckauftrag mit **zwei** Rechnungen (RE-2026-0101 über 2 Seiten mit Übertrag, RE-2026-0102), Courier, Textebene | PDF |
 | `vorlage-wawi-druck.yaml` | Zonen-/Anker-Vorlage zum PDF | |
 | `textdruck-wawi_cp1252.txt` | Reiner Textdruck (Generic/Text Only), RE-2026-0103, Seitenende = Formfeed | Windows-1252 ⚠️ echte Treiber liefern evtl. CP850 |
 
 Ordner **`layout/`**: Layouteditor (0.7.0) – `layout-beispiel.yaml` (Block `layout:` für die Konfiguration: Logo rechts, Empfänger rechts, Zahlung neben den Summen, eigenes Text- und Bildfeld), `logo.png` (Fantasie-Logo „Musterwerk“), `briefpapier-seite1.pdf` und `briefpapier-folgeseite.pdf` (PDF/A-taugliches Briefpapier). Erzeugt mit `tools/layout_beispiel.py`.
 
-Ordner **`poc/`**: Proof of Concept (Tischlerei Muster GmbH → Beispiel Bau GmbH, TM-2026-0042: CSV mit Käuferdaten + Druck-PDF, Profil mit Verkäufer/Bank und festem Format ZUGFeRD EN 16931, ohne Kundenstamm).
+Ordner **`poc/`**: Proof of Concept (Tischlerei Muster GmbH → Beispiel Bau GmbH, TM-2026-0042: CSV mit Käuferdaten + Druck-PDF, Profil mit Verkäufer/Bank und festem Format ZUGFeRD EN 16931, Käufer nur aus der CSV).
 
 Erwartete Summen (zum Gegenprüfen): Variante blo (Hotel, fiktiv) SK-2026-0413 und SK-2026-0414: netto 574,80 / USt 101,44 / brutto 676,24, fällig 05.11.2026.
 Erwartete Summen (zum Gegenprüfen): RE-2026-0101 netto 327,40 / USt 57,42 / brutto 384,82 · RE-2026-0102 174,50 / 33,16 / 207,66 · RE-2026-0103 145,00 / 27,55 / 172,55.
@@ -48,7 +47,7 @@ Erzeugt mit `erzeuge_beispiele.py` (deterministisch); Konfiguration `konfigurati
 | `gartenbau` | GL-2026-118…125 | Tabulator, ISO-Datum | Beschriftung über dem Wert, Leistungsmonat, Rabattzeile mit negativem Preis |
 | `musikschule` | KR-2026-031…038 | UTF-8, `;` | Spalten von/bis je Position, nur Steuernummer, steuerfrei (§ 4 Nr. 21 UStG) und 7 % |
 | `pixelwerk` | PW-INV-2026-0087…0094 | UTF-8 mit BOM, `\|`, ISO-Datum | englische Beschriftung, Zahlen 1,234.56, Zebrastreifen, Leistungszeitraum |
-| `metallbau` | MK-26-0412…0419 | cp1252, `;`, TT.MM.JJ | Schreibmaschinenschrift (Courier), Käufer über Kundennummer und `kundenstamm-metallbau.csv` |
+| `metallbau` | MK-26-0412…0419 | cp1252, `;`, TT.MM.JJ | Schreibmaschinenschrift (Courier), Käufername und Anschrift in der CSV (KdName, Strasse, PLZ, Ort) |
 
 `fehlerfaelle/` – jeweils CSV und Druck passen absichtlich nicht zusammen:
 

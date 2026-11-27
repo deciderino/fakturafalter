@@ -43,12 +43,19 @@ verarbeitet werden.
   und ZUGFeRD, mit dem KoSIT-Validator für die Rechnungsdaten nach EN 16931. Dazu kommen Pflichtangaben und
   Plausibilität (§ 14 Abs. 4 UStG, Summen, doppelte Nummern). Unklares landet in „Zu prüfen“, Ungültiges in
   „Fehler“ – nichts geht still raus.
-- **Kein manuelles Tippen der Rechnungsdaten.** Die Angaben kommen aus deinen Dateien und Stammdaten (Absender,
-  Kundenstamm). Du richtest einmal ein, danach läuft die Verarbeitung automatisch.
+- **Kein manuelles Tippen der Rechnungsdaten.** Die Angaben kommen aus deinen Dateien und den Absenderdaten in den
+  Einstellungen. Du richtest einmal ein, danach läuft die Verarbeitung automatisch.
 - **Lokal und offen.** Rechnungsdaten verlassen den Rechner nicht, ohne Cloud und ohne Telemetrie. Apache-2.0,
   für Windows und Linux; Java-Laufzeit und Prüfwerkzeuge sind im Paket enthalten. CSV-Assistent und Layout-Editor
   passen Fakturafalter an deinen Export und deine Sichtseite an. Optional: Prüfmuster für die Rechnungsnummer
   und eigene Dateinamen.
+
+
+**1.0.0-rc1:** CSV-Profile aus 0.9.11 passen nicht mehr automatisch (Profilformat 2).
+Fakturafalter lehnt sie ab und lässt die Datei unverändert. Die Zuordnung im
+Assistenten neu einrichten oder bei 0.9.11 bleiben. Der Kundenstamm entfällt;
+der Kundenname steht in der Quelle. Einzelheiten im [Handbuch](docs/handbuch.md#profile-von-0911-und-der-sprung-auf-10)
+und in den [Release-Notes](docs/release-notes-1.0.0-rc1.md).
 
 ## In drei Schritten
 
@@ -94,13 +101,13 @@ Die Screenshots zeigen ausschließlich erfundene Beispieldaten.
 
 | Eingang | Empfehlung | Hinweis |
 |---|---|---|
-| **CSV** (Export aus der Warenwirtschaft) | empfohlen | Passen die neun Pflichtnamen des [Standardformats](docs/csv-standard.md), greift das eingebaute Profil (ab 0.9.9); sonst einmal zuordnen mit dem CSV-Assistenten. Format siehe [csv-format.md](docs/csv-format.md) |
+| **CSV** (Export aus der Warenwirtschaft) | empfohlen | Passen die Pflichtnamen des [Standardformats](docs/csv-standard.md) (ab 1.0 inkl. Kundenname), greift das eingebaute Profil; sonst einmal zuordnen mit dem CSV-Assistenten. Format siehe [csv-format.md](docs/csv-format.md) |
 | **XML** (ZUGFeRD / Factur-X, XRechnung; CII oder UBL) | empfohlen | ohne Zuordnung; andere XML-Formate (z. B. DATEV, Lexware) werden nicht gelesen |
 | **CSV oder XML + Original-PDF** | optional | Haken „Zusätzlich das PDF der Rechnung verwenden“: der Original-Druck bleibt die Sichtseite |
 | **Nur PDF** (Angaben aus dem Rechnungsdruck) | möglich | Layout einmal anlernen; CSV oder XML sind zuverlässiger, siehe unten |
 
 **Ausgabe:** ZUGFeRD als PDF/A-3 (Profil EN 16931, eingebettete `factur-x.xml`), optional zusätzlich eine
-XRechnung (CII), wenn der Kundenstamm sie verlangt – neben der PDF, im Unterordner `XRechnung` oder gar nicht
+XRechnung (CII), wenn in den Einstellungen „XRechnung zusätzlich erzeugen“ an ist und Kundenname oder Kundennummer einen Eintrag der einfachen Liste trifft – neben der PDF oder im Unterordner `XRechnung`
 (Einstellungen → Ausgabe). Weitere Funktionen:
 - Kundenbezeichnung 1–3 als eigene Adresszeilen.
 - Artikel-, Zeichnungs- und Bestellangaben unter der Positionsbezeichnung.

@@ -638,7 +638,7 @@ class Pixelwerk(Verkaeufer):
 
 
 # --- 6 Metallbau: Schreibmaschinen-Optik (Courier), gestrichelte Linien, Datum TT.MM.JJ,
-#     Etiketten mit Punktleitern, Artikelnummern, Käufer aus dem Kundenstamm
+#     Etiketten mit Punktleitern, Artikelnummern, Käufer aus der CSV
 class Metallbau(Verkaeufer):
     kurz = "metallbau"
     name = "Metallbau Kessler GmbH"
@@ -646,7 +646,7 @@ class Metallbau(Verkaeufer):
     stnr = "321/5710/4321"
     iban = iban("0000580970")
     kodierung = "cp1252"
-    spalten = ["ReNr", "ReDatum", "LiefDatum", "KdNr", "ArtNr", "Text", "Menge", "ME", "Preis", "MwSt"]
+    spalten = ["ReNr", "ReDatum", "LiefDatum", "KdNr", "KdName", "Strasse", "PLZ", "Ort", "ArtNr", "Text", "Menge", "ME", "Preis", "MwSt"]
     ARTIKEL = [("ST-4005", "Flachstahl S235 40x5 mm", "m", "6.85"), ("ST-2020", "Winkelstahl 20x20x3", "m", "4.10"),
                ("BL-0200", "Riffelblech 2 mm verzinkt", "kg", "3.95"), ("RO-0040", "Quadratrohr 40x40x2", "m", "8.20"),
                ("SC-0001", "Schweißarbeiten Werkstatt", "Stk", "65.00"), ("VZ-0100", "Feuerverzinkung Lohnarbeit", "kg", "0.92")]
@@ -667,7 +667,9 @@ class Metallbau(Verkaeufer):
         return out
 
     def csv_zeilen(self, r):
-        return [[r.nr, f"{r.datum:%d.%m.%y}", f"{r.leistung:%d.%m.%y}", r.extra["kd"], p.artnr, p.text,
+        k = r.kunde
+        return [[r.nr, f"{r.datum:%d.%m.%y}", f"{r.leistung:%d.%m.%y}", r.extra["kd"],
+                 k["name"], k["strasse"], k["plz"], k["ort"], p.artnr, p.text,
                  menge_de(p.menge), p.einheit, de(p.preis), "19"] for p in r.pos]
 
     def zeichnen(self, r, pfad, nr=None, ib=None):

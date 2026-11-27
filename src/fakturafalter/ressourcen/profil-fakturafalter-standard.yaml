@@ -1,7 +1,7 @@
 profil: fakturafalter-standard
 version: 2
 beschreibung: 'Eingebautes Standardformat (DE: UTF-8 mit BOM, Semikolon, Dezimalkomma,
-  TT.MM.JJJJ). Greift nur, wenn die Kopfzeile die 9 Pflichtnamen trägt und kein früheres
+  TT.MM.JJJJ). Greift nur, wenn die Kopfzeile die Pflichtnamen trägt und kein früheres
   aktives Profil passt.'
 datei:
   muster: '*.csv'

@@ -717,7 +717,13 @@ class Hauptfenster(QMainWindow):
 
     def _profilhinweise(self) -> None:
         """Alte Profile und geänderte Einstellungen klar anzeigen, Dateien unangetastet lassen."""
+        import os
+
         from PySide6.QtWidgets import QMessageBox
+
+        # Automatisierte Tests dürfen nicht an modalen Dialogen hängen bleiben.
+        if os.environ.get("PYTEST_CURRENT_TEST"):
+            return
 
         for hinweis in getattr(self.k, "konfig_hinweise", None) or []:
             QMessageBox.information(self, _("Hinweis zu den Einstellungen"), hinweis)

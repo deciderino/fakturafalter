@@ -260,3 +260,18 @@ def test_felder_sind_gruppiert_und_suche_findet_beleg_und_gesamtpreis():
     assert "gesamtpreis_position" in treffer
     assert ce.anzeige_feld("BT-1").startswith("Rechnungsnummer")
     assert "*" in ce.anzeige_feld("BT-44")
+
+
+def test_startkonfig_ohne_migrationshinweis(tmp_path):
+    """Neue Installationen sollen nicht den Hinweis „Kundenstamm entfällt“ sehen."""
+    import shutil
+
+    from fakturafalter.konfig import lade_konfig
+
+    src = Path(__file__).resolve().parent.parent / "src" / "fakturafalter" / "ressourcen" / "start" / "konfiguration.yaml"
+    ziel = tmp_path / "konfiguration.yaml"
+    shutil.copy(src, ziel)
+    k = lade_konfig(ziel)
+    assert k.xrechnung_zusatz is False
+    assert k.xrechnung_liste == []
+    assert k.konfig_hinweise == []

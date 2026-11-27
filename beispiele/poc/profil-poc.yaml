@@ -2,7 +2,7 @@
 #
 # Besonderheit gegenüber profil-variante-a/b/c:
 #   - Die Käuferdaten (Name, Anschrift, USt-IdNr., E-Mail, Leitweg-ID) stehen direkt in der CSV.
-#     Ein Kundenstamm (kundenstamm.csv) ist deshalb NICHT nötig.
+#     Ein getrennter Kundenstamm ist nicht vorgesehen; der Käufer steht in der CSV.
 #   - Verkäufer, Bankverbindung und Zahlungsbedingungen stehen fest in diesem Profil
 #     (Blöcke „verkaeufer“, „zahlung“, „bemerkungen“). Sie haben Vorrang vor der Konfiguration.
 #   - Das Ausgabeformat ist fest ZUGFeRD, Profil EN 16931.
@@ -35,7 +35,7 @@ felder:
     kundennummer:  {spalte: kundennummer}                          # Pflicht, wird Käuferkennung BT-46
     BT-3:          {fest: "380"}                                   # 380 = Rechnung
     BT-5:          {fest: EUR}
-    # --- Käufer (statt Kundenstamm) ---
+    # --- Käufer (aus der CSV) ---
     BT-44:         {spalte: kunde_name}                            # Pflicht
     BT-50:         {spalte: kunde_strasse, optional: true}
     BT-53:         {spalte: kunde_plz, optional: true}             # als Text lesen, damit 01234 bleibt

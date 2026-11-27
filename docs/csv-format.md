@@ -60,12 +60,13 @@ Die Rechnungsbeträge rechnet Fakturafalter selbst aus.
 | Einzelpreis | Einzelpreis netto | BT-146 | `0,55` |
 | USt-Satz | Steuersatz oder Steuerschlüssel (im Profil übersetzt in Kategorie und Satz; bei Befreiung mit Grund) | BT-151/BT-152 | `7` |
 
-Kundenbezeichnung 1, Strasse, PLZ und Ort können entfallen, wenn stattdessen eine **Kundennummer** geliefert wird
-und das Profil einen Kundenstamm (eigene CSV) nennt.
+Der **Kundenname** (BT-44, oft `Kundenname` oder `Kundenbezeichnung 1`) ist Pflicht
+und kommt aus der Datei. Eine Kundennummer allein reicht nicht; es gibt keinen
+Kundenstamm mehr. Straße, PLZ und Ort bleiben empfohlene Angaben in der Quelle.
 
 ## Optionale Spalten
 
-- Kundennummer (mit Kundenstamm statt Anschrift)
+- Kundennummer (BT-46, ersetzt den Kundennamen nicht)
 - Positionsnummer (BT-126), Artikelnummer (BT-155)
 - Bestellnummer (BT-13), Leitweg-ID (BT-10)
 - USt-IdNr. (BT-48) und E-Mail (BT-49) des Käufers, Land (BT-55)
@@ -129,7 +130,7 @@ Zeilensteuer, …) gehören nur in den **einen wiederholenden** Block
   Danach **Spalten je Block** – dieselbe Position darf je Block ein anderes Feld
   sein. Weiter erst, wenn die Pflichtfelder zugeordnet sind: Rechnungsnummer,
   Rechnungsdatum, Bezeichnung, Menge, Einzelpreis, Steuer, und Käufername (BT-44)
-  oder Kundennummer (über den Kundenstamm). Gespeichert werden Name und 1-basierte
+  (Kundenname, BT-44). Die Kundennummer ist optional. Gespeichert werden Name und 1-basierte
   Position; beim Lesen hat der Name Vorrang, wenn die Kopfzeile ihn trägt. Ein
   Kopffeld in mehreren Blöcken wird verglichen (Abweichung → Zu prüfen). Probe
   und Eingang nutzen denselben Lesepfad. Dunkles und helles Theme setzen eigene
@@ -156,7 +157,7 @@ folgt ein Zeilenumbruch. Optional: `Skonto-Basisbetrag`, wenn nicht der volle
 Zahlbetrag gilt, sowie eine zweite Stufe (`Skonto 2`, `Zahlungsziel mit Skonto 2`,
 `Skonto-Basisbetrag 2`). Fehlt Satz oder Tage einer Stufe, entfällt die
 Konventionszeile. Der Sichtteil der PDF zeigt nur den Klartext. Werte können
-auch aus dem Kundenstamm oder als Profil-Standard kommen (CSV hat Vorrang).
+auch als Profil-Standard kommen (CSV hat Vorrang).
 Bei Gutschrift (381) entfällt strukturiertes Skonto typischerweise.
 
 Verzug oder Mahnung nur als Klartext ohne `#`, etwa in der Bemerkung (BT-22).
@@ -174,7 +175,7 @@ Ab 0.9.10 außerdem `beispiele/beispiel-satzart-bloecke-koepfe.csv` (Satzart und
 `beispiele/beispiel-satzart-gleiche-positionen.csv` (gleiche Spaltenposition, andere Bedeutung) und
 `beispiele/beispiel-satzart-ohne-blockkopf.csv` (nur Satzart K/P/S) mit den zugehörigen
 `profil-beispiel-satzart-*.yaml`.
-Ab 0.9.11 außerdem `beispiele/beispiel-satzart-marker-in-spalte.csv` (fiktiv: `#Kopf` und `#Beleg` als Satzart-Wert in der Datenzeile, kurze Datumsangaben TT.MM.JJ, getrennte Blöcke Kunde und Beleg). Ab 0.9.11.1 wertet der Eingang (und die Probe-Liste) dieselben Block-Felder gegen die jeweilige Block-Kopfzeile aus wie die Sichtseiten-Vorschau. Ab 0.9.11.2 außerdem `beispiele/beispiel-satzart-pos-kopf-und-restzeile.csv` (fiktiv: `#Kunde`/`#Beleg`/`#Pos`, Kopfzeile vor den Positionszeilen, Währung `EURO` → EUR, Textzeilen und eine Restzeile am Ende ohne falsches „Spalte fehlt“).
+Ab 0.9.11 außerdem `beispiele/beispiel-satzart-marker-in-spalte.csv` (fiktiv: `#Kopf` und `#Beleg` als Satzart-Wert in der Datenzeile, kurze Datumsangaben TT.MM.JJ, getrennte Blöcke Kunde und Beleg). Ab 0.9.11.1 wertet der Eingang (und die Probe-Liste) dieselben Block-Felder gegen die jeweilige Block-Kopfzeile aus wie die Sichtseiten-Vorschau. Ab 1.0.0-rc1 außerdem `beispiele/beispiel-satzart-pos-kopf-und-restzeile.csv` (fiktiv: `#Kunde`/`#Beleg`/`#Pos`, Kopfzeile vor den Positionszeilen, Währung `EURO` → EUR, Textzeilen und eine Restzeile am Ende ohne falsches „Spalte fehlt“).
 Standardaufbau: `beispiele/variante-zjp_textzeilen.csv` (fiktiv, RE-2026-0818:
 Kommentar und Leerzeile über der Position, Kommentar darunter; netto 394,40 /
 USt 74,94 / brutto 469,34). Profil: `beispiele/profil-variante-zjp-textzeilen.yaml`.
@@ -241,20 +242,20 @@ Der CSV-Assistent schlägt diese Felder nur vor, wenn der Spaltenname genau pass
 - **Gutschrift.** Ist `belegart` = Gutschrift, dürfen Mengen oder Preise negativ sein. Fakturafalter übernimmt
   sie als positive Beträge, denn bei Belegart 381 steckt das Vorzeichen in der Belegart.
   Negative Preise auf normalen Rechnungen werden als negative Menge übernommen (BR-27).
-- **Kundenstamm.** Die Spalten `mandat_bt89` und `iban_bt91` liefern die Lastschriftdaten je Kunde.
+- **Lastschrift.** Mandatsreferenz (BT-89) und Kunden-IBAN (BT-91) stehen in der Quelle.
   Eine Mandatsreferenz ohne Zahlungsart-Spalte bedeutet Lastschrift.
 
 Beispiel: `beispiele/variante-d_rabatt_gutschrift_lastschrift.csv` mit `beispiele/profil-variante-d.yaml`.
 
 ## Kundenbezeichnung 1–3 und Angaben unter der Positionsbezeichnung (ab 0.9.5)
 
-Auch hier ist alles freiwillig bis auf eine Ausnahme: die **Kundenbezeichnung 1** ersetzt die bisherige
-Pflichtspalte Kunde. Alte CSVs mit einer Spalte `Kunde` (oder Kundenname, Firma …) laufen unverändert, diese
-Spalte gilt als Zeile 1.
+Alles außer dem **Kundennamen** (BT-44, erste Namenszeile) ist freiwillig. Eine Spalte `Kunde`
+mit Werten wie `K-1001` wird als Kundennummer vorgeschlagen; trotzdem muss eine Namensspalte
+als Pflicht zugeordnet werden. `kunden_name_2` und `kunden_name_3` bleiben optionale weitere Zeilen.
 
 | Feld im Profil | Spalte (Beispiel) | Wirkung |
 |---|---|---|
-| `BT-44` | `Kundenbezeichnung 1` | Pflicht (sofern kein Kundenstamm den Namen liefert) |
+| `BT-44` | `Kundenbezeichnung 1` bzw. `Kundenname` | Pflicht |
 | `kunden_name_2`, `kunden_name_3` | `Kundenbezeichnung 2`, `Kundenbezeichnung 3` | optional; leer = keine Zeile |
 | `zeichnungsnummer`, `index` | `Zeichnungsnummer`, `Index` | optional; im XML Artikelmerkmal (BT-160/BT-161) „Zeichnungsnummer“ bzw. „Index“ |
 

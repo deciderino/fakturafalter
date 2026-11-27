@@ -785,7 +785,7 @@ def lauf_handvorlage(tmp: Path) -> list[Fall]:
     ]  # Zahlungsbedingung kommt aus der Konfiguration
     kaeufer = {"BT-44", "BT-50", "BT-51", "BT-52", "BT-53"}
     for quelle, kpfad, vorlage_name, prof, pdf, csv, felder in [
-        # WaWi: Käufer über Kundennummer aus dem Kundenstamm
+        # WaWi: Käufername und Anschrift stehen in der CSV
         (
             "wawi-druck",
             BEISPIELE / "konfiguration.yaml",

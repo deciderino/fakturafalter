@@ -57,13 +57,14 @@ Einstellungen lassen sich später unter **Einstellungen** ändern.
 ## 3. Schnellstart: CSV
 
 Trägt deine CSV die neun Pflichtnamen des [Standardformats](csv-standard.md)
-(`Rechnungsnummer`, `Rechnungsdatum`, `Leistungsdatum`, `Kundennummer`,
+(`Rechnungsnummer`, `Rechnungsdatum`, `Leistungsdatum`, `Kundenname`,
 `Bezeichnung`, `Menge`, `Einheit`, `Einzelpreis`, `Steuersatz`), brauchst du
-keinen Assistenten: das **eingebaute Standardprofil** (ab 0.9.9) greift mit
-letzter Priorität, sobald kein eigenes aktives Profil passt. Unter
-Einstellungen → Eingang & Vorlagen → **CSV-Vorlage speichern…** kannst du eine
-Minimal- oder Vollvorlage (UTF-8 mit BOM, Semikolon) ablegen; Absender und
-Kundenstamm müssen trotzdem gepflegt sein.
+keinen Assistenten: das **eingebaute Standardprofil** (ab 0.9.9, ab 1.0 mit
+Kundenname statt Kundennummer als Pflicht) greift mit letzter Priorität,
+sobald kein eigenes aktives Profil passt. Unter Einstellungen → Eingang &
+Vorlagen → **CSV-Vorlage speichern…** kannst du eine Minimal- oder Vollvorlage
+(UTF-8 mit BOM, Semikolon) ablegen; der Absender steht in den Einstellungen,
+der Kundenname in der CSV.
 
 Weichen die Spaltennamen ab, richtest du die Datei einmal ein:
 
@@ -160,7 +161,7 @@ eine Textzeile im Positionsblock erzeugt nicht mehr die Meldung „Spalte fehlt�
 
 ### Skonto (ab 0.9.9)
 
-In der CSV, im Kundenstamm oder als Profil-Vorgabe kannst du bis zu zwei
+In der CSV oder als Profil-Vorgabe kannst du bis zu zwei
 Skonto-Stufen angeben (`Skonto` / `Zahlungsziel mit Skonto`, optional
 `Skonto-Basisbetrag`, und dieselben Felder mit „2“). Sobald Satz und Tage einer
 Stufe stehen, schreibt Fakturafalter in die Zahlungsbedingungen (BT-20) zuerst
@@ -280,9 +281,13 @@ Ein altes `protokoll.tsv` im Ausgang (bis Version 0.9.5) wird nicht mehr
 gelesen; wer die alten Nummern für die Doppelprüfung behalten will, kopiert es
 vor dem ersten Lauf in den Ordner `Protokoll`.
 
-**XRechnung-Datei.** Unter Einstellungen → Ausgabe wählst du, wohin die
-zusätzliche XRechnung kommt: neben die PDF in den Ausgang (Standard), in den
-Unterordner `XRechnung` des Ausgangs oder gar nicht.
+**XRechnung-Datei.** Unter Einstellungen → Ausgabe schaltest du **XRechnung
+zusätzlich erzeugen** ein und pflegst eine einfache Liste: je Eintrag
+Kundenname und/oder Kundennummer und optional eine Leitweg-ID (BT-10). Trifft
+Name oder Nummer einer Rechnung, legt Fakturafalter zusätzlich zur ZUGFeRD-PDF
+eine XRechnung (CII, lokal mit KoSIT geprüft) ab. Die Ablage wählst du daneben:
+im Ausgang neben der PDF oder im Unterordner `XRechnung`. Die Leitweg-ID aus
+der Quelle hat Vorrang; die Liste füllt sie nur, wenn die Datei keine mitbringt.
 
 Mit Haken startet die Verarbeitung, sobald PDF und CSV bzw. XML mit gleichem
 Namen im Eingang liegen. Bis dahin zeigt die Karte „Zu tun“, dass auf das
@@ -568,9 +573,9 @@ SEPA-Zahlung bei Fremdwährung, Kursdatum älter als zwei Monate.
 
 ### Leitweg-ID
 
-Die Leitweg-ID (BT-10) kommt aus der Quelle (Feld „Leitweg-ID“) oder dem Kundenstamm (Spalte `leitweg_id_bt10`),
-sonst wie bisher die Kundennummer als
-Käuferreferenz. Sieht der Wert wie eine Leitweg-ID aus (z. B. `04011000-12345-03`), prüft Fakturafalter Aufbau und
+Die Leitweg-ID (BT-10) kommt aus der Quelle (Feld „Leitweg-ID“) oder, wenn die Quelle keine mitbringt,
+aus einem treffenden Eintrag der XRechnung-Liste in den Einstellungen.
+Fehlt beides, dient wie bisher die Kundennummer als Käuferreferenz. Sieht der Wert wie eine Leitweg-ID aus (z. B. `04011000-12345-03`), prüft Fakturafalter Aufbau und
 Prüfziffer (Mod 97-10) streng; eine falsche Leitweg-ID geht nach „Zu prüfen“. Andere Werte (Kundennummern)
 werden nicht als Leitweg-ID geprüft.
 
@@ -646,13 +651,33 @@ kann es nicht verarbeiten (OCR ist nicht vorgesehen).
 
 **XRechnung / Leitweg-ID an Behörden.**
 Der Standardweg ist ZUGFeRD im Profil EN 16931 und erfüllt die E-Rechnungspflicht
-im B2B. Für Behörden trägst du die Leitweg-ID im Kundenstamm ein (Abschnitt 11);
-eine XRechnung (CII) legt Fakturafalter zusätzlich ab, wenn der Kundenstamm sie
-verlangt.
+im B2B. Für Behörden trägst du die Leitweg-ID in der Quelle oder in der
+XRechnung-Liste ein (Abschnitt 11); eine XRechnung (CII) legt Fakturafalter
+zusätzlich ab, wenn der Schalter an ist und Name oder Nummer einen Eintrag trifft.
 
 **„Rechnung in USD … Kurs oder USt in EUR fehlt“.**
 Den Kurs oder die Umsatzsteuer in EUR in den Export aufnehmen (Abschnitt 11).
 Fakturafalter rechnet nie mit einem selbst geholten Kurs.
+
+
+## Profile von 0.9.11 und der Sprung auf 1.0
+
+Ab 1.0.0-rc1 gelten CSV-Profile im **Profilformat 2**. Eine Zuordnung aus 0.9.11
+(Profilformat 1 oder ältere Feldschlüssel wie `gesamt_kontrolle` und
+`kaeufer_name_2` / `kaeufer_name_3`) wird **nicht automatisch umgeschrieben**.
+Fakturafalter lehnt sie ab, lässt die Datei unverändert liegen und erklärt das
+in der Oberfläche (Du-Form):
+
+- Die Zuordnung im Assistenten **neu einrichten**. Eine Beispiel-CSV aus deiner
+  Warenwirtschaft (ERP) reicht.
+- Oder bei der Version **0.9.11** bleiben; dort funktionieren die bisherigen
+  Profile weiter.
+
+Der **Kundenstamm** (eigene `kundenstamm.csv` im Profil) entfällt. Der
+Kundenname (BT-44) ist Pflicht und kommt aus der Quelle; die Kundennummer ist
+optional. Wer bisher das Ausgabeformat „aus dem Kundenstamm“ genutzt hat,
+trägt die betreffenden Kunden in die XRechnung-Liste ein und schaltet
+„XRechnung zusätzlich erzeugen“ ein.
 
 ## Rechtliches und Lizenz
 

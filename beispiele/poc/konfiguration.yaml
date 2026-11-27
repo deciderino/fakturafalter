@@ -1,6 +1,6 @@
 # Konfiguration für den Proof of Concept (ALLE Daten erfunden)
 # Verkäufer, Bank und Zahlungsbedingungen stehen im Profil (profil-poc.yaml), Käufer in der CSV.
-# Deshalb gibt es hier keinen Block „absender“/„zahlung“ und keinen Kundenstamm.
+# Deshalb gibt es hier keinen Block „absender“/„zahlung“ und der Käufer steht in der CSV.
 
 ordner:                     # relativ zu dieser Datei
   eingang: ../../laufzeit/poc/eingang

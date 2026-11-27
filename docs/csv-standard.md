@@ -1,6 +1,6 @@
 # CSV-Exportspezifikation für Fakturafalter
 
-**Spezifikation 1.5** · Stand 27.11.2026 (Europe/Berlin) · Grundlage App **0.9.11.2**
+**Spezifikation 1.6** · Stand 27.11.2026 (Europe/Berlin) · Grundlage App **1.0.0-rc1**
 
 Diese Beschreibung richtet sich an Systemadmins und Entwickler einer
 **Warenwirtschaft (ERP)**. Sie legt fest, wie ein Rechnungs-CSV aussehen soll,
@@ -24,7 +24,7 @@ Versionsgeschichte (§ 10) drehen muss:
 | ohne Marker bzw. **verfügbar ab 0.9.8.4** | Verhalten seit 0.9.8.4, soweit nicht anders markiert. |
 | **verfügbar ab 0.9.9** | Eingebautes Standardprofil und strukturiertes Skonto in BT-20 (`#SKONTO#`). |
 | **geplant, später** | Beschlossen, aber noch nicht in der aktuellen Lieferung. |
-| **nicht vorgesehen** | Wird nicht umgesetzt, siehe § 8. |
+| **nicht unterstützt** | Wird nicht umgesetzt, siehe § 8 (früher: nicht vorgesehen). |
 
 Absenderdaten (Verkäufer, Steuernummer bzw. USt-IdNr., IBAN) stehen nicht in der
 CSV, sondern in den Einstellungen. Die Rechnungsnummer vergibt weiterhin die
@@ -128,7 +128,7 @@ Mustang/KoSIT kann zu lange oder unzulässige Werte ablehnen), *Datum*
 | Rechnungsnummer | BT-1 | ja | Text, eindeutig, von der Warenwirtschaft vergeben | `RE-2026-1001` | Zu prüfen |
 | Rechnungsdatum | BT-2 | ja | Datum, nicht in der Zukunft | `02.11.2026` | Zu prüfen |
 | Leistungsdatum | BT-72 | bed. | Datum | `31.10.2026` | Alternativ `Leistung von`/`Leistung bis` (BT-73/74) oder Leistungsmonat (`10/2026`). Mindestens eines ist Pflicht (§ 14 UStG). |
-| Kundennummer | — | bed. | Text, Schlüssel zum Kundenstamm | `K-1001` | Dann die Käuferspalten (Name, Anschrift) liefern; sonst Zu prüfen. Die Nummer wird zur Käuferkennung (BT-46). |
+| Kundenname | BT-44 | ja | Text, Name oder Firma des Käufers | `Beispiel Handel GmbH` | Zu prüfen. Pflicht aus der Quelle; es gibt keinen Kundenstamm mehr. |
 | Bezeichnung | BT-153 | ja | Text | `Bürostuhl Modell Münster` | Zu prüfen. In Kommentarzeilen steht hier der Text. |
 | Menge | BT-129 | ja | Zahl, in der XML bis 4 Nachkommastellen | `2` / `1,5` | Zusammen mit leerem Preis: Kommentar- oder Leerzeile. Nur Preis ohne Menge: siehe § 3. |
 | Einheit | BT-130 | ja | Klartext aus der Einheitenliste (§ 5) | `Stück` | Zu prüfen. Profiloption „Fehlende Einheit = Stück“ (ab 0.9.8.3) setzt H87 und schreibt einen Hinweis ins Protokoll, kein Prüffall. |
@@ -144,30 +144,31 @@ Mustang/KoSIT kann zu lange oder unzulässige Werte ablehnen), *Datum*
 | Leistung von | BT-73 | bed. | Datum | `01.10.2026` | nur ohne Leistungsdatum nötig |
 | Leistung bis | BT-74 | bed. | Datum | `31.10.2026` | wie vor |
 | Bestellnummer | BT-13 | opt. | Text | `AB-44019` | leer |
-| Leitweg-ID | BT-10 | bed. | Leitweg-ID (Prüfziffer Mod 97-10, wird geprüft, wenn der Wert wie eine Leitweg-ID aussieht) | | Kundenstamm `leitweg_id_bt10`; bei XRechnung Fallback: Kundennummer |
+| Leitweg-ID | BT-10 | bed. | Leitweg-ID (Prüfziffer Mod 97-10, wird geprüft, wenn der Wert wie eine Leitweg-ID aussieht) | | sonst optional aus der XRechnung-Liste in den Einstellungen, wenn Name oder Nummer trifft; bei XRechnung Fallback: Kundennummer |
 | Summe netto | BT-109 | opt. | Zahl, nur Kontrolle | `363,00` | keine Gegenprüfung |
 | Summe USt | BT-110 | opt. | Zahl, nur Kontrolle | `68,97` | keine Gegenprüfung |
 | Summe brutto | BT-112 | opt. | Zahl, nur Kontrolle | `431,97` | keine Gegenprüfung |
 
 ### 4.3 Käufer
 
-Reihenfolge: Zuerst der **Kundenstamm** zur `Kundennummer`. **Gefüllte
-Käuferspalten in der CSV haben Vorrang** (Feld für Feld). Eine leere Zelle
-ändert den Stammwert nicht. Ohne treffende Nummer und ohne Namen: Zu prüfen.
+Der **Kundenname (BT-44)** ist Pflicht und kommt aus der Quelle. Eine
+**Kundennummer** (BT-46, intern `kundennummer`) ist optional. Es gibt keinen
+Kundenstamm mehr: Name, Anschrift und die übrigen Käuferangaben stehen in der
+CSV (oder in XML / im Rechnungsdruck). Fehlt der Name: Zu prüfen.
 
 | Spaltenname | BT | Pflicht | Typ | Beispiel | Wenn fehlt |
 |---|---|---|---|---|---|
-| Kundenname | BT-44 | bed. | Text | `Beispiel Handel GmbH` | Stamm `name` |
+| Kundennummer | — | opt. | Text, Käuferkennung (BT-46) | `K-1001` | leer. Reicht allein nicht; der Kundenname bleibt Pflicht. |
 | Kundenbezeichnung 2 | — | opt. | Text, zweite Namenszeile; in der XML mit Leerzeichen an BT-44 gehängt | | leer |
 | Kundenbezeichnung 3 | — | opt. | wie Zeile 2 | | leer |
-| Straße | BT-50 | bed. | Text | `Beispielweg 5` | Stamm `strasse` |
-| Adresszusatz | BT-51 | opt. | Text, Adresszeile 2 | `Gebäude C` | Stamm `zusatz` |
-| PLZ | BT-53 | bed. | Text; in DE 5 Ziffern | `12345` | Stamm `plz` |
-| Ort | BT-52 | bed. | Text | `Musterstadt` | Stamm `ort` |
-| Land | BT-55 | bed. | ISO 3166-1 alpha-2, häufige Namen werden übersetzt (`Österreich` → `AT`) | `DE` | Stamm, sonst DE |
-| Kunde-USt-IdNr. | BT-48 | bed. | USt-IdNr., Format wird geprüft | `DE000000003` | Stamm `ust_id`. Pflicht u. a. bei igL und Reverse Charge. |
-| E-Rechnungsadresse | BT-49 | opt. | E-Mail (Schema in der XML immer `EM`) | `rechnung@beispiel-handel.example` | Stamm `elektr_adresse_bt49` |
-| Handelsregister | BT-47 | opt. | Text | `HRB 12345` | Stamm `register` |
+| Straße | BT-50 | bed. | Text | `Beispielweg 5` | leer; die nachgelagerte Prüfung kann die Rechnung ablehnen |
+| Adresszusatz | BT-51 | opt. | Text, Adresszeile 2 | `Gebäude C` | leer |
+| PLZ | BT-53 | bed. | Text; in DE 5 Ziffern | `12345` | leer |
+| Ort | BT-52 | bed. | Text | `Musterstadt` | leer |
+| Land | BT-55 | bed. | ISO 3166-1 alpha-2, häufige Namen werden übersetzt (`Österreich` → `AT`) | `DE` | sonst DE |
+| Kunde-USt-IdNr. | BT-48 | bed. | USt-IdNr., Format wird geprüft | `DE000000003` | leer. Pflicht u. a. bei igL und Reverse Charge. |
+| E-Rechnungsadresse | BT-49 | opt. | E-Mail (Schema in der XML immer `EM`) | `rechnung@beispiel-handel.example` | leer |
+| Handelsregister | BT-47 | opt. | Text | `HRB 12345` | leer |
 
 ### 4.4 Lieferung (nur bei abweichender Lieferanschrift)
 
@@ -266,7 +267,7 @@ Mahnhinweis als normalen Satz ohne `#` in `Bemerkung` (BT-22) schreiben.
 
 | Spaltenname | BT | Pflicht | Typ / Werte | Wenn fehlt | Status |
 |---|---|---|---|---|---|
-| Zahlungsziel | BT-9 / BT-20 | opt. | Tage netto | Kundenstamm `zahlungsziel_tage`, sonst typisch 14 Tage aus der Konfiguration | verfügbar ab 0.9.8.4 |
+| Zahlungsziel | BT-9 / BT-20 | opt. | Tage netto | sonst typisch 14 Tage aus der Konfiguration | verfügbar ab 0.9.8.4 |
 | Skonto | BT-20 | opt. | Prozent (erste Stufe) | kein Skonto | verfügbar ab 0.9.8.4 (Klartext), ab 0.9.9 zusätzlich `#SKONTO#`-Zeile |
 | Zahlungsziel mit Skonto | BT-20 | opt. | Tage (erste Stufe) | | wie `Skonto` |
 | Skonto-Basisbetrag | BT-20 | opt. | Zahl, nur wenn nicht der volle BT-115 gilt | Segment `BASISBETRAG` entfällt | *verfügbar ab 0.9.9* |
@@ -275,9 +276,9 @@ Mahnhinweis als normalen Satz ohne `#` in `Bemerkung` (BT-22) schreiben.
 | Skonto-Basisbetrag 2 | BT-20 | opt. | wie `Skonto-Basisbetrag`, für Stufe 2 | Segment entfällt | *verfügbar ab 0.9.9* |
 | Zahlungsart | BT-81 | opt. | siehe § 5 | 58 (SEPA-Überweisung); eine Mandatsreferenz ohne Zahlungsart setzt 59 | verfügbar ab 0.9.8.4 |
 | Verwendungszweck | BT-83 | opt. | Text | Rechnungsnummer | verfügbar ab 0.9.8.4 |
-| Mandatsreferenz | BT-89 | bed. bei Lastschrift | Text | Kundenstamm `mandat_bt89` | verfügbar ab 0.9.8.4 |
+| Mandatsreferenz | BT-89 | bed. bei Lastschrift | Text | leer; bei Lastschrift Zu prüfen | verfügbar ab 0.9.8.4 |
 | Gläubiger-ID | BT-90 | bed. bei Lastschrift | Text | Absender | verfügbar ab 0.9.8.4 |
-| Kunden-IBAN | BT-91 | bed. bei Lastschrift | IBAN, Prüfsumme wird geprüft | Kundenstamm `iban_bt91` | verfügbar ab 0.9.8.4 |
+| Kunden-IBAN | BT-91 | bed. bei Lastschrift | IBAN, Prüfsumme wird geprüft | leer; bei Lastschrift Zu prüfen | verfügbar ab 0.9.8.4 |
 | Zahlungsempfänger | BT-59 | opt. | nur wenn abweichend vom Verkäufer | Verkäufer (IBAN bleibt die des Absenders) | verfügbar ab 0.9.8.4 |
 
 ### 4.7 Zu- und Abschläge auf die Rechnung
@@ -494,7 +495,7 @@ Kopfzeile). Zielordner `Fehler`.
 
 ---
 
-## 8. Geplant und nicht vorgesehen
+## 8. Geplant und nicht unterstützt
 
 Strukturiertes Skonto (§ 4.6) und das eingebaute Standardprofil sind
 *verfügbar ab 0.9.9*.
@@ -508,7 +509,7 @@ Strukturiertes Skonto (§ 4.6) und das eingebaute Standardprofil sind
   nur die URI in `Link auf Unterlage` (BT-124); Einbetten ist über den
   XML-Import möglich.
 
-### 8.2 Nicht vorgesehen
+### 8.2 Nicht unterstützt
 
 - **Verkäufer außerhalb Deutschlands** (BT-40 ≠ DE).
 - **Positionsgruppen bzw. Zwischensummen** im EN-16931-Profil (nur ZUGFeRD
@@ -540,8 +541,8 @@ Strukturiertes Skonto (§ 4.6) und das eingebaute Standardprofil sind
 3. **Eine Zeile je Position**, Kopffelder in jeder Zeile gleich, auch bei
    Kommentaren. Mehrere Rechnungen in einer Datei über die Rechnungsnummer
    unterscheiden.
-4. Die neun Pflichtspalten sind immer vorhanden. `Kundennummer` zeigt in einen
-   gepflegten Kundenstamm, sonst Käuferspalten mitliefern.
+4. Die Pflichtspalten sind immer vorhanden, darunter `Kundenname` (BT-44).
+   `Kundennummer` ist optional und ersetzt den Namen nicht.
 5. `Einheit` als Klartext der Liste in § 5.1 (`Stück` → H87, `Stunde` → HUR,
    `pauschal` → LS).
 6. `Steuersatz` als `19 %` / `7 %` oder benannter Fall (`igL`, `Reverse Charge`,
@@ -571,7 +572,7 @@ RE-2026-1002;03.11.2026;03.11.2026;K-1001;Beratung Einrichtung;3;Stunde;90,00;19
 RE-2026-1002;03.11.2026;03.11.2026;K-1001;Dokumentation;1;Stück;120,00;19 %
 ```
 
-Voraussetzung: Absender in den Einstellungen und Kundenstamm-Eintrag `K-1001`.
+Voraussetzung: Absender in den Einstellungen; der Kundenname steht in der CSV.
 
 ### Vollbeispiel
 
@@ -619,3 +620,4 @@ Spezifikation erhöhen und die Änderung in der Liste unten eintragen.
 | 1.3 | 26.11.2026 | Optionaler Block-Eingang (freie Felder je Block, optionale Marker, Textzeilen einschließlich `zwischen` und `0` / `0,00`) als *verfügbar ab 0.9.9* beschrieben. Der Export-Standard bleibt eine Zeile je Position.
 | 1.4 | 26.11.2026 | Satzart als Anfangsregel im optionalen Block-Eingang, Spalten je Block (Name und Position) und farbiger Assistent: *verfügbar ab 0.9.10*. Der Export-Standard bleibt eine Zeile je Position.
 | 1.5 | 26.11.2026 | Optionaler Block-Eingang: Blöcke frei anlegen und benennen, Blockart (normal / sich wiederholend) manuell, Satzart-Wert auch in einer Datenzeile (z. B. `#Kopf`, `#Beleg`), mehrere normale Blöcke (Kunde und Beleg) ohne Kollision, Pflichtfelder inkl. Käufername oder Kundennummer vor dem Weiter im Spalten-Schritt: *verfügbar ab 0.9.11*. Ab 0.9.11.1 liest der Eingang die Blockspalten gegen die jeweilige Block-Kopfzeile (wie die Vorschau); der Export-Standard bleibt eine Zeile je Position. Ab 0.9.11.2 gelten EURO/Euro/€/EUR als EUR; Text- und Restzeilen im Positionsblock lösen keine falsche Meldung „Spalte fehlt“ aus.
+| 1.6 | 27.11.2026 | App 1.0.0-rc1. Kundenname (BT-44) ist Pflichtspalte des Standardformats, Kundennummer optional. Der Kundenstamm entfällt; Käuferangaben kommen aus der Quelle. Profile im Format 1 werden abgelehnt (neu einrichten oder bei 0.9.11 bleiben). XRechnung zusätzlich über eine einfache Liste in den Einstellungen (Name und/oder Nummer, optionale Leitweg-ID). Marker *nicht unterstützt* (früher: nicht vorgesehen).

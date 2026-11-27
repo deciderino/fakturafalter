@@ -7,6 +7,12 @@
 
 Stand: 31.10.2026 (Abschnitt 3b Input ergänzt) · Status: **nur Konzept, nichts gebaut** · Arbeitstitel: „ERechnung-Wandler“
 
+> **Stand 1.0.0-rc1 (27.11.2026):** Dieses Dokument ist die frühe Recherche.
+> Der **Kundenstamm** ist in der App entfallen. Käuferangaben kommen aus der Quelle
+> (CSV, XML oder Rechnungsdruck). Eine zusätzliche XRechnung (CII) entsteht über die
+> einfache Liste in den Einstellungen. Die Skizzen unten beschreiben den alten Entwurf.
+
+
 Legende: ✅ geprüft (Quelle am 31.10.2026 abgerufen) · ⚠️ unsicher / nur Sekundärquelle / bitte nachprüfen
 
 ---

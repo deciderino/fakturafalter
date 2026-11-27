@@ -25,7 +25,7 @@ pdf_vorlagen: [vorlage-wawi-druck.yaml]
 optionen:
   pdf_verwenden: false
   sichtteil: original
-  xrechnung_zusatz: true
+  xrechnung_zusatz: false
   stabil_sekunden: 2
   paarung_sekunden: 5
   schwelle: 0.9
