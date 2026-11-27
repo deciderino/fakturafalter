@@ -165,3 +165,23 @@ def test_preiseinheit_bleibt_in_preiszelle():
     t = _text(_pdf(r, None))[0]
     zeile = [z for z in t.splitlines() if "/ 100" in z or "je 100" in z or "pro 100" in z]
     assert zeile
+
+
+def test_ohne_vorsatz_rc2():
+    """rc2: „Unterzeilen ohne Vorsatz anzeigen“ entfernt die Vorsätze wie beschriftet (fiktive Daten)."""
+    z = [t for t, _ in sicht.unterzeilen(_voll(), "de", sicht={"kommentar_ohne_bezeichnungen": True})]
+    assert z[:4] == ["A-1", "KD-1", "Zeichnungs-Nr. Z-9, Index C", "4012345678901"]
+    assert z[4:10] == ["Langtext", "Farbe: blau", "DE", "10", "KST-1", "OBJ-7"]
+    assert z[10] == "01.11.2026 – 30.11.2026" and z[11] == "Teillieferung"
+    assert z[12].startswith("Listenpreis") and "Rabatt" in z[13] and "Zuschlag" in z[14]
+    assert not any(t.startswith(("Beschreibung:", "Art.-Nr.", "Hinweis:")) for t in z)
+    # ohne Schalter unverändert
+    assert [t for t, _ in sicht.unterzeilen(_voll(), "de", sicht={})][4] == "Beschreibung: Langtext"
+
+
+def test_ohne_vorsatz_beschriftung_rc2():
+    from fakturafalter.gui import texte
+
+    src = open(texte.__file__.replace("texte.py", "datenassistent.py"), encoding="utf-8").read()
+    assert "Unterzeilen ohne Vorsatz anzeigen (z. B. ohne „Beschreibung:“, „Art.-Nr.“)" in src
+    assert "Spaltenüberschriften auf der Sichtseite ausblenden" not in src

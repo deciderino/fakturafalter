@@ -1784,8 +1784,15 @@ class CsvAssistent(_Assistent):
                 umbruch=True,
             )
         )
-        self.c_kommentar_ohne = QCheckBox(_("Bei reinen Textzeilen die Spaltenüberschriften auf der Sichtseite ausblenden"))
-        self.c_kommentar_ohne.setToolTip(_("Die Zeile „Lieferung KW 48“ ohne die Wörter Menge und Einzelpreis daneben."))
+        self.c_kommentar_ohne = QCheckBox(_("Unterzeilen ohne Vorsatz anzeigen (z. B. ohne „Beschreibung:“, „Art.-Nr.“)"))
+        self.c_kommentar_ohne.setToolTip(
+            _(
+                "Unter einer Position steht dann nur der Wert, z. B. „A-100“ statt „Art.-Nr. A-100“ und "
+                "„Montage vor Ort“ statt „Beschreibung: Montage vor Ort“. Gilt für Art.-Nr., Ihre Art.-Nr., GTIN, "
+                "Beschreibung, Ursprungsland, Bestellpos., Kostenstelle, Objekt, Leistungszeitraum und Hinweis. "
+                "Zeichnungs-Nr./Index, Merkmale, Listenpreis und Zu-/Abschläge behalten ihren Text."
+            )
+        )
         self.c_kommentar_ohne.setChecked(False)
         v.addWidget(self.c_kommentar_ohne)
         v.addWidget(

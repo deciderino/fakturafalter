@@ -535,6 +535,8 @@ def unterzeilen(
         return bool(d["sichtbar"]) if "sichtbar" in d else default
 
     def mit_label(pref: str, wert: str, grau: bool = False) -> None:
+        """Unterzeile mit Vorsatz („Art.-Nr.“, „Beschreibung:“ …). Mit ``kommentar_ohne_bezeichnungen``
+        (Assistent: „Unterzeilen ohne Vorsatz anzeigen“) steht nur der Wert da."""
         if not wert:
             return
         dazu(wert if ohne else f"{pref} {wert}", grau)
@@ -565,7 +567,7 @@ def unterzeilen(
         dazu(f"{t['index'][:1].upper()}{t['index'][1:]} {index}", True)
     if _ein(p.standard_id):
         art = t["gtin"] if (p.standard_schema or "0160").strip() in ("", "0160") else t["std"]
-        dazu(f"{art} {_ein(p.standard_id)}", True)
+        mit_label(art, _ein(p.standard_id), True)
     # (b) Beschreibung, Merkmale, Ursprung
     beschr = _ein(p.beschreibung)
     if beschr and beschr != _ein(p.bezeichnung):
@@ -575,31 +577,31 @@ def unterzeilen(
         erste = True
         for teil in teile:
             if erste and teil:
-                dazu(f"{t['beschreibung']} {teil}")
+                mit_label(t["beschreibung"], teil)
                 erste = False
             else:
                 dazu(teil)  # auch leer: gewollte Leerzeile auf der Sichtseite
     for m in merkmale:
         dazu(m)
     if _ein(p.ursprungsland):
-        dazu(f"{t['ursprung']} {_ein(p.ursprungsland)}")
+        mit_label(t["ursprung"], _ein(p.ursprungsland))
     # (c) Zuordnung beim Kunden
     if _ein(p.bestellposition):
-        dazu(f"{t['bestellpos']} {_ein(p.bestellposition)}")
+        mit_label(t["bestellpos"], _ein(p.bestellposition))
     if _ein(p.buchungsreferenz):
-        dazu(f"{t['kostenstelle']} {_ein(p.buchungsreferenz)}")
+        mit_label(t["kostenstelle"], _ein(p.buchungsreferenz))
     if _ein(p.objektkennung):
-        dazu(f"{t['objekt']} {_ein(p.objektkennung)}")
+        mit_label(t["objekt"], _ein(p.objektkennung))
     von, bis = p.leistung_von, p.leistung_bis
     if von and bis:
-        dazu(f"{t['zeitraum']} {datum(von)} – {datum(bis)}")
+        mit_label(t["zeitraum"], f"{datum(von)} – {datum(bis)}")
     elif von:
-        dazu(f"{t['zeitraum']} {t['ab']} {datum(von)}")
+        mit_label(t["zeitraum"], f"{t['ab']} {datum(von)}")
     elif bis:
-        dazu(f"{t['zeitraum']} {t['bis']} {datum(bis)}")
+        mit_label(t["zeitraum"], f"{t['bis']} {datum(bis)}")
     # (d) Hinweis
     if _ein(p.notiz):
-        dazu(f"{t['hinweis']} {_ein(p.notiz)}")
+        mit_label(t["hinweis"], _ein(p.notiz))
     # (e) Preis: Listenpreis/Nachlass, Rabatt/Zuschlag
     if p.preisrabatt:
         dazu(
