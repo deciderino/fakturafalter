@@ -343,3 +343,10 @@ Nötig sind Name, Strasse, PLZ, Ort, IBAN und USt-IdNr. **oder** Steuernummer; d
 Freiwillig ist auch eine Spalte **Adresszusatz** (BT-36, Adresszeile 2; auch „Zusatz“ oder „Adresszeile 2“).
 Gängige Schreibweisen der Spaltennamen werden erkannt (z. B. „Firma“, „Straße“, „USt-Id“, „Mail“).
 Beispiel: `beispiele/industrie/absender-normteile.csv` (erfunden).
+
+## Status
+
+- *unterstützt:* eine Zeile je Position, Blöcke mit eigener Kopfzeile, Satzart-Spalte, Festbreite, Skonto in zwei Stufen (maschinenlesbar in BT-20).
+- *geplant:* Anlagen aus der CSV, Abschlags-, Teil- und Schlussrechnungen.
+- *nicht unterstützt:* OCR, Layout-Erkennung ohne Vorlage.
+

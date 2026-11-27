@@ -131,6 +131,8 @@ Vorlage muss zum Layout passen, und die Ergebnisse solltest du kontrollieren. De
 ## Geplante Funktionen
 
 - **Textdatei als Eingang**, etwa ein Rechnungsdokument aus Word oder einer anderen Textverarbeitung.
+- *geplant:* Anlagen aus der CSV (eingebettete Dateien), Abschlags-, Teil- und Schlussrechnungen.
+- *nicht unterstützt:* OCR (reine Scans ohne Textebene), Layout-Erkennung ohne Vorlage.
 
 ## Datenschutz und Netz
 
