@@ -1,7 +1,10 @@
-# Layout-Vorlage (Layouteditor, Fakturafalter 0.7.0) – alle Daten fiktiv.
+# Layout-Vorlage (Layouteditor, Layoutformat 2 ab Fakturafalter 1.0.0-rc2) – alle Daten fiktiv.
 # Einsetzen als Block „layout:“ in konfiguration.yaml; Pfade relativ zur Konfiguration.
+# Das Briefpapier zeigt schon den Firmennamen (briefpapier_enthaelt: [name]); Absender und Fußzeile drucken
+# deshalb nur noch Anschrift, Steuer-, Register-, Bank- und Kontaktangaben. Layoutformat 1 (bis 1.0.0-rc1) wird
+# abgelehnt und muss im Editor neu eingerichtet werden.
 layout:
-  version: 1
+  version: 2
   raster: 5.0
   raster_an: true
   logo: layout/logo.png
@@ -22,6 +25,9 @@ layout:
         hoehe: 20.0
         schrift: 9.0
         ausrichtung: links
+        sichtbar: true
+        angaben:
+        - anschrift
       empfaenger:
         x: 115.0
         y: 42.0
@@ -29,6 +35,8 @@ layout:
         hoehe: 40.0
         schrift: 10.0
         ausrichtung: links
+        angaben:
+        - ruecksendezeile
       kopf:
         x: 20.0
         y: 42.0
@@ -72,6 +80,14 @@ layout:
         hoehe: 12.0
         schrift: 7.0
         ausrichtung: links
+        sichtbar: true
+        angaben:
+        - anschrift
+        - register
+        - ust_id
+        - steuernummer
+        - bank
+        - kontakt
     felder:
     - art: text
       kennung: text1
@@ -97,6 +113,8 @@ layout:
       ebene: 4
       datei: layout/logo.png
     briefpapier: layout/briefpapier-seite1.pdf
+    briefpapier_enthaelt:
+    - name
   folgeseite:
     bausteine:
       logo:
@@ -114,6 +132,9 @@ layout:
         hoehe: 20.0
         schrift: 9.0
         ausrichtung: links
+        sichtbar: true
+        angaben:
+        - anschrift
       kopf:
         x: 20.0
         y: 36.0
@@ -157,4 +178,14 @@ layout:
         hoehe: 12.0
         schrift: 7.0
         ausrichtung: links
+        sichtbar: true
+        angaben:
+        - anschrift
+        - register
+        - ust_id
+        - steuernummer
+        - bank
+        - kontakt
     briefpapier: layout/briefpapier-folgeseite.pdf
+    briefpapier_enthaelt:
+    - name

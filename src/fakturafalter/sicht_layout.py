@@ -23,7 +23,7 @@ from reportlab.pdfbase.pdfmetrics import stringWidth
 from reportlab.pdfgen import canvas
 
 from . import layout as lay
-from . import zahlungsziel
+from . import platzhalter, zahlungsziel
 from .modell import Rechnung
 from .sicht import (
     GESAMT_RECHTS,
@@ -157,19 +157,24 @@ def _teile(*t: str) -> str:
     return " · ".join(x.strip() for x in t if x and x.strip())
 
 
-def _absender(r: Rechnung) -> list[Zeile]:
+_ALLE = ("name", "anschrift", "ust_id", "steuernummer", "register", "bank", "kontakt", "ruecksendezeile")
+
+
+def _absender(r: Rechnung, angaben=_ALLE) -> list[Zeile]:
     v = r.verkaeufer
-    return [
-        Zeile(v.name, True, 16 / 9),
-        Zeile(_teile(v.anschrift.strasse, f"{v.anschrift.plz} {v.anschrift.ort}")),
-    ]
+    out = []
+    if "name" in angaben:
+        out.append(Zeile(v.name, True, 16 / 9))
+    if "anschrift" in angaben:
+        out.append(Zeile(_teile(v.anschrift.strasse, f"{v.anschrift.plz} {v.anschrift.ort}")))
+    return out
 
 
-def _empfaenger(r: Rechnung) -> list[Zeile]:
+def _empfaenger(r: Rechnung, ruecksendezeile: bool = True) -> list[Zeile]:
     v, k = r.verkaeufer, r.kaeufer
     ruecksende = f"{v.name}, {v.anschrift.strasse}, {v.anschrift.plz} {v.anschrift.ort}"
     return (
-        [Zeile(ruecksende, False, 0.7)]
+        ([Zeile(ruecksende, False, 0.7)] if ruecksendezeile else [])
         + [
             Zeile(t)
             for t in (
@@ -340,24 +345,34 @@ def _hinweise(r: Rechnung, sprache: str | None) -> list[Zeile]:
     ]
 
 
-def _fusszeile(r: Rechnung, mit_bank: bool) -> list[Zeile]:
+def _fusszeile(r: Rechnung, mit_bank: bool, angaben=_ALLE) -> list[Zeile]:
     v, z = r.verkaeufer, r.zahlung
+    a = set(angaben)
+    mit_bank = mit_bank and "bank" in a
     iban = " ".join(z.iban[i : i + 4] for i in range(0, len(z.iban or ""), 4))
-    kontakt = _teile(v.kontakt_name, v.kontakt_telefon, v.kontakt_email)
-    return [
+    kontakt = _teile(v.kontakt_name, v.kontakt_telefon, v.kontakt_email) if "kontakt" in a else ""
+    out = [
         Zeile(
-            _teile(v.name, v.anschrift.strasse, f"{v.anschrift.plz} {v.anschrift.ort}", v.register)
+            _teile(
+                v.name if "name" in a else "",
+                v.anschrift.strasse if "anschrift" in a else "",
+                f"{v.anschrift.plz} {v.anschrift.ort}" if "anschrift" in a else "",
+                v.register if "register" in a else "",
+            )
         ),
         Zeile(
             _teile(
-                f"USt-IdNr. {v.ust_id}" if v.ust_id else "",
-                f"Steuernr. {v.steuernummer}" if v.steuernummer else "",
+                f"USt-IdNr. {v.ust_id}" if v.ust_id and "ust_id" in a else "",
+                f"Steuernr. {v.steuernummer}" if v.steuernummer and "steuernummer" in a else "",
                 f"IBAN {iban}" if iban and mit_bank else "",
                 f"BIC {z.bic}" if z.bic and mit_bank else "",
             )
         ),
         Zeile(f"Kontakt: {kontakt}" if kontakt else ""),
     ]
+    if a >= set(lay.ANGABEN_JE["fusszeile"]):
+        return out  # alle Angaben: genau wie bis rc1
+    return [x for x in out if x.text]
 
 
 # ---------------------------------------------------------------- Positionstabelle
@@ -604,16 +619,19 @@ def _seite(
             else:
                 _bild(c, e, p, bericht)
         elif e.art == "text":
-            _textblock(c, e, [Zeile(t) for t in e.text.splitlines()], bericht, kuerzen=True)
+            text = platzhalter.ersetzen(e.text, r)  # {Spalte}/{BT-xx} (rc2), fehlender Wert = leer
+            _textblock(c, e, [Zeile(t) for t in text.splitlines()], bericht, kuerzen=True)
         elif e.art == "zahlung":
             _textblock(c, e, _zahlung(r, sprache), bericht, kuerzen=True)
         elif e.art == "hinweise":
             _textblock(c, e, _hinweise(r, sprache), bericht, kuerzen=True)
         elif e.art == "absender":
-            _textblock(c, e, _absender(r), bericht)
+            zeilen_a = _absender(r, s.gedruckt(e))
+            if zeilen_a:
+                _textblock(c, e, zeilen_a, bericht)
         elif e.art == "empfaenger":
             if nr == 1:
-                _textblock(c, e, _empfaenger(r), bericht)
+                _textblock(c, e, _empfaenger(r, "ruecksendezeile" in (e.angaben or ())), bericht)
         elif e.art == "kopf":
             _kopf(c, e, r, nr, seiten, bericht)
         elif e.art == "positionen":
@@ -625,7 +643,9 @@ def _seite(
             )  # § 14 Abs. 4 Nr. 7 UStG
             _summen(c, e, r, zusatz, bericht)
         elif e.art == "fusszeile":
-            _textblock(c, e, _fusszeile(r, mit_bank=not zahlung_an or not letzte), bericht)
+            zeilen_f = _fusszeile(r, mit_bank=not zahlung_an or not letzte, angaben=tuple(s.gedruckt(e)))
+            if any(z.text for z in zeilen_f):
+                _textblock(c, e, zeilen_f, bericht)
 
 
 def erzeugen(

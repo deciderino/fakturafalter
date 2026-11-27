@@ -58,13 +58,11 @@ def test_editor_aufbau_schloss_und_klickziele(editor, qapp):
     )
     for i in range(w.liste.count()):
         it = w.liste.item(i)
-        pflicht = it.text() in (
-            "Absender",
+        pflicht = it.text() in (  # rc2: Absender und Fußzeile ohne Schloss (ausblendbar)
             "Empfängeranschrift",
             "Rechnungskopf",
             "Positionstabelle",
             "Summenblock",
-            "Fußzeile",
         )
         assert bool(it.flags() & Qt.ItemFlag.ItemIsUserCheckable) is not pflicht, it.text()
     assert all(
@@ -112,7 +110,7 @@ def test_eigene_felder_ebenen_loeschen(editor, qapp, tmp_path):
     assert t.text == "Grüße aus dem Test"
     frei = lambda: [
         x.art
-        for x in sorted((x for x in w.seite.elemente() if not x.pflicht), key=lambda x: x.ebene)
+        for x in sorted((x for x in w.seite.elemente() if not x.oben), key=lambda x: x.ebene)
     ]
     assert frei()[-1] == "text"
     w.ebene(-1)
@@ -121,7 +119,7 @@ def test_eigene_felder_ebenen_loeschen(editor, qapp, tmp_path):
     w.ebene(+1)  # schon ganz vorn: Toast, keine Änderung
     assert frei()[-1] == "text"
     z = [i.e.art for i in sorted(w._items, key=lambda i: i.zValue())]
-    assert set(z[-len(layout.PFLICHT) :]) == layout.PFLICHT  # Pflicht bleibt oben
+    assert set(z[-len(layout.OBEN) :]) == layout.OBEN  # Absender, Fußzeile, Pflicht bleiben oben
     from PIL import Image
 
     Image.new("RGB", (60, 30), (200, 30, 30)).save(tmp_path / "siegel.png")

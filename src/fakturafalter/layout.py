@@ -1,16 +1,23 @@
 # SPDX-License-Identifier: Apache-2.0
 # Copyright 2026 Fakturafalter-Mitwirkende
-"""Layout-Vorlage für den neu erzeugten Sichtteil (Layouteditor, seit 0.7.0).
+"""Layout-Vorlage für den neu erzeugten Sichtteil (Layouteditor, seit 0.7.0; Layoutformat 2 ab 1.0.0-rc2).
 
-Eine Vorlage beschreibt zwei A4-Seiten (Seite 1 und Folgeseiten) mit festen Bausteinen, eigenen Text- und
-Bildfeldern und optional einem Briefpapier-PDF als Hintergrund. Gespeichert wird sie als Block ``layout`` in der
-Konfiguration – beim aktiven Absender oben in der Datei, bei gemerkten Absendern im jeweiligen Eintrag von
-``absender_profile``. Ohne Block gilt das bisherige feste Layout unverändert (``sicht.erzeugen`` ohne Vorlage).
+Eine Vorlage beschreibt zwei A4-Seiten (Seite 1 und Folgeseiten) mit Bausteinen, eigenen Text- und Bildfeldern und
+optional einem Briefpapier-PDF als Hintergrund. Gespeichert wird sie als Block ``layout`` in der Konfiguration – beim
+aktiven Absender oben in der Datei, bei gemerkten Absendern im jeweiligen Eintrag von ``absender_profile``. Ohne
+Block gilt das bisherige feste Layout unverändert (``sicht.erzeugen`` ohne Vorlage).
 
 Maße in mm, Ursprung oben links (wie im Editor). Die XML-Rechnung bleibt davon unberührt.
 
-Pflichtangaben nach § 14 Abs. 4 UStG (Absender, Empfänger, Rechnungskopf, Positionen, Summen mit Steuer,
-Fußzeile mit USt-IdNr./Steuernummer) lassen sich nicht ausblenden und liegen immer über allen anderen Ebenen.
+Layoutformat 2 (1.0.0-rc2):
+- Empfänger, Rechnungskopf, Positionen und Summen bleiben ganze Bausteine mit Schloss (``PFLICHT``).
+- Absender und Fußzeile sind ausblendbar; je Baustein wählst du die Verkäufer-Angaben (``angaben``), am Briefpapier
+  hakst du an, was schon draufsteht (``briefpapier_enthaelt`` – das druckt Fakturafalter auf der Seite nicht noch
+  einmal). Die Empfängeranschrift hat einen Schalter für die Rücksendezeile.
+- Statt fester Pflichtbausteine prüft :func:`pflicht_pruefen`, ob jede Pflichtangabe nach § 14 Abs. 4 UStG
+  mindestens einmal auf der Rechnung steht (fehlend = Fehler, doppelt = Hinweis).
+- Layouts im Format 1 (oder ohne Version) werden abgelehnt (:class:`LayoutAlt`), ohne Migration; die Datei bleibt
+  unangetastet.
 """
 from __future__ import annotations
 
@@ -24,10 +31,11 @@ from pathlib import Path
 
 log = logging.getLogger("fakturafalter")
 
-VERSION = 1
+VERSION = 2
 SEITE_B, SEITE_H = 210.0, 297.0
 BAUSTEINE = ("logo", "absender", "empfaenger", "kopf", "positionen", "summen", "zahlung", "hinweise", "fusszeile")
-PFLICHT = frozenset({"absender", "empfaenger", "kopf", "positionen", "summen", "fusszeile"})
+PFLICHT = frozenset({"empfaenger", "kopf", "positionen", "summen"})  # Schloss: ganze Bausteine, immer sichtbar
+OBEN = PFLICHT | {"absender", "fusszeile"}  # liegen über allen freien Ebenen (wie bis rc1)
 NAMEN = {"logo": "Logo", "absender": "Absender", "empfaenger": "Empfängeranschrift", "kopf": "Rechnungskopf",
          "positionen": "Positionstabelle", "summen": "Summenblock", "zahlung": "Zahlung / Bank",
          "hinweise": "Hinweise", "fusszeile": "Fußzeile", "text": "Textfeld", "bild": "Bildfeld"}
@@ -40,6 +48,23 @@ MIN_MASS = 5.0
 BILD_ENDUNGEN = (".png", ".jpg", ".jpeg")
 ORDNER = "layout"                                   # Bilder/Briefpapier, relativ zur Konfiguration
 
+# Verkäufer-Angaben (Layoutformat 2)
+ANGABEN = ("name", "anschrift", "ust_id", "steuernummer", "register", "bank", "kontakt", "ruecksendezeile")
+ANGABEN_NAMEN = {"name": "Name", "anschrift": "Anschrift", "ust_id": "USt-IdNr.", "steuernummer": "Steuernummer",
+                 "register": "Handelsregister", "bank": "Bank (IBAN/BIC)", "kontakt": "Kontakt",
+                 "ruecksendezeile": "Rücksendezeile"}
+ANGABEN_JE = {
+    "absender": ("name", "anschrift"),
+    "empfaenger": ("ruecksendezeile",),
+    "fusszeile": ("name", "anschrift", "register", "ust_id", "steuernummer", "bank", "kontakt"),
+}
+BRIEFPAPIER_ANGABEN = ("name", "anschrift", "ust_id", "steuernummer", "register", "bank", "kontakt")
+
+_SCHLUESSEL_LAYOUT = {"version", "raster", "raster_an", "logo", "seite1", "folgeseite"}
+_SCHLUESSEL_SEITE = {"bausteine", "felder", "briefpapier", "briefpapier_enthaelt"}
+_SCHLUESSEL_ELEMENT = {"x", "y", "breite", "hoehe", "schrift", "ausrichtung", "sichtbar", "ebene", "text", "datei",
+                       "kennung", "art", "angaben"}
+
 
 @dataclass
 class Element:
@@ -51,18 +76,32 @@ class Element:
     schrift: float = 9.0
     ausrichtung: str = "links"
     sichtbar: bool = True
-    ebene: int = 0                 # nur für nicht vorgeschriebene Bausteine und eigene Felder
-    text: str = ""                 # Textfeld
+    ebene: int = 0                 # nur für freie Bausteine und eigene Felder
+    text: str = ""                 # Textfeld (mit Platzhaltern {Spalte}/{BT-xx})
     datei: str = ""                # Bildfeld (relativ zur Konfiguration)
     kennung: str = ""              # eigene Felder: eindeutig je Seite
+    angaben: list[str] | None = None   # Absender/Empfänger/Fußzeile: gezeigte Verkäufer-Angaben
+
+    def __post_init__(self) -> None:
+        if self.angaben is None and self.art in ANGABEN_JE:
+            self.angaben = list(ANGABEN_JE[self.art])
 
     @property
     def pflicht(self) -> bool:
+        """Schloss: ganzer Baustein, immer sichtbar (Empfänger, Kopf, Positionen, Summen)."""
         return self.art in PFLICHT
+
+    @property
+    def oben(self) -> bool:
+        """Liegt über allen freien Ebenen (Schloss-Bausteine, Absender, Fußzeile)."""
+        return self.art in OBEN
 
     @property
     def eigen(self) -> bool:
         return self.art in ("text", "bild")
+
+    def zeigt(self, angabe: str) -> bool:
+        return self.sichtbar and angabe in (self.angaben or ())
 
     def rahmen(self) -> tuple[float, float, float, float]:
         return self.x, self.y, self.x + self.breite, self.y + self.hoehe
@@ -77,7 +116,10 @@ class Element:
             d["ausrichtung"] = self.ausrichtung
         if not self.pflicht:
             d["sichtbar"] = bool(self.sichtbar)
+        if not self.oben:
             d["ebene"] = int(self.ebene)
+        if self.art in ANGABEN_JE:  # immer vollständig (kein Default-Raten beim nächsten Öffnen)
+            d["angaben"] = [a for a in ANGABEN_JE[self.art] if a in (self.angaben or ())]
         if self.eigen:
             d = {"art": self.art, "kennung": self.kennung, **d}
             if self.art == "text":
@@ -92,16 +134,24 @@ class Seite:
     bausteine: dict[str, Element]
     felder: list[Element] = field(default_factory=list)
     briefpapier: str = ""          # PDF oder (umgewandelt) JPEG/PNG, relativ zur Konfiguration
+    briefpapier_enthaelt: list[str] = field(default_factory=list)   # steht schon auf dem Briefpapier
 
     def elemente(self) -> list[Element]:
         return list(self.bausteine.values()) + list(self.felder)
 
     def zeichenfolge(self) -> list[Element]:
-        """Reihenfolge beim Zeichnen: zuerst nicht vorgeschriebene Bausteine und eigene Felder nach Ebene
-        (stabil), dann alle Pflichtbausteine – die liegen damit immer oben."""
-        frei = [e for e in self.elemente() if not e.pflicht]
+        """Reihenfolge beim Zeichnen: zuerst freie Bausteine und eigene Felder nach Ebene (stabil), dann
+        Absender, Fußzeile und die Schloss-Bausteine – die liegen damit immer oben."""
+        frei = [e for e in self.elemente() if not e.oben]
         frei.sort(key=lambda e: e.ebene)
-        return frei + [e for e in self.bausteine.values() if e.pflicht]
+        return frei + [e for e in self.bausteine.values() if e.oben]
+
+    def im_briefpapier(self, angabe: str) -> bool:
+        return bool(self.briefpapier) and angabe in self.briefpapier_enthaelt
+
+    def gedruckt(self, e: Element) -> list[str]:
+        """Angaben, die der Baustein auf dieser Seite wirklich druckt (ohne das, was das Briefpapier zeigt)."""
+        return [a for a in (e.angaben or ()) if not self.im_briefpapier(a)]
 
 
 @dataclass
@@ -140,6 +190,7 @@ class Vorlage:
                 sd["felder"] = [f.als_dict() for f in s.felder]
             if s.briefpapier:
                 sd["briefpapier"] = s.briefpapier
+                sd["briefpapier_enthaelt"] = [a for a in BRIEFPAPIER_ANGABEN if a in s.briefpapier_enthaelt]
             d[name] = sd
         return d
 
@@ -162,7 +213,8 @@ _STANDARD_EBENE = {"logo": 0, "zahlung": 1, "hinweise": 2}
 
 
 def standard() -> Vorlage:
-    """Startpunkt im Editor: ähnlich dem bisherigen festen Layout, als frei verschiebbare Bausteine."""
+    """Startpunkt im Editor: ähnlich dem bisherigen festen Layout, als frei verschiebbare Bausteine (Format 2,
+    alle Angaben an – optisch wie rc1)."""
     seiten = {}
     for name, bs in _STANDARD.items():
         seiten[name] = Seite({k: Element(k, *bs[k][:4], schrift=bs[k][4], ebene=_STANDARD_EBENE.get(k, 0))
@@ -175,6 +227,38 @@ class LayoutFehler(ValueError):
     """Vorlage unlesbar oder verletzt eine feste Regel (z. B. Pflichtbausteine überlappen)."""
 
 
+class LayoutAlt(LayoutFehler):
+    """Layout im Format 1 (bzw. ohne/mit unbekannter Version): wird abgelehnt, nicht migriert."""
+
+    def __init__(self, gefunden):
+        self.gefunden = gefunden
+        super().__init__(
+            f"Layoutformat {gefunden if gefunden not in (None, '') else 'ohne Angabe'} – dieses Fakturafalter erwartet "
+            f"Layoutformat {VERSION}. Bitte das Layout im Layouteditor neu einrichten (die Datei bleibt unverändert)."
+        )
+
+
+ALT_TITEL = "Dieses Layout passt nicht mehr zu Fakturafalter 1.0"
+ALT_TEXT = (
+    "Das Layout des Absenders „{name}“ wurde mit einer älteren Version eingerichtet ({format}, dieses Fakturafalter "
+    "erwartet Layoutformat 2).\n\n"
+    "Fakturafalter übernimmt es deshalb nicht – die Pflichtangaben und die Briefpapier-Haken haben sich geändert, "
+    "und es gibt keine automatische Übernahme.\n\n"
+    "Was du tun kannst:\n\n"
+    "• Das Layout im Editor neu einrichten. Dein Briefpapier und deine Bilder liegen weiter im Ordner „layout/“, du "
+    "lädst sie dort erneut.\n\n"
+    "• Oder bei der Version 0.9.11 bzw. 1.0.0-rc1 bleiben; dort funktioniert das bisherige Layout weiter.\n\n"
+    "Die Konfiguration bleibt unverändert."
+)
+
+
+def format_text(gefunden) -> str:
+    """„Layoutformat 1“ / „ohne Layoutformat“ – nie nur „Version“ (Verwechslung mit dem Profilformat)."""
+    if gefunden in (None, ""):
+        return "ohne Layoutformat"
+    return f"Layoutformat {gefunden}"
+
+
 def _zahl(d: dict, k: str, alt: float) -> float:
     try:
         return float(d.get(k, alt))
@@ -182,14 +266,32 @@ def _zahl(d: dict, k: str, alt: float) -> float:
         raise LayoutFehler(f"„{k}“ ist keine Zahl: {d.get(k)!r}") from None
 
 
+def _unbekannt(d: dict, erlaubt: set, wo: str) -> None:
+    fremd = sorted(str(k) for k in d if k not in erlaubt)
+    if fremd:
+        raise LayoutFehler(f"{wo}: unbekannter Schlüssel {', '.join(fremd)}")
+
+
 def _element(art: str, d: dict, alt: Element | None) -> Element:
     if not isinstance(d, dict):
         raise LayoutFehler(f"Baustein „{art}“: Angaben fehlen")
+    _unbekannt(d, _SCHLUESSEL_ELEMENT, f"Baustein „{art}“")
     a = alt or Element(art, 20, 20, 50, 20)
+    angaben = None
+    if art in ANGABEN_JE:
+        roh = d.get("angaben", list(ANGABEN_JE[art]))
+        if not isinstance(roh, list) or any(str(x) not in ANGABEN_JE[art] for x in roh):
+            raise LayoutFehler(
+                f"Baustein „{art}“: angaben erlaubt nur {', '.join(ANGABEN_JE[art])} (gefunden: {roh!r})"
+            )
+        angaben = [x for x in ANGABEN_JE[art] if x in {str(y) for y in roh}]
+    elif "angaben" in d:
+        raise LayoutFehler(f"Baustein „{art}“: hat keine Angaben-Liste")
     e = Element(art, _zahl(d, "x", a.x), _zahl(d, "y", a.y), _zahl(d, "breite", a.breite), _zahl(d, "hoehe", a.hoehe),
                 schrift=_zahl(d, "schrift", a.schrift), ausrichtung=str(d.get("ausrichtung", a.ausrichtung)),
                 sichtbar=bool(d.get("sichtbar", True)), ebene=int(_zahl(d, "ebene", a.ebene)),
-                text=str(d.get("text") or ""), datei=str(d.get("datei") or ""), kennung=str(d.get("kennung") or ""))
+                text=str(d.get("text") or ""), datei=str(d.get("datei") or ""), kennung=str(d.get("kennung") or ""),
+                angaben=angaben)
     if e.ausrichtung not in AUSRICHTUNG:
         e.ausrichtung = "links"
     if e.pflicht:
@@ -197,20 +299,38 @@ def _element(art: str, d: dict, alt: Element | None) -> Element:
     return e
 
 
+def version_von(d) -> object:
+    return d.get("version") if isinstance(d, dict) else None
+
+
 def aus_dict(d: dict | None, basis: Path | None = None) -> Vorlage | None:
-    """Block ``layout`` -> Vorlage; leer/fehlend -> None (= bisheriges festes Layout). Fehlende Bausteine kommen
-    aus dem Standard (ältere oder von Hand gekürzte Vorlagen laden weiter)."""
+    """Block ``layout`` -> Vorlage; leer/fehlend -> None (= bisheriges festes Layout). Nur Layoutformat 2; ältere
+    Layouts -> :class:`LayoutAlt` (keine Migration). Fehlende Bausteine kommen aus dem Standard."""
     if not d:
         return None
     if not isinstance(d, dict):
         raise LayoutFehler("Block „layout“ ist keine Zuordnung")
-    if int(d.get("version", VERSION)) > VERSION:
-        raise LayoutFehler(f"Layout-Version {d.get('version')} ist neuer als dieses Programm")
+    ver = d.get("version")
+    try:
+        ver_i = int(ver)
+    except (TypeError, ValueError):
+        raise LayoutAlt(ver) from None
+    if ver_i > VERSION:
+        raise LayoutFehler(f"Layoutformat {ver} ist neuer als dieses Programm (Layoutformat {VERSION})")
+    if ver_i < VERSION:
+        raise LayoutAlt(ver)
+    _unbekannt(d, _SCHLUESSEL_LAYOUT, "Layout")
     std = standard()
     seiten = {}
     for name in SEITEN:
         sd = d.get(name) or {}
+        if not isinstance(sd, dict):
+            raise LayoutFehler(f"„{name}“ ist keine Zuordnung")
+        _unbekannt(sd, _SCHLUESSEL_SEITE, "Seite 1" if name == "seite1" else "Folgeseite")
         bs_roh = sd.get("bausteine") or {}
+        fremd = sorted(str(k) for k in bs_roh if k not in BAUSTEINE)
+        if fremd:
+            raise LayoutFehler(f"Unbekannter Baustein {', '.join(fremd)}")
         bs = {}
         for k in BAUSTEINE:
             alt = std.seite(name).bausteine.get(k)
@@ -225,16 +345,31 @@ def aus_dict(d: dict | None, basis: Path | None = None) -> Vorlage | None:
             e = _element(art, f, Element(art, 20, 20, 50, 15, schrift=10))
             e.kennung = e.kennung or f"{art}{i + 1}"
             felder.append(e)
-        seiten[name] = Seite(bs, felder, str(sd.get("briefpapier") or ""))
+        enth = sd.get("briefpapier_enthaelt") or []
+        if not isinstance(enth, list) or any(str(x) not in BRIEFPAPIER_ANGABEN for x in enth):
+            raise LayoutFehler(
+                f"briefpapier_enthaelt erlaubt nur {', '.join(BRIEFPAPIER_ANGABEN)} (gefunden: {enth!r})"
+            )
+        enth = [a for a in BRIEFPAPIER_ANGABEN if a in {str(x) for x in enth}]
+        seiten[name] = Seite(bs, felder, str(sd.get("briefpapier") or ""), enth)
     return Vorlage(seiten["seite1"], seiten["folgeseite"], logo=str(d.get("logo") or ""),
                    raster=_zahl(d, "raster", 5.0), raster_an=bool(d.get("raster_an", True)), basis=basis)
+
+
+def traegt_pflicht(e: Element) -> bool:
+    """Baustein mit Pflichtangaben (darf nicht verdeckt werden): Schloss-Bausteine sowie sichtbare Absender/Fußzeile
+    mit mindestens einer Angabe."""
+    if e.pflicht:
+        return True
+    return e.art in ("absender", "fusszeile") and e.sichtbar and bool(e.angaben)
 
 
 def pruefen(v: Vorlage, t=lambda s: s) -> list[str]:
     """Feste Regeln; leer = in Ordnung. ``t`` übersetzt die Texte (Oberfläche), Standard Deutsch.
     - Alles liegt auf der Seite und ist mindestens 5 mm groß, Schrift 4–40 pt.
     - Die Positionstabelle ist mindestens 120 mm breit und 30 mm hoch (Spalten bleiben lesbar).
-    - Pflichtbausteine überlappen sich nicht (sonst wäre eine Pflichtangabe verdeckt/unlesbar)."""
+    - Bausteine mit Pflichtangaben überlappen sich nicht (sonst wäre eine Pflichtangabe verdeckt/unlesbar).
+    Ob jede Pflichtangabe auf der Rechnung steht, prüft :func:`pflicht_pruefen` (braucht das Absenderprofil)."""
     fehler = []
     for name in SEITEN:
         s = v.seite(name)
@@ -251,7 +386,7 @@ def pruefen(v: Vorlage, t=lambda s: s) -> list[str]:
         tab = s.bausteine["positionen"]
         if tab.breite < 120 - 0.05 or tab.hoehe < 30 - 0.05:
             fehler.append(t("{seite}: Positionstabelle muss mindestens 120 × 30 mm groß sein").format(seite=titel))
-        pfl = [e for e in s.bausteine.values() if e.pflicht]
+        pfl = [e for e in s.bausteine.values() if traegt_pflicht(e)]
         for i, a in enumerate(pfl):
             for b in pfl[i + 1:]:
                 if ueberlappen(a, b):
@@ -260,17 +395,138 @@ def pruefen(v: Vorlage, t=lambda s: s) -> list[str]:
     return fehler
 
 
+# ---------------------------------------------------------------- Pflichtangaben (§ 14 Abs. 4 UStG)
+@dataclass
+class Pflichtbefund:
+    fehler: list[str] = field(default_factory=list)    # blockiert Speichern / Erzeugen
+    doppelt: list[str] = field(default_factory=list)   # Hinweis, Speichern möglich
+    hinweise: list[str] = field(default_factory=list)  # ruhige Hinweise (z. B. Folgeseite ohne Verkäufer)
+
+    @property
+    def ok(self) -> bool:
+        return not self.fehler
+
+
+_ANGABE_SATZ = {
+    "name": "Der Verkäufername",
+    "anschrift": "Die Anschrift des Verkäufers",
+    "steuer": "Die USt-IdNr. bzw. Steuernummer",
+    "ust_id": "Die USt-IdNr.",
+    "steuernummer": "Die Steuernummer",
+    "register": "Der Handelsregistereintrag",
+    "bank": "Die Bankverbindung (IBAN)",
+}
+
+
+def _quellen(s: Seite, angabe: str, t) -> list[str]:
+    """Wo eine Angabe auf dieser Seite steht (Briefpapier und sichtbare Bausteine, ohne Zahlung)."""
+    out = []
+    if s.im_briefpapier(angabe):
+        out.append(t("Briefpapier"))
+    for k in ("absender", "fusszeile"):
+        e = s.bausteine.get(k)
+        if e is not None and e.zeigt(angabe):
+            out.append(t(NAMEN[k]))
+    return out
+
+
+def _bank_einmal(s1: Seite, sf: Seite) -> bool:
+    """Bank (IBAN) steht auf jeder Rechnung: einseitig (Seite 1 ist die letzte) und mehrseitig."""
+    z1, zf = s1.bausteine.get("zahlung"), sf.bausteine.get("zahlung")
+    seite1 = bool(_quellen(s1, "bank", str))
+    einseitig = seite1 or bool(z1 and z1.sichtbar)
+    mehrseitig = seite1 or bool(_quellen(sf, "bank", str)) or bool(zf and zf.sichtbar)
+    return einseitig and mehrseitig
+
+
+def pflicht_pruefen(v: Vorlage, verkaeufer=None, zahlung=None, t=lambda s: s) -> Pflichtbefund:
+    """Steht jede Pflichtangabe mindestens einmal auf der Rechnung? Maßstab ist das Absenderprofil
+    (``verkaeufer``: modell.Partei, ``zahlung``: modell.Zahlung – welche Werte dort wirklich stehen).
+
+    - Seite 1: Name, Anschrift, USt-IdNr. oder Steuernummer (die, die im Profil steht), Handelsregister nur ohne
+      USt-IdNr. (wenn eingetragen) – im Briefpapier oder in einem sichtbaren Baustein.
+    - Bank nur bei Überweisung mit IBAN im Profil, rechnungsweit (Zahlung, Fußzeile oder Briefpapier).
+    - Folgeseite: Rechnungskopf und Positionen; ohne Verkäufer nur ein ruhiger Hinweis.
+    - Doppelt (Briefpapier und Baustein oder zwei Bausteine): Hinweis."""
+    b = Pflichtbefund()
+    s1, sf = v.seite1, v.folgeseite
+    ust = bool(getattr(verkaeufer, "ust_id", "")) if verkaeufer is not None else True
+    stnr = bool(getattr(verkaeufer, "steuernummer", "")) if verkaeufer is not None else False
+    reg = bool(getattr(verkaeufer, "register", "")) if verkaeufer is not None else False
+    seite = t("Seite 1")
+
+    def fehlt(satz: str) -> None:
+        b.fehler.append(
+            t("{seite}: {angabe} fehlt. Zeige die Angabe in einem Baustein oder hake am Briefpapier an, dass sie "
+              "schon drauf ist.").format(seite=seite, angabe=t(satz))
+        )
+
+    for a in ("name", "anschrift"):
+        if not _quellen(s1, a, t):
+            fehlt(_ANGABE_SATZ[a])
+    # USt-IdNr. oder Steuernummer – passend zum Profil
+    if ust and stnr:
+        if not (_quellen(s1, "ust_id", t) or _quellen(s1, "steuernummer", t)):
+            fehlt(_ANGABE_SATZ["steuer"])
+    elif ust:
+        if not _quellen(s1, "ust_id", t):
+            fehlt(_ANGABE_SATZ["ust_id"])
+    elif stnr:
+        if not _quellen(s1, "steuernummer", t):
+            fehlt(_ANGABE_SATZ["steuernummer"])
+    else:  # Profil ohne beides: wenigstens eine der beiden Angaben muss gewählt sein
+        if not (_quellen(s1, "ust_id", t) or _quellen(s1, "steuernummer", t)):
+            fehlt(_ANGABE_SATZ["steuer"])
+    if not ust and reg and not _quellen(s1, "register", t):
+        fehlt(_ANGABE_SATZ["register"])
+    z = zahlung
+    bank_pflicht = bool(z is not None and getattr(z, "iban", "") and getattr(z, "art", "") != "59"
+                        and not getattr(z, "mandat", ""))
+    if bank_pflicht and not _bank_einmal(s1, sf):
+        b.fehler.append(
+            t("Die Bankverbindung (IBAN) fehlt auf mindestens einer Seite, auf der die Zahlung steht. Zeige sie in "
+              "„Zahlung / Bank“ oder in der Fußzeile, oder hake am Briefpapier an, dass sie schon drauf ist.")
+        )
+    # Folgeseite: Kopf und Positionen (Schloss-Bausteine – hier nur zur Sicherheit)
+    for k in ("kopf", "positionen", "summen"):
+        e = sf.bausteine.get(k)
+        if e is None or not e.sichtbar:
+            b.fehler.append(t("Folgeseite: {name} fehlt.").format(name=t(NAMEN[k])))
+    if not _quellen(sf, "name", t):
+        b.hinweise.append(t("Folgeseite: Der Verkäufer steht hier nicht – das ist in Ordnung, er steht auf Seite 1."))
+    # Doppeltes
+    for name in SEITEN:
+        s = v.seite(name)
+        titel = t("Seite 1") if name == "seite1" else t("Folgeseite")
+        for a in ("name", "anschrift", "ust_id", "steuernummer", "register", "bank"):
+            q = _quellen(s, a, t)
+            if len(q) > 1:
+                satz = t(_ANGABE_SATZ[a])
+                if s.im_briefpapier(a):
+                    b.doppelt.append(
+                        t("{seite}: {angabe} steht im Briefpapier und ist zusätzlich in {wo} angehakt – gedruckt wird "
+                          "sie dort nicht noch einmal.").format(seite=titel, angabe=satz, wo=", ".join(q[1:]))
+                    )
+                else:
+                    b.doppelt.append(
+                        t("{seite}: {angabe} steht doppelt ({wo}).").format(seite=titel, angabe=satz, wo=" und ".join(q))
+                    )
+    return b
+
+
 def ueberlappen(a: Element, b: Element, toleranz: float = 0.05) -> bool:
     ax0, ay0, ax1, ay1 = a.rahmen()
     bx0, by0, bx1, by1 = b.rahmen()
     return ax0 < bx1 - toleranz and bx0 < ax1 - toleranz and ay0 < by1 - toleranz and by0 < ay1 - toleranz
 
 
-def laden(roh: dict | None, basis: Path | None) -> Vorlage | None:
-    """Wie :func:`aus_dict`, verletzte Regeln -> LayoutFehler."""
+def laden(roh: dict | None, basis: Path | None, verkaeufer=None, zahlung=None) -> Vorlage | None:
+    """Wie :func:`aus_dict`, verletzte Regeln -> LayoutFehler. Mit ``verkaeufer`` auch die Pflichtangaben."""
     v = aus_dict(roh, basis)
     if v is not None:
         f = pruefen(v)
+        if verkaeufer is not None:
+            f += pflicht_pruefen(v, verkaeufer, zahlung).fehler
         if f:
             raise LayoutFehler("; ".join(f))
     return v

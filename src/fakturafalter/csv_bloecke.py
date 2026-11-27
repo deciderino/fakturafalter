@@ -830,6 +830,7 @@ def lesen(text_zeilen: list[list[str]], profil: dict, pfad: Path, start: int) ->
     kopf: dict = {}
     positionen: list[dict] = []
     fehler: list = []
+    spalten: dict[str, str] = {}
     notiz_teile: list[str] = []
     gesehen_positionen = 0
     nummern: set[str] = set()
@@ -916,6 +917,9 @@ def lesen(text_zeilen: list[list[str]], profil: dict, pfad: Path, start: int) ->
                 felder = {**felder, **(pdef.get("felder") or {})}
             for zeile, werte in bl["daten"]:
                 row = zeile_zu_row(werte, bl["kopf"])
+                for sp, w in row.items():  # Rohwerte für Platzhalter im Layout (rc2)
+                    if sp and str(w or "").strip():
+                        spalten.setdefault(str(sp).strip(), str(w).strip())
                 roh = feldsatz(row, felder, zeile, fehler, profil, pfad, block=name)
                 kopf_mergen(kopf, roh, zeile, fehler, typ=name)
                 if "BT-1" in roh and roh["BT-1"][0] not in (None, ""):
@@ -943,7 +947,15 @@ def lesen(text_zeilen: list[list[str]], profil: dict, pfad: Path, start: int) ->
     for k in [x for x in kopf if str(x).startswith("_typ_")]:
         kopf.pop(k, None)
     key = str((kopf.get("BT-1") or ("",))[0] or "")
-    return OrderedDict([(key, (kopf, positionen, fehler))])
+    out = Gruppen([(key, (kopf, positionen, fehler))])
+    out.spalten = {key: spalten}
+    return out
+
+
+class Gruppen(OrderedDict):
+    """{schlüssel: (kopf, positionen, fehler)} plus ``spalten``: {schlüssel: {Spalte: Rohwert der Kopfzeile}}."""
+
+    spalten: dict
 
 
 def _positionsblock(

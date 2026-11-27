@@ -961,6 +961,24 @@ def _tabelle_ins_profil(p: dict, fmt: Format) -> None:
         p["datei"]["startzeile"] = int(fmt.startzeile or 1)
 
 
+def profil_spalten(profil: dict) -> list[str]:
+    """Spaltennamen eines CSV-/Tabellenprofils für die Platzhalter-Auswahl: gemerkte Kopfzeile (ab rc2), sonst die
+    zugeordneten Spalten; Blockprofile: Kopfzeilen der Nicht-Positionsblöcke."""
+    from .csv_bloecke import block_wiederholend
+
+    out: list[str] = []
+    d = profil.get("datei") or {}
+    out += [str(x) for x in d.get("spalten") or []]
+    for b in profil.get("bloecke") or []:
+        if isinstance(b, dict) and not block_wiederholend(b):
+            out += [str(x) for x in (b.get("kopf") or b.get("kopfzeile") or [])]
+            out += [str(v.get("spalte")) for v in (b.get("felder") or {}).values() if isinstance(v, dict) and v.get("spalte")]
+    for v in ((profil.get("felder") or {}).get("kopf") or {}).values():
+        if isinstance(v, dict) and v.get("spalte"):
+            out.append(str(v["spalte"]))
+    return [x for x in dict.fromkeys(s.strip() for s in out) if x]
+
+
 def profil_bauen(
     name: str,
     datei: Path,
@@ -1019,6 +1037,8 @@ def profil_bauen(
         "mappings": {"einheiten": eh, "steuer": st},
     }
     _tabelle_ins_profil(p, fmt)
+    # alle Spaltennamen (rc2): Auswahl der Platzhalter im Layouteditor, auch nicht zugeordnete Spalten
+    p["datei"]["spalten"] = [c for c in dict.fromkeys(str(x).strip() for x in fmt.kopf) if c]
     if textzeile:
         p["aufbau"]["textzeile"] = textzeile
     if einheit_fehlt_stueck:

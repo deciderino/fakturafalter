@@ -122,7 +122,7 @@ def test_beispielvorlage_laden_speichern(tmp_path):
 def test_leer_heisst_standardlayout_und_fehlende_bausteine_aus_dem_standard():
     assert layout.aus_dict(None) is None and layout.aus_dict({}) is None
     v = layout.aus_dict(
-        {"seite1": {"bausteine": {"logo": {"x": 30, "y": 10, "breite": 40, "hoehe": 20}}}}
+        {"version": 2, "seite1": {"bausteine": {"logo": {"x": 30, "y": 10, "breite": 40, "hoehe": 20}}}}
     )
     std = layout.standard()
     assert (v.seite1.bausteine["logo"].x, v.seite1.bausteine["logo"].y) == (30, 10)
@@ -133,7 +133,7 @@ def test_leer_heisst_standardlayout_und_fehlende_bausteine_aus_dem_standard():
 
 def test_pflichtbausteine_bleiben_sichtbar_auch_wenn_die_datei_anderes_sagt():
     v = layout.aus_dict(
-        {"seite1": {"bausteine": {"summen": {"sichtbar": False}, "logo": {"sichtbar": False}}}}
+        {"version": 2, "seite1": {"bausteine": {"summen": {"sichtbar": False}, "logo": {"sichtbar": False}}}}
     )
     assert v.seite1.bausteine["summen"].sichtbar is True
     assert v.seite1.bausteine["logo"].sichtbar is False
@@ -143,8 +143,13 @@ def test_pflichtbausteine_bleiben_sichtbar_auch_wenn_die_datei_anderes_sagt():
     "roh, teil",
     [
         ({"version": 99}, "neuer"),
-        ({"seite1": {"felder": [{"art": "video"}]}}, "unbekannt"),
-        ({"seite1": {"bausteine": {"kopf": {"x": "links"}}}}, "keine Zahl"),
+        ({"version": 2, "seite1": {"felder": [{"art": "video"}]}}, "unbekannt"),
+        ({"version": 2, "seite1": {"bausteine": {"kopf": {"x": "links"}}}}, "keine Zahl"),
+        ({"version": 2, "seite1": {"bausteine": {"kopf": {"angaben": ["name"]}}}}, "keine Angaben-Liste"),
+        ({"version": 2, "seite1": {"bausteine": {"absender": {"angaben": ["bank"]}}}}, "angaben erlaubt"),
+        ({"version": 2, "seite1": {"briefpapier_enthaelt": ["logo"]}}, "briefpapier_enthaelt"),
+        ({"version": 2, "farbe": "rot"}, "unbekannter Schlüssel farbe"),
+        ({"version": 2, "seite1": {"bausteine": {"stempel": {}}}}, "Unbekannter Baustein"),
     ],
 )
 def test_unlesbare_vorlage(roh, teil):
@@ -179,8 +184,8 @@ def test_zeichenfolge_ebenen_und_pflicht_oben():
     s.bausteine["logo"].ebene = 10
     folge = [e.art for e in s.zeichenfolge()]
     assert folge.index("logo") > folge.index("bild")  # höhere Ebene später
-    letzte = folge[-len(layout.PFLICHT) :]
-    assert set(letzte) == layout.PFLICHT  # Pflicht ganz oben
+    letzte = folge[-len(layout.OBEN) :]
+    assert set(letzte) == layout.OBEN  # Schloss-Bausteine, Absender und Fußzeile ganz oben
 
 
 def test_vorlage_je_absender_profil():
@@ -207,13 +212,18 @@ def test_bestehende_konfiguration_ohne_layout_unveraendert(konfig):
     )  # fester Weg wie bis 0.6.2
 
 
-def test_ungueltige_vorlage_in_der_konfiguration_gibt_standard_und_hinweis(konfig):
+def test_ungueltige_vorlage_haelt_die_rechnung_an_rc2(konfig):
+    """rc2: kein stilles Ausweichen auf das Standardlayout mehr – Zu prüfen mit Grund."""
     v = layout.standard()
     v.seite1.bausteine["summen"].y = v.seite1.bausteine["positionen"].y
     konfig.roh = {**konfig.roh, "layout": v.als_dict()}
     r = beispielrechnung.rechnung()
-    assert pipeline.vorlage_fuer(r, konfig) is None
-    assert any("Standardlayout" in h.text for h in r.hinweise)
+    with pytest.raises(layout.LayoutFehler, match="überlappen"):
+        pipeline.vorlage_fuer(r, konfig)
+    pipeline.layout_vorpruefen(r, konfig)
+    pipeline.layout_vorpruefen(r, konfig)  # mehrfach aufrufbar, ein Hinweis
+    assert r.status == "pruefen"
+    assert [h.text for h in r.hinweise if "Layout-Vorlage" in h.text and "überlappen" in h.text].__len__() == 1
 
 
 # ---------------------------------------------------------------- Renderer

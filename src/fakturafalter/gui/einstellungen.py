@@ -438,6 +438,7 @@ class Einstellungen(QDialog):
             profil=v.name,
             verkaeufer=v,
             zahlung=zahlung_aus(sl.get("zahlung") or {}, kontoinhaber=v.name),
+            spalten=self._eigene_spalten(),
         )
         self._layout_dlg = dlg
         if dlg.exec():
@@ -448,6 +449,26 @@ class Einstellungen(QDialog):
                 sl.pop("layout", None)
             self._absender_liste()
             self.toast("ok", _("Layout übernommen"), _("Mit „Speichern“ unten sichern."))
+
+    def _eigene_spalten(self) -> list[str]:
+        """Nicht zugeordnete Spalten der aktiven CSV-Profile – Auswahl der Platzhalter im Layouteditor (rc2)."""
+        from .. import adapter_csv
+        from .. import csv_einrichtung as ce
+
+        out: list[str] = []
+        for prof in getattr(self.haupt.k, "csv_profile", None) or []:
+            if not isinstance(prof, dict) or prof.get("_fehler") or prof.get("_abgelehnt"):
+                continue
+            try:
+                zugeordnet = adapter_csv._positionsspalten(prof) | {
+                    str(d.get("spalte")).strip()
+                    for d in ((prof.get("felder") or {}).get("kopf") or {}).values()
+                    if isinstance(d, dict) and d.get("spalte")
+                }
+                out += [sp for sp in ce.profil_spalten(prof) if sp not in zugeordnet]
+            except Exception:  # noqa: BLE001,S112 – Auswahl ist nur eine Hilfe
+                continue
+        return list(dict.fromkeys(out))
 
     def _absender_merken(self) -> None:
         in_roh(self.abs_slots[self.abs_i], self.abs_form.werte())

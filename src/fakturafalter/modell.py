@@ -321,6 +321,8 @@ class Rechnung:
     zahlungsempfaenger: Zahlungsempfaenger | None = None  # BG-10
     steuervertreter: Steuervertreter | None = None  # BG-11
     anhaenge: list[Anhang] = field(default_factory=list)  # BG-24
+    # Rohwerte der Kopfzeile je CSV-/Tabellenspalte (ab 1.0.0-rc2, nur für Platzhalter in Layout-Textfeldern)
+    spalten: dict[str, str] = field(default_factory=dict)
 
     def hinweis(self, stufe: str, text: str, feld: str | None = None) -> None:
         self.hinweise.append(Hinweis(stufe, text, feld))

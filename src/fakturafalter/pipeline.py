@@ -535,23 +535,42 @@ def ablegen(ent: Entwurf, k: Konfig) -> list[Path]:
 
 def vorlage_fuer(r: Rechnung, k: Konfig):
     """Layout-Vorlage des Absender-Profils (Layouteditor) oder None (festes Standardlayout).
-    Eine ungültige Vorlage (z. B. von Hand geändert) gilt nicht: Standardlayout + Hinweis, Details ins Log."""
+    Ab Layoutformat 2 (rc2) kein stilles Ausweichen: ein altes (Format 1) oder ungültiges Layout bzw. fehlende
+    Pflichtangaben halten die Rechnung an (:func:`layout_vorpruefen` vor dem Status). Kommt es trotzdem hier an
+    (z. B. Original-Druck war nicht PDF/A-tauglich), bricht das Erzeugen mit klarer Meldung ab."""
     roh = layout.roh_fuer(k.roh, r.verkaeufer.name)
     if not roh:
         return None
+    return layout.laden(roh, k.basis, r.verkaeufer, r.zahlung)
+
+
+def _sichtteil_wird_neu(r: Rechnung, k: Konfig) -> bool:
+    return not (r.sicht_pdf and k.sichtteil == "original")
+
+
+def layout_vorpruefen(r: Rechnung, k: Konfig) -> None:
+    """Vor dem Status (rc2): Wird der Sichtteil neu erzeugt, muss das Layout des Absenders im Layoutformat 2 vorliegen
+    und alle Pflichtangaben tragen – sonst „Zu prüfen“ mit Grund. Mit „Original-Druck“ wird das Layout nicht gebraucht
+    und nicht geprüft. Mehrfach aufrufbar."""
+    if not _sichtteil_wird_neu(r, k):
+        return
+    roh = layout.roh_fuer(k.roh, r.verkaeufer.name)
+    if not roh:
+        return
     try:
-        return layout.laden(roh, k.basis)
+        layout.laden(roh, k.basis, r.verkaeufer, r.zahlung)
+        return
+    except layout.LayoutAlt as e:
+        text = (
+            f"{layout.ALT_TITEL}: das Layout des Absenders „{r.verkaeufer.name}“ hat "
+            f"{layout.format_text(e.gefunden)}, erwartet wird Layoutformat {layout.VERSION}. Bitte im Layouteditor "
+            "neu einrichten (Einstellungen → Absender → Layout gestalten); die Konfiguration bleibt unverändert."
+        )
     except (layout.LayoutFehler, TypeError, ValueError) as e:
-        log.warning(
-            "%s: Layout-Vorlage nicht verwendbar (%s) – Standardlayout",
-            r.nummer,
-            e,
-            extra=NUR_DATEI,
-        )
-        r.hinweis(
-            "info", "Layout-Vorlage nicht verwendbar – Standardlayout verwendet (Details im Log)"
-        )
-        return None
+        text = f"Layout-Vorlage des Absenders nicht verwendbar: {e}"
+    if not any(h.text == text for h in r.hinweise):
+        log.warning("%s: %s", r.nummer, text, extra=NUR_DATEI)
+        r.hinweis("pruefen", text)
 
 
 def _sichtteil_neu(r: Rechnung, k: Konfig, xml: bytes, titel: str, beschr: str) -> bytes:
@@ -812,6 +831,7 @@ def _verarbeiten(
         xrechnung_vorpruefen(
             r, k
         )  # BT-49/BT-10 vor dem Status, sonst ginge ein Prüffall als „ok“ durch
+        layout_vorpruefen(r, k)  # Layoutformat 2 / Pflichtangaben im Layout (rc2)
         erg = Ergebnis(
             nummer=r.nummer,
             status=r.status,
@@ -1092,6 +1112,7 @@ def prueffall_freigeben(json_pfad: Path, k: Konfig) -> Ergebnis:
     pflichtpruefung.pruefen(r, pflicht_kontext(k))
     xrechnung_vorpruefen(r, k)
     r.sicht_pdf = None
+    layout_vorpruefen(r, k)
     r.hinweis("info", "Freigegeben in der Prüfansicht: Daten aus der Quelle, Sichtbild neu gesetzt")
     erg.kunde, erg.brutto = r.kaeufer.name, str(r.summen.brutto)
     namen = ausgabe_namen_oder_hinweis(r, k)

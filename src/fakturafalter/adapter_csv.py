@@ -165,8 +165,13 @@ def lesen(pfad: Path, profil: dict, konfig: Konfig) -> list[Rechnung]:
     else:
         gruppen = _csv(text, profil, pfad)
     rechnungen = []
+    spalten = getattr(gruppen, "spalten", None) or {}
+    pos_spalten = _positionsspalten(profil)
     for nr, (kopf, pos, fehler) in gruppen.items():
         r = rechnung_bauen(kopf, pos, profil, konfig, quelle=str(pfad))
+        r.spalten = {  # Platzhalter im Layout (rc2): nur Kopfwerte, keine Positionsspalten
+            k: v for k, v in (spalten.get(nr) or {}).items() if k not in pos_spalten
+        }
         for f in fehler:
             r.hinweis("pruefen" if isinstance(f, Pruefen) else "fehler", f)
         r.herkunft.setdefault("_kodierung", Herkunft(f"erkannt: {kod}", 1.0))
@@ -180,6 +185,25 @@ def lesen(pfad: Path, profil: dict, konfig: Konfig) -> list[Rechnung]:
         for r in rechnungen:
             csv_standard.hinweise_unbekannt(r, _dateikopf(pfad, profil), profil)
     return rechnungen
+
+
+def _positionsspalten(profil: dict) -> set[str]:
+    """Spalten, die Positionsfeldern zugeordnet sind (nicht zugleich einem Kopffeld) – keine Kopfwerte."""
+    def namen(defs) -> set[str]:
+        return {str(d.get("spalte")).strip() for d in (defs or {}).values() if isinstance(d, dict) and d.get("spalte")}
+
+    felder = profil.get("felder") or {}
+    pos, kopf = namen(felder.get("position")), namen(felder.get("kopf"))
+    for b in profil.get("bloecke") or []:
+        if not isinstance(b, dict):
+            continue
+        from .csv_bloecke import block_wiederholend
+
+        if block_wiederholend(b):
+            pos |= namen(b.get("felder"))
+        else:
+            kopf |= namen(b.get("felder"))
+    return pos - kopf
 
 
 def _hat_spalte_fehlt(rechnungen: list) -> bool:
@@ -257,6 +281,7 @@ def _csv(text: str, profil: dict, pfad: Path):
     felder = profil.get("felder", {})
     schl = aufbau.get("rechnung_schluessel")
     gruppen: OrderedDict = OrderedDict()
+    spalten: dict[str, dict[str, str]] = {}  # Rohwerte der Kopfzeile je Rechnung (Platzhalter, rc2)
 
     def feldsatz(row: dict, defs: dict, zeile: int, fehler: list) -> Roh:
         roh: Roh = {}
@@ -288,6 +313,7 @@ def _csv(text: str, profil: dict, pfad: Path):
         row = dict(zip(kopfzeile, werte))
         key = (row.get(schl) or "").strip()
         g = gruppen.setdefault(key, [None, [], []])
+        sp = spalten.setdefault(key, {})
         if aufbau.get("art") == "satzart":
             sa = (row.get(aufbau.get("satzart_spalte", "Satzart")) or "").strip()
             kenn = {
@@ -305,6 +331,7 @@ def _csv(text: str, profil: dict, pfad: Path):
                 elif sa == aufbau.get("zuschlag", "Z"):
                     art_sa = "zuschlag"
             if art_sa == "kopf":
+                _spalten_merken(sp, row)
                 g[0] = feldsatz(row, felder.get("kopf", {}), zeile, g[2])
             elif art_sa == "position":
                 g[1].append(feldsatz(row, felder.get("position", {}), zeile, g[2]))
@@ -325,6 +352,7 @@ def _csv(text: str, profil: dict, pfad: Path):
             else:
                 g[2].append(f"Zeile {zeile}: unbekannte Satzart „{sa}“")
         else:  # zeile_je_position
+            _spalten_merken(sp, row)
             k = feldsatz(row, felder.get("kopf", {}), zeile, g[2])
             if g[0] is None:
                 g[0] = k
@@ -339,7 +367,10 @@ def _csv(text: str, profil: dict, pfad: Path):
             for f in aufbau.get("kopf_muss_gleich_sein", []):
                 g[0].setdefault("_roh_" + f, (row.get(f), None))
             _zeile_je_position(g, feldsatz, row, felder, zeile, pfad, tz)
-    out = OrderedDict()
+    from .csv_bloecke import Gruppen
+
+    out = Gruppen()
+    out.spalten = spalten
     for key, (kopf, pos, fehler) in gruppen.items():
         if kopf is None:
             kopf = {}
@@ -359,6 +390,13 @@ def _csv(text: str, profil: dict, pfad: Path):
         kopf = {k: v for k, v in kopf.items() if not k.startswith("_roh_")}
         out[key] = (kopf, pos, fehler)
     return out
+
+
+def _spalten_merken(sp: dict, row: dict) -> None:
+    """Erster nicht leerer Wert je Spalte (Kopfwerte einer Rechnung) – für Platzhalter wie {Bestellnummer}."""
+    for k, v in row.items():
+        if k and v is not None and str(v).strip():
+            sp.setdefault(str(k).strip(), str(v).strip())
 
 
 def _zeile_je_position(g, feldsatz, row, felder, zeile, pfad, tz) -> None:

@@ -2,7 +2,8 @@
 # Copyright 2026 Fakturafalter-Mitwirkende
 """Layouteditor für den sichtbaren Teil der erzeugten ZUGFeRD-Rechnung (nach Skizze, abgestimmt 11.11.2026).
 
-Links die Bausteine (Schloss = Pflichtangabe nach § 14 Abs. 4 UStG, nicht ausblendbar) und eigene Felder,
+Links die Bausteine (Schloss = ganzer Baustein bleibt nötig: Empfänger, Kopf, Positionen, Summen; Absender und
+Fußzeile sind ab Layoutformat 2 ausblendbar, je Baustein wählst du die Verkäufer-Angaben) und eigene Felder,
 in der Mitte die A4-Seite, rechts die Eigenschaften in mm. Die Seite im Hintergrund ist die echte Ausgabe:
 ``sicht.erzeugen`` mit fiktiven Beispieldaten, gerendert mit pypdfium2 – Editor und Rechnung laufen damit nicht
 auseinander. Neu gezeichnet wird erst nach dem Loslassen bzw. kurz nach einer Eingabe (nichts flackert).
@@ -35,6 +36,8 @@ from PySide6.QtWidgets import (
     QLayout,
     QListWidget,
     QListWidgetItem,
+    QMenu,
+    QMessageBox,
     QPlainTextEdit,
     QPushButton,
     QScrollArea,
@@ -220,7 +223,7 @@ class BlockItem(QGraphicsRectItem):
         farbe = (
             QColor(c["err"])
             if self.fehler
-            else QColor(c["acc"] if sel else ("#333333" if self.e.pflicht else "#7a7a7a"))
+            else QColor(c["acc"] if sel else ("#333333" if self.e.oben else "#7a7a7a"))
         )
         pen = QPen(farbe, 2.5 if sel else 1.4)
         pen.setCosmetic(True)
@@ -432,11 +435,16 @@ class LayoutEditor(QDialog):
         profil: str = "",
         verkaeufer: Partei | None = None,
         zahlung: Zahlung | None = None,
+        spalten: list[str] | None = None,
     ):
         super().__init__(eltern)
         self.c = c
         self.basis = Path(basis)
         self.profil = profil
+        self.verkaeufer = verkaeufer
+        self.zahlung = zahlung
+        self.spalten = list(spalten or [])  # eigene CSV-Spalten für Platzhalter (rc2)
+        self.alt_meldung = ""  # Text der Ablehnung eines alten Layouts (Format 1)
         self.setWindowTitle(_("Layouteditor"))
         self.setObjectName("wurzel")
         self.setStyleSheet(
@@ -452,6 +460,14 @@ class LayoutEditor(QDialog):
         self.eigen = True
         try:
             v = lay.aus_dict(roh, self.basis) if roh else None
+        except lay.LayoutAlt as e:
+            # Layoutformat 1 (bis rc1): keine Übernahme, Datei bleibt unverändert – Start auf dem Standard
+            log.warning("Layout-Vorlage %s abgelehnt: %s", profil, e)
+            v = None
+            self.alt_meldung = _(lay.ALT_TEXT).format(
+                name=profil or "–", format=_(lay.format_text(e.gefunden))
+            )
+            QTimer.singleShot(0, self._alt_zeigen)
         except (lay.LayoutFehler, TypeError, ValueError) as e:
             log.warning("Layout-Vorlage %s nicht lesbar: %s – Standard geladen", profil, e)
             v = None
@@ -497,7 +513,7 @@ class LayoutEditor(QDialog):
         prof = lbl(_("Vorlage / Profil: {name}").format(name=self.profil or "–"), "titel")
         prof.setMinimumHeight(48)
         fl.addWidget(prof)
-        self.b_brief = knopf(_("Briefpapier laden…"), klick=self.briefpapier_waehlen)
+        self.b_brief = knopf(_("Briefpapier laden…"), klick=self.briefpapier_knopf)
         self.b_brief_weg = knopf(_("Briefpapier entfernen"), klick=self.briefpapier_entfernen)
         self.b_raster = knopf(_("Raster an"), klick=self._raster_umschalten)
         self.b_raster.setCheckable(True)
@@ -539,8 +555,9 @@ class LayoutEditor(QDialog):
         lv.addWidget(
             lbl(
                 _(
-                    "Schloss = Pflichtangabe nach § 14 Abs. 4 UStG, lässt sich nicht ausblenden. "
-                    "Häkchen = sichtbar."
+                    "Schloss = dieser Baustein bleibt nötig (Empfänger, Kopf, Positionen, Summen). Absender und "
+                    "Fußzeile kannst du ausblenden, wenn die Angaben schon im Briefpapier oder in einem anderen "
+                    "Baustein stehen. Häkchen = sichtbar."
                 ),
                 "hinweis",
                 umbruch=True,
@@ -645,8 +662,22 @@ class LayoutEditor(QDialog):
         rv.addLayout(ah)
         self.sichtbar = QCheckBox(_("Sichtbar"))
         self.sichtbar.setObjectName("eig_sichtbar")
+        self.sichtbar.setMinimumHeight(32)
         self.sichtbar.toggled.connect(self._sichtbar)
         rv.addWidget(self.sichtbar)
+        # Layoutformat 2: welche Verkäufer-Angaben zeigt der Baustein?
+        self.l_angaben = lbl(_("Dieser Baustein zeigt:"), "sektion")
+        rv.addWidget(self.l_angaben)
+        self.angaben: dict[str, QCheckBox] = {}
+        for a in lay.ANGABEN:
+            cb = QCheckBox(_(lay.ANGABEN_NAMEN[a]))
+            cb.setObjectName(f"angabe_{a}")
+            cb.setMinimumHeight(32)
+            cb.toggled.connect(lambda an, a=a: self._angabe(a, an))
+            rv.addWidget(cb)
+            self.angaben[a] = cb
+        self.l_angaben_hinweis = lbl("", "hinweis", umbruch=True)
+        rv.addWidget(self.l_angaben_hinweis)
         self.l_text = lbl(_("Text"))
         rv.addWidget(self.l_text)
         self.text = QPlainTextEdit()
@@ -655,6 +686,18 @@ class LayoutEditor(QDialog):
         self.text.setMinimumHeight(96)
         self.text.textChanged.connect(self._text)
         rv.addWidget(self.text)
+        self.b_platzhalter = knopf(_("Platzhalter einfügen…"), klick=self.platzhalter_menue)
+        self.b_platzhalter.setObjectName("platzhalter")
+        rv.addWidget(self.b_platzhalter)
+        self.l_platzhalter = lbl(
+            _(
+                "Platzhalter wie {Bestellnummer} oder {BT-13} füllt Fakturafalter beim Erzeugen mit dem Wert aus "
+                "der Rechnung bzw. der CSV-Spalte (nur Kopfwerte). Fehlt ein Wert, bleibt die Stelle leer."
+            ),
+            "hinweis",
+            umbruch=True,
+        )
+        rv.addWidget(self.l_platzhalter)
         self.b_bildwahl = knopf(_("Bild wählen…"), klick=self._bild_waehlen)
         rv.addWidget(self.b_bildwahl)
         self.e_ebene = lbl("", "hinweis", umbruch=True)
@@ -672,9 +715,22 @@ class LayoutEditor(QDialog):
         fuss.setObjectName("leiste")
         fh = QHBoxLayout(fuss)
         fh.setContentsMargins(12, 6, 12, 6)
+        sv = QVBoxLayout()
+        sv.setSpacing(4)
         self.status = lbl("", "sub", umbruch=True)
         self.status.setMinimumHeight(40)
-        fh.addWidget(self.status, 1)
+        sv.addWidget(self.status)
+        # Pflichtangaben (§ 14 Abs. 4 UStG): rot = fehlt (blockiert Speichern), gelb = doppelt (Hinweis)
+        self.pruef_fehler = lbl("", "", umbruch=True)
+        self.pruef_fehler.setObjectName("pruef_fehler")
+        self.pruef_doppelt = lbl("", "", umbruch=True)
+        self.pruef_doppelt.setObjectName("pruef_doppelt")
+        hb = QHBoxLayout()
+        hb.setSpacing(8)
+        hb.addWidget(self.pruef_fehler, 1)
+        hb.addWidget(self.pruef_doppelt, 1)
+        sv.addLayout(hb)
+        fh.addLayout(sv, 1)
         self.b_eigen = knopf(_("Eigenes Layout anlegen"), klick=self._eigen_anlegen)
         fh.addWidget(self.b_eigen)
         self.brief_status = lbl("", "sub", umbruch=True)
@@ -731,7 +787,7 @@ class LayoutEditor(QDialog):
             if e.pflicht:
                 it.setIcon(schloss)
                 it.setFlags(Qt.ItemFlag.ItemIsEnabled | Qt.ItemFlag.ItemIsSelectable)
-                it.setToolTip(_("Pflichtangabe nach § 14 Abs. 4 UStG"))
+                it.setToolTip(_("Bleibt nötig (Pflichtangaben nach § 14 Abs. 4 UStG)"))
             else:
                 it.setFlags(
                     Qt.ItemFlag.ItemIsEnabled
@@ -803,9 +859,13 @@ class LayoutEditor(QDialog):
             for w in alle:
                 w.setEnabled(e is not None and self.eigen)
             self.b_loeschen.setEnabled(bool(e is not None and e.eigen and self.eigen))
-            frei = e is not None and not e.pflicht and self.eigen
+            frei = e is not None and not e.oben and self.eigen
             self.b_vor.setEnabled(frei)
             self.b_zurueck.setEnabled(frei)
+            self._angaben_zeigen(e)
+            self.b_platzhalter.setVisible(e is not None and e.art == "text")
+            self.b_platzhalter.setEnabled(self.eigen)
+            self.l_platzhalter.setVisible(e is not None and e.art == "text")
             if e is None:
                 self.e_titel.setText(_("Nichts gewählt"))
                 self.e_hinweis.setText(_("Baustein links oder auf der Seite anklicken."))
@@ -817,6 +877,13 @@ class LayoutEditor(QDialog):
                     _(
                         "Pflichtangabe nach § 14 Abs. 4 UStG. Der Baustein bleibt sichtbar und "
                         "liegt immer über allen anderen."
+                    )
+                )
+            elif e.art in ("absender", "fusszeile"):
+                self.e_hinweis.setText(
+                    _(
+                        "Dieser Baustein ist nicht fest vorgeschrieben. Du kannst ihn ausblenden, wenn die "
+                        "Angaben schon im Briefpapier oder in einem anderen Baustein stehen."
                     )
                 )
             elif e.art == "zahlung":
@@ -852,14 +919,14 @@ class LayoutEditor(QDialog):
             if ist_text and self.text.toPlainText() != e.text:
                 self.text.setPlainText(e.text)
             self.b_bildwahl.setVisible(e.art in ("logo", "bild"))
-            if e.pflicht:
+            if e.oben:
                 self.e_ebene.setText(_("Ebene: oben (fest)"))
             else:
                 frei_e = sorted(
-                    (x for x in self.seite.elemente() if not x.pflicht), key=lambda x: x.ebene
+                    (x for x in self.seite.elemente() if not x.oben), key=lambda x: x.ebene
                 )
                 self.e_ebene.setText(
-                    _("Ebene {n} von {m} (darüber liegen die Pflichtangaben)").format(
+                    _("Ebene {n} von {m} (darüber liegen Absender, Fußzeile und die Pflichtbausteine)").format(
                         n=frei_e.index(e) + 1, m=len(frei_e)
                     )
                 )
@@ -881,7 +948,8 @@ class LayoutEditor(QDialog):
         self.b_eigen.setVisible(not self.eigen)
         self.b_raster.setText(_("Raster an") if self.vorlage.raster_an else _("Raster aus"))
         self.raster_item.setVisible(self.vorlage.raster_an and self.eigen and not self.vorschau)
-        f = lay.pruefen(self.vorlage, _) if self.eigen else []
+        f = self.fehler_liste() if self.eigen else []
+        self._pruefung_zeigen()
         if not self.eigen:
             txt = _("Standardlayout (fest, wie bisher). Zum Gestalten „Eigenes Layout anlegen“.")
         elif f:
@@ -895,12 +963,136 @@ class LayoutEditor(QDialog):
         if self.bericht and self.eigen:
             txt += " · " + _("Hinweis: {t}").format(t=self.bericht[0])
         self.status.setText(txt)
+        self.b_brief.setText(_("Briefpapier…") if bp else _("Briefpapier laden…"))
 
     def _regeln_markieren(self) -> None:
-        pfl = [i for i in self._items if i.e.pflicht]
+        pfl = [i for i in self._items if lay.traegt_pflicht(i.e)]
         for i in self._items:
-            i.fehler = i.e.pflicht and any(lay.ueberlappen(i.e, j.e) for j in pfl if j is not i)
+            i.fehler = lay.traegt_pflicht(i.e) and any(
+                lay.ueberlappen(i.e, j.e) for j in pfl if j is not i
+            )
             i.update()
+
+    # ------------------------------------------------------------------ Pflichtangaben (Layoutformat 2)
+    def pflichtbefund(self) -> lay.Pflichtbefund:
+        return lay.pflicht_pruefen(self.vorlage, self.verkaeufer, self.zahlung, _)
+
+    def fehler_liste(self) -> list[str]:
+        """Alles, was Speichern blockiert: feste Regeln und fehlende Pflichtangaben."""
+        return lay.pruefen(self.vorlage, _) + self.pflichtbefund().fehler
+
+    def _pruefung_zeigen(self) -> None:
+        c = self.c
+        if not self.eigen:
+            self.pruef_fehler.setVisible(False)
+            self.pruef_doppelt.setVisible(False)
+            return
+        b = self.pflichtbefund()
+        rot = b.fehler
+        gelb = b.doppelt + b.hinweise
+        self.pruef_fehler.setText(
+            (_("Fehlt (Speichern nicht möglich):") + "\n• " + "\n• ".join(rot)) if rot else ""
+        )
+        self.pruef_fehler.setVisible(bool(rot))
+        self.pruef_fehler.setStyleSheet(
+            f"background:{c['er_bg']}; color:{c['er_t']}; border:1px solid {c['err']}; "
+            "border-radius:6px; padding:6px 10px;"
+        )
+        self.pruef_doppelt.setText(
+            (_("Hinweis:") + "\n• " + "\n• ".join(gelb)) if gelb else ""
+        )
+        self.pruef_doppelt.setVisible(bool(gelb))
+        self.pruef_doppelt.setStyleSheet(
+            f"background:{c['in_bg']}; color:{c['in_t']}; border:1px solid {c['busy']}; "
+            "border-radius:6px; padding:6px 10px;"
+        )
+
+    def _angaben_zeigen(self, e: lay.Element | None) -> None:
+        erlaubt = lay.ANGABEN_JE.get(e.art, ()) if e is not None else ()
+        self.l_angaben.setVisible(bool(erlaubt))
+        for a, cb in self.angaben.items():
+            cb.setVisible(a in erlaubt)
+            cb.setEnabled(self.eigen and e is not None and e.sichtbar)
+            cb.setChecked(bool(e is not None and a in (e.angaben or ())))
+        hinweis = ""
+        if e is not None and e.art == "empfaenger":
+            hinweis = _("Rücksendezeile über der Anschrift (für Fensterkuverts). Standard: an.")
+        elif e is not None and erlaubt:
+            im_bp = [_(lay.ANGABEN_NAMEN[a]) for a in erlaubt if self.seite.im_briefpapier(a)]
+            if im_bp:
+                hinweis = _("Steht schon im Briefpapier, wird hier nicht gedruckt: {liste}").format(
+                    liste=", ".join(im_bp)
+                )
+        self.l_angaben_hinweis.setText(hinweis)
+        self.l_angaben_hinweis.setVisible(bool(hinweis))
+
+    def _angabe(self, a: str, an: bool) -> None:
+        e = self.element()
+        if self._laden or e is None or a not in lay.ANGABEN_JE.get(e.art, ()):
+            return
+        neu = set(e.angaben or ())
+        neu.add(a) if an else neu.discard(a)
+        e.angaben = [x for x in lay.ANGABEN_JE[e.art] if x in neu]
+        self.geaendert()
+
+    def _alt_zeigen(self) -> None:
+        """Ablehnung eines Layouts im Format 1 – nicht blockierend, die Datei bleibt unverändert."""
+        import shiboken6
+
+        if not shiboken6.isValid(self) or not self.alt_meldung:
+            return
+        self.toast("fehler", _(lay.ALT_TITEL), _("Start auf dem Standard. Mit „Speichern“ entsteht Layoutformat 2."))
+        box = QMessageBox(self)
+        box.setObjectName("layout_alt")
+        box.setIcon(QMessageBox.Icon.Warning)
+        box.setWindowTitle(_(lay.ALT_TITEL))
+        box.setText(_(lay.ALT_TITEL))
+        box.setInformativeText(self.alt_meldung)
+        box.setStandardButtons(QMessageBox.StandardButton.Ok)
+        self._alt_box = box
+        box.open()
+
+    # ------------------------------------------------------------------ Platzhalter (rc2)
+    def platzhalter_liste(self) -> list[tuple[str, list[tuple[str, str]]]]:
+        """[(Gruppe, [(Anzeige, Platzhalter)])] – Rechnungsangaben (BT) und eigene, nicht zugeordnete Spalten."""
+        from .. import csv_einrichtung as ce
+
+        rechnung = []
+        for bt in (
+            "BT-1", "BT-2", "BT-9", "BT-10", "BT-11", "BT-12", "BT-13", "BT-14", "BT-15", "BT-16",
+            "BT-17", "BT-18", "BT-19", "BT-25", "BT-44", "BT-46", "BT-56", "BT-72", "BT-73", "BT-74",
+        ):
+            label = ce.FELD[bt][1] if bt in ce.FELD else ce.STANDARD_NAME.get(bt, (bt,))[0]
+            rechnung.append((f"{_(label)} ({bt})", "{" + bt + "}"))
+        eigen = [(sp, "{" + sp + "}") for sp in self.spalten if "{" not in sp and "}" not in sp]
+        out = [(_("Rechnungsangaben"), rechnung)]
+        if eigen:
+            out.append((_("Eigene Spalten aus deinen CSV-Profilen"), eigen))
+        return out
+
+    def platzhalter_einfuegen(self, ph: str) -> None:
+        e = self.element()
+        if e is None or e.art != "text" or not self.eigen:
+            return
+        self.text.insertPlainText(ph)
+        self.text.setFocus()
+
+    def platzhalter_menue(self) -> QMenu:
+        m = QMenu(self)
+        m.setObjectName("platzhalter_menue")
+        for gruppe, eintraege in self.platzhalter_liste():
+            m.addSection(gruppe)
+            for anzeige, ph in eintraege:
+                a = m.addAction(f"{anzeige}  {ph}" if not anzeige.startswith(ph) else anzeige)
+                a.setData(ph)
+                a.triggered.connect(lambda _c=False, ph=ph: self.platzhalter_einfuegen(ph))
+        if not self.spalten:
+            a = m.addAction(_("Eigene Spalten: tippe den Spaltennamen in geschweiften Klammern in den Text."))
+            a.setEnabled(False)
+        self._platzhalter_m = m
+        if self.isVisible():
+            m.popup(self.b_platzhalter.mapToGlobal(self.b_platzhalter.rect().bottomLeft()))
+        return m
 
     # ------------------------------------------------------------------ Zeichnen
     def geaendert(self) -> None:
@@ -1059,7 +1251,7 @@ class LayoutEditor(QDialog):
             ]
             or [0]
         )
-        ebene = 1 + max([x.ebene for x in self.seite.elemente() if not x.pflicht] or [0])
+        ebene = 1 + max([x.ebene for x in self.seite.elemente() if not x.oben] or [0])
         e = lay.Element(
             art,
             20,
@@ -1089,16 +1281,16 @@ class LayoutEditor(QDialog):
         """Nicht vorgeschriebene Bausteine und eigene Felder eine Ebene nach vorn (+1) oder hinten (−1).
         Pflichtbausteine bleiben immer darüber."""
         e = self.element()
-        if e is None or e.pflicht:
+        if e is None or e.oben:
             return
-        frei = sorted((x for x in self.seite.elemente() if not x.pflicht), key=lambda x: x.ebene)
+        frei = sorted((x for x in self.seite.elemente() if not x.oben), key=lambda x: x.ebene)
         i = frei.index(e)
         j = i + richtung
         if not 0 <= j < len(frei):
             self.toast(
                 "info",
                 _("Schon ganz vorn") if richtung > 0 else _("Schon ganz hinten"),
-                _("Pflichtangaben liegen immer oben.") if richtung > 0 else "",
+                _("Absender, Fußzeile und Pflichtbausteine liegen immer oben.") if richtung > 0 else "",
             )
             return
         frei[i], frei[j] = frei[j], frei[i]
@@ -1151,9 +1343,34 @@ class LayoutEditor(QDialog):
         if d:
             self.briefpapier_laden(Path(d))
 
-    def briefpapier_entfernen(self) -> None:
-        self.seite.briefpapier = ""
+    def briefpapier_knopf(self) -> None:
+        """„Briefpapier laden…“ bzw. „Briefpapier…“: liegt schon eines, öffnet der Dialog mit den Haken."""
+        if self.seite.briefpapier:
+            self.briefpapier_dialog(self.seite_name)
+        else:
+            self.briefpapier_waehlen()
+
+    def briefpapier_dialog(self, seite: str | None = None) -> "BriefpapierDialog":
+        dlg = BriefpapierDialog(self, seite or self.seite_name)
+        self._brief_dlg = dlg
+        dlg.open()
+        return dlg
+
+    def briefpapier_enthaelt_setzen(self, seite: str, angabe: str, an: bool) -> None:
+        s = self.vorlage.seite(seite)
+        neu = set(s.briefpapier_enthaelt)
+        neu.add(angabe) if an else neu.discard(angabe)
+        s.briefpapier_enthaelt = [a for a in lay.BRIEFPAPIER_ANGABEN if a in neu]
+        if seite == self.seite_name:
+            self.werte_zeigen()
+        self.geaendert()
+
+    def briefpapier_entfernen(self, seite: str | None = None) -> None:
+        s = self.vorlage.seite(seite or self.seite_name)
+        s.briefpapier = ""
+        s.briefpapier_enthaelt = []
         self.brief_status.setText("")
+        self.werte_zeigen()
         self.geaendert()
 
     def briefpapier_laden(self, pfad: Path, warten: bool = False) -> None:
@@ -1287,6 +1504,10 @@ class LayoutEditor(QDialog):
             self.geaendert()
         else:
             self._infos()
+        import shiboken6
+
+        if shiboken6.isValid(self) and self.isVisible():
+            self.briefpapier_dialog(seite)  # gleich danach: was steht schon auf dem Briefpapier?
 
     # ------------------------------------------------------------------ Ergebnis
     def speichern(self) -> None:
@@ -1294,7 +1515,7 @@ class LayoutEditor(QDialog):
             self.toast("info", _("Briefpapier wird noch geprüft"), _("Bitte kurz warten."))
             return
         if self.eigen:
-            f = lay.pruefen(self.vorlage, _)
+            f = self.fehler_liste()
             if f:
                 self.toast("fehler", _("Layout so nicht speicherbar"), "\n".join(f[:4]))
                 return
@@ -1302,3 +1523,63 @@ class LayoutEditor(QDialog):
 
     def ergebnis(self) -> dict | None:
         return self.vorlage.als_dict() if self.eigen else None
+
+
+class BriefpapierDialog(QDialog):
+    """„Briefpapier – Seite 1/Folgeseite“: Haken „Briefpapier enthält …“ (Layoutformat 2). Die Haken ändern die
+    Bausteine nicht von allein; was angehakt ist, druckt Fakturafalter auf dieser Seite nicht noch einmal."""
+
+    def __init__(self, editor: LayoutEditor, seite: str):
+        super().__init__(editor)
+        self.editor = editor
+        self.seite_name = seite
+        self.setObjectName("wurzel")
+        titel = _("Briefpapier – Seite 1") if seite == "seite1" else _("Briefpapier – Folgeseite")
+        self.setWindowTitle(titel)
+        v = QVBoxLayout(self)
+        v.setContentsMargins(20, 18, 20, 18)
+        v.setSpacing(8)
+        v.addWidget(lbl(titel, "titel"))
+        s = editor.vorlage.seite(seite)
+        self.l_datei = lbl(_("Datei: {name}").format(name=Path(s.briefpapier).name or _("keins")), "sub", umbruch=True)
+        v.addWidget(self.l_datei)
+        v.addWidget(lbl(_("Briefpapier enthält:"), "sektion"))
+        self.haken: dict[str, QCheckBox] = {}
+        for a in lay.BRIEFPAPIER_ANGABEN:
+            cb = QCheckBox(_(lay.ANGABEN_NAMEN[a]))
+            cb.setObjectName(f"brief_{a}")
+            cb.setMinimumHeight(32)
+            cb.setChecked(a in s.briefpapier_enthaelt)
+            cb.toggled.connect(lambda an, a=a: editor.briefpapier_enthaelt_setzen(seite, a, an))
+            v.addWidget(cb)
+            self.haken[a] = cb
+        v.addWidget(
+            lbl(
+                _(
+                    "Was schon auf dem Briefpapier steht, druckt Fakturafalter nicht noch einmal. Die "
+                    "Pflichtangaben müssen trotzdem irgendwo auf der Rechnung stehen – hier oder in einem Baustein. "
+                    "Prüfe danach die Vorschau: Fakturafalter liest das Briefpapier nicht."
+                ),
+                "hinweis",
+                umbruch=True,
+            )
+        )
+        h = QHBoxLayout()
+        self.b_anders = knopf(_("Anderes Briefpapier…"), klick=self._anders)
+        self.b_weg = knopf(_("Briefpapier entfernen"), danger=True, klick=self._weg)
+        self.b_fertig = knopf(_("Fertig"), primary=True, klick=self.accept)
+        h.addWidget(self.b_anders)
+        h.addWidget(self.b_weg)
+        h.addStretch(1)
+        h.addWidget(self.b_fertig)
+        v.addLayout(h)
+        self.resize(460, 520)
+
+    def _anders(self) -> None:
+        self.accept()
+        self.editor.seite_zeigen(self.seite_name)
+        self.editor.briefpapier_waehlen()
+
+    def _weg(self) -> None:
+        self.editor.briefpapier_entfernen(self.seite_name)
+        self.accept()
