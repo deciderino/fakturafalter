@@ -562,7 +562,8 @@ def spalten_vorschlagen(
     Mit ``zeilen`` wird eine Spalte „Kunde“ mit Werten wie „K-1001“ als Kundennummer vorgeschlagen, sonst als Name.
     ``wiederholend=True`` (Positionsblock): „Gesamtnetto“ ist der Gesamtpreis der Position, nicht die
     Rechnungssumme."""
-    aus = _spalten_nach_namen(kopf)
+    fest = spalten_nach_bt(kopf)
+    aus = _spalten_nach_namen([s for s in kopf if s not in fest.values()], ausser=set(fest))
     # „Rabatt“ allein ist mehrdeutig (Prozent oder Betrag) – nur „Rabatt%“ / „Rabattsatz“ automatisch
     r = aus.get("BT-138")
     if r and "%" not in r and _norm(r) == "rabatt":
@@ -591,15 +592,60 @@ def spalten_vorschlagen(
     # „Artikel“ allein ist meist die Bezeichnung; nur Artikelnummer, wenn es schon eine Bezeichnung gibt
     if "BT-153" not in aus and _norm(aus.get("BT-155") or "") == "artikel":
         aus["BT-153"] = aus.pop("BT-155")
+    # BT-Nummern und eigene Feldschlüssel im Kopf haben Vorrang (rc2) – die Regeln oben gelten nur für Wörter
+    return {**fest, **aus}
+
+
+# BT-Nummern des Standards, die bei uns unter einem eigenen Schlüssel stehen (EN 16931)
+BT_ZU_FELD = {
+    "BT-46": "kundennummer",  # Käuferkennung
+    "BT-131": "gesamtpreis_position",  # Nettobetrag der Rechnungsposition (nur Kontrolle)
+    "BT-152": "steuer",  # Umsatzsteuersatz der Position
+    "BT-81": "zahlungsart",  # Code für die Zahlungsart
+}
+
+_BT_IM_KOPF = re.compile(r"(?<![0-9a-z])bt[\s_\-.]*0*([0-9]{1,3})(?![0-9])", re.IGNORECASE)
+
+
+def bt_feld(spalte: str) -> str | None:
+    """Feld-ID zu einem Spaltenkopf mit BT-Nummer oder eigenem Feldschlüssel, sonst None (rc2).
+
+    Erkannt werden „BT-1“, „bt1“, „BT 1“, „BT_1“, „Rechnungsnummer (BT-1)“, „BT-1 Rechnungsnummer“ und
+    unsere Schlüssel wie „kundennummer“ oder „gesamtpreis_position“ (genau, Groß/klein egal). „BT-1“ ist
+    nie „BT-10“ oder „BT-115“. Steht mehr als eine BT-Nummer im Kopf, gilt er als mehrdeutig (None)."""
+    t = str(spalte or "").strip()
+    if not t:
+        return None
+    klein = t.lower()
+    for fid in FELD:
+        if not fid.startswith("BT-") and klein == fid.lower():
+            return fid
+    nummern = {int(m.group(1)) for m in _BT_IM_KOPF.finditer(t)}
+    if len(nummern) != 1:
+        return None
+    bt = f"BT-{nummern.pop()}"
+    if bt in FELD:
+        return bt
+    return BT_ZU_FELD.get(bt)
+
+
+def spalten_nach_bt(kopf: list[str]) -> dict[str, str]:
+    """{Feld: Spalte} nur aus BT-Nummern bzw. Feldschlüsseln im Kopf; je Feld die erste Spalte."""
+    aus: dict[str, str] = {}
+    for sp in kopf:
+        fid = bt_feld(sp)
+        if fid and fid not in aus:
+            aus[fid] = sp
     return aus
 
 
-def _spalten_nach_namen(kopf: list[str]) -> dict[str, str]:
+def _spalten_nach_namen(kopf: list[str], ausser: set[str] | None = None) -> dict[str, str]:
     frei = {_norm(s): s for s in kopf if s}
     aus: dict[str, str] = {}
+    ausser = ausser or set()
     for genau in (True, False):
         for f, syn in _SYNONYME.items():
-            if f in aus or (not genau and f in NUR_GENAU):
+            if f in aus or f in ausser or (not genau and f in NUR_GENAU):
                 continue
             for w in syn.split():
                 w = _norm(w)
@@ -848,11 +894,27 @@ def probe_csv(datei: Path, profil: dict, k) -> list[Probe]:
     return probe(adapter_csv.lesen(Path(datei), p, k), k)
 
 
+class _NamenMitBT(set):
+    """Normalisierte Spaltennamen; zählt zusätzlich Köpfe mit BT-Nummer („bt1“, „rechnungsnummerbt1“,
+    „bt1rechnungsnummer“) als bekannt (rc2), wenn die Nummer zu einem unserer Felder gehört."""
+
+    _RE = re.compile(r"^bt0*([0-9]{1,3})(?![0-9])|(?:^|[a-z])bt0*([0-9]{1,3})$")
+
+    def __contains__(self, n: object) -> bool:
+        if set.__contains__(self, n):
+            return True
+        m = self._RE.search(str(n or ""))
+        if not m:
+            return False
+        bt = f"BT-{int(m.group(1) or m.group(2))}"
+        return bt in FELD or bt in BT_ZU_FELD
+
+
 def synonym_namen() -> set[str]:
     """Alle bekannten Spalten-Synonyme, normalisiert (für Block-Kopfzeilen ohne Profil)."""
     from . import csv_bloecke
 
-    aus: set[str] = set()
+    aus: set[str] = _NamenMitBT()
     for syn in _SYNONYME.values():
         for w in syn.split():
             aus.add(csv_bloecke.name_norm(w))
@@ -1310,6 +1372,10 @@ def bloecke_vorschlagen(fmt: Format) -> tuple[list[dict], object]:
 def typ_vorschlag(kopf: list[str]) -> str:
     n = set()
     from . import csv_bloecke
+
+    bt = {bt_feld(c) for c in kopf} - {None}
+    if bt & {"BT-129", "BT-146", "BT-153", "steuer"}:
+        return "positionen"
 
     n = {csv_bloecke.name_norm(c) for c in kopf}
     if n & {
