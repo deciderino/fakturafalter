@@ -77,7 +77,11 @@ VARIANTEN = {
         )
     ],
     "blo": ["variante-blo_hotel.csv"],  # ab 0.9.8: CSV-Blöcke mit eigener Kopfzeile
+    # ab 1.0.0-rc2: Excel/ODS über ein Profil (openpyxl bzw. ODS-Leser im Paket), Layoutformat 2 mit Platzhaltern
+    "tx": ["rc2/rechnungen-export-fiktiv.xlsx"],
+    "to": ["rc2/rechnungen-export-fiktiv.ods"],
 }
+TABELLEN = {"tx": "profil-rc2-excel.yaml", "to": "profil-rc2-ods.yaml"}
 # Variante k: Rechnungsnummer prüfen und Dateiname je Belegart (Einstellungen → Ausgabe, ab 0.9.5)
 NUMMERNKREISE = {
     "rechnung": {
@@ -92,12 +96,13 @@ NAMEN_K = [
     "2026_2026000102_Hofladen_Beispiel_Inh._Erika_Musterfrau.pdf",
     "Gutschrift_GS-2026-0011.pdf",
 ]
+TABELLEN_PDF = ["RE-2026-9101_zugferd.pdf", "RE-2026-9102_zugferd.pdf"]
 MODUS = {"x": "pdf_xml", "e": "pdf_xml", "w": "pdf_xml"}
 XRECHNUNG_B = [
     "RE-2026-0102_xrechnung.xml",
     "RE-2026-0103_xrechnung.xml",
 ]  # Variante b: Unterordner XRechnung
-ALLE_PRUEFEN = ("d", "e", "l", "k", "s", "u", "w", "p", "blo")
+ALLE_PRUEFEN = ("d", "e", "l", "k", "s", "u", "w", "p", "blo", "tx", "to")
 
 
 def winpfad(p: Path) -> str:
@@ -173,6 +178,12 @@ def main() -> int:
             d["layout"] = yaml.safe_load(
                 (BSP / "layout" / "layout-beispiel.yaml").read_text(encoding="utf-8")
             )["layout"]
+        if v in TABELLEN:  # ab 1.0.0-rc2: Tabellenprofil + Layout mit {BT-13}/{Bauleiter}
+            shutil.copy(BSP / "rc2" / TABELLEN[v], b / "cfg")
+            d["csv_profile"] = [TABELLEN[v]]
+            d["layout"] = yaml.safe_load(
+                (BSP / "rc2" / "layout-platzhalter-fiktiv.yaml").read_text(encoding="utf-8")
+            )["layout"]
         if v == "k":
             d.setdefault("optionen", {})["nummernkreise"] = NUMMERNKREISE
         if v == "b":
@@ -223,6 +234,8 @@ def main() -> int:
             gut &= all(b"/Image" in x.read_bytes() and b"/Form" in x.read_bytes() for x in neu)
         if v == "k":
             gut &= [x.name for x in neu] == NAMEN_K
+        if v in TABELLEN:
+            gut &= [x.name for x in neu] == TABELLEN_PDF
         print(
             f"Variante {v}: exit {r.returncode}, {len(neu)} PDF(s), Prüfung {sorted(set(pruef))}, "
             f"Fehlerordner {fehler or 'leer'}, Ausgang {schmutz or 'sauber'}, Protokoll "

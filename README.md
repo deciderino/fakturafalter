@@ -51,6 +51,13 @@ verarbeitet werden.
   und eigene Dateinamen.
 
 
+**1.0.0-rc2:** Excel- und LibreOffice-Tabellen als Eingang, **Umwandeln …** von Hand und per Ziehen ins
+Fenster (auch bei ausgeschalteter Überwachung), BT-Nummern als Spaltennamen und im Assistenten, und ein
+flexiblerer Layout-Editor (Layoutformat 2: Absender und Fußzeile frei wählbar, „Briefpapier enthält …“,
+Pflichtangaben-Prüfung nach § 14 Abs. 4 UStG, Platzhalter wie `{BT-13}`). Layouts aus älteren Versionen (bis 1.0.0-rc1)
+werden abgelehnt und im Editor neu eingerichtet; CSV-Profile bleiben gültig. Siehe
+[Release-Notes](docs/release-notes-1.0.0-rc2.md).
+
 **1.0.0-rc1:** CSV-Profile aus 0.9.11 passen nicht mehr automatisch (Profilformat 2).
 Fakturafalter lehnt sie ab und lässt die Datei unverändert. Die Zuordnung im
 Assistenten neu einrichten oder bei 0.9.11 bleiben. Der Kundenstamm entfällt;
@@ -102,6 +109,7 @@ Die Screenshots zeigen ausschließlich erfundene Beispieldaten.
 | Eingang | Empfehlung | Hinweis |
 |---|---|---|
 | **CSV** (Export aus der Warenwirtschaft) | empfohlen | Passen die Pflichtnamen des [Standardformats](docs/csv-standard.md) (ab 1.0 inkl. Kundenname), greift das eingebaute Profil; sonst einmal zuordnen mit dem CSV-Assistenten. Format siehe [csv-format.md](docs/csv-format.md) |
+| **Excel / LibreOffice Calc** (`.xlsx`, `.ods`) | möglich (ab 1.0.0-rc2) | wie eine CSV über ein Profil aus dem Assistenten; Tabellenblatt und Kopfzeile wählst du dort |
 | **XML** (ZUGFeRD / Factur-X, XRechnung; CII oder UBL) | empfohlen | ohne Zuordnung; andere XML-Formate (z. B. DATEV, Lexware) werden nicht gelesen |
 | **CSV oder XML + Original-PDF** | optional | Haken „Zusätzlich das PDF der Rechnung verwenden“: der Original-Druck bleibt die Sichtseite |
 | **Nur PDF** (Angaben aus dem Rechnungsdruck) | möglich | Layout einmal anlernen; CSV oder XML sind zuverlässiger, siehe unten |
@@ -130,9 +138,10 @@ Vorlage muss zum Layout passen, und die Ergebnisse solltest du kontrollieren. De
 
 ## Geplante Funktionen
 
-- **Textdatei als Eingang**, etwa ein Rechnungsdokument aus Word oder einer anderen Textverarbeitung.
 - *geplant:* Anlagen aus der CSV (eingebettete Dateien), Abschlags-, Teil- und Schlussrechnungen.
-- *nicht unterstützt:* OCR (reine Scans ohne Textebene), Layout-Erkennung ohne Vorlage.
+- *nicht unterstützt:* OCR (reine Scans ohne Textebene), Layout-Erkennung ohne Vorlage, Word- und Textdateien
+  (`.docx`, `.doc`, `.odt`, `.rtf`) sowie das alte Excel-Format `.xls`. Tipp: das Dokument als PDF speichern und
+  unter „Nur PDF“ anlernen, oder aus der Warenwirtschaft als CSV exportieren.
 
 ## Datenschutz und Netz
 

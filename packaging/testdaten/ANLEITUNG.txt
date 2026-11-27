@@ -1,8 +1,15 @@
-Fakturafalter 1.0.0-rc1 – Testdaten
-===============================
+Fakturafalter 1.0.0-rc2 – Testdaten
+===================================
 
 Alle Firmen, Personen, Rechnungen und Kontonummern sind erfunden. Die CSV-Dateien
 stehen für Exporte einer Warenwirtschaft (ERP).
+
+1.0.0-rc2: Excel (.xlsx) und LibreOffice Calc (.ods) als Eingang über ein Profil, „Umwandeln …“
+von Hand und per Ziehen ins Fenster, BT-Nummern als Spaltennamen, Layout-Editor im Layoutformat 2
+(„Briefpapier enthält …“, Pflichtangaben-Prüfung, Platzhalter). Layouts bis 1.0.0-rc1 werden abgelehnt
+und im Editor neu eingerichtet; CSV-Profile aus 1.0.0-rc1 bleiben gültig.
+Nicht unterstützt: Word/ODT/RTF und das alte .xls (Tipp: als PDF speichern und „Nur PDF“ anlernen,
+oder als CSV exportieren).
 
 1.0.0-rc1: CSV-Profile aus 0.9.11 werden abgelehnt (Profilformat 2). Die alte
 Datei bleibt unverändert. Zuordnung im Assistenten neu einrichten oder bei 0.9.11
@@ -25,7 +32,10 @@ beispiele/industrie/       Normteile Brückner GmbH (Schrauben-Großhandel), 8 R
 beispiele/xml/             Druck NB-26-1001 mit ZUGFeRD-XML (CII) gleichen Namens, konfiguration-pdf-xml.yaml
 beispiele/pdf-erkennung/   Sechs Handwerksbetriebe mit unterschiedlichen Layouts (PDF + CSV)
 beispiele/xml-eingang/     XRechnungen (UBL/CII) mit Rabatt, Zuschlag, Gutschrift, Lastschrift, Anzahlung
-beispiele/layout/          Layouteditor: Beispiel-Vorlage, Fantasie-Logo, Briefpapier für Seite 1 und Folgeseiten
+beispiele/layout/          Layouteditor: Beispiel-Vorlage (Layoutformat 2), Fantasie-Logo, Briefpapier für Seite 1
+                           und Folgeseiten
+beispiele/rc2/             Neu in 1.0.0-rc2: Excel-Mappe und ODS-Tabelle mit Profilen, Layout mit Platzhaltern,
+                           altes Layout (Layoutformat 1) für den Ablehnungstest
 beispiele/                 Weitere CSV-/Text-Varianten aus alten Warenwirtschaften (Variante D: Rabatt,
                            Gutschrift, Lastschrift; Variante K: Kundenbezeichnung 1–3, Zeichnungs-Nr./Index)
 
@@ -83,13 +93,15 @@ Optional: Einstellungen → Eingang & Vorlagen → „XML (ZUGFeRD / XRechnung)�
 
 Test 6: Layouteditor
 --------------------
-1. Einstellungen → Absender → „Layout gestalten…“. Links die Bausteine (Schloss = Pflichtangabe nach
-   § 14 Abs. 4 UStG), in der Mitte die Seite mit Beispieldaten, rechts die Eigenschaften in mm.
+1. Einstellungen → Absender → „Layout gestalten…“. Links die Bausteine (Schloss nur an Empfänger,
+   Rechnungskopf, Positionen und Summen), in der Mitte die Seite mit Beispieldaten, rechts die
+   Eigenschaften in mm. Weiteres zum Layoutformat 2 in Test 27.
 2. Bausteine ziehen und an den Ecken größer/kleiner ziehen; „Raster an/aus“ umschalten. Zwei
-   Pflichtbausteine übereinander → rote Rahmen, „Speichern“ geht dann nicht.
+   Bausteine mit Pflichtangaben übereinander → rote Rahmen, „Speichern“ geht dann nicht.
 3. Logo anklicken → „Bild wählen…“ → beispiele/layout/logo.png. „Textfeld hinzufügen“, Text ändern;
    „Bildfeld hinzufügen…“. Mit „Ebene nach vorn/hinten“ übereinanderlegen.
-4. „Briefpapier laden…“ → beispiele/layout/briefpapier-seite1.pdf (Meldung „PDF/A-tauglich“), dann
+4. „Briefpapier laden…“ → beispiele/layout/briefpapier-seite1.pdf (Meldung „PDF/A-tauglich“), danach
+   fragt „Briefpapier – Seite 1“, was schon draufsteht (hier: Name des Verkäufers anhaken). Dann
    „Folgeseite“ → briefpapier-folgeseite.pdf. „Vorschau mit Beispieldaten“ blendet die Rahmen aus.
 5. „Speichern“, dann unten in den Einstellungen „Speichern“. Eine CSV ohne Druck verwenden,
    z. B. beispiele/variante-a_positionen_utf8.csv in den Eingang legen (Eingangsformat CSV, Haken aus),
@@ -103,9 +115,9 @@ Test 7 mit variante-a_positionen_utf8.csv statt variante-d laufen lassen.
 
 Test 7: Rabatt, Gutschrift, Lastschrift (CSV und XML)
 -----------------------------------------------------
-Linux:    ./Fakturafalter-1.0.0-rc1-x86_64.AppImage -c beispiele/konfiguration.yaml \
+Linux:    ./Fakturafalter-1.0.0-rc2-x86_64.AppImage -c beispiele/konfiguration.yaml \
               --dateien beispiele/variante-d_rabatt_gutschrift_lastschrift.csv
-          ./Fakturafalter-1.0.0-rc1-x86_64.AppImage -c beispiele/xml/konfiguration-pdf-xml.yaml \
+          ./Fakturafalter-1.0.0-rc2-x86_64.AppImage -c beispiele/xml/konfiguration-pdf-xml.yaml \
               --dateien beispiele/xml-eingang/*.xml
 Windows:  fakturafalter-cli.exe mit denselben Angaben (Pfade mit \).
 Erwartet: 6 × „OK“ und „[gültig]“. In den PDFs stehen Rabatt- und Zuschlagszeilen, „Gutschrift“ mit
@@ -139,7 +151,7 @@ Test 9: Fortschritt der Verarbeitung
 
 Test 10: Nur PDF mit Anlern-Assistent (unterstützt, nicht empfohlen)
 -------------------------------------------------------------------
-Linux:    ./Fakturafalter-1.0.0-rc1-x86_64.AppImage -c beispiele/industrie/konfiguration-nur-pdf.yaml
+Linux:    ./Fakturafalter-1.0.0-rc2-x86_64.AppImage -c beispiele/industrie/konfiguration-nur-pdf.yaml
 Windows:  Fakturafalter.exe -c beispiele\industrie\konfiguration-nur-pdf.yaml
 
 1. Schalter oben links auf „Überwachung an“. Nur die PDFs aus beispiele/industrie/eingang/ nach
@@ -211,7 +223,7 @@ Test 14: Ausgang als Postbox, Protokollordner, XRechnung-Ablage, Updateprüfung 
 
 Test 15: Steuer-Sonderfälle, Fremdwährung, Kleinunternehmer, Leitweg-ID (neu in 0.9.8)
 -------------------------------------------------------------------------------------
-1. CSV:   ./Fakturafalter-1.0.0-rc1-x86_64.AppImage -c beispiele/konfiguration.yaml \
+1. CSV:   ./Fakturafalter-1.0.0-rc2-x86_64.AppImage -c beispiele/konfiguration.yaml \
               --dateien beispiele/variante-s_steuerfaelle.csv
    Erwartet: 6 × „OK“ und „[gültig]“. RE-S-2026-001 Reverse Charge (Hinweis § 13b, „Ihre USt-IdNr.“),
    002 innergemeinschaftliche Lieferung nach Österreich, 003 Ausfuhr in die Schweiz, 004 nicht steuerbar in USD,
@@ -238,7 +250,7 @@ Test 15: Steuer-Sonderfälle, Fremdwährung, Kleinunternehmer, Leitweg-ID (neu i
 
 Test 16: CSV-Blöcke und Profillogik (neu in 0.9.8)
 --------------------------------------------------
-1. CSV-Blöcke:   ./Fakturafalter-1.0.0-rc1-x86_64.AppImage -c beispiele/konfiguration.yaml \
+1. CSV-Blöcke:   ./Fakturafalter-1.0.0-rc2-x86_64.AppImage -c beispiele/konfiguration.yaml \
                      --dateien beispiele/variante-blo_hotel.csv
    Erwartet: 1 × „OK“ und „[gültig]“, Profil „…blo…“ im Protokoll, SK-2026-0413
    netto 574,80 / USt 101,44 / brutto 676,24, Zahlbar bis 05.11.2026, Skonto-Hinweis
@@ -270,7 +282,7 @@ Test 17: Standardformat und Skonto (neu in 0.9.9)
 1. Einstellungen → Eingang & Vorlagen: Button „CSV-Vorlage speichern…“
    (Minimal / Vollständig / Beide). In einer frischen Konfiguration liegt
    unten die Karte „fakturafalter-standard“ (aktiv, nicht löschbar).
-2. CSV:   ./Fakturafalter-1.0.0-rc1-x86_64.AppImage -c beispiele/konfiguration.yaml \
+2. CSV:   ./Fakturafalter-1.0.0-rc2-x86_64.AppImage -c beispiele/konfiguration.yaml \
               --dateien beispiele/fakturafalter-standard-minimal.csv
    Erwartet: 2 × „OK“, Profil „fakturafalter-standard“, Rechnungen
    RE-2026-1001 und RE-2026-1002 (fiktiv). Einheit Stück wird zu H87.
@@ -286,7 +298,7 @@ Test 17: Standardformat und Skonto (neu in 0.9.9)
 
 Test 18: Blocklayout mit Markern und freien Feldern (neu in 0.9.9)
 -----------------------------------------------------------------
-1. CSV:   ./Fakturafalter-1.0.0-rc1-x86_64.AppImage -c beispiele/konfiguration.yaml \
+1. CSV:   ./Fakturafalter-1.0.0-rc2-x86_64.AppImage -c beispiele/konfiguration.yaml \
               --dateien beispiele/beispiel-bloecke-klassisch.csv
    Erwartet: 1 × „OK“, RE-2026-2101 (fiktiv), zwei Positionen, Skonto 2 % / 10 Tage,
    zahlbar in 30 Tagen, Profil „beispiel-bloecke-klassisch“ oder ein passendes
@@ -327,7 +339,7 @@ Nur fiktive Daten. Im Assistenten: Format → Blöcke festlegen → Spalten je B
    13,68 / 85,68, Zahlungsziel 30 Tage.
 
 Linux (Beispiel zu 1):
-  ./Fakturafalter-1.0.0-rc1-x86_64.AppImage -c beispiele/konfiguration.yaml \
+  ./Fakturafalter-1.0.0-rc2-x86_64.AppImage -c beispiele/konfiguration.yaml \
       --dateien beispiele/beispiel-satzart-bloecke-koepfe.csv
   (Profil zuerst im Assistenten einrichten oder die mitgelieferte
   profil-beispiel-satzart-bloecke-koepfe.yaml in die Konfiguration übernehmen.)
@@ -359,7 +371,7 @@ Kopfzeile; Datumsangaben TT.MM.JJ).
    im Assistenten gesetzt ist).
 
 Linux (wenn das Profil in der Testdaten-Konfiguration liegt):
-  ./Fakturafalter-1.0.0-rc1-x86_64.AppImage -c beispiele/konfiguration.yaml \
+  ./Fakturafalter-1.0.0-rc2-x86_64.AppImage -c beispiele/konfiguration.yaml \
       --dateien beispiele/beispiel-satzart-marker-in-spalte.csv
 
 Dunkel/Hell: Einstellungen → Darstellung, denselben Assistenten-Schritt
@@ -383,7 +395,7 @@ am Ende eine einspaltige Restzeile).
    (Profilformat 2, siehe Test 22) – im Assistenten neu einrichten.
 
 Linux (wenn das Profil in der Testdaten-Konfiguration liegt):
-  ./Fakturafalter-1.0.0-rc1-x86_64.AppImage -c beispiele/konfiguration.yaml \
+  ./Fakturafalter-1.0.0-rc2-x86_64.AppImage -c beispiele/konfiguration.yaml \
       --dateien beispiele/beispiel-satzart-pos-kopf-und-restzeile.csv
 
 
@@ -429,3 +441,68 @@ Kundennummer K-1001).
 3. Statt des Namens nur die Kundennummer „K-1001“ eintragen: gleiches Ergebnis.
 4. Schalter aus: keine XRechnung, auch wenn der Kunde in der Liste steht.
 
+
+Test 25: Excel und LibreOffice Calc (neu in 1.0.0-rc2)
+------------------------------------------------------
+Dateien: beispiele/rc2/rechnungen-export-fiktiv.xlsx und .ods (zwei Titelzeilen, Blatt „Export“
+und ein Blatt „Notizen“; Spalte „Bestellnummer (BT-13)“).
+
+1. Einstellungen → Eingang & Vorlagen → „CSV“ → „Neue CSV einrichten…“ → die .xlsx wählen
+   (Dateiauswahl „CSV- und Tabellendateien“).
+2. Format: statt Trennzeichen/Zeichensatz stehen „Tabellenblatt“ (vorgeschlagen: Export) und
+   „Kopfzeile steht in Zeile“ (vorgeschlagen: 3). Blatt „Notizen“ wählen → Vorschau zeigt den Text,
+   zurück auf „Export“.
+3. Zuordnung: „Bestellnummer (BT-13)“ ist schon der Bestellnummer zugeordnet; neben den Feldern steht
+   grau die BT-Nummer, der Tooltip nennt den amtlichen Namen. „Feld suchen …“: „Käufer“, „Buyer“ und
+   „BT-13“ finden Treffer.
+4. Speichern und die Datei in den Eingang legen. Erwartet: RE-2026-9101 und RE-2026-9102 „gültig“,
+   Einzelpreis 0,12 €, 2,5 Std. × 65,00 € = 162,50 €, keine Rundungsreste.
+5. Dasselbe mit der .ods. Ohne Klicken: beispiele/rc2/profil-rc2-excel.yaml bzw. profil-rc2-ods.yaml
+   über „Profil übernehmen…“.
+6. Eine fiktive .docx, .odt oder .xls über „Umwandeln …“: Hinweis „übersprungen … nicht unterstützt“
+   mit Tipp (Word/ODT als PDF speichern und „Nur PDF“ anlernen oder als CSV exportieren; .xls als
+   .xlsx speichern). Im Eingang: die Datei geht nach Fehler, die _fehler.txt nennt denselben Tipp.
+
+
+Test 26: Umwandeln von Hand und Ziehen ins Fenster (neu in 1.0.0-rc2)
+---------------------------------------------------------------------
+1. Überwachung aus. Im Hauptfenster „Umwandeln …“ → „Dateien wählen …“ →
+   beispiele/variante-a_positionen_utf8.csv. Erwartet: Fortschritt, Ergebnis im Ausgang, die Datei in
+   beispiele/ liegt unverändert da (verarbeitet wird eine Kopie). Der Schalter Überwachung bleibt aus.
+2. Dieselbe Datei noch einmal: Erwartet „Zu prüfen“ (Rechnungsnummer schon erzeugt).
+3. Einen neuen Ordner mit einer Kopie von beispiele/variante-k_kundenbezeichnung_erp.csv und einer
+   leeren Datei brief.docx ins Fenster ziehen: beim Ziehen zeigt das Fenster „Loslassen zum
+   Umwandeln …“. Die CSV wird verarbeitet, brief.docx nennt Fakturafalter als übersprungen (mit Tipp).
+   Unterordner werden nicht durchsucht.
+
+
+Test 27: Layout-Editor, Layoutformat 2 (neu in 1.0.0-rc2)
+---------------------------------------------------------
+1. „Layout gestalten…“ → Fußzeile anklicken. Rechts „Dieser Baustein zeigt:“ – „USt-IdNr.“ abwählen.
+   Erwartet: roter Kasten „Seite 1: Die USt-IdNr. fehlt …“, „Speichern“ sagt, was fehlt. Wieder
+   anhaken → roter Kasten leer. Ebenso: „Bank“ abwählen und „Zahlung / Bank“ ausblenden → „Die
+   Bankverbindung (IBAN) fehlt …“ (Zahlungsart Überweisung mit IBAN).
+2. Absender ausblenden (Sichtbar aus). Name und Anschrift stehen noch in der Fußzeile → kein roter
+   Kasten. Im Standard steht ein gelber Hinweis „steht doppelt (Absender und Fußzeile)“ – Speichern
+   geht trotzdem.
+3. Briefpapier laden (Test 6) und im Dialog „Name“ anhaken: der Name entfällt in Absender und
+   Fußzeile dieser Seite, ein gelber Hinweis erklärt das; die Haken an den Bausteinen bleiben.
+4. Textfeld hinzufügen → „Platzhalter einfügen…“ → „Bestellnummer (BT-13)“; unter „Eigene Spalten aus
+   deinen CSV-Profilen“ stehen nicht zugeordnete Spalten (nach Test 25: „Bauleiter“).
+   Fertige Vorlage: der Block „layout:“ aus beispiele/rc2/layout-platzhalter-fiktiv.yaml mit der
+   Excel-Datei aus Test 25: unter der Anschrift steht „Bestellung PO-77801 · Bauleiter Hans Beispiel“,
+   bei RE-2026-9102 bleiben die Werte leer.
+5. Folgeseite: Absender und Fußzeile ausblenden → kein roter Kasten (der Verkäufer steht auf Seite 1),
+   nur ein Hinweis. Rechnungskopf und Positionen tragen ein Schloss und bleiben sichtbar.
+
+
+Test 28: Altes Layout wird abgelehnt (neu in 1.0.0-rc2)
+-------------------------------------------------------
+Datei: beispiele/rc2/layout-alt-format1-fiktiv.yaml (Layout aus 1.0.0-rc1, Layoutformat 1).
+
+1. Den Block „layout:“ aus dieser Datei in beispiele/konfiguration.yaml einsetzen und Fakturafalter
+   mit dieser Konfiguration starten.
+2. „Layout gestalten…“: Hinweis „Dieses Layout passt nicht mehr zu Fakturafalter 1.0“ mit
+   „Layoutformat 1“, der Editor startet auf dem Standard. Ohne Speichern bleibt die Datei unverändert.
+3. variante-a_positionen_utf8.csv verarbeiten (Sichtteil wird neu erzeugt): Erwartet „Zu prüfen“ mit
+   dem Grund Layoutformat – kein stilles Standardlayout.

@@ -90,6 +90,12 @@ def vorlage() -> dict:
     f["positionen"].y, f["positionen"].hoehe = 66, 154
     f["summen"].x, f["zahlung"].x = 20, 115
     f["summen"].breite, f["zahlung"].breite = 85, 75
+    # Layoutformat 2 (ab 1.0.0-rc2): das Briefpapier zeigt schon den Firmennamen, Absender und Fußzeile drucken
+    # deshalb nur den Rest der Verkäufer-Angaben
+    for seite in (v.seite1, v.folgeseite):
+        seite.briefpapier_enthaelt = ["name"]
+        seite.bausteine["absender"].angaben = ["anschrift"]
+        seite.bausteine["fusszeile"].angaben = [a for a in layout.ANGABEN_JE["fusszeile"] if a != "name"]
     fehler = layout.pruefen(v)
     assert not fehler, fehler
     return v.als_dict()
@@ -100,8 +106,11 @@ def main() -> int:
     logo(ZIEL / "logo.png")
     briefpapier(ZIEL / "briefpapier-seite1.pdf", folge=False)
     briefpapier(ZIEL / "briefpapier-folgeseite.pdf", folge=True)
-    kopf = ("# Layout-Vorlage (Layouteditor, Fakturafalter 0.7.0) – alle Daten fiktiv.\n"
-            "# Einsetzen als Block „layout:“ in konfiguration.yaml; Pfade relativ zur Konfiguration.\n")
+    kopf = ("# Layout-Vorlage (Layouteditor, Layoutformat 2 ab Fakturafalter 1.0.0-rc2) – alle Daten fiktiv.\n"
+            "# Einsetzen als Block „layout:“ in konfiguration.yaml; Pfade relativ zur Konfiguration.\n"
+            "# Das Briefpapier zeigt schon den Firmennamen (briefpapier_enthaelt: [name]); Absender und Fußzeile drucken\n"
+            "# deshalb nur noch Anschrift, Steuer-, Register-, Bank- und Kontaktangaben. Layoutformat 1 (bis 1.0.0-rc1) wird\n"
+            "# abgelehnt und muss im Editor neu eingerichtet werden.\n")
     (ZIEL / "layout-beispiel.yaml").write_text(kopf + yaml.safe_dump({"layout": vorlage()}, allow_unicode=True,
                                                                      sort_keys=False), encoding="utf-8")
     print("geschrieben:", *sorted(x.name for x in ZIEL.iterdir()))

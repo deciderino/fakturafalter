@@ -1,6 +1,6 @@
 # CSV-Exportspezifikation für Fakturafalter
 
-**Spezifikation 1.6** · Stand 27.11.2026 (Europe/Berlin) · Grundlage App **1.0.0-rc1**
+**Spezifikation 1.7** · Stand 27.11.2026 (Europe/Berlin) · Grundlage App **1.0.0-rc2**
 
 Diese Beschreibung richtet sich an Systemadmins und Entwickler einer
 **Warenwirtschaft (ERP)**. Sie legt fest, wie ein Rechnungs-CSV aussehen soll,
@@ -23,6 +23,7 @@ Versionsgeschichte (§ 10) drehen muss:
 |---|---|
 | ohne Marker bzw. **verfügbar ab 0.9.8.4** | Verhalten seit 0.9.8.4, soweit nicht anders markiert. |
 | **verfügbar ab 0.9.9** | Eingebautes Standardprofil und strukturiertes Skonto in BT-20 (`#SKONTO#`). |
+| **verfügbar ab 1.0.0-rc2** | BT-Nummern als Spaltennamen, Excel (`.xlsx`) und LibreOffice Calc (`.ods`) über ein Profil. |
 | **geplant, später** | Beschlossen, aber noch nicht in der aktuellen Lieferung. |
 | **nicht unterstützt** | Wird nicht umgesetzt, siehe § 8 (früher: nicht vorgesehen). |
 
@@ -51,12 +52,13 @@ ZUGFeRD erzeugt.
 | Trennzeichen | **Semikolon** (`;`) | Ein Profil kann Komma, Tabulator oder `\|` festlegen oder automatisch erkennen. Für diesen Standard fest Semikolon verwenden. |
 | Textbegrenzer | `"` | Feld, das Semikolon, Anführungszeichen oder Zeilenumbruch enthält, in Anführungszeichen setzen; ein `"` im Wert als `""`. |
 | Zeilenende | `LF` oder `CRLF` | Beides wird gelesen. |
-| Kopfzeile | **Pflicht**, erste Zeile = genaue Spaltennamen | Ohne Kopfzeile nur mit abweichendem Profil. Spaltennamen ohne führende/trailing Leerzeichen (die App trimmt sie). |
+| Kopfzeile | **Pflicht**, erste Zeile = genaue Spaltennamen | Ohne Kopfzeile nur mit abweichendem Profil. Spaltennamen ohne führende/trailing Leerzeichen (die App trimmt sie). *Verfügbar ab 1.0.0-rc2:* Statt des Namens darf eine Spalte die **BT-Nummer** aus EN 16931 tragen (`BT-1`, `BT-13`, auch `bt_13` oder `BT 13`); der Assistent ordnet sie dann direkt zu, vor jeder Namenserkennung. `BT-1` und `BT-10` werden sicher unterschieden; eine Spalte mit zwei BT-Nummern gilt nicht als BT-Spalte. |
 | Dezimaltrennzeichen | **Komma** (`149,00`, `1234,50`) | |
 | Tausenderpunkt | optional `1.234,50` | Wird nur gelesen, wenn das Profil `zahlen.tausender: "."` setzt (der Assistent tut das typischerweise bei DezimalKomma). Ohne diese Einstellung wird `1.234,50` nicht als Zahl erkannt (*verfügbar ab 0.9.9:* das Standardprofil setzt den Tausenderpunkt). Empfehlung an den Export: Beträge **ohne** Tausendergruppierung schreiben, das ist eindeutig. |
 | Datum | **`TT.MM.JJJJ`** (`02.11.2026`) | Andere Formate nur mit abweichendem Profil. |
 | Leere Zelle | kein Wert | Nur Leerzeichen gilt als leer. Bei **Menge** und **Einzelpreis** gelten außerdem `0`, `0,00` und `0.0` als leer (keine Position). |
 | Dateiname | Extension `.csv`, kein führender Punkt oder `~` | Dateien, deren Name mit `.` oder `~` beginnt oder auf `.tmp`, `.part` bzw. `.crdownload` endet, **werden ignoriert**. Groß/Kleinschreibung der Endung ist egal. Ein festes Namensmuster ist nicht vorgeschrieben; sinnvoll z. B. `RE-2026-1001.csv` oder eine Sammeldatei `rechnungen-2026-11-26.csv`. |
+| Excel / LibreOffice | *verfügbar ab 1.0.0-rc2* | `.xlsx` (Excel 2007 und neuer) und `.ods` (LibreOffice Calc) liest Fakturafalter über ein Profil aus dem Assistenten wie eine CSV: Tabellenblatt und Zeile der Spaltenüberschriften wählst du dort. Zahlen- und Datumszellen werden genau übernommen (Beträge als Dezimalzahl, ohne Rundungsfehler der Tabellenkalkulation); bei Formeln zählt der zuletzt gespeicherte Wert. Das alte Excel-Format `.xls` und verschlüsselte Mappen sind *nicht unterstützt* (in `.xlsx` speichern). Für einen neuen Export bleibt **CSV** die Empfehlung. |
 | Rechnungen je Datei | **eine oder mehrere** | Im Standardaufbau (eine Zeile je Position) bilden alle Zeilen mit derselben Rechnungsnummer eine Rechnung. Der Blockmodus (eine Datei = eine Rechnung, optionale Marker *verfügbar ab 0.9.9*, Satzart als Anfangsregel und Spalten je Block *verfügbar ab 0.9.10*, freie Blöcke und Satzart-Wert in der Datenzeile *verfügbar ab 0.9.11*, Textzeilen wie hier) ist ein **anderer, optionaler Eingang**, nicht Bestandteil dieses Export-Standards. Wer neu exportiert, liefert weiter eine Zeile je Position. Einzelheiten: [csv-format.md](csv-format.md#blöcke-mit-eigener-kopfzeile-ab-098-überarbeitet-ab-099). |
 
 ### Hotfolder (Eingangsordner)
@@ -512,6 +514,10 @@ Strukturiertes Skonto (§ 4.6) und das eingebaute Standardprofil sind
 ### 8.2 Nicht unterstützt
 
 - **Verkäufer außerhalb Deutschlands** (BT-40 ≠ DE).
+- **Word- und Textverarbeitungsdateien** (`.docx`, `.doc`, `.odt`, `.rtf`) und das
+  alte Excel-Format `.xls`. Tipp: das Dokument als PDF speichern und unter
+  „Nur PDF“ anlernen, oder aus der Warenwirtschaft (ERP) als CSV exportieren
+  (bzw. `.xls` als `.xlsx` speichern).
 - **Positionsgruppen bzw. Zwischensummen** im EN-16931-Profil (nur ZUGFeRD
   EXTENDED). Zwischenzeilen auf der Sichtseite über Kommentarzeilen (§ 3).
 - **Eigenes Lieferscheindatum:** EN 16931 hat im Kernprofil kein solches Feld.
@@ -621,3 +627,4 @@ Spezifikation erhöhen und die Änderung in der Liste unten eintragen.
 | 1.4 | 26.11.2026 | Satzart als Anfangsregel im optionalen Block-Eingang, Spalten je Block (Name und Position) und farbiger Assistent: *verfügbar ab 0.9.10*. Der Export-Standard bleibt eine Zeile je Position.
 | 1.5 | 26.11.2026 | Optionaler Block-Eingang: Blöcke frei anlegen und benennen, Blockart (normal / sich wiederholend) manuell, Satzart-Wert auch in einer Datenzeile (z. B. `#Kopf`, `#Beleg`), mehrere normale Blöcke (Kunde und Beleg) ohne Kollision, Pflichtfelder inkl. Käufername oder Kundennummer vor dem Weiter im Spalten-Schritt: *verfügbar ab 0.9.11*. Ab 0.9.11.1 liest der Eingang die Blockspalten gegen die jeweilige Block-Kopfzeile (wie die Vorschau); der Export-Standard bleibt eine Zeile je Position. Ab 0.9.11.2 gelten EURO/Euro/€/EUR als EUR; Text- und Restzeilen im Positionsblock lösen keine falsche Meldung „Spalte fehlt“ aus.
 | 1.6 | 27.11.2026 | App 1.0.0-rc1. Kundenname (BT-44) ist Pflichtspalte des Standardformats, Kundennummer optional. Der Kundenstamm entfällt; Käuferangaben kommen aus der Quelle. Profile im Format 1 werden abgelehnt (neu einrichten oder bei 0.9.11 bleiben). XRechnung zusätzlich über eine einfache Liste in den Einstellungen (Name und/oder Nummer, optionale Leitweg-ID). Marker *nicht unterstützt* (früher: nicht vorgesehen).
+| 1.7 | 27.11.2026 | App 1.0.0-rc2. Spaltennamen dürfen BT-Nummern sein (`BT-13` …), *verfügbar ab 1.0.0-rc2*. Excel (`.xlsx`) und LibreOffice Calc (`.ods`) über ein Profil (Blatt und Kopfzeile im Assistenten), *verfügbar ab 1.0.0-rc2*. Word/ODT/RTF und `.xls`: *nicht unterstützt* (mit Tipp). Der Export-Standard bleibt CSV, eine Zeile je Position.

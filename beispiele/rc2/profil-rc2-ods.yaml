@@ -1,0 +1,103 @@
+# Fakturafalter 1.0.0-rc2 – Beispielprofil, alle Daten fiktiv (erzeugt mit tools/rc2_beispiele.py).
+profil: Beispiel ODS (rc2)
+version: 2
+beschreibung: 'Beispiel 1.0.0-rc2 (fiktiv): Eingerichtet mit dem Assistenten aus rechnungen-export-fiktiv.ods:
+  Blatt „Export“ ab Zeile 3 · Dezimalkomma'
+datei:
+  muster: '*.ods'
+  kodierung: utf-8
+  trennzeichen: ;
+  textbegrenzer: '"'
+  kopfzeile: true
+  blatt: Export
+  startzeile: 3
+  spalten:
+  - Rechnungsnummer
+  - Rechnungsdatum
+  - Lieferdatum
+  - Kunde
+  - Straße
+  - PLZ
+  - Ort
+  - Bestellnummer (BT-13)
+  - Bauleiter
+  - Artikel
+  - Menge
+  - Einheit
+  - Einzelpreis
+  - USt
+zahlen:
+  dezimal: ','
+  tausender: .
+datum:
+  format: '%d.%m.%Y'
+aufbau:
+  art: zeile_je_position
+  rechnung_schluessel: Rechnungsnummer
+  kopf_muss_gleich_sein:
+  - Rechnungsdatum
+  - Kunde
+felder:
+  kopf:
+    BT-13:
+      spalte: Bestellnummer (BT-13)
+      optional: true
+    BT-1:
+      spalte: Rechnungsnummer
+    BT-2:
+      spalte: Rechnungsdatum
+      typ: datum
+    BT-72:
+      spalte: Lieferdatum
+      typ: datum
+      optional: true
+    BT-44:
+      spalte: Kunde
+    BT-50:
+      spalte: Straße
+      optional: true
+    BT-53:
+      spalte: PLZ
+      optional: true
+    BT-52:
+      spalte: Ort
+      optional: true
+    BT-3:
+      fest: '380'
+    BT-5:
+      fest: EUR
+  position:
+    BT-129:
+      spalte: Menge
+      typ: zahl
+    BT-130:
+      spalte: Einheit
+      mapping: einheiten
+      optional: true
+    BT-146:
+      spalte: Einzelpreis
+      typ: zahl
+    steuer:
+      spalte: USt
+      mapping: steuer
+    BT-153:
+      spalte: Artikel
+mappings:
+  einheiten:
+    Stunde: HUR
+    Stück: H87
+    unbekannt: allgemein
+  steuer:
+    19 %:
+      BT-151: S
+      BT-152: 19
+    7 %:
+      BT-151: S
+      BT-152: 7
+    unbekannt: satz
+sicht:
+  positionsnummer: true
+  einheit: kurz
+  menge_exakt: true
+  kommentar_ohne_bezeichnungen: false
+  felder: {}

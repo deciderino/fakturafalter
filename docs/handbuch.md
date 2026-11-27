@@ -70,16 +70,27 @@ Weichen die Spaltennamen ab, richtest du die Datei einmal ein:
 
 1. Einstellungen → **Eingang & Vorlagen** → Eingangsformat **CSV**.
 2. **Neue CSV einrichten…** Eine echte Export-Datei aus der Warenwirtschaft
-   wählen (sie wird nur gelesen). Der Zuordnung einen Namen geben und **Weiter**.
+   wählen (sie wird nur gelesen). Ab 1.0.0-rc2 geht auch eine Excel-Mappe
+   (`.xlsx`) oder eine LibreOffice-Calc-Tabelle (`.ods`). Der Zuordnung einen
+   Namen geben und **Weiter**.
 3. **Format:** Trennzeichen, Zeichensatz, Dezimalzeichen und Datumsformat sind
-   erkannt. Passt die Vorschau nicht, stelle sie um. Unter **Aufbau** kannst du
+   erkannt. Passt die Vorschau nicht, stelle sie um. Bei Excel/ODS wählst du statt
+   Trennzeichen und Zeichensatz das **Tabellenblatt** und die Zeile, in der die
+   **Kopfzeile** steht (Titelzeilen darüber erkennt der Assistent). Zahlen- und
+   Datumszellen übernimmt Fakturafalter genau, ohne Rundungsreste der
+   Tabellenkalkulation. Unter **Aufbau** kannst du
    festlegen, ob jede Zeile eine Position ist, die Datei **Blöcke** hat
    (eine Datei = eine Rechnung) oder eine Satzart-Spalte Kopf und Positionen
    trennt. Sieht die Datei nach mehreren Blöcken aus, weist Fakturafalter darauf hin.
 4. **Spalten zuordnen** (nur wenn jede Zeile eine Position ist oder eine
    Satzart-Spalte Kopf und Positionen trennt): Über jeder Spalte steht, wofür
    Fakturafalter sie nimmt. Stimmt etwas nicht, wähle das Feld um oder
-   „nicht verwenden“. Unklare Steuerwerte bleiben auf „prüfen“.
+   „nicht verwenden“. Unklare Steuerwerte bleiben auf „prüfen“. Neben jedem
+   Feld steht grau die BT-Nummer aus EN 16931; der Tooltip nennt den amtlichen
+   Namen („Im Standard: BT-13 Bestellreferenz (Purchase order reference)“).
+   „Feld suchen …“ findet auch „Käufer“, „Verkäufer“, „Buyer“, „Seller“ oder
+   „BT-13“. Heißt eine Spalte schon `BT-13` (oder `bt_13`), ist sie gleich
+   zugeordnet (ab 1.0.0-rc2).
 5. Nur bei **Blöcken** (eine Datei = eine Rechnung, ab 0.9.10, erweitert ab 0.9.11):
    nach dem Format kommt **Blöcke festlegen**. Die CSV erscheint als farbige Tabelle
    (eigene Farben im hellen und dunklen Theme, mit lesbarer Schrift). Blöcke kannst
@@ -102,7 +113,11 @@ Weichen die Spaltennamen ab, richtest du die Datei einmal ein:
 6. **Textzeilen** und **Darstellung** (Standardaufbau und Blöcke): ob Kommentare oder gewollte Leerzeilen vorkommen; 0 und 0,00 gelten
    als leer; Text zwischen zwei Positionen standardmäßig zur oberen Position;
    Platzhalter `#LEER`; Positionsnummer, Menge, Einheit, Schalter
-   „Wenn die Einheit fehlt, Stück eintragen“. Die Darstellung erreichst du später
+   „Wenn die Einheit fehlt, Stück eintragen“ (die Sichtseite zeigt dann „Stk.“;
+   bei „Einheit wie in der CSV anzeigen“ die Schreibweise, die deine Datei bei
+   anderen Positionen für Stück verwendet) und
+   „Unterzeilen ohne Vorsatz anzeigen“ (z. B. ohne „Beschreibung:“ oder
+   „Art.-Nr.“ vor dem Wert). Die Darstellung erreichst du später
    auch über **Darstellung…** an der Profilkarte.
 7. **Probe:** zeigt je Rechnung „bereit“ oder „braucht Prüfung“ – es wird
    nichts erzeugt. Optional **Sichtseite ansehen…**. Dann **Speichern**. Die
@@ -199,11 +214,53 @@ Rechnung, wenn die Sichtseite neu gebaut wird – typischerweise bei CSV oder
 XML ohne den Haken „Zusätzlich das PDF der Rechnung verwenden“, oder wenn
 unter Ausgabe das Sichtbild „Immer neu erzeugen“ steht.
 
-Links die Bausteine (ein Schloss kennzeichnet Pflichtangaben nach § 14 Abs. 4
-UStG), in der Mitte die Seite mit Beispieldaten, rechts die Eigenschaften in mm.
-Zwei Pflichtbausteine übereinander bekommen rote Rahmen; Speichern geht dann
-nicht. Du kannst Logo und Briefpapier laden, Text- und Bildfelder hinzufügen
-und die Reihenfolge der Ebenen ändern.
+Links die Bausteine, in der Mitte die Seite mit Beispieldaten, rechts die
+Eigenschaften in mm. Du kannst Logo und Briefpapier laden, Text- und Bildfelder
+hinzufügen und die Reihenfolge der Ebenen ändern.
+
+**Layoutformat 2 (ab 1.0.0-rc2).**
+
+- Ein **Schloss** tragen nur noch Empfänger, Rechnungskopf, Positionstabelle und
+  Summen: diese Bausteine bleiben nötig. **Absender** und **Fußzeile** kannst du
+  ausblenden, wenn die Angaben schon im Briefpapier oder in einem anderen Baustein
+  stehen.
+- Bei Absender und Fußzeile wählst du unter **„Dieser Baustein zeigt:“**, welche
+  Verkäufer-Angaben er druckt (Absender: Name, Anschrift; Fußzeile zusätzlich
+  Handelsregister, USt-IdNr., Steuernummer, Bank und Kontakt). Bei der
+  Empfängeranschrift schaltest du die **Rücksendezeile** über der Anschrift
+  (für Fensterkuverts, Standard: an).
+- Nach dem Laden eines Briefpapiers (oder über **Briefpapier…**) hakst du an, was
+  schon draufsteht: **„Briefpapier enthält:“**. Das druckt Fakturafalter auf dieser
+  Seite nicht noch einmal. Seite 1 und Folgeseite haben getrennte Haken.
+  Fakturafalter liest das Briefpapier nicht – prüfe danach die Vorschau.
+- Die Fußleiste prüft nach § 14 Abs. 4 UStG, ob jede Pflichtangabe mindestens
+  einmal auf der Rechnung steht: Name und Anschrift des Verkäufers, USt-IdNr. oder
+  Steuernummer (die, die im Absender steht), das Handelsregister nur, wenn keine
+  USt-IdNr. eingetragen ist, die Bank nur bei Überweisung mit IBAN (im Baustein
+  „Zahlung / Bank“, in der Fußzeile oder im Briefpapier). Fehlt etwas,
+  steht es im **roten Kasten** und Speichern ist gesperrt. Steht etwas doppelt,
+  erscheint ein **gelber Hinweis**; Speichern bleibt möglich. Fakturafalter hakt
+  nichts von selbst ab.
+- Die **Folgeseite** braucht Rechnungskopf und Positionen (die Summen stehen auf
+  der letzten Seite). Der Verkäufer muss dort nicht stehen – er steht auf Seite 1.
+- Bausteine mit Pflichtangaben dürfen sich nicht überlappen (rote Rahmen).
+
+**Platzhalter in Textfeldern (ab 1.0.0-rc2).** In ein Textfeld kannst du Werte aus
+der Rechnung einsetzen: **Platzhalter einfügen…** zeigt die Rechnungsangaben
+(z. B. `{BT-13}` Bestellnummer) und die Spalten deiner CSV-Profile, die keinem Feld
+zugeordnet sind (z. B. `{Projektleiter}`). Du kannst auch selbst `{Spaltenname}`
+tippen. Es zählen nur Kopfwerte (ein Wert je Rechnung, keine Positionswerte). Fehlt
+ein Wert, bleibt die Stelle leer. `{{` und `}}` schreiben eine geschweifte Klammer.
+Ein Beispiel im Layoutformat 2 liegt unter `beispiele/layout/layout-beispiel.yaml`.
+
+**Layouts aus älteren Versionen (bis 1.0.0-rc1)** (Layoutformat 1) übernimmt Fakturafalter
+nicht. Der Editor erklärt das beim Öffnen und startet auf dem Standard, ohne die
+alten Positionen und ohne angehängtes Briefpapier. Die Konfiguration bleibt
+unverändert, bis du speicherst. Wird die Sichtseite neu erzeugt, geht die
+Rechnung mit diesem Grund nach **Zu prüfen** – nie still ins Standardlayout.
+Mit „Original-Druck verwenden“ als Sichtteil wird das Layout nicht gebraucht,
+dort ändert sich nichts. Wer das alte Layout behalten will, bleibt bei 0.9.11
+oder 1.0.0-rc1.
 
 Ohne eigene Vorlage gilt das Standardlayout. Die strukturierten Rechnungsdaten
 (XML) ändern sich durch das Layout nicht.
@@ -266,6 +323,21 @@ Original-PDF. **Nur PDF** siehe Abschnitt 9.
 4. Fertige Dateien liegen im `Ausgang`, die Quellen wandern nach `Erledigt`.
    Das Protokoll `protokoll.tsv` im Ordner `Protokoll` hält Nummer, Status und
    Prüfstand fest.
+
+### Umwandeln von Hand (ab 1.0.0-rc2)
+
+Neben **Jetzt einlesen** steht **Umwandeln …** mit dem Menü **Dateien wählen …**
+und **Ordner wählen …**. Du kannst Dateien oder einen Ordner auch einfach ins
+Hauptfenster ziehen. Das geht auch bei ausgeschalteter Überwachung; der Schalter
+bleibt, wie er ist.
+
+Fakturafalter nimmt dieselbe Strecke wie beim Eingang (Profil, Pflicht- und
+Validierungsprüfung, Prüfansicht, Ausgang). Deine **Originale bleiben
+unangetastet**: verarbeitet wird eine Kopie, die danach wie eine Datei aus dem
+Eingang in `Erledigt`, `Zu prüfen` oder `Fehler` landet. Bei einem Ordner zählen
+nur die Dateien direkt darin (keine Unterordner). Passt eine Datei zu keinem
+Eingangsformat (z. B. Word), sagt Fakturafalter das, statt sie still zu
+überspringen.
 
 **Ausgang als Postbox.** In den Ausgang kommt nur die fertige, geprüfte Datei,
 und zwar in einem Schritt (keine halben oder temporären Dateien). Gibt es eine
@@ -685,9 +757,16 @@ E-Rechnungsadresse des Kunden (BT-49) in der Quelle stehen; fehlt sie, landet
 die Rechnung mit Hinweis in „Zu prüfen“. Verglichen wird der ganze
 Kundenname oder dessen erste Zeile, außerdem die Kundennummer.
 
+Ab 1.0.0-rc2 gilt für **Layouts** das Layoutformat 2 (Abschnitt 5). Ein Layout
+aus älteren Versionen (bis 1.0.0-rc1) wird abgelehnt und im Editor neu eingerichtet; das
+Profilformat 2 der CSV-Profile ist davon nicht betroffen.
+
 Stand der Funktionen in 1.0: *geplant* sind Anlagen aus der CSV sowie
-Abschlags-, Teil- und Schlussrechnungen; *nicht unterstützt* sind OCR und eine
-Layout-Erkennung ohne Vorlage.
+Abschlags-, Teil- und Schlussrechnungen; *nicht unterstützt* sind OCR, eine
+Layout-Erkennung ohne Vorlage, Word- und Textdateien (`.docx`, `.doc`, `.odt`,
+`.rtf`) und das alte Excel-Format `.xls`. Tipp für Word/ODT: als PDF speichern
+und unter „Nur PDF“ anlernen, oder aus der Warenwirtschaft (ERP) als CSV
+exportieren.
 
 ## Rechtliches und Lizenz
 

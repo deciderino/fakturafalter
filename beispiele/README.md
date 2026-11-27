@@ -23,7 +23,9 @@ Absender immer **Muster GmbH**, USt-IdNr. DE123456788, Domains `*.example`. Kein
 | `vorlage-wawi-druck.yaml` | Zonen-/Anker-Vorlage zum PDF | |
 | `textdruck-wawi_cp1252.txt` | Reiner Textdruck (Generic/Text Only), RE-2026-0103, Seitenende = Formfeed | Windows-1252 ⚠️ echte Treiber liefern evtl. CP850 |
 
-Ordner **`layout/`**: Layouteditor (0.7.0) – `layout-beispiel.yaml` (Block `layout:` für die Konfiguration: Logo rechts, Empfänger rechts, Zahlung neben den Summen, eigenes Text- und Bildfeld), `logo.png` (Fantasie-Logo „Musterwerk“), `briefpapier-seite1.pdf` und `briefpapier-folgeseite.pdf` (PDF/A-taugliches Briefpapier). Erzeugt mit `tools/layout_beispiel.py`.
+Ordner **`layout/`**: Layouteditor (0.7.0, Layoutformat 2 ab 1.0.0-rc2) – `layout-beispiel.yaml` (Block `layout:` für die Konfiguration: Logo rechts, Empfänger rechts, Zahlung neben den Summen, eigenes Text- und Bildfeld; das Briefpapier enthält den Firmennamen, Absender und Fußzeile drucken den Rest), `logo.png` (Fantasie-Logo „Musterwerk“), `briefpapier-seite1.pdf` und `briefpapier-folgeseite.pdf` (PDF/A-taugliches Briefpapier). Erzeugt mit `tools/layout_beispiel.py`.
+
+Ordner **`rc2/`** (ab 1.0.0-rc2, erzeugt mit `tools/rc2_beispiele.py`): `rechnungen-export-fiktiv.xlsx` (Excel, Blatt „Export“ mit zwei Titelzeilen, Blatt „Notizen“, Spalte „Bestellnummer (BT-13)“, nicht zugeordnete Spalte „Bauleiter“) und dieselbe Tabelle als `rechnungen-export-fiktiv.ods` (von LibreOffice Calc gespeichert), dazu `profil-rc2-excel.yaml` und `profil-rc2-ods.yaml`; `layout-platzhalter-fiktiv.yaml` (Layoutformat 2 mit Textfeld „Bestellung {BT-13} · Bauleiter {Bauleiter}“); `layout-alt-format1-fiktiv.yaml` (Layout aus 1.0.0-rc1, wird abgelehnt). Erwartet: RE-2026-9101 netto 222,50 / USt 42,28 / brutto 264,78; RE-2026-9102 netto 39,90 / USt 2,79 / brutto 42,69.
 
 Ordner **`poc/`**: Proof of Concept (Tischlerei Muster GmbH → Beispiel Bau GmbH, TM-2026-0042: CSV mit Käuferdaten + Druck-PDF, Profil mit Verkäufer/Bank und festem Format ZUGFeRD EN 16931, Käufer nur aus der CSV).
 

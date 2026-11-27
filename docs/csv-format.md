@@ -25,6 +25,43 @@ richtest du weiterhin mit „Neue CSV einrichten…“ ein.
   **Textzeile**; eine Zeile, die nur Kopffelder trägt, eine **gewollte Leerzeile**.
   Beides gilt ab 0.9.8.1 auch in diesem Standardaufbau (nicht nur bei `bloecke`).
 
+## Excel und LibreOffice Calc (ab 1.0.0-rc2)
+
+Statt einer CSV darf der Export auch eine **Excel-Mappe (`.xlsx`)** oder eine
+**LibreOffice-Calc-Tabelle (`.ods`)** sein. Eingerichtet wird sie im Assistenten wie
+eine CSV („Neue CSV einrichten…“, Dateiauswahl „CSV- und Tabellendateien“):
+
+- **Tabellenblatt:** vorgeschlagen ist das aktive (bzw. erste sichtbare) Blatt.
+- **Kopfzeile steht in Zeile:** Titelzeilen über den Spaltenüberschriften erkennt der
+  Assistent und schlägt die erste passende Zeile vor; du kannst sie ändern.
+- Trennzeichen und Zeichensatz entfallen. Zahlen- und Datumszellen übernimmt
+  Fakturafalter **genau**: Beträge als Dezimalzahl ohne die Rundungsreste der
+  Tabellenkalkulation (z. B. `0,30` statt `0,30000000000000004`), Datumszellen als Datum,
+  Prozentzellen (`19 %`) als Steuersatz 19. Bei Formeln zählt der zuletzt gespeicherte
+  Wert; eine Formel ohne gespeicherten Wert bleibt leer.
+- Das Profil merkt sich Blatt und Zeile (`datei.blatt`, `datei.startzeile`, Muster
+  `*.xlsx` bzw. `*.ods`). Fehlt das Blatt später, passt das Profil nicht (Meldung mit
+  Blattnamen), nichts wird geraten.
+- Die Tabellen laufen über den Eingangsordner und über **Umwandeln …** im Hauptfenster.
+
+*Nicht unterstützt:* das alte Excel-Format `.xls` (in Excel als `.xlsx` speichern),
+verschlüsselte Mappen sowie Word- und Textdateien (`.docx`, `.doc`, `.odt`, `.rtf`).
+Tipp für Word/ODT: als PDF speichern und unter „Nur PDF“ anlernen, oder aus der
+Warenwirtschaft (ERP) als CSV exportieren.
+
+## Spaltennamen mit BT-Nummer (ab 1.0.0-rc2)
+
+Trägt eine Spalte statt eines Namens die **BT-Nummer** aus EN 16931 (`BT-1`, `BT-13`,
+auch `bt_13`, `BT 13` oder `Bestellnummer (BT-13)`), ordnet der Assistent sie direkt
+diesem Feld zu – vor jeder Namenserkennung, auch in Block-Kopfzeilen. Eigene
+Feldschlüssel aus Profilen (z. B. `kundennummer`) gelten genauso. Für Felder ohne eigene
+BT-Nummer im Modell gilt: `BT-46` → Kundennummer, `BT-131` → Gesamtpreis der Position,
+`BT-152` → Steuersatz, `BT-81` → Zahlungsart.
+
+In der Feldliste des Assistenten steht die BT-Nummer grau neben dem Namen; der Tooltip
+nennt den amtlichen Namen („Im Standard: BT-13 Bestellreferenz (Purchase order reference)“).
+„Feld suchen …“ findet auch Käufer/Verkäufer, Buyer/Seller und BT-Nummern.
+
 ## Was das Profil sonst zulässt
 
 | Einstellung | Möglich |
@@ -346,7 +383,7 @@ Beispiel: `beispiele/industrie/absender-normteile.csv` (erfunden).
 
 ## Status
 
-- *unterstützt:* eine Zeile je Position, Blöcke mit eigener Kopfzeile, Satzart-Spalte, Festbreite, Skonto in zwei Stufen (maschinenlesbar in BT-20).
+- *unterstützt:* eine Zeile je Position, Blöcke mit eigener Kopfzeile, Satzart-Spalte, Festbreite, Skonto in zwei Stufen (maschinenlesbar in BT-20), Excel `.xlsx` und LibreOffice `.ods` (ab 1.0.0-rc2), BT-Nummern als Spaltennamen (ab 1.0.0-rc2).
 - *geplant:* Anlagen aus der CSV, Abschlags-, Teil- und Schlussrechnungen.
-- *nicht unterstützt:* OCR, Layout-Erkennung ohne Vorlage.
+- *nicht unterstützt:* OCR, Layout-Erkennung ohne Vorlage, Word/ODT/RTF und das alte Excel-Format `.xls` (Tipp: als PDF speichern und „Nur PDF“ anlernen, oder als CSV exportieren).
 
