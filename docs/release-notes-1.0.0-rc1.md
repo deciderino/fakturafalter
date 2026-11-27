@@ -43,7 +43,9 @@ stabile Linie, bis 1.0 erscheint).
   Die Leitweg-ID aus der Quelle hat Vorrang. Die XRechnung braucht die
   E-Rechnungsadresse des Kunden (BT-49) aus der Quelle; fehlt sie, entsteht
   keine ungültige Datei, sondern die Rechnung geht mit klarem Hinweis nach
-  „Zu prüfen“. Der Listenvergleich nimmt den ganzen Kundennamen oder die erste
+  „Zu prüfen“. Das gilt für alle Eingänge (CSV, XML, PDF). Auch eine fehlende
+  Leitweg-ID ohne Kundennummer führt jetzt verlässlich zu „Zu prüfen“; vorher
+  konnte eine solche Rechnung trotz Hinweis als „ok“ durchgehen. Der Listenvergleich nimmt den ganzen Kundennamen oder die erste
   Namenszeile (Groß/Klein und Leerzeichen egal). Eine frühere Einstellung „XRechnung,
   wenn der Kundenstamm es verlangt“ ohne Liste wird nicht still auf alle
   Rechnungen angewendet, sondern mit einem klaren Hinweis angezeigt.

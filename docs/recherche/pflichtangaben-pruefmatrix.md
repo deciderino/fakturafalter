@@ -166,7 +166,7 @@ Ein Status „fehler“ oder „pruefen“ hält die Rechnung an. „warnung“ 
 | keine Positionen | aufbau | pruefen |
 | BT-153 fehlt | aufbau | pruefen |
 | Einheit/Steuerschlüssel nicht zugeordnet | aufbau `_map` | pruefen/fehler (bzw. fester Ersatz laut Mapping) |
-| Kunde nicht im Stamm und kein Name / Käufername fehlt | aufbau | pruefen |
+| Kundenname (BT-44) fehlt in der Quelle | aufbau | pruefen |
 | Ausgabeformat unbekannt | aufbau | pruefen |
 | Konfidenz unter Schwelle | aufbau | pruefen |
 | Positionsbetrag ≠ Kontrollwert, BT-109/112 ≠ Kontrollwert | rechnen | pruefen |
