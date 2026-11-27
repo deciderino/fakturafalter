@@ -4,7 +4,6 @@
 
 from __future__ import annotations
 
-import csv
 import json
 import logging
 from dataclasses import dataclass, field
@@ -14,7 +13,7 @@ import yaml
 
 from . import zahlungsziel
 from .modell import Anschrift, Partei, Zahlung
-from .werte import bloecke_bereinigen, dekodieren, trennzeichen_erkennen
+from .werte import bloecke_bereinigen
 
 log = logging.getLogger("fakturafalter")
 

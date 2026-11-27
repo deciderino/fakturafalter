@@ -9,7 +9,6 @@ import copy
 import re
 from datetime import date, datetime, timedelta
 from decimal import Decimal
-from pathlib import Path
 
 from . import sicht, steuerfaelle, zahlungsziel
 from .konfig import Konfig, bemerkungen_aus, kunden_namen, partei_aus, xrechnung_treffer, zahlung_aus

@@ -772,7 +772,6 @@ class Einstellungen(QDialog):
         self._vorlagen_neu_ohne_laden()
 
     def _teil_csv(self, v: QVBoxLayout) -> None:
-        k = self.haupt.k
         profile = self._csv_profile_laden()
         _abschnitt(
             v,
