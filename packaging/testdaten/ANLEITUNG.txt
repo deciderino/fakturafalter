@@ -8,6 +8,8 @@ stehen für Exporte einer Warenwirtschaft (ERP).
 Datei bleibt unverändert. Zuordnung im Assistenten neu einrichten oder bei 0.9.11
 bleiben. Es gibt keinen Kundenstamm mehr; der Kundenname steht in der CSV.
 XRechnung zusätzlich: Schalter und Liste unter Einstellungen → Ausgabe.
+Geplant: Anlagen aus der CSV, Abschlags-/Teil-/Schlussrechnungen.
+Nicht unterstützt: OCR, Layout-Erkennung ohne Vorlage.
 
 Kernfunktion zum Ausprobieren: ZUGFeRD (EN 16931, PDF/A-3) aus CSV oder XML,
 ohne dass ein Druck-PDF nötig ist. Der Layout-Editor gestaltet die Sichtseite.
