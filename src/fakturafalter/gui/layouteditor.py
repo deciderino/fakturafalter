@@ -645,6 +645,7 @@ class LayoutEditor(QDialog):
             sp.setButtonSymbols(
                 QAbstractSpinBox.ButtonSymbols.NoButtons
             )  # Klickziele: Tippen/Pfeiltasten
+            sp.lineEdit().setTextMargins(8, 0, 4, 0)
             sp.valueChanged.connect(lambda w, s=schl: self._wert(s, w))
             rv.addWidget(sp)
             self.spins[schl] = sp
@@ -741,6 +742,8 @@ class LayoutEditor(QDialog):
     def _rolle(self, w: QWidget) -> QScrollArea:
         s = QScrollArea()
         s.setWidgetResizable(True)
+        if not w.objectName():
+            w.setObjectName("wurzel")  # Fläche im Theme (dunkel: nicht die helle Standardfarbe)
         s.setWidget(w)
         s.setFrameShape(QFrame.Shape.NoFrame)
         s.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)

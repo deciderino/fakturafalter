@@ -423,3 +423,29 @@ def test_platzhalter_namen_ohne_rohe_bt_nummer(qapp, tmp_path, sprache):
     finally:
         texte.sprache_setzen("de")
         w.close()
+
+
+@pytest.mark.parametrize("hell", [True, False])
+def test_eigenschaften_lesbar_hell_und_dunkel(qapp, tmp_path, hell):
+    """Rechte Spalte im Theme (dunkel nicht hellgrau) und mm-Felder zeigen ihren Wert (WCAG AA, rc2)."""
+    from .test_rc1_suche import _kontrast
+
+    w = _editor(qapp, tmp_path, hell=hell)
+    try:
+        w.waehlen(w.seite.bausteine["fusszeile"])
+        for _ in range(3):
+            qapp.processEvents()
+        for sp in w.spins.values():
+            assert sp.lineEdit().width() > 60, sp.lineEdit().geometry()  # kein zusammengedrücktes Textfeld
+        img = w.grab().toImage()
+        rechts = w.spins["x"].parentWidget()
+        assert rechts.objectName() == "wurzel"
+        p = rechts.mapTo(w, rechts.rect().topLeft())
+        flaeche = img.pixelColor(p.x() + 4, p.y() + 4).name()
+        assert _kontrast(flaeche, w.c["fg"]) >= 4.5, (flaeche, w.c["fg"])
+        sp = w.spins["x"]
+        q = sp.mapTo(w, sp.rect().center())
+        feld = img.pixelColor(sp.mapTo(w, sp.rect().topLeft()).x() + sp.width() - 8, q.y()).name()
+        assert _kontrast(feld, w.c["fg"]) >= 4.5, (feld, w.c["fg"])
+    finally:
+        w.close()

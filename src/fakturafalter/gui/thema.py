@@ -125,7 +125,12 @@ def css(c: dict[str, str]) -> str:
                    background: {c["dis_bg"]}; color: {c["dis_fg"]}; border: 2px solid {c["dis_b"]}; }}
     QLineEdit, QSpinBox, QComboBox {{ background: {c["base"]}; border: 2px solid {c["btn_b"]}; border-radius: 4px;
                    min-height: 44px; padding: 0px 8px; }}
-    QLineEdit:focus, QComboBox:focus {{ border-color: {c["acc"]}; }}
+    QLineEdit:focus, QComboBox:focus, QSpinBox:focus {{ border-color: {c["acc"]}; }}
+    QDoubleSpinBox {{ background: {c["base"]}; border: 2px solid {c["btn_b"]}; border-radius: 4px; padding: 0px; }}
+    QDoubleSpinBox:focus {{ border-color: {c["acc"]}; }}
+    QDoubleSpinBox:disabled {{ background: {c["dis_bg"]}; color: {c["dis_fg"]}; border-color: {c["dis_b"]}; }}
+    QDoubleSpinBox::up-button, QDoubleSpinBox::down-button {{ subcontrol-origin: margin; width: 0px; height: 0px;
+                   border: none; }}
     QComboBox QAbstractItemView {{ background: {c["base"]}; selection-background-color: {c["sel"]}; }}
     QComboBox QAbstractItemView::item {{ min-height: 44px; }}
     QLineEdit:disabled, QComboBox:disabled, QSpinBox:disabled {{ background: {c["dis_bg"]}; color: {c["dis_fg"]}; border-color: {c["dis_b"]}; }}
