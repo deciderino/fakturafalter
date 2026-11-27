@@ -174,5 +174,5 @@ def test_listen_und_tabellen_wcag_aa(hell):
     c = thema.farben(hell)
     css = thema.css(c)
     assert "QAbstractItemView" in css and "QHeaderView::section" in css
-    for vg, hg in (("fg", "base"), ("fg", "sel"), ("fg", "btn"), ("fg", "card"), ("sub", "base")):
+    for vg, hg in (("fg", "base"), ("fg", "sel"), ("fg", "btn"), ("fg", "card"), ("sub", "base"), ("gut_t", "card"), ("warn_t", "card")):
         assert _kontrast(c[vg], c[hg]) >= 4.5, (hell, vg, hg, round(_kontrast(c[vg], c[hg]), 2))

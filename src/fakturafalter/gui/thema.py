@@ -25,6 +25,7 @@ def farben(hell: bool) -> dict[str, str]:
             prim="#1565c0",
             prim_b="#0d47a1",
             ok="#43a047",
+            gut_t="#2e7d32",  # grüne Schrift auf Weiß: 5,1:1 (WCAG AA); ok (#43a047) nur für Punkte/Flächen
             off="#9e9e9e",
             busy="#ffb300",
             err="#e53935",
@@ -63,6 +64,7 @@ def farben(hell: bool) -> dict[str, str]:
         prim="#1f5f8b",
         prim_b="#2a7ab0",
         ok="#43a047",
+        gut_t="#43a047",
         off="#757575",
         busy="#ffb300",
         err="#e53935",
@@ -105,7 +107,7 @@ def css(c: dict[str, str]) -> str:
     QLabel#gross {{ font-size: 24px; font-weight: bold; }}
     QLabel#sub {{ color: {c["sub"]}; font-size: 13px; }}
     QLabel#warn {{ color: {c["warn_t"]}; font-size: 13px; }}
-    QLabel#gut {{ color: {c["ok"]}; font-size: 13px; }}
+    QLabel#gut {{ color: {c["gut_t"]}; font-size: 13px; }}
     QLabel#pille {{ background: {c["pill"]}; color: {c["pill_t"]}; border-radius: 9px; padding: 2px 10px; font-size: 13px; }}
     QLabel#sektion {{ font-size: 13px; font-weight: bold; color: {c["sec"]}; padding-top: 6px; }}
     QLabel#hinweis {{ color: {c["sub"]}; font-size: 13px; }}
