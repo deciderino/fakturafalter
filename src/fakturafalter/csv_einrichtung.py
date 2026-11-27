@@ -458,6 +458,9 @@ def satzart(fmt: Format) -> bool:
     return any(_norm(s) in ("satzart", "satztyp", "zeilentyp", "recordtype") for s in fmt.kopf)
 
 
+# Im Positionsblock meint „Gesamtnetto“ die Zeile, nicht die Rechnung
+_GESAMT_IM_POSITIONSBLOCK = frozenset(("gesamtnetto", "nettogesamt", "gesamtbetrag", "betragnetto"))
+
 # Spaltennamen, die Name oder Nummer des Kunden sein können – entschieden wird an den Werten
 _KUNDE_MEHRDEUTIG = frozenset(("kunde", "kunden", "customer", "kd"))
 
@@ -470,10 +473,24 @@ def _sieht_nach_nummer_aus(werte: list[str]) -> bool:
     )
 
 
-def spalten_vorschlagen(kopf: list[str], zeilen: list[list[str]] | None = None) -> dict[str, str]:
+def spalten_vorschlagen(
+    kopf: list[str], zeilen: list[list[str]] | None = None, *, wiederholend: bool | None = None
+) -> dict[str, str]:
     """-> {Feld: Spalte}. Erst exakte Treffer (normalisiert), dann Wortanfänge; jede Spalte höchstens einmal.
-    Mit ``zeilen`` wird eine Spalte „Kunde“ mit Werten wie „K-1001“ als Kundennummer vorgeschlagen, sonst als Name."""
+    Mit ``zeilen`` wird eine Spalte „Kunde“ mit Werten wie „K-1001“ als Kundennummer vorgeschlagen, sonst als Name.
+    ``wiederholend=True`` (Positionsblock): „Gesamtnetto“ ist der Gesamtpreis der Position, nicht die
+    Rechnungssumme."""
     aus = _spalten_nach_namen(kopf)
+    # „Rabatt“ allein ist mehrdeutig (Prozent oder Betrag) – nur „Rabatt%“ / „Rabattsatz“ automatisch
+    r = aus.get("BT-138")
+    if r and "%" not in r and _norm(r) == "rabatt":
+        aus.pop("BT-138")
+    if wiederholend and "gesamtpreis_position" not in aus:
+        for f in ("BT-109", "BT-112"):
+            sp = aus.get(f)
+            if sp and _norm(sp) in _GESAMT_IM_POSITIONSBLOCK:
+                aus["gesamtpreis_position"] = aus.pop(f)
+                break
     s = aus.get("BT-44")
     if s and "kundennummer" not in aus and _norm(s) in _KUNDE_MEHRDEUTIG and zeilen:
         i = kopf.index(s)

@@ -1183,7 +1183,7 @@ class CsvAssistent(_Assistent):
                 kopf = list(b.get("kopf") or [])
                 daten = [r for _n, r in (b.get("daten") or [])]
                 if kopf:
-                    zu = ce.spalten_vorschlagen(kopf, daten)
+                    zu = ce.spalten_vorschlagen(kopf, daten, wiederholend=bool(b.get("wiederholend")))
                     # im Positionsblock Positionsfelder bevorzugen, im Kopf Kopffelder
                     pf = ce.positionsfelder()
                     if b.get("wiederholend"):
