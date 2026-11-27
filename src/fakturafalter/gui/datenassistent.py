@@ -23,6 +23,7 @@ from PySide6.QtWidgets import (
     QLineEdit,
     QMessageBox,
     QPushButton,
+    QSpinBox,
     QStackedWidget,
     QTableWidget,
     QTableWidgetItem,
@@ -30,7 +31,7 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
-from .. import adapter_xml
+from .. import adapter_xml, tabellen
 from .. import csv_einrichtung as ce
 from . import aktionen
 from .bausteine import (
@@ -45,8 +46,8 @@ from .bausteine import (
     rollen,
 )
 from .blockassistent import AnfangsBox, BlockKarten, BlockTabelle, Legende, SpaltenJeBlock, typ_name
-from .texte import _
 from .feldsuche import BT_ROLLE, BtDelegate, feld_tooltip
+from .texte import _
 
 TRENNZEICHEN = (
     (";", "Semikolon ;"),
@@ -301,6 +302,16 @@ class CsvAssistent(_Assistent):
                 umbruch=True,
             )
         )
+        v.addWidget(
+            lbl(
+                _(
+                    "Auch Excel (.xlsx) und LibreOffice Calc (.ods) gehen – das Blatt und die Zeile mit den "
+                    "Spaltenüberschriften wählst du im nächsten Schritt. Word/ODT wird nicht unterstützt."
+                ),
+                "hinweis",
+                umbruch=True,
+            )
+        )
         h = QHBoxLayout()
         h.addWidget(knopf(_("CSV-Datei auswählen…"), primary=True, klick=self._waehlen))
         h.addStretch(1)
@@ -319,14 +330,26 @@ class CsvAssistent(_Assistent):
 
     def _waehlen(self) -> None:
         d, _f = QFileDialog.getOpenFileName(
-            self, _("CSV-Datei auswählen…"), str(Path.home()), _("CSV-Dateien (*.csv *.txt *.tsv)")
+            self,
+            _("CSV-Datei auswählen…"),
+            str(Path.home()),
+            _("CSV- und Tabellendateien (*.csv *.txt *.tsv *.xlsx *.ods)"),
         )
         if d:
             self.datei_setzen(Path(d))
 
     def datei_setzen(self, datei: Path) -> None:
         try:
-            fmt = ce.format_erkennen(datei)
+            alt_d = (self.alt or {}).get("datei") or {}
+            if self.alt and alt_d.get("blatt"):
+                try:  # beim Ändern: gespeichertes Blatt und Kopfzeile (Excel/ODS)
+                    fmt = ce.format_erkennen(
+                        datei, blatt=alt_d.get("blatt"), startzeile=int(alt_d.get("startzeile") or 1)
+                    )
+                except ValueError:
+                    fmt = ce.format_erkennen(datei)
+            else:
+                fmt = ce.format_erkennen(datei)
         except (OSError, ValueError, UnicodeError) as e:
             self.toast("fehler", _("Datei lässt sich nicht lesen"), str(e))
             self.gehe(self.i)
@@ -361,6 +384,7 @@ class CsvAssistent(_Assistent):
                 box.addItem(str(wert), wert)
             box.setCurrentIndex(box.findData(wert))
             box.blockSignals(False)
+        self._tabelle_zeigen()
         self._format_zeigen()
         self._vorschau_bauen()
         self.gehe(self.i)
@@ -394,7 +418,46 @@ class CsvAssistent(_Assistent):
             g.addWidget(lbl(t), (i // 2) * 2, i % 2)
             g.addWidget(b, (i // 2) * 2 + 1, i % 2)
             b.currentIndexChanged.connect(self._format_geaendert)
+        self.box_csvformat = [b for b in (self.f_trenn, self.f_kod)]
+        self.l_csvformat = [g.itemAtPosition(0, 0).widget(), g.itemAtPosition(0, 1).widget()]
         v.addLayout(g)
+        # Excel/ODS (rc2): Blatt und Zeile der Kopfzeile statt Trennzeichen/Zeichensatz
+        self.box_tabelle = QWidget()
+        tg = QGridLayout(self.box_tabelle)
+        tg.setContentsMargins(0, 0, 0, 0)
+        tg.setHorizontalSpacing(16)
+        tg.setVerticalSpacing(6)
+        self.f_blatt = QComboBox()
+        self.f_blatt.setObjectName("tabellenblatt")
+        self.f_blatt.setAccessibleName(_("Tabellenblatt"))
+        self.f_blatt.setMinimumHeight(48)
+        self.f_start = QSpinBox()
+        self.f_start.setObjectName("startzeile")
+        self.f_start.setAccessibleName(_("Kopfzeile steht in Zeile"))
+        self.f_start.setRange(1, 10000)
+        self.f_start.setMinimumHeight(48)
+        tg.addWidget(lbl(_("Tabellenblatt")), 0, 0)
+        tg.addWidget(lbl(_("Kopfzeile steht in Zeile")), 0, 1)
+        tg.addWidget(self.f_blatt, 1, 0)
+        tg.addWidget(self.f_start, 1, 1)
+        tg.addWidget(
+            lbl(
+                _(
+                    "Zahlen und Datumszellen übernimmt Fakturafalter genau (ohne Rundungsfehler). Formeln: es "
+                    "zählt der zuletzt gespeicherte Wert."
+                ),
+                "hinweis",
+                umbruch=True,
+            ),
+            2,
+            0,
+            1,
+            2,
+        )
+        self.f_blatt.currentIndexChanged.connect(self._format_geaendert)
+        self.f_start.valueChanged.connect(self._format_geaendert)
+        self.box_tabelle.setVisible(False)
+        v.addWidget(self.box_tabelle)
         v.addWidget(lbl(_("Aufbau der Datei"), umbruch=True))
         self.f_art = _auswahl(
             (
@@ -435,10 +498,38 @@ class CsvAssistent(_Assistent):
         return w
 
     def _neu_lesen(self, fmt: ce.Format) -> ce.Format:
+        if self.datei is not None and tabellen.ist_tabelle(self.datei):
+            # Zahl- und Datumszellen im gewählten Format schreiben (genau wie später beim Lesen)
+            return ce.format_erkennen(
+                self.datei,
+                blatt=fmt.blatt or None,
+                startzeile=fmt.startzeile or None,
+                dezimal=fmt.dezimal,
+                datum_format=fmt.datum,
+            )
         neu = ce.format_erkennen(self.datei, fmt.kodierung, fmt.trennzeichen)
         neu.dezimal, neu.datum = fmt.dezimal, fmt.datum
         neu.tausender = "." if fmt.dezimal == "," else ""
         return neu
+
+    def _tabelle_zeigen(self) -> None:
+        """Bei Excel/ODS Blatt und Kopfzeile zeigen, Trennzeichen und Zeichensatz ausblenden."""
+        fmt = self.fmt
+        tab = bool(fmt and fmt.ist_tabelle)
+        self.box_tabelle.setVisible(tab)
+        for w in (*self.box_csvformat, *self.l_csvformat):
+            w.setVisible(not tab)
+        if not tab:
+            return
+        self.f_blatt.blockSignals(True)
+        self.f_blatt.clear()
+        for b in fmt.blaetter:
+            self.f_blatt.addItem(b, b)
+        self.f_blatt.setCurrentIndex(max(self.f_blatt.findData(fmt.blatt), 0))
+        self.f_blatt.blockSignals(False)
+        self.f_start.blockSignals(True)
+        self.f_start.setValue(int(fmt.startzeile or 1))
+        self.f_start.blockSignals(False)
 
     def _format_geaendert(self, *_a) -> None:
         if not self.datei:
@@ -450,11 +541,18 @@ class CsvAssistent(_Assistent):
             "",
             self.f_datum.currentData(),
         )
+        if self.fmt is not None and self.fmt.ist_tabelle:
+            neues_blatt = self.f_blatt.currentData() or self.fmt.blatt
+            f.blatt = neues_blatt
+            # anderes Blatt: Kopfzeile neu vorschlagen lassen, sonst die gewählte Zeile
+            f.startzeile = 0 if neues_blatt != self.fmt.blatt else int(self.f_start.value())
+            f.blaetter = list(self.fmt.blaetter)
         try:
             self.fmt = self._neu_lesen(f)
         except (ValueError, UnicodeError) as e:
             self.toast("fehler", _("Mit dieser Einstellung nicht lesbar"), str(e))
             return
+        self._tabelle_zeigen()
         self._format_zeigen()
         self._vorschau_bauen()
 

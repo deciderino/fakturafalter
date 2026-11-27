@@ -45,7 +45,7 @@ from .logdatei import NUR_DATEI
 from .modell import Rechnung
 
 log = logging.getLogger("fakturafalter")
-CSV_ENDUNGEN = {".csv", ".txt", ".tsv"}
+CSV_ENDUNGEN = {".csv", ".txt", ".tsv", ".xlsx", ".ods"}  # Excel/ODS ab rc2 wie CSV
 SCHON_ERZEUGT = (
     "schon erzeugt – der Druck kam nach seinen Daten (CSV/XML), Rechnung {nr} wurde ohne ihn erstellt; "
     "PDF liegt in „Erledigt“"
@@ -233,7 +233,8 @@ def einlesen(datei: Path, k: Konfig) -> tuple[str, list[Rechnung]]:
         except adapter_csv.ProfilFehler:
             raise
         except (ValueError, IndexError, KeyError) as e:
-            raise ValueError(f"CSV nicht lesbar ({type(e).__name__}: {e})") from e
+            art_txt = "Tabelle" if suf in (".xlsx", ".ods") else "CSV"
+            raise ValueError(f"{art_txt} nicht lesbar ({type(e).__name__}: {e})") from e
         if prof is None:
             alt = [Path(str(x[0])).name for x in (getattr(k, "abgelehnte_profile", None) or [])]
             if alt:

@@ -116,7 +116,8 @@ def nach_gegenstueck(dateien: list[Path], k: Konfig, seit: dict[Path, float], je
         return list(dateien), []
     arten: dict[str, set[str]] = {}
     for p in dateien:
-        art = "pdf" if p.suffix.lower() == ".pdf" else "daten" if p.suffix.lower() in DATEN_ENDUNGEN else "sonst"
+        suf = p.suffix.lower()
+        art = "pdf" if suf == ".pdf" else "daten" if suf in DATEN_ENDUNGEN | TABELLEN_ENDUNGEN else "sonst"
         arten.setdefault(p.stem.lower(), set()).add(art)
     bereit, wartend = [], []
     for p in dateien:

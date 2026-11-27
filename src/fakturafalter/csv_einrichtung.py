@@ -15,7 +15,7 @@ from pathlib import Path
 
 import yaml
 
-from . import codelisten, steuerfaelle
+from . import codelisten, steuerfaelle, tabellen
 from .pdferkennung import einheit_code
 from .werte import csv_lesen, dekodieren, trennzeichen_erkennen
 
@@ -696,6 +696,14 @@ class Format:
     datum: str
     kopf: list[str] = field(default_factory=list)
     zeilen: list[list[str]] = field(default_factory=list)
+    # Excel/ODS (ab rc2): gewähltes Blatt, Zeile der Kopfzeile (1 = erste Zeile), alle Blätter der Datei
+    blatt: str = ""
+    startzeile: int = 1
+    blaetter: list[str] = field(default_factory=list)
+
+    @property
+    def ist_tabelle(self) -> bool:
+        return bool(self.blaetter)
 
     @property
     def zusammenfassung(self) -> str:
@@ -705,6 +713,8 @@ class Format:
         k = {"utf-8": "UTF-8", "utf-8-sig": "UTF-8", "cp1252": "Windows-1252"}.get(
             self.kodierung, self.kodierung
         )
+        if self.ist_tabelle:
+            return f"Blatt „{self.blatt}“ ab Zeile {self.startzeile} · Dezimal{'komma' if self.dezimal == ',' else 'punkt'}"
         return f"{t} · {k} · Dezimal{'komma' if self.dezimal == ',' else 'punkt'}"
 
 
@@ -713,8 +723,36 @@ def spalte(fmt: Format, name: str) -> list[str]:
     return [z[i].strip() for z in fmt.zeilen if i < len(z)]
 
 
-def format_erkennen(datei: Path, kodierung: str = "auto", trennzeichen: str = "auto") -> Format:
-    """Kodierung, Trennzeichen, Dezimalzeichen und Datumsformat vorschlagen (alles änderbar)."""
+def format_erkennen(
+    datei: Path,
+    kodierung: str = "auto",
+    trennzeichen: str = "auto",
+    *,
+    blatt: str | None = None,
+    startzeile: int | None = None,
+    dezimal: str | None = None,
+    datum_format: str | None = None,
+) -> Format:
+    """Kodierung, Trennzeichen, Dezimalzeichen und Datumsformat vorschlagen (alles änderbar).
+
+    Excel/ODS (ab rc2): ``blatt`` (Standard: das aktive Blatt), ``startzeile`` (Standard: erste Zeile, die wie
+    eine Kopfzeile aussieht), ``dezimal``/``datum_format`` für Zahl- und Datumszellen (Standard: wie die
+    Text-Zellen der Datei, sonst Komma und TT.MM.JJJJ)."""
+    if tabellen.ist_tabelle(datei):
+        t = tabellen.lesen(Path(datei), blatt)
+        start = int(startzeile or tabellen.startzeile_vorschlagen(t))
+        d2, f2 = tabellen.erkennen(t, start)
+        dez, dfmt = dezimal or d2, datum_format or f2
+        roh = [z for z in tabellen.zeilen_als_text(t, start, dez, dfmt) if any(w.strip() for w in z)]
+        if not roh:
+            raise ValueError(f"Blatt „{t.blatt}“ ist ab Zeile {start} leer")
+        breite = max(len(z) for z in roh)
+        roh = [z + [""] * (breite - len(z)) for z in roh]
+        kopf, daten = [c.strip() for c in roh[0]], roh[1:]
+        return Format(
+            "utf-8", tabellen.TRENNZEICHEN, dez, "." if dez == "," else "", dfmt, kopf, daten,
+            blatt=t.blatt, startzeile=start, blaetter=list(t.blaetter),
+        )
     text, kod = dekodieren(Path(datei).read_bytes(), kodierung)
     trenn = trennzeichen_erkennen(text) if trennzeichen in ("auto", "", None) else trennzeichen
     zeilen = [z for z in csv_lesen(text, trenn) if any((w or "").strip().strip("\x1a") for w in z)]
@@ -916,6 +954,13 @@ def einheiten_vorschlag(werte: list[str]) -> dict[str, str]:
     return aus
 
 
+def _tabelle_ins_profil(p: dict, fmt: Format) -> None:
+    """Excel/ODS: Blatt und Kopfzeile im Profil merken (rc2). Trennzeichen/Zeichensatz gelten intern."""
+    if getattr(fmt, "ist_tabelle", False):
+        p["datei"]["blatt"] = fmt.blatt
+        p["datei"]["startzeile"] = int(fmt.startzeile or 1)
+
+
 def profil_bauen(
     name: str,
     datei: Path,
@@ -973,6 +1018,7 @@ def profil_bauen(
         "felder": {"kopf": kopf, "position": pos},
         "mappings": {"einheiten": eh, "steuer": st},
     }
+    _tabelle_ins_profil(p, fmt)
     if textzeile:
         p["aufbau"]["textzeile"] = textzeile
     if einheit_fehlt_stueck:
@@ -1843,6 +1889,7 @@ def profil_bauen_bloecke(
         "bloecke": aus_bloecke,
         "mappings": {"einheiten": eh, "steuer": st},
     }
+    _tabelle_ins_profil(p, fmt)
     sa = satzart_spalte
     if sa in (None, ""):
         sa = next(

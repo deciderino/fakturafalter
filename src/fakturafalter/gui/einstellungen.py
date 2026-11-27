@@ -1062,7 +1062,7 @@ class Einstellungen(QDialog):
 
     def _csv_testen(self) -> None:
         datei, _f = QFileDialog.getOpenFileName(
-            self, _("CSV zum Testen"), str(Path.home()), _("CSV/Text (*.csv *.txt *.tsv)")
+            self, _("CSV zum Testen"), str(Path.home()), _("CSV- und Tabellendateien (*.csv *.txt *.tsv *.xlsx *.ods)")
         )
         if not datei:
             return

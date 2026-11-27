@@ -796,7 +796,6 @@ EN.update(
         "CSV einrichten": "Set up CSV",
         "CSV einrichten…": "Set up CSV…",
         "CSV-Datei auswählen…": "Choose CSV file…",
-        "CSV-Dateien (*.csv *.txt *.tsv)": "CSV files (*.csv *.txt *.tsv)",
         "CSV-Zuordnungen": "CSV mappings",
         "Das gewählte Profil gilt beim Speichern für alle Rechnungen ohne eigenen Absender.": "When you save, the selected profile applies to all invoices without their own sender.",
         "Datei lässt sich nicht lesen": "File cannot be read",
@@ -1472,7 +1471,6 @@ _PROFILE_098 = {
     "Auch die Datei {n} löschen?": "Also delete the file {n}?",
     "Aufbau der Datei": "File structure",
     "CSV zum Testen": "CSV to test",
-    "CSV/Text (*.csv *.txt *.tsv)": "CSV/Text (*.csv *.txt *.tsv)",
     "Das Profil „{n}“ aus der Liste nehmen? Die Datei kannst du zusätzlich löschen.": "Remove the profile “{n}” from the list? You can also delete the file.",
     "Datei nicht gelöscht": "File not deleted",
     "Erkannte Blöcke – typisiere sie, falls nötig.": "Detected blocks – set their type if needed.",
@@ -1684,5 +1682,16 @@ EN.update(
         "{namen} – passt nicht zum eingestellten Eingang oder wird nicht unterstützt (z. B. Word). Details in der Logdatei.": "{namen} – does not match the configured input or is not supported (e.g. Word). Details in the log file.",
         "{n} Datei(en) übersprungen": "{n} file(s) skipped",
         "{n} Rechnung(en) umgewandelt": "{n} invoice(s) converted",
+    }
+)
+
+# 1.0.0-rc2: Excel/ODS
+EN.update(
+    {
+        "Auch Excel (.xlsx) und LibreOffice Calc (.ods) gehen – das Blatt und die Zeile mit den Spaltenüberschriften wählst du im nächsten Schritt. Word/ODT wird nicht unterstützt.": "Excel (.xlsx) and LibreOffice Calc (.ods) work too – you choose the sheet and the row with the column headers in the next step. Word/ODT is not supported.",
+        "CSV- und Tabellendateien (*.csv *.txt *.tsv *.xlsx *.ods)": "CSV and spreadsheet files (*.csv *.txt *.tsv *.xlsx *.ods)",
+        "Kopfzeile steht in Zeile": "Header row is row",
+        "Tabellenblatt": "Sheet",
+        "Zahlen und Datumszellen übernimmt Fakturafalter genau (ohne Rundungsfehler). Formeln: es zählt der zuletzt gespeicherte Wert.": "Fakturafalter takes numbers and date cells exactly (no rounding errors). Formulas: the last saved value counts.",
     }
 )

@@ -13,6 +13,7 @@ from pathlib import Path
 from .aufbau import Roh, rechnung_bauen
 from .konfig import Konfig
 from .modell import Herkunft, Hinweis, Rechnung
+from .tabellen import TabellenFehler, als_csv_text, ist_tabelle
 from .werte import WertFehler, csv_lesen, datum, dekodieren, trennzeichen_erkennen, zahl
 
 log = logging.getLogger("fakturafalter")
@@ -20,6 +21,22 @@ log = logging.getLogger("fakturafalter")
 
 class ProfilFehler(Exception):
     pass
+
+
+def datei_text(pfad: Path, profil: dict) -> tuple[str, str]:
+    """Inhalt als Text -> (Text, Kodierung). Excel/ODS (ab rc2): das Blatt des Profils ab seiner Startzeile,
+    Zahlen mit dem Dezimalzeichen des Profils, Datumszellen im Datumsformat des Profils, Trennzeichen „;“."""
+    dat = profil.get("datei", {}) or {}
+    if ist_tabelle(pfad):
+        text = als_csv_text(
+            Path(pfad),
+            dat.get("blatt") or None,
+            int(dat.get("startzeile") or 1),
+            (profil.get("zahlen") or {}).get("dezimal", ","),
+            (profil.get("datum") or {}).get("format", "%d.%m.%Y"),
+        )
+        return text, Path(pfad).suffix.lower().lstrip(".")
+    return dekodieren(Path(pfad).read_bytes(), dat.get("kodierung", "auto"))
 
 
 class Zweifel(WertFehler):
@@ -91,8 +108,8 @@ def profil_passt(pfad: Path, profil: dict) -> bool:
         return ok
     # Kopfzeile muss alle benötigten Spalten enthalten
     try:
-        text, _ = dekodieren(pfad.read_bytes(), profil.get("datei", {}).get("kodierung", "auto"))
-    except UnicodeDecodeError:
+        text, _ = datei_text(pfad, profil)
+    except (UnicodeDecodeError, TabellenFehler):
         return False
     trenn = profil.get("datei", {}).get("trennzeichen", "auto")
     trenn = trennzeichen_erkennen(text) if trenn in (None, "auto") else trenn
@@ -110,8 +127,8 @@ def _feste_breite_passt(pfad: Path, profil: dict) -> bool:
     """Das Dateimuster allein (z. B. „*.txt“) passt auch auf Textdrucke. Deshalb muss die erste belegte Zeile
     ein Kopfsatz des Profils sein und jede belegte Zeile eine bekannte Satzart tragen."""
     try:
-        text, _ = dekodieren(pfad.read_bytes(), profil.get("datei", {}).get("kodierung", "auto"))
-    except (OSError, UnicodeDecodeError):
+        text, _ = datei_text(pfad, profil)
+    except (OSError, UnicodeDecodeError, TabellenFehler):
         return False
     aufbau = profil.get("aufbau", {})
     sa_def = aufbau.get("satzart", {"von": 1, "bis": 1})
@@ -127,8 +144,8 @@ def _dateikopf(pfad: Path, profil: dict) -> list[str]:
     """Erste Kopfzeile der CSV, für Hinweise zu unbekannten Spalten."""
     dat = profil.get("datei", {})
     try:
-        text, _ = dekodieren(pfad.read_bytes(), dat.get("kodierung", "auto"))
-    except (OSError, UnicodeDecodeError):
+        text, _ = datei_text(pfad, profil)
+    except (OSError, UnicodeDecodeError, TabellenFehler):
         return []
     trenn = dat.get("trennzeichen", "auto")
     trenn = trennzeichen_erkennen(text) if trenn in (None, "auto") else trenn
@@ -139,9 +156,7 @@ def _dateikopf(pfad: Path, profil: dict) -> list[str]:
 
 
 def lesen(pfad: Path, profil: dict, konfig: Konfig) -> list[Rechnung]:
-    raw = pfad.read_bytes()
-    dat = profil.get("datei", {})
-    text, kod = dekodieren(raw, dat.get("kodierung", "auto"))
+    text, kod = datei_text(pfad, profil)
     art = profil.get("aufbau", {}).get("art", "zeile_je_position")
     if art == "feste_breite":
         gruppen = _feste_breite(text, profil, pfad)
@@ -486,10 +501,8 @@ def profil_passt_grund(pfad: Path, profil: dict) -> tuple[bool, str]:
     art = profil.get("aufbau", {}).get("art") or "zeile_je_position"
     if art == "bloecke":
         try:
-            text, _ = dekodieren(
-                pfad.read_bytes(), profil.get("datei", {}).get("kodierung", "auto")
-            )
-        except (OSError, UnicodeDecodeError) as e:
+            text, _ = datei_text(pfad, profil)
+        except (OSError, UnicodeDecodeError, TabellenFehler) as e:
             return False, f"Datei nicht lesbar ({e})"
         dat = profil.get("datei", {})
         trenn = dat.get("trennzeichen", "auto")
@@ -521,8 +534,8 @@ def profil_name(profil: dict) -> str:
 def _zeilen_fuer_profil(pfad: Path, profil: dict) -> list[list[str]]:
     dat = profil.get("datei", {})
     try:
-        text, _ = dekodieren(pfad.read_bytes(), dat.get("kodierung", "auto"))
-    except (OSError, UnicodeDecodeError):
+        text, _ = datei_text(pfad, profil)
+    except (OSError, UnicodeDecodeError, TabellenFehler):
         return []
     trenn = dat.get("trennzeichen", "auto")
     trenn = trennzeichen_erkennen(text) if trenn in (None, "auto") else trenn

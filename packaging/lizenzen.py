@@ -22,7 +22,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 WURZELN = ["PySide6-Essentials", "ruamel.yaml", "pdfplumber", "pikepdf", "reportlab", "lxml", "PyYAML",
-           "fonttools", "watchdog"]
+           "fonttools", "watchdog", "openpyxl"]
 GESPERRT = re.compile(r"\bAGPL|Affero", re.I)      # z.B. PyMuPDF, Ghostscript
 NAMEN = re.compile(r"(LICEN[CS]E|COPYING|NOTICE|AUTHORS|COPYRIGHT)", re.I)
 

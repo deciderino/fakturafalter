@@ -19,6 +19,7 @@ dependencies = [
   "PyYAML>=6",          # MIT
   "fonttools>=4.50",    # MIT
   "watchdog>=4",        # Apache-2.0
+  "openpyxl>=3.1",      # MIT (et-xmlfile MIT) – Excel (.xlsx) als Eingabe ab 1.0.0-rc2; ODS liest Fakturafalter selbst
 ]
 
 [project.gui-scripts]
