@@ -131,7 +131,7 @@ Mustang/KoSIT kann zu lange oder unzulässige Werte ablehnen), *Datum*
 | Kundenname | BT-44 | ja | Text, Name oder Firma des Käufers | `Beispiel Handel GmbH` | Zu prüfen. Pflicht aus der Quelle; es gibt keinen Kundenstamm mehr. |
 | Bezeichnung | BT-153 | ja | Text | `Bürostuhl Modell Münster` | Zu prüfen. In Kommentarzeilen steht hier der Text. |
 | Menge | BT-129 | ja | Zahl, in der XML bis 4 Nachkommastellen | `2` / `1,5` | Zusammen mit leerem Preis: Kommentar- oder Leerzeile. Nur Preis ohne Menge: siehe § 3. |
-| Einheit | BT-130 | ja | Klartext aus der Einheitenliste (§ 5) | `Stück` | Zu prüfen. Profiloption „Fehlende Einheit = Stück“ (ab 0.9.8.3) setzt H87 und schreibt einen Hinweis ins Protokoll, kein Prüffall. |
+| Einheit | BT-130 | ja | Klartext aus der Einheitenliste (§ 5) | `Stück` | Zu prüfen. Profiloption „Wenn die Einheit fehlt, Stück eintragen“ (ab 0.9.8.3, Name ab 1.0) setzt H87 und schreibt einen Hinweis ins Protokoll, kein Prüffall. |
 | Einzelpreis | BT-146 | ja | Zahl, Netto je Preiseinheit, nicht negativ | `149,00` | Zu prüfen (bzw. Kommentar, siehe Menge). |
 | Steuersatz | BT-151/152 | ja | Satz oder Steuerfall, siehe § 5 | `19 %` | Zu prüfen (kein stilles 19 %). |
 
@@ -466,7 +466,7 @@ XRechnung). Unklares oder Ungültiges geht **nicht still** in den Ausgang.
 **Zu prüfen** (Auswahl, die Datei bleibt im Ordner `Pruefen`):
 
 - Pflichtfeld fehlt oder ist unlesbar (Nummer, Datum, Bezeichnung, Menge,
-  Einheit, Einzelpreis, Leistungsdatum bzw. -zeitraum, Käufername).
+  Einheit, Einzelpreis, Leistungsdatum bzw. -zeitraum, Kundenname).
 - Kopfwiderpruch bei den im Profil genannten Feldern (heute typisch Datum und
   Kundennummer).
 - Kontrollbetrag weicht um mehr als 0,01 ab.

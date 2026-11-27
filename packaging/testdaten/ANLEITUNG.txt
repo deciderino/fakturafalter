@@ -1,7 +1,8 @@
 Fakturafalter 1.0.0-rc1 – Testdaten
 ===============================
 
-Alle Firmen, Personen, Rechnungen und Kontonummern sind erfunden.
+Alle Firmen, Personen, Rechnungen und Kontonummern sind erfunden. Die CSV-Dateien
+stehen für Exporte einer Warenwirtschaft (ERP).
 
 1.0.0-rc1: CSV-Profile aus 0.9.11 werden abgelehnt (Profilformat 2). Die alte
 Datei bleibt unverändert. Zuordnung im Assistenten neu einrichten oder bei 0.9.11
@@ -23,7 +24,7 @@ beispiele/xml/             Druck NB-26-1001 mit ZUGFeRD-XML (CII) gleichen Namen
 beispiele/pdf-erkennung/   Sechs Handwerksbetriebe mit unterschiedlichen Layouts (PDF + CSV)
 beispiele/xml-eingang/     XRechnungen (UBL/CII) mit Rabatt, Zuschlag, Gutschrift, Lastschrift, Anzahlung
 beispiele/layout/          Layouteditor: Beispiel-Vorlage, Fantasie-Logo, Briefpapier für Seite 1 und Folgeseiten
-beispiele/                 Weitere CSV-/Text-Varianten aus Alt-Warenwirtschaften (Variante D: Rabatt,
+beispiele/                 Weitere CSV-/Text-Varianten aus alten Warenwirtschaften (Variante D: Rabatt,
                            Gutschrift, Lastschrift; Variante K: Kundenbezeichnung 1–3, Zeichnungs-Nr./Index)
 
 Arbeitsordner der Test-Konfigurationen: laufzeit/ in diesem Ordner (wird beim Start angelegt).
@@ -344,7 +345,7 @@ Kopfzeile; Datumsangaben TT.MM.JJ).
    Anfangsregeln (Satzart-Wert), keine leeren Markerzeilen. Weiter ist aktiv,
    sobald jeder Block Zeilen hat (fehlende Anfangsregel wäre nur eine Warnung).
 2. **Spalten je Block:** Pflichtangaben (Rechnungsnummer, Datum, Bezeichnung,
-   Menge, Einzelpreis, Steuer, Käufername oder Kundennummer) müssen zugeordnet
+   Menge, Einzelpreis, Steuersatz, Kundenname; Kundennummer optional) müssen zugeordnet
    sein, sonst bleibt Weiter aus. Tabelle ist höher; im dunklen Theme bleiben
    Schrift und Fläche lesbar.
 3. Probe / Kommandozeile nach eingerichtetem Profil:
@@ -371,14 +372,58 @@ Nur fiktive Daten. Datei: beispiele/beispiel-satzart-pos-kopf-und-restzeile.csv
 Währung „EURO“; Kommentarzeilen mit Menge 0; die dritte Position ohne Einheit;
 am Ende eine einspaltige Restzeile).
 
-1. Im Assistenten die Datei durchlaufen, Schalter „Fehlende Einheit = Stück
-   verwenden“ einschalten, bis zur Probe.
+1. Im Assistenten die Datei durchlaufen, Schalter „Wenn die Einheit fehlt,
+   Stück eintragen“ einschalten, bis zur Probe.
 2. Erwartet in Probe-Liste und Eingang dasselbe: Rechnung RE-47110815,
    Käufer Nordlicht Bürobedarf GmbH, 3 Positionen, Währung EUR (nicht EURO),
    keine Meldung „Spalte … fehlt“, Warnung nur „Pos 3 … Einheit fehlte, Stück
-   angenommen“. Ein vorhandenes Blockprofil aus 0.9.11 oder 0.9.11.1 muss nicht
-   neu angelegt werden.
+   angenommen“. Ab 1.0.0-rc1 wird ein Blockprofil aus 0.9.11.x abgelehnt
+   (Profilformat 2, siehe Test 22) – im Assistenten neu einrichten.
 
 Linux (wenn das Profil in der Testdaten-Konfiguration liegt):
   ./Fakturafalter-1.0.0-rc1-x86_64.AppImage -c beispiele/konfiguration.yaml \
       --dateien beispiele/beispiel-satzart-pos-kopf-und-restzeile.csv
+
+
+Test 22: Altes Profil wird abgelehnt (neu in 1.0.0-rc1)
+-------------------------------------------------------
+Nur fiktive Daten. Datei: beispiele/rc1/profil-alt-0911-fiktiv.yaml
+(Profilformat 1 mit den alten Schlüsseln `gesamt_kontrolle` und `kaeufer_name_2`).
+
+1. Einstellungen → Eingang & Vorlagen → „Profil übernehmen…“ → diese Datei.
+2. Erwartet: Dialog „Dieses Profil passt nicht mehr zu Fakturafalter 1.0“ mit
+   Profilname, „Profilformat 2“ und den Knöpfen „Assistent öffnen“ und
+   „Schließen“. Das Profil erscheint nicht in der Liste, es wird nichts in den
+   Profilordner kopiert, die Datei bleibt unverändert.
+3. „Assistent öffnen“ startet den CSV-Assistenten für eine neue Zuordnung.
+
+
+Test 23: „Feld suchen …“ und neue Bezeichnungen (neu in 1.0.0-rc1)
+------------------------------------------------------------------
+Datei: beispiele/beispiel-satzart-pos-kopf-und-restzeile.csv
+
+1. Assistent → Blöcke → Spalten je Block, im Positionsblock die Spalte
+   „Gesamtpreis“ anklicken.
+2. In „Feld suchen …“ „gesamtpreis“ tippen. Erwartet: Gruppe „Position“ mit
+   „Gesamtpreis der Position (nur Kontrolle)“; Enter wählt ihn, Escape leert
+   die Suche. „ustsatz“ findet „Steuersatz oder Steuerschlüssel“, „belegname“
+   findet „Rechnungsnummer“, „lieferdatum“ „Leistungs- oder Lieferdatum“.
+3. Die Pflichtkarte rechts nennt dieselben Wörter wie die Liste, beim Kunden
+   nur „Kundenname“.
+4. Weg „eine Zeile je Position“ mit variante-a_positionen_utf8.csv: rechts
+   neben der Tabelle steht dieselbe Suche für die angeklickte Spalte.
+
+
+Test 24: XRechnung zusätzlich über die Liste (neu in 1.0.0-rc1)
+---------------------------------------------------------------
+Datei: beispiele/variante-a_positionen_utf8.csv (Kunde „Beispiel Handel GmbH“,
+Kundennummer K-1001).
+
+1. Einstellungen → Ausgabe: „XRechnung zusätzlich erzeugen“ an, Eintrag
+   Kundenname „Beispiel Handel GmbH“, Leitweg-ID „991-12345-67“ (fiktiv).
+2. CSV in den Eingang legen. Erwartet: neben dem ZUGFeRD-PDF eine
+   `…_xrechnung.xml` für die Rechnungen dieses Kunden, mit BT-10 991-12345-67,
+   KoSIT gültig. Andere Kunden bekommen keine XRechnung.
+3. Statt des Namens nur die Kundennummer „K-1001“ eintragen: gleiches Ergebnis.
+4. Schalter aus: keine XRechnung, auch wenn der Kunde in der Liste steht.
+

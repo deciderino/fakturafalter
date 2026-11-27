@@ -1,0 +1,24 @@
+# Fiktives Profil im alten Format (0.9.11, Profilformat 1) – nur zum Testen der Ablehnung in 1.0.
+# Über Einstellungen → Eingang & Vorlagen → „Profil übernehmen…“ wählen: Fakturafalter 1.0
+# lehnt es ab, kopiert nichts und lässt diese Datei unverändert.
+profil: Muster-Warenwirtschaft (alt)
+version: 1
+datei:
+  muster: "alt-muster-*.csv"
+format:
+  trennzeichen: ";"
+  kodierung: utf-8
+  dezimal: ","
+  datum: "%d.%m.%Y"
+felder:
+  kopf:
+    BT-1: {spalte: Belegnr}
+    BT-2: {spalte: Belegdatum}
+    BT-44: {spalte: Kunde}
+    kaeufer_name_2: {spalte: Kunde2}
+  position:
+    BT-153: {spalte: Bezeichnung}
+    BT-129: {spalte: Menge}
+    BT-146: {spalte: Einzelpreis}
+    gesamt_kontrolle: {spalte: Gesamtpreis}
+    steuer: {spalte: USt}

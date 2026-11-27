@@ -93,13 +93,16 @@ Weichen die Spaltennamen ab, richtest du die Datei einmal ein:
    gespeichert. Weiter ist nur gesperrt, wenn kein Block da ist oder ein Block
    keine Zeilen hat. Danach **Spalten je Block:** auf eine Spalte klicken und das
    Feld zuordnen; dieselbe Position darf in einem anderen Block ein anderes Feld
-   sein. Weiter erst, wenn Rechnungsnummer, Rechnungsdatum, Bezeichnung, Menge,
-   Einzelpreis, Steuer und Käufername (oder Kundennummer) zugeordnet sind. Ein
+   sein. Weiter erst, wenn Rechnungsnummer, Rechnungsdatum, Bezeichnung der
+   Position, Menge, Einzelpreis (netto), Steuersatz oder Steuerschlüssel und
+   Kundenname zugeordnet sind (die Kundennummer ist optional). Über der Feldliste
+   steht **„Feld suchen …“**: tippen filtert die gruppierte Liste (z. B.
+   „gesamtpreis“ → „Gesamtpreis der Position (nur Kontrolle)“). Ein
    Kopffeld in mehreren Blöcken wird verglichen (Abweichung → Zu prüfen).
 6. **Textzeilen** und **Darstellung** (Standardaufbau und Blöcke): ob Kommentare oder gewollte Leerzeilen vorkommen; 0 und 0,00 gelten
    als leer; Text zwischen zwei Positionen standardmäßig zur oberen Position;
    Platzhalter `#LEER`; Positionsnummer, Menge, Einheit, Schalter
-   „Fehlende Einheit = Stück verwenden“. Die Darstellung erreichst du später
+   „Wenn die Einheit fehlt, Stück eintragen“. Die Darstellung erreichst du später
    auch über **Darstellung…** an der Profilkarte.
 7. **Probe:** zeigt je Rechnung „bereit“ oder „braucht Prüfung“ – es wird
    nichts erzeugt. Optional **Sichtseite ansehen…**. Dann **Speichern**. Die

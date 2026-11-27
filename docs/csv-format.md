@@ -129,8 +129,10 @@ Zeilensteuer, …) gehören nur in den **einen wiederholenden** Block
   Anfangsregel und abweichende Anzahl wiederholender Blöcke sind Warnungen.
   Danach **Spalten je Block** – dieselbe Position darf je Block ein anderes Feld
   sein. Weiter erst, wenn die Pflichtfelder zugeordnet sind: Rechnungsnummer,
-  Rechnungsdatum, Bezeichnung, Menge, Einzelpreis, Steuer, und Käufername (BT-44)
-  (Kundenname, BT-44). Die Kundennummer ist optional. Gespeichert werden Name und 1-basierte
+  Rechnungsdatum, Bezeichnung der Position, Menge, Einzelpreis (netto),
+  Steuersatz oder Steuerschlüssel und Kundenname (BT-44). Die Kundennummer ist
+  optional. Über der Feldliste steht „Feld suchen …“ (gruppierte Liste, filtert
+  beim Tippen nach Label, Tooltip und typischen Spaltennamen). Gespeichert werden Name und 1-basierte
   Position; beim Lesen hat der Name Vorrang, wenn die Kopfzeile ihn trägt. Ein
   Kopffeld in mehreren Blöcken wird verglichen (Abweichung → Zu prüfen). Probe
   und Eingang nutzen denselben Lesepfad. Dunkles und helles Theme setzen eigene
@@ -191,7 +193,7 @@ In den Aufbauten `zeile_je_position` und `bloecke` gilt:
 - `sicht.einheit: csv` zeigt den Einheitentext aus der CSV; Standard `kurz` (z. B. `Stk.`). In der XML steht weiter der Rec-20-Code in BT-130.
 - `aufbau.einheit_fehlt_stueck: true` (ab 0.9.8.3): Positionen mit Menge und Preis, aber leerer Einheit, erhalten Stück (Rec 20 H87, auf der Sichtseite der Text „Stück“). Im Protokoll erscheint der Hinweis „Einheit fehlte, Stück angenommen“ (kein Prüffall). Standard `false`: fehlende Einheit bleibt „Zu prüfen“. Die Option wirkt in der gemeinsamen Rechnungserzeugung, also auch in anderen Aufbauten, wenn sie im Profil steht. Kommentarzeilen bleiben unverändert.
 - Kommentarzeilen stehen auf der Sichtseite ohne Vorsatz „Beschreibung:“ direkt unter der Position (XML: BT-154). Der Vorsatz gilt nur für eine eigene Beschreibungsspalte. `sicht.kommentar_ohne_bezeichnungen: true` blendet auch Labels wie „Art.-Nr.:“ an Kommentarzeilen aus.
-- Im Assistenten folgen (beim Blockaufbau nach „Blöcke festlegen“ und „Spalten je Block“) die Schritte „Textzeilen“ und „Darstellung“ (PDF-Bezeichnung umbenennen, optionale Felder ausblenden, Schalter „Fehlende Einheit = Stück verwenden“). „Darstellung…“ ist später auch direkt in den Einstellungen am Profil erreichbar.
+- Im Assistenten folgen (beim Blockaufbau nach „Blöcke festlegen“ und „Spalten je Block“) die Schritte „Textzeilen“ und „Darstellung“ (PDF-Bezeichnung umbenennen, optionale Felder ausblenden, Schalter „Wenn die Einheit fehlt, Stück eintragen“). „Darstellung…“ ist später auch direkt in den Einstellungen am Profil erreichbar.
 
 ## Profile in den Einstellungen (ab 0.9.8)
 
