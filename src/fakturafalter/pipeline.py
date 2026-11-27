@@ -237,6 +237,13 @@ def einlesen(datei: Path, k: Konfig) -> tuple[str, list[Rechnung]]:
                 f"CSV nicht lesbar ({type(e).__name__}: {e})"
             ) from e
         if prof is None:
+            alt = [Path(str(x[0])).name for x in (getattr(k, "abgelehnte_profile", None) or [])]
+            if alt:
+                raise ValueError(
+                    "Kein passendes CSV-Profil gefunden. Nicht gelesen, weil im alten Profilformat: "
+                    + ", ".join(alt)
+                    + ". Bitte im Assistenten neu einrichten (Profilformat 2) oder bei 0.9.11 bleiben."
+                )
             raise ValueError("Kein passendes CSV-Profil gefunden")
         return "csv", rs
     if suf == ".xml":

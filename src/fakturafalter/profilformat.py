@@ -38,7 +38,7 @@ class ProfilVeraltet(ValueError):
         if self.schluessel:
             grund = (
                 f"{wer}verwendet eine Bezeichnung, die Fakturafalter 1.0 nicht mehr kennt "
-                f"({self.schluessel})."
+                f"({self.schluessel}); dieses Fakturafalter erwartet Profilformat {PROFILFORMAT}."
             )
         else:
             grund = (

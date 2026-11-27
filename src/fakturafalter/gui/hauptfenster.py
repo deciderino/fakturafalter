@@ -727,18 +727,17 @@ class Hauptfenster(QMainWindow):
 
         for hinweis in getattr(self.k, "konfig_hinweise", None) or []:
             QMessageBox.information(self, _("Hinweis zu den Einstellungen"), hinweis)
+        from . import profilablehnung
+
         gesehen = set()
         for _pfad, meldung, *rest in getattr(self.k, "abgelehnte_profile", None) or []:
-            titel = rest[0] if rest else _("Dieses Profil passt nicht mehr zu Fakturafalter 1.0")
+            titel = rest[0] if rest else None
             if meldung in gesehen:
                 continue
             gesehen.add(meldung)
-            box = QMessageBox(self)
-            box.setIcon(QMessageBox.Icon.Warning)
-            box.setWindowTitle(titel)
-            box.setText(meldung)
-            box.setStandardButtons(QMessageBox.StandardButton.Ok)
-            box.exec()
+            if profilablehnung.zeigen(self, meldung, titel):
+                self.datenassistent_oeffnen("csv")
+                break
 
     def einstellungen_oeffnen(self, bereich: int | str = 0) -> None:
         """Während die Einstellungen offen sind, ruht die Überwachung (keine halb geänderte Konfiguration im

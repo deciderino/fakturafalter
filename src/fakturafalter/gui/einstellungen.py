@@ -732,9 +732,20 @@ class Einstellungen(QDialog):
 
         k = self.haupt.k
         aus = []
+        from ..profilformat import ProfilVeraltet, pruefen
+
         for e in self._csv_eintraege():
             try:
-                aus.append(konfig_mod._profil_laden(k, self.roh, e))
+                prof = konfig_mod._profil_laden(k, self.roh, e)
+                try:
+                    pruefen(prof, datei=csv_eintrag_datei(e))
+                except ProfilVeraltet as pv:
+                    prof = dict(prof)
+                    prof["_fehler"] = _(
+                        "Altes Profilformat – wird nicht gelesen. Bitte im Assistenten neu einrichten."
+                    )
+                    prof["_abgelehnt"] = (pv.titel(), pv.meldung())
+                aus.append(prof)
             except (OSError, ValueError, KeyError) as ex:
                 aus.append(
                     {
@@ -804,6 +815,14 @@ class Einstellungen(QDialog):
         kv.addLayout(kopf)
         if prof.get("_fehler"):
             kv.addWidget(lbl(prof["_fehler"], "warn", umbruch=True))
+            if prof.get("_abgelehnt"):
+                kv.addWidget(
+                    knopf(
+                        _("Warum?"),
+                        klick=lambda _c=False, p=prof: self._csv_abgelehnt_zeigen(p),
+                        tip=_("Erklärt, warum dieses Profil nicht mehr gelesen wird"),
+                    )
+                )
         else:
             kv.addWidget(lbl(csv_einrichtung.merkmale(prof), "hinweis", umbruch=True))
         d = prof.get("datei") or {}
@@ -993,13 +1012,37 @@ class Einstellungen(QDialog):
                     self.toast("fehler", _("Datei nicht gelöscht"), str(e))
         self._csv_schreiben(ein)
 
+    def _csv_abgelehnt_zeigen(self, prof: dict) -> None:
+        from . import profilablehnung
+
+        titel, meldung = prof.get("_abgelehnt") or (None, prof.get("_fehler") or "")
+        if profilablehnung.zeigen(self, meldung, titel):
+            self._csv_assistent()
+
     def _csv_uebernehmen(self) -> None:
         datei, _f = QFileDialog.getOpenFileName(
             self, _("Profil übernehmen"), str(Path.home()), _("YAML/JSON (*.yaml *.yml *.json)")
         )
         if not datei:
             return
-        quelle = Path(datei)
+        self._csv_uebernehmen_datei(Path(datei))
+
+    def _csv_uebernehmen_datei(self, quelle: Path) -> bool:
+        """Profil in den Profilordner kopieren – vorher Profilformat prüfen (alte Profile nicht kopieren)."""
+        from ..konfig import lade_datei
+        from ..profilformat import ProfilVeraltet, pruefen
+
+        try:
+            pruefen(lade_datei(quelle), datei=quelle)
+        except ProfilVeraltet as pv:
+            from . import profilablehnung
+
+            if profilablehnung.zeigen(self, pv.meldung(), pv.titel()):
+                self._csv_assistent()
+            return False
+        except Exception as e:  # noqa: BLE001 – unlesbare Datei klar melden
+            self.toast("fehler", _("Profil nicht übernommen"), f"{type(e).__name__}: {e}")
+            return False
         ziel = Path(self.haupt.k.basis) / quelle.name
         if ziel.exists() and ziel.resolve() != quelle.resolve():
             stamm, n = ziel.stem, 2
@@ -1009,12 +1052,14 @@ class Einstellungen(QDialog):
             if ziel.resolve() != quelle.resolve():
                 shutil.copy2(quelle, ziel)
         except OSError as e:
-            return self.toast("fehler", _("Profil nicht übernommen"), str(e))
+            self.toast("fehler", _("Profil nicht übernommen"), str(e))
+            return False
         ein = self._csv_eintraege()
         rel = self._csv_rel(str(ziel))
         if not any(csv_eintrag_datei(x) == rel or csv_eintrag_datei(x) == ziel.name for x in ein):
             ein.append({"datei": rel, "aktiv": True})
         self._csv_schreiben(ein)
+        return True
 
     def _csv_testen(self) -> None:
         datei, _f = QFileDialog.getOpenFileName(
@@ -1027,6 +1072,9 @@ class Einstellungen(QDialog):
         treffer = None
         for prof in self._csv_profile_laden():
             name = daten.profilname(prof) if not prof.get("_fehler") else prof.get("profil", "?")
+            if prof.get("_abgelehnt"):
+                zeilen.append(f"• {name}: " + _("abgelehnt – altes Profilformat, bitte neu einrichten"))
+                continue
             if prof.get("_fehler"):
                 zeilen.append(f"• {name}: nicht ladbar ({prof['_fehler']})")
                 continue
