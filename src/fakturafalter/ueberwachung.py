@@ -13,8 +13,11 @@
 from __future__ import annotations
 
 import logging
+import shutil
+import tempfile
 import threading
 import time
+from dataclasses import dataclass, field
 from pathlib import Path
 
 from watchdog.events import FileSystemEvent, FileSystemEventHandler
@@ -33,6 +36,71 @@ def relevant(p: Path) -> bool:
 
 
 DATEN_ENDUNGEN = {".csv", ".txt", ".tsv", ".xml"}
+# Tabellen (ab 1.0.0-rc2) laufen wie eine CSV durch Assistent und Profil
+TABELLEN_ENDUNGEN = {".xlsx", ".ods"}
+NICHT_UNTERSTUETZT = {".docx", ".doc", ".odt", ".rtf", ".xls"}
+
+
+@dataclass
+class Auswahl:
+    """Ergebnis von ``manuell_sammeln``: was umgewandelt wird und was übersprungen wurde (mit Grund)."""
+
+    dateien: list[Path] = field(default_factory=list)
+    uebersprungen: list[tuple[Path, str]] = field(default_factory=list)
+
+
+def passende_endungen(k: Konfig) -> set[str]:
+    """Dateiarten, die der eingestellte Eingang verarbeitet (wie im Eingangsordner)."""
+    if not k.ist_daten():
+        return {".pdf"}
+    e = DATEN_ENDUNGEN | TABELLEN_ENDUNGEN
+    if k.pdf_als_gegenstueck():
+        e = e | {".pdf"}
+    return e
+
+
+def manuell_sammeln(pfade: list[Path], k: Konfig) -> Auswahl:
+    """„Umwandeln …“ / Ziehen ins Fenster: Ordner (nur oberste Ebene) aufklappen, unpassende Dateien
+    überspringen, bei PDF + CSV/XML das gleichnamige Gegenstück aus demselben Ordner dazunehmen."""
+    aus = Auswahl()
+    endungen = passende_endungen(k)
+    gesehen: set[Path] = set()
+    kandidaten: list[Path] = []
+    for p in pfade:
+        p = Path(p)
+        if p.is_dir():
+            kandidaten.extend(sorted(q for q in p.iterdir() if relevant(q)))
+        elif p.is_file():
+            kandidaten.append(p)
+        else:
+            aus.uebersprungen.append((p, "nicht gefunden"))
+    zusatz: list[Path] = []
+    if k.pdf_als_gegenstueck():
+        for p in kandidaten:
+            if p.suffix.lower() not in endungen:
+                continue
+            for q in p.parent.iterdir() if p.parent.is_dir() else ():
+                if q != p and q.stem.lower() == p.stem.lower() and q.suffix.lower() in endungen and relevant(q):
+                    if (q.suffix.lower() == ".pdf") != (p.suffix.lower() == ".pdf"):
+                        zusatz.append(q)
+    for p in kandidaten + zusatz:
+        try:
+            schl = p.resolve()
+        except OSError:
+            schl = p
+        if schl in gesehen:
+            continue
+        gesehen.add(schl)
+        suf = p.suffix.lower()
+        if suf in NICHT_UNTERSTUETZT:
+            aus.uebersprungen.append((p, "nicht unterstützt (Word/ODT/XLS)"))
+        elif suf not in endungen:
+            aus.uebersprungen.append((p, "passt nicht zum eingestellten Eingang"))
+        elif not relevant(p) or not lesbar(p):
+            aus.uebersprungen.append((p, "nicht lesbar"))
+        else:
+            aus.dateien.append(p)
+    return aus
 
 
 def mehrfach_eingabe(k: Konfig) -> bool:
@@ -141,6 +209,39 @@ class Waechter:
         """Alles, was im Eingang liegt und lesbar ist, sofort verarbeiten (ohne Ruhezeit abzuwarten)."""
         self.k.eingang.mkdir(parents=True, exist_ok=True)
         return self._lauf([p for p in self.k.eingang.iterdir() if relevant(p) and lesbar(p)])
+
+    def manuell(self, dateien: list[Path]) -> Lauf | None:
+        """Gewählte Dateien umwandeln (ab 1.0.0-rc2), auch bei ausgeschalteter Überwachung.
+
+        Gleiche Strecke wie der Eingang (Profil, Pflicht- und Validierungsprüfung, Prüfansicht, Ausgang). Die
+        Originale bleiben unangetastet: verarbeitet wird eine Kopie in einem Arbeitsordner im System-Temp, die
+        wie eine Datei aus dem Eingang nach Erledigt/Zu prüfen/Fehler wandert. Dateien, die schon im Eingang
+        liegen, werden wie bei „Jetzt einlesen“ direkt verarbeitet."""
+        self.k.ordner_anlegen()
+        try:
+            eingang = self.k.eingang.resolve()
+        except OSError:
+            eingang = self.k.eingang
+        arbeit = Path(tempfile.mkdtemp(prefix="fakturafalter-umwandeln-"))
+        try:
+            kopien: list[Path] = []
+            ordner_nr: dict[Path, Path] = {}
+            for p in dateien:
+                p = Path(p)
+                if p.resolve().parent == eingang:
+                    kopien.append(p)
+                    continue
+                # je Herkunftsordner ein Unterordner: gleichnamige Dateien aus verschiedenen Ordnern stoßen
+                # nicht zusammen, PDF und CSV/XML desselben Ordners bleiben beieinander (Paarung über den Namen)
+                ziel_ordner = ordner_nr.setdefault(p.resolve().parent, arbeit / str(len(ordner_nr) + 1))
+                ziel_ordner.mkdir(parents=True, exist_ok=True)
+                ziel = ziel_ordner / p.name
+                shutil.copy2(p, ziel)
+                kopien.append(ziel)
+            log.info("Umwandeln von Hand: %d Datei(en): %s", len(kopien), ", ".join(p.name for p in kopien))
+            return self._lauf(kopien)
+        finally:
+            shutil.rmtree(arbeit, ignore_errors=True)
 
     def _lauf(self, dateien: list[Path]) -> Lauf | None:
         with self._sperre:

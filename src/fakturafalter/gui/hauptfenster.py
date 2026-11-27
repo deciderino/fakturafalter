@@ -8,7 +8,7 @@ import logging
 from datetime import date
 from pathlib import Path
 
-from PySide6.QtCore import QTimer, Signal
+from PySide6.QtCore import Qt, QTimer, Signal
 from PySide6.QtGui import QAction, QKeySequence, QShortcut
 from PySide6.QtWidgets import (
     QApplication,
@@ -62,6 +62,10 @@ class Hauptfenster(QMainWindow):
         self.arbeiter.zustand.connect(self._zustand)
         self.arbeiter.fortschritt.connect(self._bei_fortschritt)
         self.arbeiter.problem.connect(lambda t: self.toast("fehler", _("Überwachung gestoppt"), t))
+        self.arbeiter.umwandeln_problem.connect(
+            lambda t: self.toast("fehler", _("Umwandeln fehlgeschlagen"), t)
+        )
+        self._manuell = False  # laufender Lauf kommt aus „Umwandeln …“ / Ziehen ins Fenster (rc2)
         self.log_datei = logdatei.aktuell()
         self._tray_sig = None
 
@@ -151,11 +155,24 @@ class Hauptfenster(QMainWindow):
         self.b_jetzt = knopf(
             _("Jetzt einlesen"), klick=self.jetzt_einlesen, tip=_("Eingang sofort verarbeiten (F5)")
         )
+        # rc2: Umwandeln von Hand – Dateien oder Ordner wählen (auch bei „Überwachung aus“)
+        self.b_umwandeln = knopf(
+            _("Umwandeln …"),
+            tip=_(
+                "Dateien oder einen Ordner von Hand umwandeln – mit dem eingestellten Profil, auch bei "
+                "ausgeschalteter Überwachung. Du kannst Dateien auch ins Fenster ziehen."
+            ),
+        )
+        self.b_umwandeln.setObjectName("umwandeln")
+        self.m_umwandeln = QMenu(self.b_umwandeln)
+        self.a_dateien = self.m_umwandeln.addAction(_("Dateien wählen …"), self.umwandeln_dateien)
+        self.a_ordner = self.m_umwandeln.addAction(_("Ordner wählen …"), self.umwandeln_ordner)
+        self.b_umwandeln.setMenu(self.m_umwandeln)
         self.b_eingang = knopf(_("Eingang öffnen"), klick=lambda: aktionen.oeffnen(self.k.eingang))
         self.b_einst = knopf(
             _("Einstellungen"), tip=_("Einstellungen (Strg+,)"), klick=self.einstellungen_oeffnen
         )
-        for b in (self.b_pause, self.b_jetzt, self.b_eingang):
+        for b in (self.b_pause, self.b_jetzt, self.b_umwandeln, self.b_eingang):
             tl.addWidget(b)
         tl.addStretch()
         tl.addWidget(self.b_einst)
@@ -242,6 +259,8 @@ class Hauptfenster(QMainWindow):
         bl.addWidget(k)
         bl.addStretch()
         self.setCentralWidget(root)
+        self.setAcceptDrops(True)
+        self.ablage = self._ablage_bauen(root)
 
         sb = QStatusBar()
         sb.setSizeGripEnabled(False)
@@ -253,6 +272,163 @@ class Hauptfenster(QMainWindow):
         self.setStatusBar(sb)
         self._zustand(self.zust)
         self.toasts.ordnen()
+
+    def _ablage_bauen(self, eltern: QWidget) -> QFrame:
+        """Fläche „Loslassen zum Umwandeln“, nur sichtbar, solange Dateien über das Fenster gezogen werden."""
+        c = self.c
+        w = QFrame(eltern)
+        w.setObjectName("ablage")
+        w.setStyleSheet(
+            f"QFrame#ablage {{ border: 2px dashed {c['acc']}; border-radius: 8px; background: {c['card']}; }}"
+            " QFrame#ablage QLabel { border: none; background: transparent; }"
+        )
+        v = QVBoxLayout(w)
+        v.setContentsMargins(24, 24, 24, 24)
+        v.addStretch()
+        self.l_ablage = lbl("", "titel", umbruch=True)
+        self.l_ablage.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        v.addWidget(self.l_ablage)
+        unter = lbl(
+            _(
+                "Gleiches Profil und gleiche Prüfungen wie im Eingang. Ergebnisse in den Ausgang, die "
+                "Originale bleiben, wo sie sind. Eine gleichnamige PDF neben der CSV/XML wird wie gewohnt "
+                "als Sichtteil genommen."
+            ),
+            "sub",
+            umbruch=True,
+        )
+        unter.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        v.addWidget(unter)
+        v.addStretch()
+        w.hide()
+        return w
+
+    # ======================================================================== Umwandeln von Hand (rc2)
+    def _umwandeln_moeglich(self, melden: bool = True) -> bool:
+        fehlt = self.einrichtung_fehlt()
+        if fehlt:
+            if melden:
+                self.toast(
+                    "info",
+                    _("Erst die Einrichtung abschließen"),
+                    _("Noch einzurichten: {was}").format(was=", ".join(fehlt)),
+                )
+            return False
+        if self._beschaeftigt() or self._einst_offen:
+            if melden:
+                self.toast(
+                    "info",
+                    _("Gerade läuft eine Verarbeitung"),
+                    _("Versuch es gleich noch einmal, wenn sie fertig ist."),
+                )
+            return False
+        return True
+
+    def umwandeln_dateien(self) -> bool:
+        if not self._umwandeln_moeglich():
+            return False
+        gew, _f = QFileDialog.getOpenFileNames(
+            self,
+            _("Dateien umwandeln"),
+            str(Path.home()),
+            _("Rechnungsdateien (*.csv *.txt *.tsv *.xml *.pdf *.xlsx *.ods);;Alle Dateien (*)"),
+        )
+        return self.umwandeln([Path(g) for g in gew]) if gew else False
+
+    def umwandeln_ordner(self) -> bool:
+        if not self._umwandeln_moeglich():
+            return False
+        d = QFileDialog.getExistingDirectory(self, _("Ordner umwandeln"), str(Path.home()))
+        return self.umwandeln([Path(d)]) if d else False
+
+    def umwandeln(self, pfade: list[Path]) -> bool:
+        """Gewählte oder ins Fenster gezogene Dateien/Ordner umwandeln (gleiche Strecke wie der Eingang)."""
+        from ..ueberwachung import manuell_sammeln
+
+        if not self._umwandeln_moeglich():
+            return False
+        auswahl = manuell_sammeln(pfade, self.k)
+        for p, grund in auswahl.uebersprungen:
+            log.info("Umwandeln von Hand: %s übersprungen (%s)", p.name, grund)
+        if auswahl.uebersprungen:
+            namen = ", ".join(p.name for p, _g in auswahl.uebersprungen[:3])
+            if len(auswahl.uebersprungen) > 3:
+                namen += " …"
+            self.toast(
+                "info",
+                _("{n} Datei(en) übersprungen").format(n=len(auswahl.uebersprungen)),
+                _("{namen} – passt nicht zum eingestellten Eingang oder wird nicht unterstützt (z. B. Word). Details in der Logdatei.").format(
+                    namen=namen
+                ),
+            )
+        if not auswahl.dateien:
+            self.toast(
+                "info",
+                _("Nichts zum Umwandeln"),
+                _("In der Auswahl ist keine passende CSV-, XML-, Excel/ODS- oder PDF-Datei."),
+            )
+            return False
+        if not self.arbeiter.umwandeln(auswahl.dateien):
+            return False
+        self._manuell = True
+        self.b_jetzt.setEnabled(False)
+        self.b_umwandeln.setEnabled(False)
+        self.l_status.setText(_("Umwandeln läuft: {n} Datei(en)").format(n=len(auswahl.dateien)))
+        return True
+
+    @staticmethod
+    def _lokale_pfade(ev) -> list[Path]:
+        md = ev.mimeData()
+        if md is None or not md.hasUrls():
+            return []
+        return [Path(u.toLocalFile()) for u in md.urls() if u.isLocalFile() and u.toLocalFile()]
+
+    def dragEnterEvent(self, ev) -> None:  # noqa: N802 (Qt)
+        pfade = self._lokale_pfade(ev)
+        if not pfade:
+            ev.ignore()
+            return
+        ev.acceptProposedAction()
+        if len(pfade) == 1:
+            t = _("Loslassen zum Umwandeln: {name}").format(name=pfade[0].name)
+        else:
+            t = _("Loslassen zum Umwandeln: {n} Dateien/Ordner").format(n=len(pfade))
+        if not self._umwandeln_moeglich(melden=False):
+            t = (
+                _("Erst die Einrichtung abschließen")
+                if self.einrichtung_fehlt()
+                else _("Gerade läuft eine Verarbeitung")
+            )
+        self.l_ablage.setText(t)
+        self._ablage_zeigen(True)
+
+    def dragMoveEvent(self, ev) -> None:  # noqa: N802 (Qt)
+        if self._lokale_pfade(ev):
+            ev.acceptProposedAction()
+        else:
+            ev.ignore()
+
+    def dragLeaveEvent(self, ev) -> None:  # noqa: N802 (Qt)
+        self._ablage_zeigen(False)
+        super().dragLeaveEvent(ev)
+
+    def dropEvent(self, ev) -> None:  # noqa: N802 (Qt)
+        self._ablage_zeigen(False)
+        pfade = self._lokale_pfade(ev)
+        if not pfade:
+            ev.ignore()
+            return
+        ev.acceptProposedAction()
+        QTimer.singleShot(0, lambda: self.umwandeln(pfade))  # Drag-Quelle nicht blockieren
+
+    def _ablage_zeigen(self, an: bool) -> None:
+        if an:
+            cw = self.centralWidget()
+            self.ablage.setGeometry(cw.rect().adjusted(16, 72, -16, -16))
+            self.ablage.raise_()
+            self.ablage.show()
+        else:
+            self.ablage.hide()
 
     def _starthinweis_bauen(self) -> QFrame:
         """Karte oben im Hauptfenster (kein Popup, blinkt nicht). Farben wie ein Hinweis-Toast."""
@@ -391,6 +567,9 @@ class Hauptfenster(QMainWindow):
         self.b_pause.update()
         self.b_pause.setEnabled(z != "einrichten" and not self._einst_offen)
         self.b_jetzt.setEnabled(aktiv and not self._beschaeftigt())
+        self.b_umwandeln.setEnabled(
+            z != "einrichten" and not self._einst_offen and not self._beschaeftigt()
+        )
         fehlt = self.einrichtung_fehlt()
         self.l_einricht.setText(_("Noch einzurichten: {was}").format(was=", ".join(fehlt)))
         self._pruefmodul_text()
@@ -578,11 +757,13 @@ class Hauptfenster(QMainWindow):
         if stand is None:
             self._lauf_ende()
             self.b_jetzt.setEnabled(self.zust == "aktiv")
+            self.b_umwandeln.setEnabled(self.zust != "einrichten" and not self._einst_offen)
             return
         if not self._laeuft:
             self._laeuft = True
             self.l_bereit.setText("")
             self.b_jetzt.setEnabled(False)
+            self.b_umwandeln.setEnabled(False)
             if self.zust == "aktiv":
                 self.l_status.setText(_("Verarbeitung läuft"))
         self.fortschritt.setzen(stand)
@@ -604,13 +785,20 @@ class Hauptfenster(QMainWindow):
         """Erfolg: kein Toast (nur der Zähler steigt). Prüfen: Toast „N verarbeitet, M prüfen“ mit „Prüfen“.
         Fehler: EIN zusammengefasster Toast."""
         self._lauf_ende()
+        manuell, self._manuell = self._manuell, False
         self.b_jetzt.setEnabled(self.zust == "aktiv")
+        self.b_umwandeln.setEnabled(self.zust != "einrichten" and not self._einst_offen)
         if lauf is None:
             self.aktualisieren()
+            if manuell:
+                self._status_text()
+                return
             self.l_status.setText(
                 _("Eingang ist leer – keine lesbaren CSV-, XML- oder PDF-Dateien.")
             )
             return
+        if manuell:
+            self._status_text()
         for vorlage, werte in getattr(lauf, "meldungen", []):  # z. B. Protokoll fehlt (kein Halt)
             self.toast(
                 "info",
@@ -625,6 +813,15 @@ class Hauptfenster(QMainWindow):
             self.fertig_toast(lauf)
         elif neu_pr or neu_fe:
             self.hinweis_toast()
+        elif manuell:
+            n = sum(e.status == "ok" for e in lauf.ergebnisse)
+            self.toast(
+                "ok",
+                _("{n} Rechnung(en) umgewandelt").format(n=n),
+                _("Die Dateien liegen im Ausgang. Die Originale sind unverändert."),
+                _("Ausgang öffnen"),
+                lambda: aktionen.oeffnen(self.k.ausgang),
+            )
         if self.pruef_fenster is not None and self.pruef_fenster.isVisible():
             self.pruef_fenster.aktualisieren()
 

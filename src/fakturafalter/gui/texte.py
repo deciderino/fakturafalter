@@ -1659,3 +1659,30 @@ EN.update({
     "{n} (wiederholend)": "{n} (repeating)",
     "{s}, Wert {w}. Die Zeile mit diesem Wert enthält zugleich Daten und wird mitgelesen.": "{s}, value {w}. The row with this value also contains data and is read as well.",
 })
+
+# 1.0.0-rc2: Umwandeln von Hand
+EN.update(
+    {
+        "Dateien oder einen Ordner von Hand umwandeln – mit dem eingestellten Profil, auch bei ausgeschalteter Überwachung. Du kannst Dateien auch ins Fenster ziehen.": "Convert files or a folder by hand – with the configured profile, even with monitoring off. You can also drag files onto the window.",
+        "Dateien umwandeln": "Convert files",
+        "Dateien wählen …": "Choose files …",
+        "Die Dateien liegen im Ausgang. Die Originale sind unverändert.": "The files are in the output folder. The originals are unchanged.",
+        "Erst die Einrichtung abschließen": "Finish the setup first",
+        "Gerade läuft eine Verarbeitung": "Processing is running",
+        "Gleiches Profil und gleiche Prüfungen wie im Eingang. Ergebnisse in den Ausgang, die Originale bleiben, wo sie sind. Eine gleichnamige PDF neben der CSV/XML wird wie gewohnt als Sichtteil genommen.": "Same profile and same checks as the input folder. Results go to the output folder, the originals stay where they are. A PDF with the same name next to the CSV/XML is used as the visible part as usual.",
+        "In der Auswahl ist keine passende CSV-, XML-, Excel/ODS- oder PDF-Datei.": "The selection contains no suitable CSV, XML, Excel/ODS or PDF file.",
+        "Loslassen zum Umwandeln: {name}": "Drop to convert: {name}",
+        "Loslassen zum Umwandeln: {n} Dateien/Ordner": "Drop to convert: {n} files/folders",
+        "Nichts zum Umwandeln": "Nothing to convert",
+        "Ordner umwandeln": "Convert folder",
+        "Ordner wählen …": "Choose folder …",
+        "Rechnungsdateien (*.csv *.txt *.tsv *.xml *.pdf *.xlsx *.ods);;Alle Dateien (*)": "Invoice files (*.csv *.txt *.tsv *.xml *.pdf *.xlsx *.ods);;All files (*)",
+        "Umwandeln fehlgeschlagen": "Conversion failed",
+        "Umwandeln läuft: {n} Datei(en)": "Converting: {n} file(s)",
+        "Umwandeln …": "Convert …",
+        "Versuch es gleich noch einmal, wenn sie fertig ist.": "Try again once it has finished.",
+        "{namen} – passt nicht zum eingestellten Eingang oder wird nicht unterstützt (z. B. Word). Details in der Logdatei.": "{namen} – does not match the configured input or is not supported (e.g. Word). Details in the log file.",
+        "{n} Datei(en) übersprungen": "{n} file(s) skipped",
+        "{n} Rechnung(en) umgewandelt": "{n} invoice(s) converted",
+    }
+)

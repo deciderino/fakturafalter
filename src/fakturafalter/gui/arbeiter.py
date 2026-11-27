@@ -19,6 +19,7 @@ class Arbeiter(QObject):
     lauf_fertig = Signal(object)  # pipeline.Lauf
     zustand = Signal(str)  # "aktiv" | "pausiert" | "beschaeftigt" | "fehler"
     problem = Signal(str)  # Klartext für Toast
+    umwandeln_problem = Signal(str)  # Fehler beim Umwandeln von Hand (rc2), Überwachung läuft weiter
     fortschritt = Signal(object)  # pipeline.Stand (queued in den GUI-Thread)
 
     def __init__(self, k: Konfig, polling: bool = False, parent=None):
@@ -94,6 +95,31 @@ class Arbeiter(QObject):
                 self.problem.emit(f"{type(e).__name__}: {e}")
 
         self._jetzt_t = threading.Thread(target=los, name="fakturafalter-jetzt", daemon=True)
+        self._jetzt_t.start()
+        return True
+
+    def umwandeln(self, dateien: list) -> bool:
+        """Von Hand gewählte Dateien umwandeln (rc2). Gleiche Sperre wie Überwachung und „Jetzt einlesen“;
+        funktioniert auch bei ausgeschalteter Überwachung."""
+        if self.beschaeftigt or not dateien:
+            return False
+        w = self._w or Waechter(
+            self.k,
+            polling=self.polling,
+            bei_lauf=self.lauf_fertig.emit,
+            bei_fortschritt=self.fortschritt.emit,
+        )
+
+        def los():
+            try:
+                if w.manuell(list(dateien)) is None:
+                    self.lauf_fertig.emit(None)
+            except Exception as e:  # noqa: BLE001
+                log.exception("Umwandeln fehlgeschlagen")
+                self.umwandeln_problem.emit(f"{type(e).__name__}: {e}")
+                self.lauf_fertig.emit(None)
+
+        self._jetzt_t = threading.Thread(target=los, name="fakturafalter-umwandeln", daemon=True)
         self._jetzt_t.start()
         return True
 
