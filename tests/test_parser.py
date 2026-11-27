@@ -93,7 +93,12 @@ def test_pdf_druckauftrag_zerlegen_und_lesen(konfig):
     for r in rs:
         s = rechnen.berechnen(r)
         assert (str(s.netto), str(s.ust), str(s.brutto)) == SOLL[r.nummer]
-        assert r.status == "ok", [str(h) for h in r.hinweise]
+        if r.nummer == "RE-2026-0102":
+            # rc1: Stadtverwaltung Musterhausen steht in der XRechnung-Liste, der Druck hat keine
+            # E-Rechnungsadresse (BT-49) -> einziger Prüfgrund
+            assert [h.feld for h in r.hinweise if h.stufe == "pruefen"] == ["BT-49"], r.hinweise
+        else:
+            assert r.status == "ok", [str(h) for h in r.hinweise]
     # lange Bezeichnung ragt in Menge-Spalte, Übertrag-Zeile ignoriert
     assert len(rs[0].positionen) == 3
     assert rs[0].positionen[1].menge == D("3.5")
