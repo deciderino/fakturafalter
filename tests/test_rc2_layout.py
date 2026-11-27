@@ -385,3 +385,41 @@ def test_pruefkaesten_wcag_aa(hell):
 
     c = thema.farben(hell)
     assert k(c["er_t"], c["er_bg"]) >= 4.5 and k(c["in_t"], c["in_bg"]) >= 4.5
+
+
+@pytest.mark.parametrize("hell", [True, False])
+def test_briefpapier_dialog_hinweis_nicht_abgeschnitten(qapp, tmp_path, hell):
+    w = _editor(qapp, tmp_path, hell=hell)
+    try:
+        w.vorlage.seite1.briefpapier = "layout/x.pdf"
+        dlg = w.briefpapier_dialog("seite1")
+        dlg.show()
+        for _ in range(3):
+            qapp.processEvents()
+        lab = dlg.l_hinweis
+        assert lab.height() >= lab.heightForWidth(lab.width()) - 1, (lab.height(), lab.heightForWidth(lab.width()))
+        assert dlg.b_fertig.geometry().top() >= lab.geometry().bottom()
+        dlg.accept()
+    finally:
+        w.close()
+
+
+@pytest.mark.parametrize("sprache", ["de", "en"])
+def test_platzhalter_namen_ohne_rohe_bt_nummer(qapp, tmp_path, sprache):
+    from fakturafalter.gui import texte
+
+    w = _editor(qapp, tmp_path)
+    try:
+        texte.sprache_setzen(sprache)
+        (_g, rechnung), *_rest = w.platzhalter_liste()
+        for anzeige, ph in rechnung:
+            bt = ph.strip("{}")
+            assert not anzeige.startswith(bt), anzeige  # immer ein Name vor der Nummer, nie „BT-56 (BT-56)“
+        namen = dict((ph, a) for a, ph in rechnung)
+        if sprache == "en":
+            assert namen["{BT-9}"].startswith("Payment due date") and namen["{BT-56}"].startswith("Buyer contact point")
+        else:
+            assert namen["{BT-56}"].startswith("Kontaktstelle des Käufers")
+    finally:
+        texte.sprache_setzen("de")
+        w.close()

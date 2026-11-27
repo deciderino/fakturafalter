@@ -49,6 +49,7 @@ from PySide6.QtWidgets import (
 from .. import beispielrechnung, pdfa, sicht, validierung
 from .. import layout as lay
 from ..modell import Partei, Zahlung
+from . import texte
 from .bausteine import ToastStapel, knopf, lbl
 from .texte import _
 
@@ -1062,8 +1063,13 @@ class LayoutEditor(QDialog):
             "BT-1", "BT-2", "BT-9", "BT-10", "BT-11", "BT-12", "BT-13", "BT-14", "BT-15", "BT-16",
             "BT-17", "BT-18", "BT-19", "BT-25", "BT-44", "BT-46", "BT-56", "BT-72", "BT-73", "BT-74",
         ):
-            label = ce.FELD[bt][1] if bt in ce.FELD else ce.STANDARD_NAME.get(bt, (bt,))[0]
-            rechnung.append((f"{_(label)} ({bt})", "{" + bt + "}"))
+            fid = bt if bt in ce.FELD else ce.BT_ZU_FELD.get(bt)
+            if fid in ce.FELD:
+                label = _(ce.FELD[fid][1])
+            else:  # amtlicher Name aus EN 16931, zweisprachig
+                name = ce.STANDARD_NAME.get(bt, (bt, bt))
+                label = name[1] if texte.sprache() == "en" else name[0]
+            rechnung.append((f"{label} ({bt})", "{" + bt + "}"))
         eigen = [(sp, "{" + sp + "}") for sp in self.spalten if "{" not in sp and "}" not in sp]
         out = [(_("Rechnungsangaben"), rechnung)]
         if eigen:
@@ -1553,17 +1559,16 @@ class BriefpapierDialog(QDialog):
             cb.toggled.connect(lambda an, a=a: editor.briefpapier_enthaelt_setzen(seite, a, an))
             v.addWidget(cb)
             self.haken[a] = cb
-        v.addWidget(
-            lbl(
-                _(
-                    "Was schon auf dem Briefpapier steht, druckt Fakturafalter nicht noch einmal. Die "
-                    "Pflichtangaben müssen trotzdem irgendwo auf der Rechnung stehen – hier oder in einem Baustein. "
-                    "Prüfe danach die Vorschau: Fakturafalter liest das Briefpapier nicht."
-                ),
-                "hinweis",
-                umbruch=True,
-            )
+        self.l_hinweis = lbl(
+            _(
+                "Was schon auf dem Briefpapier steht, druckt Fakturafalter nicht noch einmal. Die "
+                "Pflichtangaben müssen trotzdem irgendwo auf der Rechnung stehen – hier oder in einem Baustein. "
+                "Prüfe danach die Vorschau: Fakturafalter liest das Briefpapier nicht."
+            ),
+            "hinweis",
+            umbruch=True,
         )
+        v.addWidget(self.l_hinweis)
         h = QHBoxLayout()
         self.b_anders = knopf(_("Anderes Briefpapier…"), klick=self._anders)
         self.b_weg = knopf(_("Briefpapier entfernen"), danger=True, klick=self._weg)
@@ -1573,7 +1578,10 @@ class BriefpapierDialog(QDialog):
         h.addStretch(1)
         h.addWidget(self.b_fertig)
         v.addLayout(h)
-        self.resize(460, 520)
+        # Breite fest genug für die Knöpfe; Höhe aus dem Inhalt, damit der umbrochene Hinweis nie abgeschnitten wird
+        self.setMinimumWidth(540)
+        v.setSizeConstraint(QVBoxLayout.SizeConstraint.SetMinimumSize)
+        self.resize(540, max(600, v.totalHeightForWidth(540) if v.hasHeightForWidth() else 600))
 
     def _anders(self) -> None:
         self.accept()

@@ -348,6 +348,7 @@ STANDARD_NAME: dict[str, tuple[str, str]] = {
     "BT-52": ("Ort des Käufers", "Buyer city"),
     "BT-53": ("Postleitzahl des Käufers", "Buyer post code"),
     "BT-55": ("Ländercode des Käufers", "Buyer country code"),
+    "BT-56": ("Kontaktstelle des Käufers", "Buyer contact point"),
     "BT-59": ("Name des Zahlungsempfängers", "Payee name"),
     "BT-70": ("Name des Waren- oder Dienstleistungsempfängers", "Deliver to party name"),
     "BT-72": ("Tatsächliches Lieferdatum", "Actual delivery date"),
