@@ -40,7 +40,11 @@ stabile Linie, bis 1.0 erscheint).
   Kundennummer, optionale Leitweg-ID BT-10). Ist der Schalter an, bekommt jede
   Rechnung, deren Name oder Nummer einen Eintrag trifft, zusätzlich zur
   ZUGFeRD-PDF eine XRechnung (CII, XRechnung-konform, lokal mit KoSIT geprüft).
-  Die Leitweg-ID aus der Quelle hat Vorrang. Eine frühere Einstellung „XRechnung,
+  Die Leitweg-ID aus der Quelle hat Vorrang. Die XRechnung braucht die
+  E-Rechnungsadresse des Kunden (BT-49) aus der Quelle; fehlt sie, entsteht
+  keine ungültige Datei, sondern die Rechnung geht mit klarem Hinweis nach
+  „Zu prüfen“. Der Listenvergleich nimmt den ganzen Kundennamen oder die erste
+  Namenszeile (Groß/Klein und Leerzeichen egal). Eine frühere Einstellung „XRechnung,
   wenn der Kundenstamm es verlangt“ ohne Liste wird nicht still auf alle
   Rechnungen angewendet, sondern mit einem klaren Hinweis angezeigt.
   *Nicht unterstützt:* XRechnung UBL als zusätzliche Datei (ein altes
@@ -70,6 +74,11 @@ stabile Linie, bis 1.0 erscheint).
   „Schließen“), an der Profilkarte in den Einstellungen („Warum?“), bei
   „Profil übernehmen…“ (es wird nichts kopiert), bei „Profil testen…“ und im
   Eingang (Fehlermeldung nennt das abgelehnte Profil).
+
+- **Beispiel-CSV und Vorlagen.** „CSV-Vorlage speichern…“ schrieb in der
+  Minimalvorlage die Kundennummer in die Spalte Kundenname. Behoben; die
+  Vorlagen tragen jetzt Kundenname und Anschrift, die Vollvorlage auch die
+  E-Rechnungsadresse. Beide Beispielrechnungen gehen ohne Prüffall durch.
 
 - **Standard-CSV.** Die Pflichtnamen des eingebauten Formats enthalten
   `Kundenname` statt `Kundennummer`. `Kundennummer` bleibt eine optionale

@@ -453,21 +453,30 @@ def _soll_xrechnung(r: Rechnung, k: Konfig) -> bool:
         return False
     if (r.ausgabeformat or "").startswith("XRECHNUNG"):
         return True
-    from .konfig import xrechnung_treffer
+    from .konfig import kunden_namen, xrechnung_treffer
 
-    return xrechnung_treffer(k, name=r.kaeufer.name, nummer=r.kundennummer or r.kaeufer.kennung) is not None
+    return xrechnung_treffer(k, name=kunden_namen(r), nummer=r.kundennummer or r.kaeufer.kennung) is not None
 
 
 def _xrechnung(r: Rechnung, k: Konfig) -> bytes | None:
     if not _soll_xrechnung(r, k):
         return None
+    if not (r.kaeufer.elektronische_adresse or "").strip():
+        # ohne BT-49 wäre die XRechnung ungültig (PEPPOL-EN16931-R010) – keine Datei, Hinweis steht schon
+        if not any(getattr(h, "feld", None) == "BT-49" for h in r.hinweise):
+            r.hinweis(
+                "pruefen",
+                "XRechnung vorgesehen, aber die E-Rechnungsadresse des Kunden (BT-49) fehlt.",
+                "BT-49",
+            )
+        return None
     if (r.ausgabeformat or "") == "XRECHNUNG_UBL":
         r.hinweis(
             "info", "XRechnung UBL ist noch nicht umgesetzt – XRechnung im CII-Format erzeugt"
         )
-    from .konfig import xrechnung_treffer
+    from .konfig import kunden_namen, xrechnung_treffer
 
-    treffer = xrechnung_treffer(k, name=r.kaeufer.name, nummer=r.kundennummer or r.kaeufer.kennung)
+    treffer = xrechnung_treffer(k, name=kunden_namen(r), nummer=r.kundennummer or r.kaeufer.kennung)
     if treffer and treffer.leitweg_id and not r.leitweg_id:
         r.leitweg_id = treffer.leitweg_id
     if not r.leitweg_id:

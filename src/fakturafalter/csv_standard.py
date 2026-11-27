@@ -336,8 +336,8 @@ def _csv_zeile(zellen: list[str]) -> str:
 
 
 def vorlage_minimal() -> bytes:
-    """UTF-8 mit BOM, nur die Pflichtspalten, zwei fiktive Rechnungen."""
-    kopf = list(PFLICHTNAMEN)
+    """UTF-8 mit BOM, die Pflichtspalten plus Anschrift (Straße, PLZ, Ort – § 14 UStG), zwei fiktive Rechnungen."""
+    kopf = list(PFLICHTNAMEN) + ["Straße", "PLZ", "Ort"]
     zeilen = [
         kopf,
         [
@@ -385,6 +385,8 @@ def vorlage_minimal() -> bytes:
             "19 %",
         ],
     ]
+    anschrift = ["Beispielweg 5", "12345", "Musterstadt"]
+    zeilen = [zeilen[0]] + [z + anschrift for z in zeilen[1:]]
     text = "\n".join(_csv_zeile(z) for z in zeilen) + "\n"
     return text.encode("utf-8-sig")
 
@@ -405,7 +407,13 @@ def vorlage_voll() -> bytes:
         Leistungsdatum="31.10.2026",
         Kundennummer="K-1001",
         Kundenname="Beispiel Handel GmbH",
+        Straße="Beispielweg 5",
+        PLZ="12345",
+        Ort="Musterstadt",
+        Land="DE",
+        **{"E-Rechnungsadresse": "rechnung@beispiel-handel.example"},
         Belegart="Rechnung",
+        **{"Summe netto": "363,00", "Summe USt": "68,97", "Summe brutto": "431,97"},
         Währung="EUR",
         Bestellnummer="AB-44019",
         Zahlungsziel="30",
@@ -423,7 +431,6 @@ def vorlage_voll() -> bytes:
             Einheit="Stück",
             Einzelpreis="149,00",
             Steuersatz="19 %",
-            **{"Summe netto": "363,00", "Summe USt": "68,97", "Summe brutto": "431,97"},
             Positionsnummer="1",
             Artikelnummer="ART-1040",
             Positionsbetrag="298,00",
@@ -437,7 +444,6 @@ def vorlage_voll() -> bytes:
             Einheit="Stunde",
             Einzelpreis="65,00",
             Steuersatz="19 %",
-            **{"Summe netto": "363,00", "Summe USt": "68,97", "Summe brutto": "431,97"},
             Positionsnummer="2",
             Artikelnummer="ART-2001",
             Positionsbetrag="65,00",
@@ -458,7 +464,7 @@ def vorlage_voll() -> bytes:
             PLZ="12345",
             Ort="Musterstadt",
             Land="DE",
-            **{"Kunde-USt-IdNr.": "DE000000003"},
+            **{"Kunde-USt-IdNr.": "DE000000003", "E-Rechnungsadresse": "rechnung@beispiel-handel.example"},
             Positionsnummer="1",
         ),
     ]

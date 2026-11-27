@@ -680,7 +680,10 @@ Der **Kundenstamm** (eigene `kundenstamm.csv` im Profil) entfällt. Der
 Kundenname (BT-44) ist Pflicht und kommt aus der Quelle; die Kundennummer ist
 optional. Wer bisher das Ausgabeformat „aus dem Kundenstamm“ genutzt hat,
 trägt die betreffenden Kunden in die XRechnung-Liste ein und schaltet
-„XRechnung zusätzlich erzeugen“ ein.
+„XRechnung zusätzlich erzeugen“ ein. Für die XRechnung muss die
+E-Rechnungsadresse des Kunden (BT-49) in der Quelle stehen; fehlt sie, landet
+die Rechnung mit Hinweis in „Zu prüfen“. Verglichen wird der ganze
+Kundenname oder dessen erste Zeile, außerdem die Kundennummer.
 
 Stand der Funktionen in 1.0: *geplant* sind Anlagen aus der CSV sowie
 Abschlags-, Teil- und Schlussrechnungen; *nicht unterstützt* sind OCR und eine

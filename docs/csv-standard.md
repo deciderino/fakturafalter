@@ -559,16 +559,17 @@ Strukturiertes Skonto (§ 4.6) und das eingebaute Standardprofil sind
 
 ### Minimalbeispiel
 
-Nur die neun Pflichtspalten, zwei Rechnungen, eine Kommentarzeile. Datei:
+Die neun Pflichtspalten plus Straße, PLZ und Ort (ohne Anschrift landet die
+Rechnung in „Zu prüfen“, § 14 UStG), zwei Rechnungen, eine Kommentarzeile. Datei:
 [`fakturafalter-standard-minimal.csv`](../beispiele/fakturafalter-standard-minimal.csv)
 (fiktiv, UTF-8 mit BOM).
 
 ```csv
-Rechnungsnummer;Rechnungsdatum;Leistungsdatum;Kundenname;Bezeichnung;Menge;Einheit;Einzelpreis;Steuersatz
-RE-2026-1001;02.11.2026;31.10.2026;Beispiel Handel GmbH;Bürostuhl Modell Münster;2;Stück;149,00;19 %
-RE-2026-1001;02.11.2026;31.10.2026;Beispiel Handel GmbH;Lieferung frei Haus;;;;
-RE-2026-1001;02.11.2026;31.10.2026;Beispiel Handel GmbH;Montage vor Ort;1;Stunde;65,00;19 %
-RE-2026-1002;03.11.2026;03.11.2026;Beispiel Handel GmbH;Beratung Einrichtung;3;Stunde;90,00;19 %
+Rechnungsnummer;Rechnungsdatum;Leistungsdatum;Kundenname;Bezeichnung;Menge;Einheit;Einzelpreis;Steuersatz;Straße;PLZ;Ort
+RE-2026-1001;02.11.2026;31.10.2026;Beispiel Handel GmbH;Bürostuhl Modell Münster;2;Stück;149,00;19 %;Beispielweg 5;12345;Musterstadt
+RE-2026-1001;02.11.2026;31.10.2026;Beispiel Handel GmbH;Lieferung frei Haus;;;;;Beispielweg 5;12345;Musterstadt
+RE-2026-1001;02.11.2026;31.10.2026;Beispiel Handel GmbH;Montage vor Ort;1;Stunde;65,00;19 %;Beispielweg 5;12345;Musterstadt
+RE-2026-1002;03.11.2026;03.11.2026;Beispiel Handel GmbH;Beratung Einrichtung;3;Stunde;90,00;19 %;Beispielweg 5;12345;Musterstadt
 ```
 
 Voraussetzung: Absender in den Einstellungen; der Kundenname steht in der CSV.

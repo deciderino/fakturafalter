@@ -161,14 +161,29 @@ def xrechnung_liste_aus(opt: dict) -> list[XRechnungEintrag]:
     return aus
 
 
-def xrechnung_treffer(k: "Konfig", *, name: str = "", nummer: str = "") -> XRechnungEintrag | None:
-    """Erster Listen-Treffer über Kundenname oder Kundennummer (Groß/Klein und Leerzeichen egal)."""
+def kunden_namen(r) -> list[str]:
+    """Namen eines Käufers für den Listenvergleich: ganzer Name und erste Namenszeile."""
+    k = getattr(r, "kaeufer", None)
+    if k is None:
+        return []
+    return [k.name] + list(getattr(k, "name_zeilen", None) or [])[:1]
+
+
+def xrechnung_treffer(
+    k: "Konfig", *, name: str | list[str] = "", nummer: str = ""
+) -> XRechnungEintrag | None:
+    """Erster Listen-Treffer über Kundenname oder Kundennummer (Groß/Klein und Leerzeichen egal).
+
+    ``name`` darf eine Liste sein: der ganze Name (BT-44 mit Zeile 2/3) und die erste Namenszeile –
+    so trifft „Muster GmbH“ auch, wenn in der CSV zusätzlich „Einkauf“ als Zeile 2 steht."""
     if not getattr(k, "xrechnung_zusatz", False):
         return None
-    n, nr = _norm_vgl(name), _norm_vgl(nummer)
+    namen = [name] if isinstance(name, str) else list(name or [])
+    ns = {_norm_vgl(x) for x in namen if x and _norm_vgl(x)}
+    nr = _norm_vgl(nummer)
     for e in k.xrechnung_liste or []:
         en, enr = _norm_vgl(e.name), _norm_vgl(e.nummer)
-        if en and n and en == n:
+        if en and en in ns:
             return e
         if enr and nr and enr == nr:
             return e

@@ -422,9 +422,9 @@ Datei: beispiele/variante-a_positionen_utf8.csv (Kunde „Beispiel Handel GmbH�
 Kundennummer K-1001).
 
 1. Einstellungen → Ausgabe: „XRechnung zusätzlich erzeugen“ an, Eintrag
-   Kundenname „Beispiel Handel GmbH“, Leitweg-ID „991-12345-67“ (fiktiv).
+   Kundenname „Beispiel Handel GmbH“, Leitweg-ID „04011000-12345-03“ (fiktiv).
 2. CSV in den Eingang legen. Erwartet: neben dem ZUGFeRD-PDF eine
-   `…_xrechnung.xml` für die Rechnungen dieses Kunden, mit BT-10 991-12345-67,
+   `…_xrechnung.xml` für die Rechnungen dieses Kunden, mit BT-10 04011000-12345-03,
    KoSIT gültig. Andere Kunden bekommen keine XRechnung.
 3. Statt des Namens nur die Kundennummer „K-1001“ eintragen: gleiches Ergebnis.
 4. Schalter aus: keine XRechnung, auch wenn der Kunde in der Liste steht.

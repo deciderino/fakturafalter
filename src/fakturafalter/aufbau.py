@@ -12,7 +12,7 @@ from decimal import Decimal
 from pathlib import Path
 
 from . import sicht, steuerfaelle, zahlungsziel
-from .konfig import Konfig, bemerkungen_aus, partei_aus, xrechnung_treffer, zahlung_aus
+from .konfig import Konfig, bemerkungen_aus, kunden_namen, partei_aus, xrechnung_treffer, zahlung_aus
 from .modell import (
     Anhang,
     Herkunft,
@@ -822,10 +822,19 @@ def _vorzeichen(r: Rechnung) -> None:
 
 def _xrechnung_aus_liste(r: Rechnung, konfig: Konfig) -> None:
     """Leitweg-ID aus der XRechnung-Liste ergänzen, wenn die Quelle keine mitbringt."""
-    treffer = xrechnung_treffer(konfig, name=r.kaeufer.name, nummer=r.kundennummer or r.kaeufer.kennung)
+    treffer = xrechnung_treffer(konfig, name=kunden_namen(r), nummer=r.kundennummer or r.kaeufer.kennung)
     if treffer and treffer.leitweg_id and not r.leitweg_id:
         r.leitweg_id = treffer.leitweg_id
         r.herkunft["BT-10"] = Herkunft("xrechnung_liste", 1.0)
+    if treffer and not (r.kaeufer.elektronische_adresse or "").strip():
+        # XRechnung 3.0 verlangt die elektronische Adresse des Käufers (PEPPOL-EN16931-R010)
+        r.hinweis(
+            "pruefen",
+            "XRechnung vorgesehen (Kunde steht in der XRechnung-Liste), aber die "
+            "E-Rechnungsadresse des Kunden (BT-49) fehlt. Bitte in der Quelle ergänzen, "
+            "z. B. Spalte „E-Rechnungsadresse“.",
+            "BT-49",
+        )
 
 def _skonto_feld(wert, *namen):
     for n in namen:
