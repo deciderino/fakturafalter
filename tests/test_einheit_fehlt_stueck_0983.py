@@ -60,7 +60,7 @@ def test_option_setzt_stueck_h87_ohne_prueffall(konfig):
     assert p.einheit == "H87"
     assert p.einheit_roh == "Stück"
     assert p.einheit_angenommen
-    assert sicht.einheit_anzeige(p, r) == "Stück"
+    assert sicht.einheit_anzeige(p, r) == "Stk."  # rc2: wie die übrigen Positionen (Kurzform)
     texte = [str(h) for h in r.hinweise]
     assert any("Einheit fehlte, Stück angenommen" in t for t in texte)
     assert not any(h.stufe == "pruefen" and "BT-130" in (h.feld or "") for h in r.hinweise)
@@ -75,13 +75,13 @@ def test_option_setzt_stueck_h87_ohne_prueffall(konfig):
     assert not any("Lieferschein" in (q.bezeichnung or "") for q in r.positionen)
 
 
-def test_sicht_zeigt_stueck_auch_bei_kurzform(konfig):
+def test_sicht_zeigt_kurzform_stk_rc2(konfig):
     profil = _profil(True)
     profil.setdefault("sicht", {})["einheit"] = "kurz"
     (r,) = adapter_csv.lesen(CSV, profil, konfig)
     rechnen.berechnen(r)
     p = _pauschale(r)
-    assert sicht.einheit_anzeige(p, r) == "Stück"
+    assert sicht.einheit_anzeige(p, r) == "Stk."  # rc2: Kurzform wie die anderen Positionen
     # andere Positionen mit Einheit in der CSV: Kurzform
     andere = next(q for q in r.positionen if q.bezeichnung.startswith("Beispielplatte"))
     assert sicht.einheit_anzeige(andere, r) == "Stk."
@@ -144,3 +144,24 @@ def test_profil_bauen_schreibt_option_nur_wenn_gesetzt():
     assert p2["aufbau"]["einheit_fehlt_stueck"] is True
     # Assistenten-Vorschlag für „Stück“ ist H87
     assert p2["mappings"]["einheiten"].get("Stück") == "H87"
+
+
+def test_angenommene_einheit_bei_csv_text_rc2(konfig):
+    """sicht.einheit = csv: angenommene Einheit übernimmt den CSV-Text einer anderen Stück-Position, sonst Kurzform."""
+    from fakturafalter.modell import Position
+
+    profil = _profil(True)
+    profil.setdefault("sicht", {})["einheit"] = "csv"
+    (r,) = adapter_csv.lesen(CSV, profil, konfig)
+    rechnen.berechnen(r)
+    p = _pauschale(r)
+    gleiche = [q for q in r.positionen if q is not p and (q.einheit or "").upper() == "H87" and q.einheit_roh]
+    erwartet = str(gleiche[0].einheit_roh).strip() if gleiche else "Stk."
+    assert sicht.einheit_anzeige(p, r) == erwartet
+    # nur angenommene Position: Kurzform, englisch „pc.“
+    r.positionen = [p]
+    assert sicht.einheit_anzeige(p, r) == "Stk."
+    assert sicht.einheit_anzeige(p, r, "en") == "pc."
+    q = Position(nr="9", bezeichnung="X", einheit="H87", einheit_roh="Stk")
+    r.positionen = [q, p]
+    assert sicht.einheit_anzeige(p, r) == "Stk"

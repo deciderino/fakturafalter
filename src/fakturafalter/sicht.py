@@ -145,11 +145,20 @@ def menge_anzeige(p, r=None) -> str:
 def einheit_anzeige(p, r=None, sprache: str | None = None) -> str:
     """Einheit auf der Sichtseite: Kurzform aus der Tabelle oder unveränderter CSV-Text.
 
-    Wurde die Einheit als Stück angenommen (``einheit_angenommen``), steht auf der
-    Sichtseite immer der lange Text „Stück“, unabhängig von ``sicht.einheit``.
+    Wurde die Einheit als Stück angenommen (``einheit_angenommen``), folgt sie ab 1.0.0-rc2 derselben
+    Darstellung wie die übrigen Positionen: Kurzform („Stk.“) aus der Tabelle. Bei ``sicht.einheit: csv``
+    gibt es für die Zeile keinen CSV-Text; dann gilt der CSV-Text einer anderen Position mit derselben
+    Einheit auf dieser Rechnung, sonst die Kurzform.
     """
     if getattr(p, "einheit_angenommen", False):
-        return einheit_text(p.einheit, sprache, lang=True)
+        if r is not None and sicht_von(r).get("einheit") == "csv":
+            for q in getattr(r, "positionen", None) or []:
+                if q is p or getattr(q, "einheit_angenommen", False):
+                    continue
+                roh_q = str(getattr(q, "einheit_roh", "") or "").strip()
+                if roh_q and (q.einheit or "").upper() == (p.einheit or "").upper():
+                    return roh_q
+        return einheit_text(p.einheit, sprache)
     roh = str(getattr(p, "einheit_roh", "") or "").strip()
     if r is not None and sicht_von(r).get("einheit") == "csv" and roh:
         return roh
