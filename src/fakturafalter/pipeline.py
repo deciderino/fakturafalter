@@ -247,7 +247,19 @@ def einlesen(datei: Path, k: Konfig) -> tuple[str, list[Rechnung]]:
         return "csv", rs
     if suf == ".xml":
         return "xml", adapter_xml.lesen(datei, k)
+    if suf in WORD_ENDUNGEN:
+        raise ValueError(f"Dateityp {suf} (Word/Textverarbeitung) wird nicht unterstützt. {WORD_TIPP}")
+    if suf == ".xls":
+        raise ValueError(XLS_TIPP)
     raise ValueError(f"Dateityp {suf or '(ohne Endung)'} wird nicht verarbeitet")
+
+
+# ab 1.0.0-rc2: Word/ODT/RTF und .xls sind ausdrücklich nicht unterstützt – mit Weg, wie es trotzdem geht
+WORD_ENDUNGEN = (".docx", ".doc", ".odt", ".rtf")
+WORD_TIPP = ("Tipp: das Dokument als PDF speichern und unter „Nur PDF“ anlernen, oder aus der Warenwirtschaft als CSV "
+             "exportieren.")
+XLS_TIPP = ("Das alte Excel-Format .xls wird nicht unterstützt. Tipp: die Mappe in Excel als .xlsx speichern und im "
+            "Assistenten einrichten, oder als CSV exportieren.")
 
 
 def _gegenpruefen(daten: Rechnung, druck: Rechnung, nur_tabelle: bool = False) -> None:

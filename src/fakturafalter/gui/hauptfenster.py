@@ -343,7 +343,7 @@ class Hauptfenster(QMainWindow):
 
     def umwandeln(self, pfade: list[Path]) -> bool:
         """Gewählte oder ins Fenster gezogene Dateien/Ordner umwandeln (gleiche Strecke wie der Eingang)."""
-        from ..ueberwachung import manuell_sammeln
+        from ..ueberwachung import NICHT_UNTERSTUETZT, manuell_sammeln
 
         if not self._umwandeln_moeglich():
             return False
@@ -359,6 +359,12 @@ class Hauptfenster(QMainWindow):
                 _("{n} Datei(en) übersprungen").format(n=len(auswahl.uebersprungen)),
                 _("{namen} – passt nicht zum eingestellten Eingang oder wird nicht unterstützt (z. B. Word). Details in der Logdatei.").format(
                     namen=namen
+                )
+                + (
+                    "\n"
+                    + _("Word/ODT: als PDF speichern und unter „Nur PDF“ anlernen, oder als CSV exportieren. .xls: als .xlsx speichern.")
+                    if any(p.suffix.lower() in NICHT_UNTERSTUETZT for p, _g in auswahl.uebersprungen)
+                    else ""
                 ),
             )
         if not auswahl.dateien:

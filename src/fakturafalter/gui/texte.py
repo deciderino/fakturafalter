@@ -1680,6 +1680,7 @@ EN.update(
         "Umwandeln …": "Convert …",
         "Versuch es gleich noch einmal, wenn sie fertig ist.": "Try again once it has finished.",
         "{namen} – passt nicht zum eingestellten Eingang oder wird nicht unterstützt (z. B. Word). Details in der Logdatei.": "{namen} – does not match the configured input or is not supported (e.g. Word). Details in the log file.",
+        "Word/ODT: als PDF speichern und unter „Nur PDF“ anlernen, oder als CSV exportieren. .xls: als .xlsx speichern.": "Word/ODT: save as PDF and train it under “PDF only”, or export as CSV. .xls: save as .xlsx.",
         "{n} Datei(en) übersprungen": "{n} file(s) skipped",
         "{n} Rechnung(en) umgewandelt": "{n} invoice(s) converted",
     }

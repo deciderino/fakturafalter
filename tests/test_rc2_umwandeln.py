@@ -236,6 +236,8 @@ def test_nichts_passendes_und_einrichtung_fehlt(fenster, qapp, tmp_path, monkeyp
     assert not fenster.umwandeln([q])
     titel = [t.titel.text() for t in fenster.toasts.sichtbare()]
     assert any("übersprungen" in t for t in titel) and any("Nichts zum Umwandeln" in t for t in titel)
+    detail = " ".join(t.detail.text() for t in fenster.toasts.sichtbare())
+    assert "als PDF speichern" in detail and "Nur PDF" in detail and ".xlsx" in detail  # Tipp für Word/ODT/.xls
     monkeypatch.setattr(fenster, "einrichtung_fehlt", lambda: ["Absender"])
     assert not fenster.umwandeln([q])
     assert any("Einrichtung" in t.titel.text() for t in fenster.toasts.sichtbare())
@@ -250,3 +252,25 @@ def test_ablage_kontrast():
         c = thema.farben(hell)
         assert _kontrast(c["fg"], c["card"]) >= 4.5 and _kontrast(c["sub"], c["card"]) >= 4.5
         assert _kontrast(c["acc"], c["card"]) >= 3.0  # Rahmen (Nicht-Text, WCAG 1.4.11)
+
+
+@pytest.mark.parametrize("endung", [".docx", ".odt", ".rtf", ".doc"])
+def test_word_im_eingang_mit_tipp(konfig, endung):
+    """Word/ODT im Eingang: Fehler mit klarem „nicht unterstützt“ und Tipp, kein Absturz (rc2)."""
+    from fakturafalter import pipeline
+
+    d = konfig.eingang / f"brief{endung}"
+    d.write_bytes(b"PK\x03\x04fiktiv")
+    pipeline.verarbeiten([d], konfig)
+    txt = (konfig.fehler / f"brief{endung}_fehler.txt").read_text(encoding="utf-8")
+    assert "nicht unterstützt" in txt and "als PDF speichern" in txt and "Nur PDF" in txt and "CSV" in txt
+
+
+def test_xls_im_eingang_mit_tipp(konfig):
+    from fakturafalter import pipeline
+
+    d = konfig.eingang / "alt.xls"
+    d.write_bytes(b"\xd0\xcf\x11\xe0fiktiv")
+    pipeline.verarbeiten([d], konfig)
+    txt = (konfig.fehler / "alt.xls_fehler.txt").read_text(encoding="utf-8")
+    assert ".xls wird nicht unterstützt" in txt and ".xlsx" in txt
