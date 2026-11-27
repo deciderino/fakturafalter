@@ -46,6 +46,7 @@ from .bausteine import (
 )
 from .blockassistent import AnfangsBox, BlockKarten, BlockTabelle, Legende, SpaltenJeBlock, typ_name
 from .texte import _
+from .feldsuche import BT_ROLLE, BtDelegate, feld_tooltip
 
 TRENNZEICHEN = (
     (";", "Semikolon ;"),
@@ -109,9 +110,10 @@ def _feldliste_gruppiert(b: QComboBox, wiederholend: bool = True) -> None:
                 f.setBold(True)
                 it.setFont(f)
         b.addItem(ce.anzeige_feld(fid), fid)
-        tip = ce.FELD_TOOLTIP.get(fid)
-        if tip:
-            b.setItemData(b.count() - 1, _(tip), Qt.ItemDataRole.ToolTipRole)
+        b.setItemData(b.count() - 1, ce.bt_kurz(fid), BT_ROLLE)
+        b.setItemData(b.count() - 1, feld_tooltip(fid), Qt.ItemDataRole.ToolTipRole)
+    if not isinstance(b.itemDelegate(), BtDelegate):
+        b.setItemDelegate(BtDelegate(b))
 
 
 class _Assistent(QDialog):

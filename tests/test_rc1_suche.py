@@ -87,10 +87,11 @@ def test_liste_pflichtstern_und_bt_nur_amtlich():
     for fid, (_i, label, _t, _ty, pflicht) in ce.FELD.items():
         z = ce.anzeige_feld(fid)
         assert ("*" in z) == pflicht, z
+        # rc2: die BT-Nummer steht nicht mehr im Text, sondern grau daneben (bt_kurz)
+        assert "(BT-" not in z and fid not in z.replace(label, ""), z
+        assert ce.bt_kurz(fid) == (fid if fid.startswith("BT-") else "")
         if fid.startswith("BT-"):
-            assert z.endswith(f"({fid})"), z
-        else:
-            assert "(BT-" not in z and fid not in z.replace(label, ""), z
+            assert ce.anzeige_feld(fid, mit_bt=True).endswith(f"({fid})")
     assert all(f in ce.FELD_TOOLTIP for f in ce.FELD), "jedes Feld braucht einen Tooltip"
 
 

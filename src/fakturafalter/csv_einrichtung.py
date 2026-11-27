@@ -316,6 +316,189 @@ FELD_TOOLTIP.update(
 )
 
 
+# Offizielle Bezeichnungen nach EN 16931-1 (deutsche Fassung / englisch), rc2. Unsere Labels bleiben
+# verständlich („Kunde – Ort“); im Tooltip steht zusätzlich der Name im Standard.
+STANDARD_NAME: dict[str, tuple[str, str]] = {
+    "BT-1": ("Rechnungsnummer", "Invoice number"),
+    "BT-2": ("Rechnungsdatum", "Invoice issue date"),
+    "BT-3": ("Code für den Rechnungstyp", "Invoice type code"),
+    "BT-5": ("Code für die Rechnungswährung", "Invoice currency code"),
+    "BT-9": ("Fälligkeitsdatum der Zahlung", "Payment due date"),
+    "BT-10": ("Käuferreferenz", "Buyer reference"),
+    "BT-11": ("Projektreferenz", "Project reference"),
+    "BT-12": ("Vertragsreferenz", "Contract reference"),
+    "BT-13": ("Bestellreferenz", "Purchase order reference"),
+    "BT-14": ("Auftragsreferenz", "Sales order reference"),
+    "BT-15": ("Referenz auf die Wareneingangsmeldung", "Receiving advice reference"),
+    "BT-16": ("Referenz auf die Versandanzeige", "Despatch advice reference"),
+    "BT-17": ("Referenz auf die Ausschreibung oder das Los", "Tender or lot reference"),
+    "BT-18": ("Objektkennung", "Invoiced object identifier"),
+    "BT-19": ("Buchungsreferenz des Käufers", "Buyer accounting reference"),
+    "BT-20": ("Zahlungsbedingungen", "Payment terms"),
+    "BT-22": ("Bemerkung zur Rechnung", "Invoice note"),
+    "BT-25": ("Referenz auf die vorausgegangene Rechnung", "Preceding Invoice reference"),
+    "BT-26": ("Ausstellungsdatum der vorausgegangenen Rechnung", "Preceding Invoice issue date"),
+    "BT-44": ("Name des Käufers", "Buyer name"),
+    "BT-46": ("Kennung des Käufers", "Buyer identifier"),
+    "BT-47": ("Kennung der rechtlichen Registrierung des Käufers", "Buyer legal registration identifier"),
+    "BT-48": ("Umsatzsteuer-Identifikationsnummer des Käufers", "Buyer VAT identifier"),
+    "BT-49": ("Elektronische Adresse des Käufers", "Buyer electronic address"),
+    "BT-50": ("Zeile 1 der Anschrift des Käufers", "Buyer address line 1"),
+    "BT-51": ("Zeile 2 der Anschrift des Käufers", "Buyer address line 2"),
+    "BT-52": ("Ort des Käufers", "Buyer city"),
+    "BT-53": ("Postleitzahl des Käufers", "Buyer post code"),
+    "BT-55": ("Ländercode des Käufers", "Buyer country code"),
+    "BT-59": ("Name des Zahlungsempfängers", "Payee name"),
+    "BT-70": ("Name des Waren- oder Dienstleistungsempfängers", "Deliver to party name"),
+    "BT-72": ("Tatsächliches Lieferdatum", "Actual delivery date"),
+    "BT-73": ("Anfangsdatum des Rechnungszeitraums", "Invoicing period start date"),
+    "BT-74": ("Enddatum des Rechnungszeitraums", "Invoicing period end date"),
+    "BT-75": ("Zeile 1 der Lieferanschrift", "Deliver to address line 1"),
+    "BT-77": ("Ort der Lieferanschrift", "Deliver to city"),
+    "BT-78": ("Postleitzahl der Lieferanschrift", "Deliver to post code"),
+    "BT-80": ("Ländercode der Lieferanschrift", "Deliver to country code"),
+    "BT-81": ("Code für die Zahlungsart", "Payment means type code"),
+    "BT-83": ("Verwendungszweck", "Remittance information"),
+    "BT-89": ("Kennung der Mandatsreferenz", "Mandate reference identifier"),
+    "BT-90": ("Kennung des Gläubigers", "Bank assigned creditor identifier"),
+    "BT-91": ("Kennung des zu belastenden Kontos", "Debited account identifier"),
+    "BT-92": ("Betrag des Nachlasses auf Dokumentenebene", "Document level allowance amount"),
+    "BT-94": ("Prozentsatz des Nachlasses auf Dokumentenebene", "Document level allowance percentage"),
+    "BT-97": ("Grund für den Nachlass auf Dokumentenebene", "Document level allowance reason"),
+    "BT-99": ("Betrag der Abgabe auf Dokumentenebene", "Document level charge amount"),
+    "BT-101": ("Prozentsatz der Abgabe auf Dokumentenebene", "Document level charge percentage"),
+    "BT-104": ("Grund für die Abgabe auf Dokumentenebene", "Document level charge reason"),
+    "BT-109": ("Gesamtbetrag ohne Umsatzsteuer", "Invoice total amount without VAT"),
+    "BT-110": ("Gesamtbetrag der Umsatzsteuer", "Invoice total VAT amount"),
+    "BT-111": (
+        "Gesamtbetrag der Umsatzsteuer in der Abrechnungswährung",
+        "Invoice total VAT amount in accounting currency",
+    ),
+    "BT-112": ("Gesamtbetrag einschließlich Umsatzsteuer", "Invoice total amount with VAT"),
+    "BT-113": ("Vorauszahlungsbetrag", "Paid amount"),
+    "BT-120": ("Grund der Steuerbefreiung", "VAT exemption reason text"),
+    "BT-124": ("Externe Unterlage (Speicherort)", "External document location"),
+    "BT-126": ("Kennung der Rechnungsposition", "Invoice line identifier"),
+    "BT-127": ("Bemerkung zur Rechnungsposition", "Invoice line note"),
+    "BT-128": ("Objektkennung auf Ebene der Rechnungsposition", "Invoice line object identifier"),
+    "BT-129": ("In Rechnung gestellte Menge", "Invoiced quantity"),
+    "BT-130": ("Einheit der in Rechnung gestellten Menge", "Invoiced quantity unit of measure code"),
+    "BT-131": ("Nettobetrag der Rechnungsposition", "Invoice line net amount"),
+    "BT-132": ("Referenz auf die Bestellposition", "Referenced purchase order line reference"),
+    "BT-133": ("Buchungsreferenz des Käufers für die Rechnungsposition", "Invoice line Buyer accounting reference"),
+    "BT-134": ("Anfangsdatum des Zeitraums der Rechnungsposition", "Invoice line period start date"),
+    "BT-135": ("Enddatum des Zeitraums der Rechnungsposition", "Invoice line period end date"),
+    "BT-136": ("Betrag des Nachlasses auf Ebene der Rechnungsposition", "Invoice line allowance amount"),
+    "BT-138": ("Prozentsatz des Nachlasses auf Ebene der Rechnungsposition", "Invoice line allowance percentage"),
+    "BT-139": ("Grund für den Nachlass auf Ebene der Rechnungsposition", "Invoice line allowance reason"),
+    "BT-141": ("Betrag der Abgabe auf Ebene der Rechnungsposition", "Invoice line charge amount"),
+    "BT-143": ("Prozentsatz der Abgabe auf Ebene der Rechnungsposition", "Invoice line charge percentage"),
+    "BT-144": ("Grund für die Abgabe auf Ebene der Rechnungsposition", "Invoice line charge reason"),
+    "BT-146": ("Nettopreis des Artikels", "Item net price"),
+    "BT-147": ("Nachlass auf den Artikelpreis", "Item price discount"),
+    "BT-148": ("Bruttopreis des Artikels", "Item gross price"),
+    "BT-149": ("Basismenge zum Artikelpreis", "Item price base quantity"),
+    "BT-151": ("Code der Umsatzsteuerkategorie des Artikels", "Invoiced item VAT category code"),
+    "BT-152": ("Umsatzsteuersatz des Artikels", "Invoiced item VAT rate"),
+    "BT-153": ("Artikelname", "Item name"),
+    "BT-154": ("Artikelbeschreibung", "Item description"),
+    "BT-155": ("Artikelkennung des Verkäufers", "Item Seller's identifier"),
+    "BT-156": ("Artikelkennung des Käufers", "Item Buyer's identifier"),
+    "BT-157": ("Kennung des Artikels nach registriertem Schema", "Item standard identifier"),
+    "BT-158": ("Kennung der Artikelklassifizierung", "Item classification identifier"),
+    "BT-159": ("Ursprungsland des Artikels", "Item country of origin"),
+    "BT-160": ("Name des Artikelattributs", "Item attribute name"),
+    "BT-161": ("Wert des Artikelattributs", "Item attribute value"),
+}
+
+# Eigene Schlüssel → BT-Nummern im Standard (für Tooltip und Suche); leer = kein eigenes Feld im Standard
+FELD_STANDARD: dict[str, tuple[str, ...]] = {
+    "kundennummer": ("BT-46",),
+    "kunden_name_2": ("BT-44",),
+    "kunden_name_3": ("BT-44",),
+    "gesamtpreis_position": ("BT-131",),
+    "steuer": ("BT-151", "BT-152"),
+    "belegart": ("BT-3",),
+    "zahlungsart": ("BT-81",),
+    "zahlungsziel_tage": ("BT-9",),
+    "skonto_satz": ("BT-20",),
+    "skonto_tage": ("BT-20",),
+    "skonto_basisbetrag": ("BT-20",),
+    "skonto_satz_2": ("BT-20",),
+    "skonto_tage_2": ("BT-20",),
+    "skonto_basisbetrag_2": ("BT-20",),
+    "zeichnungsnummer": ("BT-160", "BT-161"),
+    "index": ("BT-160", "BT-161"),
+    "steuerhinweis": ("BT-120",),
+    "zeilenart": (),
+    "kurs": (),
+    "kursdatum": (),
+}
+
+_STANDARD_ZUSATZ = {
+    "kunden_name_2": ("Teil von", "part of"),
+    "kunden_name_3": ("Teil von", "part of"),
+    "skonto_satz": ("als Skonto-Angabe in", "as discount entry in"),
+    "skonto_tage": ("als Skonto-Angabe in", "as discount entry in"),
+    "skonto_basisbetrag": ("als Skonto-Angabe in", "as discount entry in"),
+    "skonto_satz_2": ("als Skonto-Angabe in", "as discount entry in"),
+    "skonto_tage_2": ("als Skonto-Angabe in", "as discount entry in"),
+    "skonto_basisbetrag_2": ("als Skonto-Angabe in", "as discount entry in"),
+    "zahlungsziel_tage": ("daraus berechnet:", "used to calculate"),
+    "zeichnungsnummer": ("als Artikelattribut", "as item attribute"),
+    "index": ("als Artikelattribut", "as item attribute"),
+}
+_KEIN_FELD = {
+    "zeilenart": (
+        "kein eigenes Feld; steuert Nachlass oder Abgabe der Position (BG-27/BG-28)",
+        "no field of its own; controls line allowance or charge (BG-27/BG-28)",
+    ),
+    "kurs": (
+        "kein eigenes Feld; dient der Umrechnung für BT-111",
+        "no field of its own; used for the conversion of BT-111",
+    ),
+    "kursdatum": ("kein eigenes Feld; Angabe zum Umrechnungskurs", "no field of its own; exchange rate date"),
+}
+
+
+def standard_bts(fid: str) -> tuple[str, ...]:
+    """BT-Nummern im Standard zu einem Feld (eigene Schlüssel über FELD_STANDARD)."""
+    if fid.startswith("BT-"):
+        return (fid,)
+    return FELD_STANDARD.get(fid, ())
+
+
+def standard_zeile(fid: str, sprache: str = "de") -> str:
+    """Letzte Tooltip-Zeile: „Im Standard: BT-52 Ort des Käufers (Buyer city)“ (rc2)."""
+    en = sprache == "en"
+    kopf = "In the standard:" if en else "Im Standard:"
+    if fid in _KEIN_FELD:
+        return f"{kopf} {_KEIN_FELD[fid][1 if en else 0]}"
+    teile = []
+    for bt in standard_bts(fid):
+        de_name, en_name = STANDARD_NAME[bt]
+        teile.append(f"{bt} {en_name}" if en else f"{bt} {de_name} ({en_name})")
+    if not teile:
+        return ""
+    zusatz = _STANDARD_ZUSATZ.get(fid)
+    text = (" and " if en else " und ").join(teile)
+    if zusatz:
+        text = f"{zusatz[1 if en else 0]} {text}"
+    return f"{kopf} {text}"
+
+
+def tooltip(fid: str, sprache: str = "de", erklaerung: str | None = None) -> str:
+    """Tooltip eines Feldes: Erklärung (übersetzt übergeben) und am Ende der Name im Standard."""
+    tip = erklaerung if erklaerung is not None else FELD_TOOLTIP.get(fid, "")
+    std = standard_zeile(fid, sprache)
+    return f"{tip}\n{std}" if tip and std else (tip or std)
+
+
+def bt_kurz(fid: str) -> str:
+    """Grau neben dem Label: die amtliche BT-Nummer, nur bei echten BT-Feldern (wie rc1)."""
+    return fid if fid.startswith("BT-") else ""
+
+
 def felder_in_gruppe(gruppe: str, *, wiederholend: bool) -> list[str]:
     """Feld-IDs einer Gruppe, Pflichtfelder zuerst. Positionsfelder nur im wiederholenden Block."""
     ids = [f for f in _FELD_GRUPPE_IDS.get(gruppe, ()) if f in FELD]
@@ -326,9 +509,16 @@ def felder_in_gruppe(gruppe: str, *, wiederholend: bool) -> list[str]:
     return ids
 
 
+def _such(s: str) -> str:
+    """Normalisiert für die Suche; Umlaute und ae/oe/ue gelten gleich („Kaeufer“ = „Käufer“)."""
+    return _norm(s or "").replace("ä", "ae").replace("ö", "oe").replace("ü", "ue").replace("ß", "ss")
+
+
 def suche_felder(frage: str, *, wiederholend: bool) -> list[str]:
-    """Feld-IDs, deren Label, Tooltip oder Synonym zur Frage passen (Reihenfolge der Gruppen)."""
-    q = _norm(frage or "")
+    """Feld-IDs, deren Label, Tooltip, Synonym, BT-Nummer oder Name im Standard zur Frage passen
+    (Reihenfolge der Gruppen). „Käufer“/„Buyer“ finden die Kundenfelder, „Verkäufer“/„Seller“ die des
+    Verkäufers (rc2)."""
+    q = _such(frage)
     treffer: list[str] = []
     for g in GRUPPE_REIHENFOLGE:
         if g == "position" and not wiederholend:
@@ -337,22 +527,42 @@ def suche_felder(frage: str, *, wiederholend: bool) -> list[str]:
             if not q:
                 treffer.append(fid)
                 continue
-            label = _norm(FELD[fid][1])
-            tip = _norm(FELD_TOOLTIP.get(fid, ""))
-            syn = _norm(_SYNONYME.get(fid, ""))
-            if q in label or q in tip or q in syn or label.startswith(q) or q in fid.lower().replace("-", ""):
+            label = _such(FELD[fid][1])
+            tip = _such(FELD_TOOLTIP.get(fid, ""))
+            syn = _such(_SYNONYME.get(fid, ""))
+            std = _such(" ".join(" ".join((bt, *STANDARD_NAME.get(bt, ()))) for bt in standard_bts(fid)))
+            rolle = _such(_KUNDE_KAEUFER.get(fid, ""))
+            if "verkaeufer" not in q:  # „Käufer“ soll nicht über „Verkäufer“ treffen
+                tip, std, rolle = (x.replace("verkaeufer", "-") for x in (tip, std, rolle))
+            if (
+                q in label
+                or q in tip
+                or q in syn
+                or q in std
+                or q in rolle
+                or q in fid.lower().replace("-", "").replace("_", "")
+            ):
                 treffer.append(fid)
     return treffer
 
 
-def anzeige_feld(fid: str) -> str:
-    """Sichtbare Zeile in der Auswahlliste: Label, Pflichtstern, amtliche BT-Nummer."""
+def anzeige_feld(fid: str, mit_bt: bool = False) -> str:
+    """Sichtbare Zeile in der Auswahlliste: Label und Pflichtstern. Die amtliche BT-Nummer zeichnet die
+    Liste ab rc2 grau daneben (``bt_kurz``); ``mit_bt`` hängt sie für reine Texte in Klammern an."""
     if fid not in FELD:
         return fid
     _i, label, _teil, _typ, pflicht = FELD[fid]
     stern = " *" if pflicht else ""
-    bt = f" ({fid})" if fid.startswith("BT-") else ""
+    bt = f" ({fid})" if mit_bt and fid.startswith("BT-") else ""
     return f"{label}{stern}{bt}"
+
+
+# Suche: „Käufer“/„Buyer“ finden alle Kundenfelder, „Verkäufer“/„Seller“ die Felder des Verkäufers (rc2)
+_KUNDE_KAEUFER = {
+    fid: "käuferbuyer" for fid in ("kundennummer", "BT-44", "kunden_name_2", "kunden_name_3", "BT-50", "BT-51",
+                                   "BT-53", "BT-52", "BT-55", "BT-48", "BT-49", "BT-47", "BT-10", "BT-19")
+}
+_KUNDE_KAEUFER.update({fid: "verkäuferseller" for fid in ("BT-155", "BT-59")})
 
 # Freiwillige Felder ab 0.6.0 nur bei genauem Spaltennamen vorschlagen (kein Wortanfang: „Versanddatum“ ≠ Fracht)
 NUR_GENAU = frozenset(f[0] for f in FELDER[FELDER.index(FELD["belegart"]) :])

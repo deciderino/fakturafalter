@@ -5,11 +5,84 @@
 from __future__ import annotations
 
 from PySide6.QtCore import Qt, Signal
-from PySide6.QtGui import QFont
-from PySide6.QtWidgets import QLabel, QLineEdit, QListWidget, QListWidgetItem, QVBoxLayout, QWidget
+from PySide6.QtGui import QColor, QFont
+from PySide6.QtWidgets import (
+    QLabel,
+    QLineEdit,
+    QListWidget,
+    QListWidgetItem,
+    QStyle,
+    QStyledItemDelegate,
+    QStyleOptionViewItem,
+    QVBoxLayout,
+    QWidget,
+)
 
 from .. import csv_einrichtung as ce
+from . import texte
 from .texte import _
+
+BT_ROLLE = Qt.ItemDataRole.UserRole + 7  # graue BT-Nummer neben dem Label (rc2)
+
+
+def _farben_von(widget) -> dict:
+    """Theme-Farben des Fensters (``c``), sonst aus der Palette geraten (hell/dunkel)."""
+    from . import thema
+
+    w = widget
+    while w is not None:
+        c = getattr(w, "c", None)
+        if isinstance(c, dict) and "sub" in c:
+            return c
+        w = w.parentWidget() if hasattr(w, "parentWidget") else None
+    hell = widget is None or widget.palette().base().color().lightness() >= 128
+    return thema.farben(hell)
+
+
+class BtDelegate(QStyledItemDelegate):
+    """Zeichnet die amtliche BT-Nummer grau direkt hinter dem Label; markiert in Schriftfarbe (AA-Kontrast)."""
+
+    def paint(self, painter, option, index) -> None:
+        super().paint(painter, option, index)
+        bt = index.data(BT_ROLLE)
+        if not bt:
+            return
+        opt = QStyleOptionViewItem(option)
+        self.initStyleOption(opt, index)
+        c = _farben_von(opt.widget)
+        markiert = bool(opt.state & QStyle.StateFlag.State_Selected)
+        style = opt.widget.style() if opt.widget is not None else None
+        text_rect = (
+            style.subElementRect(QStyle.SubElement.SE_ItemViewItemText, opt, opt.widget)
+            if style is not None
+            else opt.rect
+        )
+        fm = opt.fontMetrics
+        breite = fm.horizontalAdvance(opt.text)
+        x = text_rect.left() + breite + fm.horizontalAdvance("  ") + 4
+        if x >= text_rect.right() - 10:
+            return
+        painter.save()
+        f = QFont(opt.font)
+        f.setBold(False)
+        painter.setFont(f)
+        painter.setPen(QColor(c["fg"] if markiert else c["sub"]))
+        r = text_rect.adjusted(x - text_rect.left(), 0, 0, 0)
+        painter.drawText(r, int(Qt.AlignmentFlag.AlignVCenter | Qt.AlignmentFlag.AlignLeft), fm.elidedText(bt, Qt.TextElideMode.ElideRight, r.width()))
+        painter.restore()
+
+    def sizeHint(self, option, index):  # noqa: N802 (Qt)
+        h = super().sizeHint(option, index)
+        bt = index.data(BT_ROLLE)
+        if bt:
+            h.setWidth(h.width() + option.fontMetrics.horizontalAdvance(f"  {bt}") + 8)
+        return h
+
+
+def feld_tooltip(fid: str) -> str:
+    """Tooltip im Assistenten: Erklärung (übersetzt) plus „Im Standard: …“ (rc2)."""
+    tip = ce.FELD_TOOLTIP.get(fid)
+    return ce.tooltip(fid, texte.sprache(), _(tip) if tip else (ce.FELD[fid][1] if fid in ce.FELD else ""))
 
 
 class _SuchZeile(QLineEdit):
@@ -48,6 +121,7 @@ class FeldSuche(QWidget):
         self.suche.returnPressed.connect(self._enter)
         v.addWidget(self.suche)
         self.liste = QListWidget()
+        self.liste.setItemDelegate(BtDelegate(self.liste))
         self.liste.setMinimumHeight(180)
         self.liste.currentItemChanged.connect(self._wahl)
         v.addWidget(self.liste, 1)
@@ -147,9 +221,9 @@ class FeldSuche(QWidget):
             gesehen.add(fid)
             it = QListWidgetItem(ce.anzeige_feld(fid))
             it.setData(Qt.ItemDataRole.UserRole, fid)
-            tip = ce.FELD_TOOLTIP.get(fid)
-            if tip:
-                it.setToolTip(_(tip))
+            it.setData(BT_ROLLE, ce.bt_kurz(fid))
+            it.setData(Qt.ItemDataRole.AccessibleTextRole, ce.anzeige_feld(fid, mit_bt=True))
+            it.setToolTip(feld_tooltip(fid))
             self.liste.addItem(it)
         self.liste.blockSignals(False)
         self._markieren(aktuell)
@@ -164,9 +238,7 @@ class FeldSuche(QWidget):
             self.geaendert.emit(fid)
 
     def _tip(self, fid: str) -> None:
-        if fid and fid in ce.FELD_TOOLTIP:
-            self.l_tip.setText(_(ce.FELD_TOOLTIP[fid]))
-        elif fid and fid in ce.FELD:
-            self.l_tip.setText(ce.FELD[fid][1])
+        if fid and fid in ce.FELD:
+            self.l_tip.setText(feld_tooltip(fid))
         else:
             self.l_tip.setText("")
