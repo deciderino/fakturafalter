@@ -234,6 +234,88 @@ FELD_TOOLTIP = {
 }
 
 
+# Einzeiler für alle übrigen Felder: Bedeutung plus kleines Beispiel (rc1, Skizze § 2.2)
+FELD_TOOLTIP.update(
+    {
+        "BT-50": "Straße und Hausnummer des Kunden. Beispiel: Musterweg 1.",
+        "BT-51": "Zweite Adresszeile, z. B. Hinterhaus oder Postfach. Nicht der Name.",
+        "BT-53": "Postleitzahl des Kunden. Beispiel: 12345.",
+        "BT-52": "Ort des Kunden. Beispiel: Musterstadt.",
+        "BT-55": "Land des Kunden als Code oder Name, z. B. DE oder Deutschland.",
+        "BT-48": "Umsatzsteuer-Identifikationsnummer des Kunden. Beispiel: DE123456789.",
+        "BT-10": "Leitweg-ID oder Referenz des Kunden, bei Behörden Pflicht für die XRechnung. "
+        "Beispiel: 991-12345-67.",
+        "BT-13": "Bestellnummer des Kunden. Beispiel: B-2026-0815.",
+        "skonto_basisbetrag": "Betrag, auf den Skonto gerechnet wird, wenn nicht die ganze Rechnung. "
+        "Leer = Rechnungsbetrag.",
+        "skonto_basisbetrag_2": "Basisbetrag der zweiten Skontostufe. Leer = Rechnungsbetrag.",
+        "BT-126": "Laufende Nummer der Position. Beispiel: 1, 2, 3.",
+        "belegart": "Rechnung, Gutschrift oder Korrektur. Leer = Rechnung.",
+        "BT-25": "Bei Gutschrift oder Korrektur: Nummer der ursprünglichen Rechnung.",
+        "BT-26": "Bei Gutschrift oder Korrektur: Datum der ursprünglichen Rechnung.",
+        "BT-73": "Beginn des Leistungszeitraums. Beispiel: 01.11.2026.",
+        "BT-74": "Ende des Leistungszeitraums. Beispiel: 30.11.2026.",
+        "zeilenart": "Markiert eine Zeile als Position, Rabatt oder Zuschlag. Leer = Position.",
+        "BT-138": "Rabatt der Zeile in Prozent, z. B. 10 für 10 %. Nicht der Betrag.",
+        "BT-136": "Rabatt der Zeile als Betrag, z. B. 5,00. Nicht der Prozentsatz.",
+        "BT-139": "Grund des Rabatts der Zeile. Beispiel: Mengenrabatt.",
+        "BT-141": "Zuschlag auf die Zeile als Betrag, z. B. 2,50.",
+        "BT-147": "Nachlass je Einheit auf den Listenpreis. Beispiel: Liste 10,00, Nachlass 1,00 "
+        "→ Einzelpreis 9,00.",
+        "BT-94": "Rabatt auf die ganze Rechnung in Prozent, z. B. 3 für 3 %.",
+        "BT-92": "Rabatt auf die ganze Rechnung als Betrag, z. B. 20,00.",
+        "BT-97": "Grund des Rabatts auf die ganze Rechnung. Beispiel: Treuerabatt.",
+        "BT-99": "Zuschlag auf die ganze Rechnung als Betrag, z. B. Fracht 12,50.",
+        "BT-101": "Zuschlag auf die ganze Rechnung in Prozent.",
+        "BT-104": "Grund des Zuschlags. Beispiel: Fracht oder Verpackung.",
+        "BT-113": "Schon bezahlter Betrag, z. B. eine Anzahlung. Wird vom Zahlbetrag abgezogen.",
+        "zahlungsart": "Überweisung oder Lastschrift. Leer = wie in den Zahlungsdaten eingestellt.",
+        "BT-89": "Mandatsreferenz der SEPA-Lastschrift. Nur bei Lastschrift.",
+        "BT-91": "IBAN, von der abgebucht wird. Nur bei Lastschrift.",
+        "BT-90": "Gläubiger-Identifikationsnummer für die Lastschrift. Beispiel: DE98ZZZ09999999999.",
+        "BT-83": "Text für die Überweisung. Leer = Rechnungsnummer.",
+        "BT-22": "Freier Hinweis auf der Rechnung. Beispiel: Vielen Dank für Ihren Auftrag.",
+        "BT-14": "Auftragsnummer, oft aus der Auftragsbestätigung.",
+        "BT-11": "Projektnummer oder -bezeichnung des Kunden.",
+        "BT-12": "Nummer des Vertrags, auf den sich die Rechnung bezieht.",
+        "BT-16": "Nummer des Lieferscheins. Beispiel: LS-4711.",
+        "BT-15": "Wareneingangsnummer des Kunden.",
+        "BT-17": "Vergabe- oder Losnummer bei öffentlichen Aufträgen.",
+        "BT-18": "Kennung eines Objekts, z. B. Zählernummer oder Gebäude.",
+        "BT-19": "Kostenstelle oder Buchungskonto des Kunden.",
+        "BT-70": "Name der Lieferanschrift, wenn sie von der Rechnungsanschrift abweicht.",
+        "BT-75": "Straße der Lieferanschrift.",
+        "BT-78": "Postleitzahl der Lieferanschrift.",
+        "BT-77": "Ort der Lieferanschrift.",
+        "BT-80": "Land der Lieferanschrift, z. B. DE.",
+        "BT-59": "Name des Zahlungsempfängers, nur wenn nicht du selbst, z. B. ein Factoring-Dienst.",
+        "BT-124": "Link (URL) auf eine Unterlage zur Rechnung.",
+        "BT-127": "Notiz zu einer Position. Beispiel: Lieferung KW 48.",
+        "BT-154": "Lange Beschreibung des Artikels, zusätzlich zur Bezeichnung.",
+        "BT-156": "Artikelnummer, die der Kunde für den Artikel verwendet.",
+        "BT-157": "GTIN oder EAN des Artikels. Beispiel: 4012345678901.",
+        "BT-158": "Warengruppe oder Klassifizierung, z. B. Zolltarifnummer.",
+        "BT-159": "Ursprungsland des Artikels als Code, z. B. DE.",
+        "BT-160": "Name eines Artikelmerkmals. Beispiel: Farbe.",
+        "BT-161": "Wert eines Artikelmerkmals. Beispiel: blau.",
+        "BT-132": "Positionsnummer in der Bestellung des Kunden.",
+        "BT-133": "Kostenstelle oder Buchungskonto des Kunden für diese Zeile.",
+        "BT-134": "Beginn der Leistung dieser Zeile.",
+        "BT-135": "Ende der Leistung dieser Zeile.",
+        "zeichnungsnummer": "Zeichnungsnummer des Teils. Beispiel: Z-1001.",
+        "index": "Änderungsindex der Zeichnung. Beispiel: B.",
+        "BT-128": "Kennung eines Objekts für diese Zeile.",
+        "BT-143": "Zuschlag auf die Zeile in Prozent.",
+        "BT-144": "Grund des Zuschlags der Zeile.",
+        "BT-47": "Handelsregister- oder Registernummer des Kunden. Beispiel: HRB 12345.",
+        "steuerhinweis": "Hinweis zur Steuer, z. B. Steuerschuldnerschaft des Leistungsempfängers.",
+        "kurs": "Umrechnungskurs bei Fremdwährung: 1 EUR = … Fremdwährung. Beispiel: 1,08.",
+        "kursdatum": "Datum des Umrechnungskurses.",
+        "BT-111": "Umsatzsteuer der Rechnung in EUR, wenn die Rechnung in einer Fremdwährung ist.",
+    }
+)
+
+
 def felder_in_gruppe(gruppe: str, *, wiederholend: bool) -> list[str]:
     """Feld-IDs einer Gruppe, Pflichtfelder zuerst. Positionsfelder nur im wiederholenden Block."""
     ids = [f for f in _FELD_GRUPPE_IDS.get(gruppe, ()) if f in FELD]
