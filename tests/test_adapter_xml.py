@@ -22,7 +22,7 @@ UBL = """<?xml version="1.0" encoding="UTF-8"?>
   <cac:PartyTaxScheme><cbc:CompanyID>DE123456788</cbc:CompanyID><cac:TaxScheme><cbc:ID>VAT</cbc:ID></cac:TaxScheme></cac:PartyTaxScheme>
   <cac:PartyLegalEntity><cbc:RegistrationName>Muster Bau GmbH</cbc:RegistrationName></cac:PartyLegalEntity>
  </cac:Party></cac:AccountingSupplierParty>
- <cac:AccountingCustomerParty><cac:Party><cac:PartyIdentification><cbc:ID>K-77</cbc:ID></cac:PartyIdentification>
+ <cac:AccountingCustomerParty><cac:Party><cbc:EndpointID schemeID="EM">rechnung@beispielhausen.invalid</cbc:EndpointID><cac:PartyIdentification><cbc:ID>K-77</cbc:ID></cac:PartyIdentification>
   <cac:PostalAddress><cbc:StreetName>Amtsplatz 2</cbc:StreetName><cbc:CityName>Beispielhausen</cbc:CityName>
   <cbc:PostalZone>54321</cbc:PostalZone><cac:Country><cbc:IdentificationCode>DE</cbc:IdentificationCode></cac:Country></cac:PostalAddress>
   <cac:PartyLegalEntity><cbc:RegistrationName>Gemeinde Beispielhausen</cbc:RegistrationName></cac:PartyLegalEntity>
@@ -94,6 +94,21 @@ def test_ubl_und_pipeline(konfig):
         "Gemeinde Beispielhausen",
     )
     assert (konfig.ausgang / "UBL-2026-7_zugferd.pdf").exists()
+
+
+def test_ubl_ohne_bt49_wird_prueffall(konfig):
+    """rc1: Eingehende XRechnung ohne E-Rechnungsadresse des Kunden (BT-49) – keine ungültige XRechnung
+    (PEPPOL-EN16931-R010) erzeugen, sondern Prüffall mit Feld BT-49."""
+    konfig.modus, konfig.pdf_vorlagen = "pdf_xml", []
+    ohne = UBL.replace(
+        '<cbc:EndpointID schemeID="EM">rechnung@beispielhausen.invalid</cbc:EndpointID>', ""
+    )
+    assert ohne != UBL
+    (konfig.eingang / "UBL-2026-8.xml").write_text(ohne, encoding="utf-8")
+    lauf = pipeline.verarbeiten(sorted(konfig.eingang.iterdir()), konfig)
+    e = lauf.ergebnisse[0]
+    assert e.status == "pruefen"
+    assert any(h.startswith("PRUEFEN: [BT-49]") for h in e.hinweise), e.hinweise
 
 
 def test_fremdes_xml_und_entitaeten(konfig, tmp_path):

@@ -71,7 +71,20 @@ def test_abweichung_csv_druck_geht_in_pruefung(konfig, eingang):
 
 def test_nur_pdf(konfig, eingang):
     lauf = verarbeiten(eingang("druckauftrag-wawi.pdf"), konfig)
-    assert lauf.ok and [e.nummer for e in lauf.ergebnisse] == ["RE-2026-0101", "RE-2026-0102"]
+    erg = {e.nummer: e for e in lauf.ergebnisse}
+    assert [e.nummer for e in lauf.ergebnisse] == ["RE-2026-0101", "RE-2026-0102"]
+    assert erg["RE-2026-0101"].status == "ok"
+    # rc1: 0102 (Stadtverwaltung Musterhausen) steht in der XRechnung-Liste, der Druck hat aber keine
+    # E-Rechnungsadresse (BT-49) – keine ungültige XRechnung, sondern Prüffall
+    assert erg["RE-2026-0102"].status == "pruefen"
+    assert any(h.startswith("PRUEFEN: [BT-49]") for h in erg["RE-2026-0102"].hinweise)
+
+
+def test_nur_pdf_ohne_xrechnung_alles_ok(konfig, eingang):
+    konfig.xrechnung_zusatz = False
+    lauf = verarbeiten(eingang("druckauftrag-wawi.pdf"), konfig)
+    assert lauf.ok, [(e.nummer, e.hinweise) for e in lauf.ergebnisse]
+    assert [e.nummer for e in lauf.ergebnisse] == ["RE-2026-0101", "RE-2026-0102"]
 
 
 def test_doppelte_rechnungsnummer_und_unbekannte_datei(konfig, eingang):

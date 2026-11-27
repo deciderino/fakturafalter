@@ -2376,6 +2376,7 @@ class Sitzung:
 
         r = self.rechnung()
         pflichtpruefung.pruefen(r, pipeline.pflicht_kontext(self.k))
+        pipeline.xrechnung_vorpruefen(r, self.k)  # BT-49/BT-10 vor dem Status
         erg = Ergebnis(
             nummer=r.nummer,
             status=r.status,

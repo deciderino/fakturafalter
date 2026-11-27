@@ -233,9 +233,7 @@ def einlesen(datei: Path, k: Konfig) -> tuple[str, list[Rechnung]]:
         except adapter_csv.ProfilFehler:
             raise
         except (ValueError, IndexError, KeyError) as e:
-            raise ValueError(
-                f"CSV nicht lesbar ({type(e).__name__}: {e})"
-            ) from e
+            raise ValueError(f"CSV nicht lesbar ({type(e).__name__}: {e})") from e
         if prof is None:
             alt = [Path(str(x[0])).name for x in (getattr(k, "abgelehnte_profile", None) or [])]
             if alt:
@@ -455,25 +453,37 @@ def _soll_xrechnung(r: Rechnung, k: Konfig) -> bool:
         return True
     from .konfig import kunden_namen, xrechnung_treffer
 
-    return xrechnung_treffer(k, name=kunden_namen(r), nummer=r.kundennummer or r.kaeufer.kennung) is not None
+    return (
+        xrechnung_treffer(k, name=kunden_namen(r), nummer=r.kundennummer or r.kaeufer.kennung)
+        is not None
+    )
 
 
-def _xrechnung(r: Rechnung, k: Konfig) -> bytes | None:
+def xrechnung_vorpruefen(r: Rechnung, k: Konfig) -> bool:
+    """Vor dem Erzeugen (damit der Status stimmt): Ist eine XRechnung vorgesehen, Leitweg-ID aus der Liste
+    setzen und fehlende Angaben als Hinweis melden – ohne BT-49 Prüffall (PEPPOL-EN16931-R010), ohne
+    Leitweg-ID Kundennummer als Käuferreferenz oder Prüffall (BT-10). Mehrfach aufrufbar. -> XRechnung vorgesehen?"""
     if not _soll_xrechnung(r, k):
-        return None
+        return False
+    vorhanden = {(h.stufe, getattr(h, "feld", None), h.text) for h in r.hinweise}
+
+    def melden(stufe: str, text: str, feld: str | None = None) -> None:
+        if (stufe, feld, text) not in vorhanden:
+            if feld is None:
+                r.hinweis(stufe, text)
+            else:
+                r.hinweis(stufe, text, feld)
+            vorhanden.add((stufe, feld, text))
+
     if not (r.kaeufer.elektronische_adresse or "").strip():
-        # ohne BT-49 wäre die XRechnung ungültig (PEPPOL-EN16931-R010) – keine Datei, Hinweis steht schon
+        # ohne BT-49 wäre die XRechnung ungültig – Hinweis aus der Liste (aufbau) reicht, sonst eigener
         if not any(getattr(h, "feld", None) == "BT-49" for h in r.hinweise):
-            r.hinweis(
+            melden(
                 "pruefen",
                 "XRechnung vorgesehen, aber die E-Rechnungsadresse des Kunden (BT-49) fehlt.",
                 "BT-49",
             )
-        return None
-    if (r.ausgabeformat or "") == "XRECHNUNG_UBL":
-        r.hinweis(
-            "info", "XRechnung UBL ist noch nicht umgesetzt – XRechnung im CII-Format erzeugt"
-        )
+        return True
     from .konfig import kunden_namen, xrechnung_treffer
 
     treffer = xrechnung_treffer(k, name=kunden_namen(r), nummer=r.kundennummer or r.kaeufer.kennung)
@@ -481,16 +491,25 @@ def _xrechnung(r: Rechnung, k: Konfig) -> bytes | None:
         r.leitweg_id = treffer.leitweg_id
     if not r.leitweg_id:
         if r.kundennummer:
-            r.hinweis(
-                "info",
-                f"Keine Leitweg-ID – Käuferreferenz (BT-10) = Kundennummer {r.kundennummer}",
+            melden(
+                "info", f"Keine Leitweg-ID – Käuferreferenz (BT-10) = Kundennummer {r.kundennummer}"
             )
         else:
-            r.hinweis(
-                "pruefen",
-                "XRechnung vorgesehen, aber keine Leitweg-ID (BT-10) vorhanden",
-                "BT-10",
+            melden(
+                "pruefen", "XRechnung vorgesehen, aber keine Leitweg-ID (BT-10) vorhanden", "BT-10"
             )
+    return True
+
+
+def _xrechnung(r: Rechnung, k: Konfig) -> bytes | None:
+    if not xrechnung_vorpruefen(r, k):
+        return None
+    if not (r.kaeufer.elektronische_adresse or "").strip():
+        return None  # wäre ungültig (PEPPOL-EN16931-R010); Prüffall-Hinweis steht
+    if (r.ausgabeformat or "") == "XRECHNUNG_UBL":
+        r.hinweis(
+            "info", "XRechnung UBL ist noch nicht umgesetzt – XRechnung im CII-Format erzeugt"
+        )
     return cii.erzeugen(r, "XRECHNUNG")
 
 
@@ -789,6 +808,9 @@ def _verarbeiten(
         pflichtpruefung.pruefen(
             r, ctx
         )  # Pflichtangaben § 14 Abs. 4 UStG / Plausibilität -> „Zu prüfen“
+        xrechnung_vorpruefen(
+            r, k
+        )  # BT-49/BT-10 vor dem Status, sonst ginge ein Prüffall als „ok“ durch
         erg = Ergebnis(
             nummer=r.nummer,
             status=r.status,
@@ -1067,6 +1089,7 @@ def prueffall_freigeben(json_pfad: Path, k: Konfig) -> Ergebnis:
         return erg
     rechnen.berechnen(r)
     pflichtpruefung.pruefen(r, pflicht_kontext(k))
+    xrechnung_vorpruefen(r, k)
     r.sicht_pdf = None
     r.hinweis("info", "Freigegeben in der Prüfansicht: Daten aus der Quelle, Sichtbild neu gesetzt")
     erg.kunde, erg.brutto = r.kaeufer.name, str(r.summen.brutto)

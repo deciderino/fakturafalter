@@ -150,7 +150,8 @@ def test_ohne_profilbloecke_bleibt_alles_wie_bisher():
 ])
 def test_ausgabeformat_im_profil(fmt, erwartet, status):
     k = lade_konfig(BEISPIELE / "konfiguration.yaml")
-    kopf = _kopf(**{"BT-44": "Stadtverwaltung Musterhausen"})
+    # Kunde steht in der XRechnung-Liste – rc1: dann braucht es die E-Rechnungsadresse (BT-49)
+    kopf = _kopf(**{"BT-44": "Stadtverwaltung Musterhausen", "BT-49": "rechnung@musterhausen.example"})
     kopf["kundennummer"] = ("K-1002", H)
     r = rechnung_bauen(kopf, POS, {"_basis": BEISPIELE, "mappings": STEUER, "ausgabe": {"format": fmt}}, k, "t")
     assert r.ausgabeformat == erwartet and r.status == status, r.hinweise
