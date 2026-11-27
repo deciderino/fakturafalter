@@ -33,7 +33,13 @@ pdf_vorlagen: [vorlage-wawi-druck.yaml]
 
 optionen:
   sichtteil: original       # original = Druckseiten übernehmen (Schriften werden eingebettet) | neu
-  xrechnung_zusatz: true    # zusätzlich XRechnung-CII-XML, wenn der Kundenstamm XRECHNUNG_* verlangt
+  xrechnung_zusatz: true    # zusätzlich XRechnung (CII), wenn Name oder Nummer in der Liste steht
+  xrechnung_liste:
+    - name: Stadtverwaltung Musterhausen
+      nummer: K-1002
+      leitweg_id: "04011000-12345-03"
+    - name: Probe Kleinbetrieb e.K.
+      nummer: K-1003
   # xrechnung_ablage: ausgang  # ab 0.9.6: ausgang (neben der PDF) | unterordner (Ausgang/XRechnung) | keine
   # updatepruefung: true       # ab 0.9.6: beim Start nach neuer Version fragen (einziger Netzzugriff, nur Hinweis)
   # updates_vorab: false       # Pre-Releases einbeziehen

@@ -54,7 +54,6 @@ def test_assistent_erkennt_standardaufbau_und_preisbasis():
         z,
         ce.steuer_vorschlag(ce.spalte(fmt, z["steuer"])),
         ce.einheiten_vorschlag(ce.spalte(fmt, z["BT-130"])),
-        None,
         {"ziel": "BT-154", "verwaist": "BT-22", "zwischen": "vorher"},
     )
     assert p["aufbau"]["art"] == "zeile_je_position"

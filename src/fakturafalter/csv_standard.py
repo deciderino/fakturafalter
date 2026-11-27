@@ -11,12 +11,12 @@ from . import steuerfaelle
 PROFIL_ID = "fakturafalter-standard"
 PROFIL_DATEI = "profil-fakturafalter-standard.yaml"
 
-# Die 9 Pflichtnamen der Vorlage: genau so muss die Kopfzeile sie tragen, damit das Profil greift.
+# Die Pflichtnamen der Vorlage: genau so muss die Kopfzeile sie tragen, damit das Profil greift.
 PFLICHTNAMEN = (
     "Rechnungsnummer",
     "Rechnungsdatum",
     "Leistungsdatum",
-    "Kundennummer",
+    "Kundenname",
     "Bezeichnung",
     "Menge",
     "Einheit",
@@ -30,6 +30,7 @@ KOPF_GLEICH = (
     "Rechnungsdatum",
     "Leistungsdatum",
     "Kundennummer",
+    "Kundenname",
     "Belegart",
     "Währung",
     "Leistung von",
@@ -46,7 +47,7 @@ _SPALTEN: list[tuple[str, str, str | None, bool]] = [
     ("BT-1", "Rechnungsnummer", None, True),
     ("BT-2", "Rechnungsdatum", "datum", True),
     ("BT-72", "Leistungsdatum", "datum", True),
-    ("kundennummer", "Kundennummer", None, True),
+    ("kundennummer", "Kundennummer", None, False),
     ("BT-153", "Bezeichnung", None, True),
     ("BT-129", "Menge", "zahl", True),
     ("BT-130", "Einheit", None, True),
@@ -61,9 +62,9 @@ _SPALTEN: list[tuple[str, str, str | None, bool]] = [
     ("BT-109", "Summe netto", "zahl", False),
     ("BT-110", "Summe USt", "zahl", False),
     ("BT-112", "Summe brutto", "zahl", False),
-    ("BT-44", "Kundenname", None, False),
-    ("kaeufer_name_2", "Kundenbezeichnung 2", None, False),
-    ("kaeufer_name_3", "Kundenbezeichnung 3", None, False),
+    ("BT-44", "Kundenname", None, True),
+    ("kunden_name_2", "Kundenbezeichnung 2", None, False),
+    ("kunden_name_3", "Kundenbezeichnung 3", None, False),
     ("BT-50", "Straße", None, False),
     ("BT-51", "Adresszusatz", None, False),
     ("BT-53", "PLZ", None, False),
@@ -80,7 +81,7 @@ _SPALTEN: list[tuple[str, str, str | None, bool]] = [
     ("BT-126", "Positionsnummer", None, False),
     ("BT-155", "Artikelnummer", None, False),
     ("BT-149", "Preiseinheit", "zahl", False),
-    ("gesamt_kontrolle", "Positionsbetrag", "zahl", False),
+    ("gesamtpreis_position", "Positionsbetrag", "zahl", False),
     ("BT-127", "Positionstext", None, False),
     ("BT-154", "Artikelbeschreibung", None, False),
     ("BT-156", "Kundenartikelnummer", None, False),
@@ -266,10 +267,10 @@ def profil() -> dict:
         (kopf if teil == "kopf" else pos)[feld] = d
     return {
         "profil": PROFIL_ID,
-        "version": 1,
+        "version": 2,
         "beschreibung": (
             "Eingebautes Standardformat (DE: UTF-8 mit BOM, Semikolon, Dezimalkomma, "
-            "TT.MM.JJJJ). Greift nur, wenn die Kopfzeile die 9 Pflichtnamen trägt und "
+            "TT.MM.JJJJ). Greift nur, wenn die Kopfzeile die Pflichtnamen trägt und "
             "kein früheres aktives Profil passt."
         ),
         "datei": {
@@ -335,7 +336,7 @@ def _csv_zeile(zellen: list[str]) -> str:
 
 
 def vorlage_minimal() -> bytes:
-    """UTF-8 mit BOM, nur die 9 Pflichtspalten, zwei fiktive Rechnungen."""
+    """UTF-8 mit BOM, nur die Pflichtspalten, zwei fiktive Rechnungen."""
     kopf = list(PFLICHTNAMEN)
     zeilen = [
         kopf,

@@ -131,7 +131,7 @@ def test_beispiel_dateien_im_repo():
 
 
 def test_eigene_profile_behalten_vorrang(konfig, tmp_path):
-    """Ein früheres eigenes Profil gewinnt, auch wenn die 9 Pflichtnamen passen."""
+    """Ein früheres eigenes Profil gewinnt, auch wenn die Pflichtnamen passen."""
     std = next(p for p in konfig.csv_profile if csv_standard.ist_standard(p))
     f = tmp_path / "p.csv"
     f.write_bytes(csv_standard.vorlage_minimal())

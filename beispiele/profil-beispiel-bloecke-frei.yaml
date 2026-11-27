@@ -1,5 +1,5 @@
 profil: beispiel-bloecke-frei
-version: 1
+version: 2
 beschreibung: 'Beispiel B: Felder frei verteilt, Kommentar und #LEER (fiktiv).'
 datei:
   muster: beispiel-bloecke-*.csv

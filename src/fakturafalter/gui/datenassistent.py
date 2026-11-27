@@ -598,13 +598,13 @@ class CsvAssistent(_Assistent):
         self.f_platz = QLineEdit("#LEER")
         self.f_platz.setPlaceholderText(_("leer = kein Platzhalter"))
         self.f_platz.setMinimumHeight(48)
-        tv.addWidget(lbl(_("Platzhalter für eine gewollte Leerzeile auf der Sichtseite")))
+        tv.addWidget(lbl(_("Markierung in der Datei für eine leere Zeile, z. B. #LEER")))
         tv.addWidget(self.f_platz)
         self.f_leer_modus = _auswahl(
             (
-                ("beides", "Platzhalter oder Zeile nur mit Kopffeldern"),
-                ("platzhalter", "Nur Platzhalter"),
-                ("kopffeldzeile", "Nur Zeile mit Kopffeldern (ohne Menge/Preis/Text)"),
+                ("beides", "Beides: Markierung oder Zeile nur mit Kopffeldern"),
+                ("platzhalter", "Nur wenn die Markierung (z. B. #LEER) steht"),
+                ("kopffeldzeile", "Nur wenn die Zeile außer Kopfdaten nichts enthält"),
             ),
             "beides",
             _("Leerzeile erkennen"),
@@ -916,7 +916,7 @@ class CsvAssistent(_Assistent):
         self.b_block_neu = knopf(_("Block hinzufügen"), klick=self._block_hinzufuegen)
         self.b_block_weg = knopf(_("Entfernen"), klick=self._block_entfernen)
         self.b_block_name = knopf(_("Umbenennen"), klick=self._block_umbenennen)
-        self.b_wdh = QPushButton(_("Wiederholend: aus"))
+        self.b_wdh = QPushButton(_("Kommt mehrmals vor: aus"))
         self.b_wdh.setCheckable(True)
         self.b_wdh.toggled.connect(self._block_wdh_geklickt)
         leiste.addWidget(self.b_block_neu)
@@ -1074,7 +1074,7 @@ class CsvAssistent(_Assistent):
             if getattr(self, "b_wdh", None):
                 self.b_wdh.blockSignals(True)
                 self.b_wdh.setChecked(False)
-                self.b_wdh.setText(_("Wiederholend: aus"))
+                self.b_wdh.setText(_("Kommt mehrmals vor: aus"))
                 self.b_wdh.blockSignals(False)
             return
         bl = self.t_block.bloecke[i]
@@ -1085,7 +1085,7 @@ class CsvAssistent(_Assistent):
             wdh = bool(bl.get("wiederholend"))
             self.b_wdh.blockSignals(True)
             self.b_wdh.setChecked(wdh)
-            self.b_wdh.setText(_("Wiederholend: an") if wdh else _("Wiederholend: aus"))
+            self.b_wdh.setText(_("Kommt mehrmals vor: an") if wdh else _("Kommt mehrmals vor: aus"))
             self.b_wdh.blockSignals(False)
 
     def _bloecke_geaendert(self) -> None:
@@ -1500,9 +1500,9 @@ class CsvAssistent(_Assistent):
                 umbruch=True,
             )
         )
-        self.c_kommentare = QCheckBox(_("Kommentarzeilen sind zu erwarten"))
+        self.c_kommentare = QCheckBox(_("Es gibt Zeilen nur mit Text, ohne Menge und Preis"))
         self.c_kommentare.setChecked(True)
-        self.c_leerzeilen = QCheckBox(_("Gewollte Leerzeilen sind zu erwarten"))
+        self.c_leerzeilen = QCheckBox(_("Es gibt absichtliche Leerzeilen auf der Rechnung"))
         self.c_leerzeilen.setChecked(True)
         v.addWidget(self.c_kommentare)
         v.addWidget(self.c_leerzeilen)
@@ -1518,16 +1518,16 @@ class CsvAssistent(_Assistent):
         v.addWidget(self.c_leer_menge)
         v.addWidget(self.c_leer_preis)
         v.addWidget(self.c_leer_text)
-        self.l_platz_zjp = lbl(_("Platzhalter für eine gewollte Leerzeile (optional)"))
+        self.l_platz_zjp = lbl(_("Markierung in der Datei für eine leere Zeile, z. B. #LEER"))
         v.addWidget(self.l_platz_zjp)
         self.f_platz_zjp = QLineEdit("#LEER")
         self.f_platz_zjp.setMinimumHeight(48)
         v.addWidget(self.f_platz_zjp)
         self.f_preis_ohne = _auswahl(
             (
-                ("pruefen", "Zu prüfen (Standard)"),
-                ("eins", "Menge 1 setzen"),
-                ("kommentar", "Als Kommentarzeile (nur Text, nicht in der Summe)"),
+                ("pruefen", "Rechnung zur Prüfung"),
+                ("eins", "Menge 1 annehmen"),
+                ("kommentar", "Nur als Text, nicht in die Summe"),
             ),
             "pruefen",
             _("Preis vorhanden, Menge leer oder 0"),
@@ -1681,7 +1681,7 @@ class CsvAssistent(_Assistent):
         self.c_posnr = QCheckBox(_("Positionsnummer auf der Sichtseite zeigen"))
         self.c_posnr.setChecked(True)
         v.addWidget(self.c_posnr)
-        self.c_menge_exakt = QCheckBox(_("Menge exakt aus der CSV zeigen (z. B. 40,00)"))
+        self.c_menge_exakt = QCheckBox(_("Nachkommastellen der Menge so lassen wie in der Datei (z. B. 40,00)"))
         self.c_menge_exakt.setChecked(True)
         v.addWidget(self.c_menge_exakt)
         self.f_einheit_sicht = _auswahl(
@@ -1691,20 +1691,21 @@ class CsvAssistent(_Assistent):
         )
         v.addWidget(lbl(_("Einheit auf der Sichtseite")))
         v.addWidget(self.f_einheit_sicht)
-        self.c_einheit_fehlt_stueck = QCheckBox(_("Fehlende Einheit = Stück verwenden"))
+        self.c_einheit_fehlt_stueck = QCheckBox(_("Wenn die Einheit fehlt, Stück eintragen"))
         self.c_einheit_fehlt_stueck.setChecked(False)
         v.addWidget(self.c_einheit_fehlt_stueck)
         v.addWidget(
             lbl(
                 _(
-                    "Positionen mit Menge und Preis, aber ohne Einheit, erhalten Stück (H87). "
-                    "Im Protokoll erscheint der Hinweis „Einheit fehlte, Stück angenommen“ – kein Prüffall."
+                    "Hat eine Position Menge und Preis, aber keine Einheit, trägt Fakturafalter Stück ein. "
+                    "Im Protokoll steht ein Hinweis, die Rechnung kommt deshalb nicht zur Prüfung. "
+                    "Beispiel: Spalte Einheit leer bei „Beratung 2,00“."
                 ),
                 "hinweis",
                 umbruch=True,
             )
         )
-        self.c_kommentar_ohne = QCheckBox(_("Bezeichnungen bei Kommentarzeilen ausblenden"))
+        self.c_kommentar_ohne = QCheckBox(_("Bei reinen Textzeilen die Spaltenüberschriften auf der Sichtseite ausblenden"))
         self.c_kommentar_ohne.setChecked(False)
         v.addWidget(self.c_kommentar_ohne)
         v.addWidget(
@@ -1916,7 +1917,6 @@ class CsvAssistent(_Assistent):
                 steuer,
                 eh,
                 self._textzeile(),
-                ce.kundenstamm_vorschlag(self.haupt.k) if z.get("kundennummer") else None,
                 self.satzart_spalte,
             )
         else:
@@ -1927,7 +1927,6 @@ class CsvAssistent(_Assistent):
                 z,
                 steuer,
                 eh,
-                ce.kundenstamm_vorschlag(self.haupt.k) if z.get("kundennummer") else None,
                 self._textzeile(),
             )
             if self.art == "satzart":

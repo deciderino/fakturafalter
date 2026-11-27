@@ -1,5 +1,5 @@
 profil: beispiel-satzart-marker-in-spalte
-version: 1
+version: 2
 beschreibung: 'Fiktives Beispiel 0.9.11: Satzart-Wert in der Datenzeile (#Kopf, #Beleg),
   getrennte Blöcke Kunde und Beleg, Datumsangaben TT.MM.JJ.'
 datei:
@@ -42,11 +42,11 @@ bloecke:
   - Kunde4
   - Kunde5
   felder:
-    kaeufer_name_2:
+    kunden_name_2:
       spalte: Kunde2
       position: 3
       optional: true
-    kaeufer_name_3:
+    kunden_name_3:
       spalte: Kunde3
       position: 4
       optional: true

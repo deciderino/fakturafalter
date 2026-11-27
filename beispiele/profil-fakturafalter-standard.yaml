@@ -1,5 +1,5 @@
 profil: fakturafalter-standard
-version: 1
+version: 2
 beschreibung: 'Eingebautes Standardformat (DE: UTF-8 mit BOM, Semikolon, Dezimalkomma,
   TT.MM.JJJJ). Greift nur, wenn die Kopfzeile die 9 Pflichtnamen trägt und kein früheres
   aktives Profil passt.'
@@ -93,10 +93,10 @@ felder:
     BT-44:
       spalte: Kundenname
       optional: true
-    kaeufer_name_2:
+    kunden_name_2:
       spalte: Kundenbezeichnung 2
       optional: true
-    kaeufer_name_3:
+    kunden_name_3:
       spalte: Kundenbezeichnung 3
       optional: true
     BT-50:
@@ -288,7 +288,7 @@ felder:
       spalte: Preiseinheit
       typ: zahl
       optional: true
-    gesamt_kontrolle:
+    gesamtpreis_position:
       spalte: Positionsbetrag
       typ: zahl
       optional: true

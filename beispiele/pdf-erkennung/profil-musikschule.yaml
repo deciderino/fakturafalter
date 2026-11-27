@@ -1,6 +1,7 @@
 # Musikschule Klangraum e.V. (erfunden) – UTF-8, Semikolon, Dezimalkomma, Leistungszeitraum von/bis
 # Nur Steuernummer (keine USt-IdNr.); Unterricht steuerfrei nach § 4 Nr. 21 UStG, Noten 7 %.
 profil: musikschule
+version: 2
 datei: {muster: "musikschule_*.csv", trennzeichen: ";"}
 zahlen: {dezimal: ",", tausender: "."}
 datum: {format: "%d.%m.%Y"}

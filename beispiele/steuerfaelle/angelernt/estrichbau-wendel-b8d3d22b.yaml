@@ -1,6 +1,7 @@
 # Angelernte PDF-Vorlage (automatisch erzeugt). Lesbar und änderbar; gelöscht wird sie
 # beim nächsten Paar PDF + CSV neu angelernt. Koordinaten in pt, Seite 0 = erste, -1 = letzte.
 profil: estrichbau-wendel
+version: 2
 kennung: b8d3d22b
 erkennung:
   texte:

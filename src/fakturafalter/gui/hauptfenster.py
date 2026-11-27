@@ -71,6 +71,7 @@ class Hauptfenster(QMainWindow):
         self.toasts = ToastStapel(self, abstand_unten=48)
         self.tray = None
         self._aufbauen()
+        QTimer.singleShot(0, self._profilhinweise)
 
         if tray_erlaubt and QSystemTrayIcon.isSystemTrayAvailable():
             self.tray = QSystemTrayIcon(symbol(self.c["off"]), self)
@@ -712,6 +713,26 @@ class Hauptfenster(QMainWindow):
         ok = bool(dlg.exec())
         self.einstellungen_uebernehmen(orte.lesen(self.konfig_pfad))
         return ok
+
+
+    def _profilhinweise(self) -> None:
+        """Alte Profile und geänderte Einstellungen klar anzeigen, Dateien unangetastet lassen."""
+        from PySide6.QtWidgets import QMessageBox
+
+        for hinweis in getattr(self.k, "konfig_hinweise", None) or []:
+            QMessageBox.information(self, _("Hinweis zu den Einstellungen"), hinweis)
+        gesehen = set()
+        for _pfad, meldung, *rest in getattr(self.k, "abgelehnte_profile", None) or []:
+            titel = rest[0] if rest else _("Dieses Profil passt nicht mehr zu Fakturafalter 1.0")
+            if meldung in gesehen:
+                continue
+            gesehen.add(meldung)
+            box = QMessageBox(self)
+            box.setIcon(QMessageBox.Icon.Warning)
+            box.setWindowTitle(titel)
+            box.setText(meldung)
+            box.setStandardButtons(QMessageBox.StandardButton.Ok)
+            box.exec()
 
     def einstellungen_oeffnen(self, bereich: int | str = 0) -> None:
         """Während die Einstellungen offen sind, ruht die Überwachung (keine halb geänderte Konfiguration im

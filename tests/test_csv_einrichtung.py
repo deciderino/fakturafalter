@@ -26,7 +26,7 @@ def test_profil_liest_wie_handprofil(konfig, tmp_path):
     fmt = ce.format_erkennen(datei)
     z = ce.spalten_vorschlagen(fmt.kopf)
     p = ce.profil_bauen("Mein Export", datei, fmt, z, {"1": "19 %", "2": "7 %"},
-                        ce.einheiten_vorschlag(ce.spalte(fmt, z["BT-130"])), str(BEISPIELE / "kundenstamm.csv"))
+                        ce.einheiten_vorschlag(ce.spalte(fmt, z["BT-130"])))
     ziel = ce.speichern(p, ce.dateiname("Mein Export", tmp_path))
     assert ziel.name == "profil-mein-export.yaml"
     neu = lade_datei(ziel)
@@ -49,7 +49,7 @@ def test_allgemeine_einheit_und_satzspalte(konfig, tmp_path):
     fmt = ce.format_erkennen(csv)
     z = ce.spalten_vorschlagen(fmt.kopf)
     assert (z["BT-1"], z["BT-44"], z["steuer"], z["BT-146"]) == ("Nr", "Kunde", "MwSt", "Preis")
-    p = ce.profil_bauen("x", csv, fmt, z, ce.steuer_vorschlag(ce.spalte(fmt, "MwSt")), {}, None)
+    p = ce.profil_bauen("x", csv, fmt, z, ce.steuer_vorschlag(ce.spalte(fmt, "MwSt")), {})
     r = adapter_csv.lesen(csv, p, konfig)[0]
     assert [(q.einheit, q.steuer.satz) for q in r.positionen] == [("HUR", 19), ("H87", Decimal("7"))]
     assert r.kaeufer.name == "Fiktiv AG"

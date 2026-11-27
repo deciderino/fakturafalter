@@ -1,6 +1,7 @@
 # Angelernte PDF-Vorlage (automatisch erzeugt). Lesbar und änderbar; gelöscht wird sie
 # beim nächsten Paar PDF + CSV neu angelernt. Koordinaten in pt, Seite 0 = erste, -1 = letzte.
 profil: lichtbogen-messtechnik
+version: 2
 kennung: 3c4aeb4f
 erkennung:
   texte:

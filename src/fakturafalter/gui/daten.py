@@ -12,7 +12,7 @@ from decimal import Decimal, InvalidOperation
 from pathlib import Path
 
 from .. import protokoll as protokoll_mod
-from ..konfig import Konfig, kundenstamm_fuer, partei_aus
+from ..konfig import Konfig, partei_aus
 from ..pipeline import ausgabe_namen
 from ..ueberwachung import relevant
 
@@ -193,22 +193,6 @@ def ausgabe_pdf(k: Konfig, nummer: str) -> Path | None:
     return p if p.exists() else None
 
 
-def kundenstamm_info(k: Konfig) -> list[tuple[Path, int, int]]:
-    """-> [(Datei, Kunden, davon ohne elektronische Adresse BT-49)] je Kundenstamm aus Profilen/Vorlagen."""
-    gesehen: dict[Path, tuple[Path, int, int]] = {}
-    for prof in [*k.csv_profile, *k.pdf_vorlagen]:
-        dfn = prof.get("kundenstamm")
-        if not dfn or not dfn.get("datei"):
-            continue
-        p = Path(dfn["datei"])
-        p = (p if p.is_absolute() else Path(prof["_basis"]) / p).resolve()
-        if p in gesehen:
-            continue
-        ks = kundenstamm_fuer(dfn, Path(prof["_basis"]))
-        ohne = sum(1 for r in ks.daten.values() if not r.get("elektr_adresse_bt49"))
-        gesehen[p] = (p, len(ks.daten), ohne)
-    return list(gesehen.values())
-
 
 def profilname(prof: dict) -> str:
     name = (
@@ -241,8 +225,9 @@ def absender_fehlt(k: Konfig) -> list[str]:
     „XML“: der Verkäufer steht in der XML (Absender nur Rückfall) – nichts Pflicht."""
     if k.modus == "nur_pdf" or k.ist_xml():
         return []
-    if k.csv_profile and all(prof.get("verkaeufer") for prof in k.csv_profile):
-        for prof in k.csv_profile:
+    eigene = [prof for prof in k.csv_profile if not prof.get("_eingebaut")]
+    if eigene and all(prof.get("verkaeufer") for prof in eigene):
+        for prof in eigene:
             fehlt = _partei_fehlt(partei_aus(prof["verkaeufer"], k.absender))
             if fehlt:
                 return fehlt

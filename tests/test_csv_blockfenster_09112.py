@@ -43,8 +43,8 @@ def _profil(
 
     kunde_felder = {
         "BT-44": {"spalte": "Kunde1", "position": 2, "optional": True},
-        "kaeufer_name_2": {"spalte": "Kunde2", "position": 3, "optional": True},
-        "kaeufer_name_3": {"spalte": "Kunde3", "position": 4, "optional": True},
+        "kunden_name_2": {"spalte": "Kunde2", "position": 3, "optional": True},
+        "kunden_name_3": {"spalte": "Kunde3", "position": 4, "optional": True},
         "BT-50": {"spalte": "Strasse", "position": 5, "optional": True},
         "BT-53": {"spalte": "PLZ", "position": 6, "optional": True},
         "BT-52": {"spalte": "Ort", "position": 7, "optional": True},
@@ -66,7 +66,7 @@ def _profil(
         "BT-130": {"spalte": "Einheit", "position": 5, "optional": True, "mapping": "einheiten"},
         "BT-146": {"spalte": "Einzelpreis", "position": 6, "typ": "zahl"},
         "BT-149": {"spalte": "Preisbasis", "position": 7, "typ": "zahl", "optional": True},
-        "gesamt_kontrolle": {
+        "gesamtpreis_position": {
             "spalte": "Gesamtpreis", "position": 8, "typ": "zahl", "optional": True
         },
         "steuer": {"spalte": "Ust-Satz", "position": 9, "mapping": "steuer"},

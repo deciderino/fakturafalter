@@ -440,19 +440,42 @@ def entwurf_erzeugen(r: Rechnung, k: Konfig, ausgang: Path | None = None, bei_pd
     return ent
 
 
+def _soll_xrechnung(r: Rechnung, k: Konfig) -> bool:
+    """Zusätzliche XRechnung: Schalter an und (Listen-Treffer oder Profil/Quelle verlangt XRechnung)."""
+    if not k.xrechnung_zusatz:
+        return False
+    if (r.ausgabeformat or "").startswith("XRECHNUNG"):
+        return True
+    from .konfig import xrechnung_treffer
+
+    return xrechnung_treffer(k, name=r.kaeufer.name, nummer=r.kundennummer or r.kaeufer.kennung) is not None
+
+
 def _xrechnung(r: Rechnung, k: Konfig) -> bytes | None:
-    if k.xrechnung_zusatz and r.ausgabeformat.startswith("XRECHNUNG"):
-        if r.ausgabeformat == "XRECHNUNG_UBL":
-            r.hinweis(
-                "info", "XRechnung UBL ist noch nicht umgesetzt – XRechnung im CII-Format erzeugt"
-            )
-        if not r.leitweg_id:
+    if not _soll_xrechnung(r, k):
+        return None
+    if (r.ausgabeformat or "") == "XRECHNUNG_UBL":
+        r.hinweis(
+            "info", "XRechnung UBL ist noch nicht umgesetzt – XRechnung im CII-Format erzeugt"
+        )
+    from .konfig import xrechnung_treffer
+
+    treffer = xrechnung_treffer(k, name=r.kaeufer.name, nummer=r.kundennummer or r.kaeufer.kennung)
+    if treffer and treffer.leitweg_id and not r.leitweg_id:
+        r.leitweg_id = treffer.leitweg_id
+    if not r.leitweg_id:
+        if r.kundennummer:
             r.hinweis(
                 "info",
-                f"Keine Leitweg-ID im Kundenstamm – Käuferreferenz (BT-10) = Kundennummer {r.kundennummer}",
+                f"Keine Leitweg-ID – Käuferreferenz (BT-10) = Kundennummer {r.kundennummer}",
             )
-        return cii.erzeugen(r, "XRECHNUNG")
-    return None
+        else:
+            r.hinweis(
+                "pruefen",
+                "XRechnung vorgesehen, aber keine Leitweg-ID (BT-10) vorhanden",
+                "BT-10",
+            )
+    return cii.erzeugen(r, "XRECHNUNG")
 
 
 def ablegen(ent: Entwurf, k: Konfig) -> list[Path]:

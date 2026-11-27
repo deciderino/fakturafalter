@@ -2337,7 +2337,7 @@ class Sitzung:
                 "BT-153": (p.bezeichnung, h),
                 "BT-129": (p.menge, h),
                 "BT-146": (p.einzelpreis, h),
-                "gesamt_kontrolle": (p.gesamt, h),
+                "gesamtpreis_position": (p.gesamt, h),
                 "steuer": (p.steuer_text if "steuer" in pv else "*", h),
                 "BT-130": (pdferkennung.einheit_schluessel(pv, p), h),
             }

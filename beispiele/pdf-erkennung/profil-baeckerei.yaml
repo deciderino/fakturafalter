@@ -1,5 +1,6 @@
 # Bäckerei Sonnenkorn GmbH (erfunden) – UTF-8, Semikolon, Dezimalkomma, TT.MM.JJJJ
 profil: baeckerei
+version: 2
 datei: {muster: "baeckerei_*.csv", trennzeichen: ";"}
 zahlen: {dezimal: ",", tausender: "."}
 datum: {format: "%d.%m.%Y"}

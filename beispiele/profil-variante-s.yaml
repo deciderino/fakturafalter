@@ -3,7 +3,7 @@
 # Drittland, nicht im Inland steuerbare Leistung, Fremdwährung (USD mit Kurs) und eine gemischte Rechnung.
 # Der Steuerhinweis der Quelle wird BT-120; fehlt er, gilt der Standardtext des Falls.
 profil: steuerfaelle
-version: 1
+version: 2
 beschreibung: "Eine Zeile je Position, UTF-8, Semikolon, Dezimalkomma; Steuerschlüssel RC/IGL/EX/NSTB"
 
 datei:

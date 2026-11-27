@@ -1,6 +1,6 @@
 # CSV-Zuordnungsprofil – passt zu variante-b_wawi_cp1252.csv (erfundene Daten)
 profil: wawi-semikolon
-version: 1
+version: 2
 beschreibung: "WaWi-Export, Satzart K/P, Windows-1252, Semikolon, Dezimalkomma"
 
 datei:
@@ -29,7 +29,16 @@ felder:
     BT-2:          {spalte: Belegdatum, typ: datum}
     BT-72:         {spalte: Lieferdatum, typ: datum, optional: true}
     BT-13:         {spalte: "Ihre Bestellung", optional: true}
-    kundennummer:  {spalte: Kundennr}
+    kundennummer:  {spalte: Kundennr, optional: true}
+    BT-44:         {spalte: Kundenname}
+    BT-50:         {spalte: Strasse, optional: true}
+    BT-53:         {spalte: PLZ, optional: true}
+    BT-52:         {spalte: Ort, optional: true}
+    BT-55:         {spalte: Land, optional: true}
+    BT-48:         {spalte: "USt-IdNr", optional: true}
+    BT-49:         {spalte: "E-Rechnungsadresse", optional: true}
+    BT-10:         {spalte: "Leitweg-ID", optional: true}
+    zahlungsziel_tage: {spalte: Zahlungsziel, typ: tage, optional: true}
     BT-3:          {fest: "380"}
     BT-5:          {fest: EUR}
     BT-112:        {spalte: "Summe brutto", typ: zahl, zweck: pruefung}
@@ -61,14 +70,9 @@ mappings:
     "9": {BT-151: AE, BT-152: 0, BT-120: "Steuerschuldnerschaft des Leistungsempfängers", BT-121: "VATEX-EU-AE"}
     unbekannt: pruefen
 
-kundenstamm:
-  datei: kundenstamm.csv
-  schluessel: kundennummer
-  liefert: [BT-44, BT-50, BT-52, BT-53, BT-55, BT-48, BT-49, BT-10, zahlungsziel_tage, format]
-  fehlt: pruefen
 
 ausgabe:
-  format: aus_kundenstamm    # sonst fest: XRECHNUNG_CII | XRECHNUNG_UBL | ZUGFERD_EN16931
+  format: ZUGFERD_EN16931    # fest; XRechnung zusätzlich über die Liste in den Einstellungen
   zahlungsbedingung: "Zahlbar innerhalb {zahlungsziel_tage} Tagen ohne Abzug."
 
 sicherheit:

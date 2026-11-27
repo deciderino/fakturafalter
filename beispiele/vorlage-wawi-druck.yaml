@@ -32,7 +32,7 @@ felder:
     wert: rechts
     typ: datum
     format: "%d.%m.%Y"
-  kundennummer:                     # Schlüssel für den Kundenstamm (BT-44 ff., BT-49, BT-10)
+  kundennummer:                     # optionale Kundennummer (BT-46)
     anker: "Kunden-Nr.:"
     wert: rechts
     muster: 'K-\d{4}'
@@ -46,10 +46,9 @@ felder:
     anker: "Ihre Bestellung:"
     wert: rechts
     optional: true
-  anschrift_kontrolle:              # nur Gegenprüfung mit Kundenstamm, kein Ausgabefeld
+  BT-44:                              # Name und Anschrift aus dem Adressfenster
     bereich: {seite: 1, x0: 45, top: 130, x1: 300, bottom: 185}
-    zweck: pruefung
-    vergleiche_mit: kundenstamm.name
+    als_anschrift: true
     zeilen_ignorieren: ['^Muster GmbH, ']   # Absenderzeile im Fenster
 
 # 4) Positionstabelle
@@ -67,7 +66,7 @@ positionen:
     BT-129:  {rechte_kante: 395, toleranz: 3, typ: zahl}
     BT-130:  {links_ab: 397, bis: 425, mapping: einheiten}
     BT-146:  {rechte_kante: 480, toleranz: 3, typ: zahl}
-    gesamt_kontrolle: {rechte_kante: 545, toleranz: 3, typ: zahl, zweck: pruefung}
+    gesamtpreis_position: {rechte_kante: 545, toleranz: 3, typ: zahl, zweck: pruefung}
     steuer:  {links_ab: 549, bis: 575, mapping: steuer}
   neue_position_wenn: BT-126 gefuellt
   folgezeile_ohne_pos: an_BT-153_anhaengen   # mehrzeilige Bezeichnung
@@ -89,7 +88,6 @@ mappings:
     A: {BT-151: S, BT-152: 19}
     B: {BT-151: S, BT-152: 7}
 
-kundenstamm: {datei: kundenstamm.csv, schluessel: kundennummer}
 
 sicherheit:              # wann geht eine Rechnung in die Prüfansicht?
   pflichtfeld_fehlt: pruefen

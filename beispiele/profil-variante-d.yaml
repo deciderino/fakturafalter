@@ -3,7 +3,7 @@
 # (negative Beträge werden positiv übernommen), SEPA-Lastschrift (Zahlart + Mandat + IBAN des Kunden),
 # Bezug auf die ursprüngliche Rechnung und Vorauszahlung.
 profil: rabatt-gutschrift-lastschrift
-version: 1
+version: 2
 beschreibung: "Eine Zeile je Position, UTF-8, Semikolon, Dezimalkomma; Rabatt, Gutschrift, Lastschrift"
 
 datei:
@@ -26,7 +26,16 @@ felder:
     BT-1:          {spalte: Belegnummer}
     BT-2:          {spalte: Datum, typ: datum}
     BT-72:         {spalte: Leistung, typ: datum, optional: true}
-    kundennummer:  {spalte: Kunde}
+    kundennummer:  {spalte: Kunde, optional: true}
+    BT-44:         {spalte: Kundenname}
+    BT-50:         {spalte: Strasse, optional: true}
+    BT-53:         {spalte: PLZ, optional: true}
+    BT-52:         {spalte: Ort, optional: true}
+    BT-55:         {spalte: Land, optional: true}
+    BT-48:         {spalte: "USt-IdNr", optional: true}
+    BT-49:         {spalte: "E-Rechnungsadresse", optional: true}
+    BT-10:         {spalte: "Leitweg-ID", optional: true}
+    zahlungsziel_tage: {spalte: Zahlungsziel, typ: tage, optional: true}
     belegart:      {spalte: Belegart}                          # Rechnung / Gutschrift / Korrektur -> BT-3
     BT-25:         {spalte: "Bezug auf", optional: true}       # Rechnungsbezug (BG-3)
     BT-26:         {spalte: "Bezug vom", typ: datum, optional: true}
@@ -53,7 +62,4 @@ mappings:
     "2": {BT-151: S, BT-152: 7}
     unbekannt: pruefen
 
-kundenstamm:
-  datei: kundenstamm.csv
-  schluessel: kundennummer
-  fehlt: pruefen
+

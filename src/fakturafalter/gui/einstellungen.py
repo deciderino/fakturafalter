@@ -19,6 +19,7 @@ from PySide6.QtWidgets import (
     QFileDialog,
     QFrame,
     QHBoxLayout,
+    QHeaderView,
     QLineEdit,
     QListWidget,
     QListWidgetItem,
@@ -27,6 +28,8 @@ from PySide6.QtWidgets import (
     QSpinBox,
     QStackedWidget,
     QSystemTrayIcon,
+    QTableWidget,
+    QTableWidgetItem,
     QTextEdit,
     QVBoxLayout,
     QWidget,
@@ -48,6 +51,7 @@ from ..konfig import (
     XRECHNUNG_ORDNER,
     csv_eintrag_datei,
     gemeinsamer_ordner,
+    xrechnung_liste_aus,
 )
 from . import aktionen, autostart, daten
 from .absender_form import AbsenderFormular, aus_roh, in_roh
@@ -785,24 +789,6 @@ class Einstellungen(QDialog):
             v.addWidget(lbl(_("Noch keine CSV eingerichtet."), "hinweis", umbruch=True))
         for i, prof in enumerate(profile):
             self._csv_karte(v, prof, i, len(profile))
-        infos = daten.kundenstamm_info(k)
-        if infos:
-            _abschnitt(v, _("Kundenstamm"))
-            for pfad, anzahl, ohne in infos:
-                zeile = QHBoxLayout()
-                zeile.addWidget(lbl(pfad.name, umbruch=True), 1)
-                zeile.addWidget(
-                    knopf(_("Öffnen"), klick=lambda _c=False, p=pfad: aktionen.oeffnen(p))
-                )
-                v.addLayout(zeile)
-                text = (
-                    _("{n} Kunden geladen").format(n=anzahl)
-                    if anzahl
-                    else _("Datei fehlt oder ist leer")
-                )
-                if ohne:
-                    text += " · " + _("{n} ohne E-Mail (für XRechnung nötig)").format(n=ohne)
-                v.addWidget(lbl(text, "gut" if anzahl and not ohne else "warn", umbruch=True))
 
     def _csv_karte(self, v: QVBoxLayout, prof: dict, index: int, anzahl: int) -> None:
         aktiv = adapter_csv.profil_aktiv(prof)
@@ -908,7 +894,7 @@ class Einstellungen(QDialog):
         box.setText(
             _(
                 "Eine CSV-Vorlage im Standardformat speichern (UTF-8 mit BOM, Semikolon). "
-                "Absender und Kundenstamm müssen gepflegt sein."
+                "Absender muss gepflegt sein; der Kundenname steht in der CSV."
             )
         )
         b_min = box.addButton(_("Minimal"), QMessageBox.ActionRole)
@@ -1203,20 +1189,57 @@ class Einstellungen(QDialog):
             ),
             erste=True,
         )
+        self.c_xr = QCheckBox(_("XRechnung zusätzlich erzeugen"))
+        self.c_xr.setObjectName("xrechnung_zusatz")
+        self.c_xr.setChecked(bool(opt.get("xrechnung_zusatz")))
+        v.addWidget(self.c_xr)
         v.addWidget(
-            lbl(_("XRechnung (XML) zusätzlich, wenn der Kundenstamm es verlangt"), umbruch=True)
+            lbl(
+                _(
+                    "Ist der Schalter an, bekommt jede Rechnung, deren Kundenname oder "
+                    "Kundennummer in der Liste steht, zusätzlich zum ZUGFeRD-PDF eine "
+                    "XRechnung (CII). Die Leitweg-ID (BT-10) ist optional und wird gesetzt, "
+                    "wenn die Datei keine mitbringt. Lokal prüft Fakturafalter mit KoSIT."
+                ),
+                "hinweis",
+                umbruch=True,
+            )
         )
+        self.t_xr = QTableWidget(0, 3)
+        self.t_xr.setObjectName("xrechnung_liste")
+        self.t_xr.setHorizontalHeaderLabels(
+            [_("Kundenname"), _("Kundennummer"), _("Leitweg-ID (optional)")]
+        )
+        self.t_xr.verticalHeader().setVisible(False)
+        self.t_xr.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
+        self.t_xr.setMinimumHeight(180)
+        self.t_xr.setAccessibleName(_("XRechnung-Liste"))
+        for e in xrechnung_liste_aus(opt):
+            r = self.t_xr.rowCount()
+            self.t_xr.insertRow(r)
+            self.t_xr.setItem(r, 0, QTableWidgetItem(e.name))
+            self.t_xr.setItem(r, 1, QTableWidgetItem(e.nummer))
+            self.t_xr.setItem(r, 2, QTableWidgetItem(e.leitweg_id))
+        if self.t_xr.rowCount() == 0:
+            self.t_xr.insertRow(0)
+        v.addWidget(self.t_xr)
+        xr_kn = QHBoxLayout()
+        xr_kn.addWidget(knopf(_("Eintrag hinzufügen"), klick=self._xr_plus))
+        xr_kn.addWidget(knopf(_("Entfernen"), klick=self._xr_minus))
+        xr_kn.addStretch(1)
+        v.addLayout(xr_kn)
+        v.addWidget(lbl(_("Ablage der XRechnung-Datei"), umbruch=True))
         self.xr = QComboBox()
         self.xr.setObjectName("xrechnung_ablage")
-        self.xr.setAccessibleName(_("XRechnung (XML) zusätzlich, wenn der Kundenstamm es verlangt"))
+        self.xr.setAccessibleName(_("Ablage der XRechnung-Datei"))
         self.xr.addItem(_("Neben der PDF im Ausgang"), "ausgang")
         self.xr.addItem(
             _("Im Unterordner „{n}“ des Ausgangs").format(n=XRECHNUNG_ORDNER), "unterordner"
         )
-        self.xr.addItem(_("Keine XRechnung-Datei"), "keine")
         ablage = str(opt.get("xrechnung_ablage") or "ausgang")
-        if not opt.get("xrechnung_zusatz", True) or ablage == "keine":
-            ablage = "keine"
+        if ablage == "keine":
+            self.c_xr.setChecked(False)
+            ablage = "ausgang"
         self.xr.setCurrentIndex(max(0, self.xr.findData(ablage)))
         v.addWidget(self.xr)
         v.addWidget(lbl(_("Sichtbild"), umbruch=True))
@@ -1229,7 +1252,33 @@ class Einstellungen(QDialog):
         v.addStretch(1)
         return w
 
+    def _xr_plus(self) -> None:
+        r = self.t_xr.rowCount()
+        self.t_xr.insertRow(r)
+        self.t_xr.setCurrentCell(r, 0)
+        self.t_xr.editItem(self.t_xr.item(r, 0) or QTableWidgetItem(""))
+
+    def _xr_minus(self) -> None:
+        r = self.t_xr.currentRow()
+        if r >= 0:
+            self.t_xr.removeRow(r)
+        if self.t_xr.rowCount() == 0:
+            self.t_xr.insertRow(0)
+
+    def _xr_liste_lesen(self) -> list[dict]:
+        aus = []
+        for r in range(self.t_xr.rowCount()):
+            def z(c):
+                it = self.t_xr.item(r, c)
+                return (it.text() if it else "").strip()
+
+            e = {"name": z(0), "nummer": z(1), "leitweg_id": z(2)}
+            if any(e.values()):
+                aus.append(e)
+        return aus
+
     def _teil_dateiname(self, v: QVBoxLayout, opt: dict) -> None:
+
         """Dateiname und Prüfung der Rechnungsnummer je Belegart (ab 0.9.5). Leere Felder = wie bisher."""
         _abschnitt(
             v,
@@ -1570,12 +1619,10 @@ class Einstellungen(QDialog):
             self.modus() in ("csv", "xml") and self.pdf_verwenden.isChecked()
         ) or "gegenstueck_minuten" in o:
             o["gegenstueck_minuten"] = self.gegenstueck.value()
-        ablage = self.xr.currentData()
-        o["xrechnung_zusatz"] = ablage != "keine"
-        if ablage == "unterordner" or "xrechnung_ablage" in o:
-            o["xrechnung_ablage"] = (
-                ablage if ablage != "keine" else o.get("xrechnung_ablage", "ausgang")
-            )
+        o["xrechnung_zusatz"] = self.c_xr.isChecked()
+        o["xrechnung_liste"] = self._xr_liste_lesen()
+        ablage = self.xr.currentData() or "ausgang"
+        o["xrechnung_ablage"] = ablage if ablage in ("ausgang", "unterordner") else "ausgang"
         if self.updates.isChecked() is not True or "updatepruefung" in o:
             o["updatepruefung"] = self.updates.isChecked()
         if self.updates_vorab.isChecked() or "updates_vorab" in o:

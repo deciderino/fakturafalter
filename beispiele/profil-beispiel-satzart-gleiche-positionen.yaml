@@ -1,5 +1,5 @@
 profil: beispiel-satzart-gleiche-positionen
-version: 1
+version: 2
 beschreibung: 'Eine gemeinsame Kopfzeile, gleiche Position, andere Bedeutung (fiktiv, ab 0.9.10).'
 datei:
   muster: beispiel-satzart-gleiche-positionen.csv

@@ -34,7 +34,7 @@ positionen:
     BT-129:  {rechte_kante: 390, toleranz: 3, typ: zahl}
     BT-130:  {links_ab: 396, bis: 425, mapping: einheiten}
     BT-146:  {rechte_kante: 475, toleranz: 3, typ: zahl}
-    gesamt_kontrolle: {rechte_kante: 535, toleranz: 3, typ: zahl, zweck: pruefung}
+    gesamtpreis_position: {rechte_kante: 535, toleranz: 3, typ: zahl, zweck: pruefung}
     steuer:  {links_ab: 545, bis: 575, mapping: steuer}
   neue_position_wenn: BT-126 gefuellt
 

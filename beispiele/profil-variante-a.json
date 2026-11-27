@@ -1,19 +1,28 @@
 {
   "profil": "export-utf8-komma",
-  "version": 1,
+  "version": 2,
   "beschreibung": "Eine Zeile je Position, Kopf wiederholt, UTF-8, Komma, Dezimalpunkt",
   "datei": { "muster": "*.csv", "kodierung": "auto", "trennzeichen": ",", "textbegrenzer": "\"", "kopfzeile": true },
   "zahlen": { "dezimal": ".", "tausender": "" },
   "datum": { "format": "%Y-%m-%d" },
   "aufbau": { "art": "zeile_je_position", "rechnung_schluessel": "rechnungsnummer",
-              "kopf_muss_gleich_sein": ["rechnungsdatum", "kundennummer"] },
+              "kopf_muss_gleich_sein": ["rechnungsdatum", "kundennummer", "kundenname"] },
   "felder": {
     "kopf": {
       "BT-1": { "spalte": "rechnungsnummer" },
       "BT-2": { "spalte": "rechnungsdatum", "typ": "datum" },
       "BT-72": { "spalte": "leistungsdatum", "typ": "datum", "optional": true },
       "BT-13": { "spalte": "bestellnummer", "optional": true },
-      "kundennummer": { "spalte": "kundennummer" },
+      "kundennummer": { "spalte": "kundennummer", "optional": true },
+      "BT-44": { "spalte": "kundenname" },
+      "BT-50": { "spalte": "strasse", "optional": true },
+      "BT-53": { "spalte": "plz", "optional": true },
+      "BT-52": { "spalte": "ort", "optional": true },
+      "BT-55": { "spalte": "land", "optional": true },
+      "BT-48": { "spalte": "ust_id", "optional": true },
+      "BT-49": { "spalte": "e_adresse", "optional": true },
+      "BT-10": { "spalte": "leitweg_id", "optional": true },
+      "zahlungsziel_tage": { "spalte": "zahlungsziel", "typ": "tage", "optional": true },
       "BT-3": { "fest": "380" },
       "BT-5": { "fest": "EUR" }
     },
@@ -31,7 +40,6 @@
     "einheiten": { "Stk": "C62", "Std": "HUR", "m": "MTR", "pausch": "LS", "unbekannt": "pruefen" },
     "steuer": { "1": { "BT-151": "S", "BT-152": 19 }, "2": { "BT-151": "S", "BT-152": 7 }, "unbekannt": "pruefen" }
   },
-  "kundenstamm": { "datei": "kundenstamm.csv", "schluessel": "kundennummer", "fehlt": "pruefen" },
   "pdf_erkennung": {
     "_hinweis": "Der alte Beispieldruck druckauftrag-wawi.pdf zeigt Platzhalter statt USt-IdNr. und IBAN – diese Felder hier nicht gegenprüfen.",
     "felder": ["BT-1", "BT-2", "BT-72", "BG-14", "BT-32", "BT-109", "BT-110", "BT-112", "BT-119"]

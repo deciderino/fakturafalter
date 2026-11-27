@@ -28,6 +28,7 @@ from PySide6.QtWidgets import (
 from .. import csv_bloecke
 from .. import csv_einrichtung as ce
 from . import thema
+from .feldsuche import FeldSuche
 from .texte import _
 
 # Fallback-Konstanten (hell); laufende Palette kommt aus thema.block_palette().
@@ -996,16 +997,14 @@ class SpaltenJeBlock(QWidget):
         ff.setBold(True)
         self.l_spalte.setFont(ff)
         self.l_beispiel = QLabel("")
-        self.b_feld = QComboBox()
-        self.b_feld.setMinimumHeight(40)
-        self.b_feld.currentIndexChanged.connect(self._feld_geaendert)
+        self.l_beispiel.setVisible(False)
+        self.b_feld = FeldSuche()
+        self.b_feld.geaendert.connect(self._feld_geaendert)
         self.l_andere = QLabel("")
         self.l_andere.setWordWrap(True)
         sv.addWidget(self.l_spalte)
-        sv.addWidget(self.l_beispiel)
-        sv.addWidget(self.b_feld)
+        sv.addWidget(self.b_feld, 1)
         sv.addWidget(self.l_andere)
-        sv.addStretch(1)
         self.box_hinweis = QFrame()
         self.box_hinweis.setFrameShape(QFrame.Shape.StyledPanel)
         hv = QVBoxLayout(self.box_hinweis)
@@ -1225,25 +1224,17 @@ class SpaltenJeBlock(QWidget):
         self._karten()
 
     def _fuelle_combo(self) -> None:
-        self.b_feld.blockSignals(True)
-        self.b_feld.clear()
-        self.b_feld.addItem(_("– nicht verwenden –"), "")
         bl = self.bloecke[self.aktiv] if self.bloecke else {}
-        wieder = bool(bl.get("wiederholend"))
-        pf = ce.positionsfelder()
-        for f, anz, *_r in ce.FELDER:
-            if f in pf and not wieder:
-                continue
-            self.b_feld.addItem(_(anz) + f" ({f})", f)
+        self.b_feld.set_wiederholend(bool(bl.get("wiederholend")))
         schon = (self.felder.get(self.aktiv) or {}).get(self.spalte_i, "")
-        self.b_feld.setCurrentIndex(max(0, self.b_feld.findData(schon)))
-        self.b_feld.blockSignals(False)
+        self.b_feld.set_feld(schon or "")
+        self.b_feld.set_beispiel(self._beispiel())
 
     def _feld_geaendert(self) -> None:
         if not self.bloecke:
             return
         self.felder.setdefault(self.aktiv, {})
-        feld = self.b_feld.currentData() or ""
+        feld = self.b_feld.feld() if hasattr(self.b_feld, "feld") else (self.b_feld.currentData() or "")
         if feld:
             self.felder[self.aktiv][self.spalte_i] = feld
         else:
@@ -1403,12 +1394,13 @@ class SpaltenJeBlock(QWidget):
                 sp = kopf[col] if col < len(kopf) and kopf[col] else _("Spalte {n}").format(n=col + 1)
                 wo[f] = _("Block {b}, Spalte {n} {s}").format(b=name, n=col + 1, s=sp)
         sicht = [
-            ("BT-1", _("Rechnungsnummer (BT-1)")),
-            ("BT-2", _("Rechnungsdatum (BT-2)")),
-            ("BT-153", _("Bezeichnung")),
+            ("BT-153", _("Bezeichnung der Position")),
             ("BT-129", _("Menge")),
-            ("BT-146", _("Einzelpreis")),
-            ("steuer", _("Steuer")),
+            ("BT-146", _("Einzelpreis (netto)")),
+            ("steuer", _("Steuersatz oder Steuerschlüssel")),
+            ("BT-1", _("Rechnungsnummer")),
+            ("BT-2", _("Rechnungsdatum")),
+            ("BT-44", _("Kundenname")),
         ]
         zeilen = []
         for f, lab in sicht:
@@ -1416,14 +1408,6 @@ class SpaltenJeBlock(QWidget):
                 zeilen.append("✓  " + lab + " – " + wo.get(f, zu[f]))
             else:
                 zeilen.append("○  " + lab + " – " + _("fehlt noch"))
-        if zu.get("BT-44") or zu.get("kundennummer"):
-            f = "BT-44" if zu.get("BT-44") else "kundennummer"
-            lab = _("Käufername (BT-44)") if f == "BT-44" else _("Kundennummer")
-            zeilen.append("✓  " + lab + " – " + wo.get(f, zu[f]))
-        else:
-            zeilen.append(
-                "○  " + _("Käufername (BT-44) oder Kundennummer") + " – " + _("fehlt noch")
-            )
         self.l_pflicht.setText("\n".join(zeilen))
         fehlt = ce.fehlende_pflicht(zu)
         if fehlt:

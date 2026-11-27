@@ -1,5 +1,5 @@
 profil: beispiel-satzart-bloecke-marker
-version: 1
+version: 2
 beschreibung: 'Blöcke mit Marker, Satzart und Kopfzeile je Block (fiktiv, ab 0.9.10).'
 datei:
   muster: beispiel-satzart-bloecke-marker.csv

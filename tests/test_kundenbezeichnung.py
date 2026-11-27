@@ -57,7 +57,7 @@ def test_nur_alte_spalte_kunde_bleibt_wie_bisher(konfig):
 def test_drei_zeilen_xml_ein_name_sicht_drei_zeilen(konfig):
     r = _bauen(
         konfig,
-        {"BT-44": "Firma Alpha", "kaeufer_name_2": "Werk Süd", "kaeufer_name_3": "Niederlassung West",
+        {"BT-44": "Firma Alpha", "kunden_name_2": "Werk Süd", "kunden_name_3": "Niederlassung West",
          "BT-56": "z. Hd. Frau Beispiel", "BT-51": "Abteilung Einkauf"},
     )
     assert r.status == "ok"
@@ -76,31 +76,30 @@ def test_drei_zeilen_xml_ein_name_sicht_drei_zeilen(konfig):
 
 
 def test_zeile_2_leer_keine_luecke(konfig):
-    r = _bauen(konfig, {"BT-44": "Firma Alpha", "kaeufer_name_2": "  ", "kaeufer_name_3": "Niederlassung West"})
+    r = _bauen(konfig, {"BT-44": "Firma Alpha", "kunden_name_2": "  ", "kunden_name_3": "Niederlassung West"})
     assert _name_xml(r) == "Firma Alpha Niederlassung West"
     assert r.kaeufer.namenszeilen() == ["Firma Alpha", "Niederlassung West"]
 
 
 def test_zellen_werden_bereinigt(konfig):
-    r = _bauen(konfig, {"BT-44": " Firma  Alpha\n", "kaeufer_name_2": "Werk\nSüd ", "kaeufer_name_3": "\tWest"})
+    r = _bauen(konfig, {"BT-44": " Firma  Alpha\n", "kunden_name_2": "Werk\nSüd ", "kunden_name_3": "\tWest"})
     assert r.kaeufer.name == "Firma Alpha Werk Süd West"
     assert r.kaeufer.name_zeilen == ["Firma Alpha", "Werk Süd", "West"]
 
 
 def test_zeile_1_fehlt_haelt_an_und_rueckt_nicht_nach(konfig):
-    r = _bauen(konfig, {"BT-44": "", "kaeufer_name_2": "Werk Süd"})
+    r = _bauen(konfig, {"BT-44": "", "kunden_name_2": "Werk Süd"})
     assert r.status == "pruefen"
     bt44 = [h for h in r.hinweise if h.feld == "BT-44"]
-    assert len(bt44) == 1 and "Kundenbezeichnung 1 fehlt" in bt44[0].text
+    assert len(bt44) == 1 and "fehlt" in bt44[0].text and ("Zeile 1" in bt44[0].text or "Kundenname" in bt44[0].text)
     assert r.kaeufer.name == "" and r.kaeufer.name_zeilen == []
 
 
-def test_alle_leer_name_aus_kundenstamm(konfig):
-    definition = {"kundenstamm": {"datei": str(BEISPIELE / "kundenstamm.csv"), "schluessel": "kundennummer"}}
-    r = _bauen(konfig, {"kundennummer": "K-1001", "BT-44": "", "kaeufer_name_2": "", "kaeufer_name_3": ""},
-               definition)
-    assert r.kaeufer.name and r.kaeufer.name_zeilen == []
-    assert not [h for h in r.hinweise if h.feld == "BT-44"]
+def test_alle_leer_kein_name_ohne_quelle(konfig):
+    r = _bauen(konfig, {"kundennummer": "K-1001", "BT-44": "", "kunden_name_2": "", "kunden_name_3": ""})
+    assert r.kaeufer.name == "" and r.kaeufer.name_zeilen == []
+    assert r.status == "pruefen"
+    assert any(h.feld == "BT-44" for h in r.hinweise)
 
 
 def test_name_geaendert_dann_eine_zeile():
@@ -123,10 +122,10 @@ def test_beispiel_csv_variante_k(konfig):
     "kopf, erwartet",
     [
         (["Kundenbezeichnung 1", "Kundenbezeichnung 2", "Kundenbezeichnung 3"],
-         {"BT-44": "Kundenbezeichnung 1", "kaeufer_name_2": "Kundenbezeichnung 2",
-          "kaeufer_name_3": "Kundenbezeichnung 3"}),
+         {"BT-44": "Kundenbezeichnung 1", "kunden_name_2": "Kundenbezeichnung 2",
+          "kunden_name_3": "Kundenbezeichnung 3"}),
         (["Kunde", "Kundenbezeichnung 2", "Kundenbezeichnung 3"],
-         {"BT-44": "Kunde", "kaeufer_name_2": "Kundenbezeichnung 2", "kaeufer_name_3": "Kundenbezeichnung 3"}),
+         {"BT-44": "Kunde", "kunden_name_2": "Kundenbezeichnung 2", "kunden_name_3": "Kundenbezeichnung 3"}),
         (["Kunde", "Kundenbezeichnung 1"], {"BT-44": "Kundenbezeichnung 1"}),
         (["Kundenname", "Kd.-Nr."], {"BT-44": "Kundenname"}),
     ],
@@ -139,13 +138,13 @@ def test_assistent_ordnet_kundenbezeichnungen_zu(kopf, erwartet):
 
 
 def test_assistent_felder_optional_und_profil():
-    for f in ("kaeufer_name_2", "kaeufer_name_3", "zeichnungsnummer", "index", "BT-128", "BT-143", "BT-144"):
+    for f in ("kunden_name_2", "kunden_name_3", "zeichnungsnummer", "index", "BT-128", "BT-143", "BT-144"):
         assert f in ce.FELD and ce.FELD[f][4] is False
-    assert "kaeufer_name_2" not in ce.NUR_GENAU and "index" in ce.NUR_GENAU
+    assert "kunden_name_2" not in ce.NUR_GENAU and "index" in ce.NUR_GENAU
     fmt = ce.Format("utf-8", ";", ",", ".", "%d.%m.%Y", ["Nr", "Kundenbezeichnung 1", "Kundenbezeichnung 2"], [])
     p = ce.profil_bauen("t", Path("x.csv"), fmt, {"BT-1": "Nr", "BT-44": "Kundenbezeichnung 1",
-                                                   "kaeufer_name_2": "Kundenbezeichnung 2"}, {}, {}, None)
-    assert p["felder"]["kopf"]["kaeufer_name_2"] == {"spalte": "Kundenbezeichnung 2", "optional": True}
+                                                   "kunden_name_2": "Kundenbezeichnung 2"}, {}, {}, None)
+    assert p["felder"]["kopf"]["kunden_name_2"] == {"spalte": "Kundenbezeichnung 2", "optional": True}
     assert "Kundennummer oder Kunde – Name" not in ce.fehlende_pflicht({"BT-44": "Kundenbezeichnung 1"})
 
 

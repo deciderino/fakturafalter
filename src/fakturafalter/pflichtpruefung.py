@@ -284,7 +284,7 @@ def _zahlung(r: Rechnung, k: Kontext):
             yield "BT-84", f"IBAN (BT-84) „{z.iban}“ ist ungültig (Prüfsumme oder Länge stimmt nicht)."
     if r.summen.zahlbar > 0 and not z.faellig and _leer(z.bedingungen):
         yield "BT-20", ("Fälligkeitsdatum (BT-9) oder Zahlungsbedingungen (BT-20) fehlen "
-                        "(EN 16931, BR-CO-25). Zahlungsziel im Profil/Kundenstamm angeben.")
+                        "(EN 16931, BR-CO-25). Zahlungsziel im Profil oder in der Quelle angeben.")
     if z.faellig and r.datum and z.faellig < r.datum:
         yield "BT-9", f"Fälligkeitsdatum (BT-9) {z.faellig:%d.%m.%Y} liegt vor dem Rechnungsdatum."
 
@@ -536,7 +536,7 @@ def _xrechnung_leitweg(r: Rechnung, k: Kontext):
     v = (r.leitweg_id or "").strip()
     if v and leitweg_aehnlich(v) and not leitweg_gueltig(v):
         yield "BT-10", (f"Leitweg-ID (BT-10) „{v}“ ist ungültig (Aufbau Grob-[Fein-]Prüfziffer oder Prüfziffer "
-                        "nach Mod 97-10 stimmt nicht). Bitte im Kundenstamm bzw. in der Quelle prüfen.")
+                        "nach Mod 97-10 stimmt nicht). Bitte in der Quelle prüfen.")
 
 
 @regel("xrechnung_kontakt", "xrechnung", "TODO: BT-34, BT-49, Verkäuferkontakt BG-6, BG-16 (BR-DE-1/2/5/6/7)",

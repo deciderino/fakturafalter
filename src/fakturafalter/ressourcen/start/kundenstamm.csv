@@ -1,4 +1,0 @@
-kundennummer;name;strasse;plz;ort;land;ust_id;elektr_adresse_bt49;leitweg_id_bt10;zahlungsziel_tage;skonto_satz;skonto_tage;skonto_basisbetrag;skonto_satz_2;skonto_tage_2;skonto_basisbetrag_2;format;kontakt_email
-K-1001;Beispiel Handel GmbH;Beispielweg 5;12345;Musterstadt;DE;DE000000003;rechnung@beispiel-handel.example;;14;;;;;;;ZUGFERD_EN16931;einkauf@beispiel-handel.example
-K-1002;Stadtverwaltung Musterhausen;Rathausplatz 1;54321;Musterhausen;DE;;erechnung@musterhausen.example;04011000-12345-03;30;;;;;;;XRECHNUNG_CII;
-K-1003;Probe Kleinbetrieb e.K.;Probegasse 3;12347;Musterstadt;DE;DE000000011;buchhaltung@probe.example;;14;;;;;;;XRECHNUNG_UBL;

@@ -15,7 +15,7 @@ from fakturafalter.konfig import lade_konfig
 
 BEISPIELE = Path(__file__).resolve().parent.parent / "beispiele"
 
-CSV = "variante-b_wawi_cp1252.csv"  # 3 Rechnungen, 0102 und 0103 mit XRechnung (Kundenstamm)
+CSV = "variante-b_wawi_cp1252.csv"  # 3 Rechnungen, 0102 und 0103 mit XRechnung (Liste in den Einstellungen)
 TEMP = Path(tempfile.gettempdir())
 
 

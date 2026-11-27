@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: Apache-2.0
 # Copyright 2026 Fakturafalter-Mitwirkende
-"""Proof of Concept (beispiele/poc/): Käufer aus der CSV, Verkäufer/Zahlung/Format aus dem Profil, ohne Kundenstamm."""
+"""Proof of Concept (beispiele/poc/): Käufer aus der CSV, Verkäufer/Zahlung/Format aus dem Profil, Käufer nur aus der Quelle."""
 import shutil
 from datetime import date
 from decimal import Decimal
@@ -47,7 +47,7 @@ POS = [{"BT-126": ("1", H), "BT-153": ("Test", H), "BT-129": (Decimal("1"), H), 
 STEUER = {"steuer": {"1": {"BT-151": "S", "BT-152": 19}}}
 
 
-def test_poc_ende_zu_ende_ohne_kundenstamm(poc):
+def test_poc_ende_zu_ende_aus_der_quelle(poc):
     assert "kundenstamm" not in poc.csv_profile[0]
     assert not poc.absender.name                       # Konfiguration ohne Absender
     dateien = [Path(shutil.copy(POC / n, poc.eingang / n)) for n in ("TM-2026-0042.csv", "TM-2026-0042.pdf")]
@@ -93,22 +93,22 @@ def test_leitweg_id_aus_csv_auch_bei_zugferd(poc, tmp_path):
     assert _xml(e.dateien[0]).findtext(".//ram:BuyerReference", namespaces=NS) == "04011000-12345-03"
 
 
-def test_csv_kaeufer_hat_vorrang_vor_kundenstamm():
+def test_csv_kaeufer_kommt_nur_aus_der_quelle():
     k = lade_konfig(BEISPIELE / "konfiguration.yaml")
-    dfn = {"_basis": BEISPIELE, "kundenstamm": {"datei": "kundenstamm.csv"}, "mappings": STEUER}
-    r = rechnung_bauen(_kopf(**{"BT-44": "Neuer Name GmbH", "BT-10": "991-12345-99"}), POS, dfn, k, "t")
-    assert r.kaeufer.name == "Neuer Name GmbH"                    # aus der Quelle
-    assert r.kaeufer.anschrift.strasse == "Beispielweg 5"         # Rest aus dem Kundenstamm
+    dfn = {"_basis": BEISPIELE, "mappings": STEUER}
+    r = rechnung_bauen(_kopf(**{"BT-44": "Neuer Name GmbH", "BT-50": "Beispielweg 5", "BT-10": "991-12345-99"}), POS, dfn, k, "t")
+    assert r.kaeufer.name == "Neuer Name GmbH"
+    assert r.kaeufer.anschrift.strasse == "Beispielweg 5"
     assert r.kaeufer.kennung == "K-1001"
     assert r.leitweg_id == "991-12345-99"
     assert r.status == "ok", r.hinweise
 
 
-def test_ohne_kundenstamm_und_ohne_kaeuferdaten_bleibt_pruefen():
+def test_ohne_kaeufernamen_bleibt_pruefen():
     k = lade_konfig(BEISPIELE / "konfiguration.yaml")
     r = rechnung_bauen(_kopf(), POS, {"_basis": BEISPIELE, "mappings": STEUER}, k, "t")
     assert r.status == "pruefen"
-    assert any("Kundenstamm" in h.text for h in r.hinweise)
+    assert any("Name des Käufers fehlt" in h.text for h in r.hinweise)
 
 
 def test_kaeufer_nur_aus_quelle_ohne_kundenstamm():
@@ -122,23 +122,22 @@ def test_kaeufer_nur_aus_quelle_ohne_kundenstamm():
 
 def test_verkaeufer_und_zahlung_im_profil_mischen_mit_konfig():
     k = lade_konfig(BEISPIELE / "konfiguration.yaml")
-    dfn = {"_basis": BEISPIELE, "mappings": STEUER, "kundenstamm": {"datei": "kundenstamm.csv"},
+    dfn = {"_basis": BEISPIELE, "mappings": STEUER,
            "verkaeufer": {"name": "Andere GmbH"}, "zahlung": {"iban": "DE02 1203 0000 0000 2020 51", "ziel_tage": 7},
            "bemerkungen": []}
-    r = rechnung_bauen(_kopf(), POS, dfn, k, "t")
+    r = rechnung_bauen(_kopf(**{"BT-44": "Beispiel Handel GmbH"}), POS, dfn, k, "t")
     assert r.verkaeufer.name == "Andere GmbH"
     assert r.verkaeufer.ust_id == k.absender.ust_id              # nicht genannt -> aus der Konfiguration
     assert r.zahlung.iban == "DE02120300000000202051"
     assert r.zahlung.kontoinhaber == "Andere GmbH"                # neuer Verkäufer -> dessen Name
-    assert r.zahlung.ziel_tage == 14                              # Kundenstamm K-1001 hat Vorrang (14)
+    assert r.zahlung.ziel_tage == 7                              # Profil zahlt vor der Konfiguration
     assert r.bemerkungen == []
     assert k.absender.name == "Muster GmbH" and k.zahlung.iban != r.zahlung.iban   # Konfig unverändert
 
 
 def test_ohne_profilbloecke_bleibt_alles_wie_bisher():
     k = lade_konfig(BEISPIELE / "konfiguration.yaml")
-    r = rechnung_bauen(_kopf(), POS, {"_basis": BEISPIELE, "mappings": STEUER,
-                                      "kundenstamm": {"datei": "kundenstamm.csv"}}, k, "t")
+    r = rechnung_bauen(_kopf(**{"BT-44": "Beispiel Handel GmbH"}), POS, {"_basis": BEISPIELE, "mappings": STEUER}, k, "t")
     assert r.verkaeufer == k.absender and r.verkaeufer is not k.absender
     assert r.zahlung.iban == k.zahlung.iban and r.bemerkungen == k.bemerkungen
     assert r.ausgabeformat == "ZUGFERD_EN16931" and r.status == "ok"
@@ -146,23 +145,21 @@ def test_ohne_profilbloecke_bleibt_alles_wie_bisher():
 
 @pytest.mark.parametrize("fmt,erwartet,status", [
     ("XRECHNUNG_CII", "XRECHNUNG_CII", "ok"),
-    ("aus_kundenstamm", "XRECHNUNG_CII", "ok"),       # K-1002 verlangt XRECHNUNG_CII
-    ("QUATSCH", "XRECHNUNG_CII", "pruefen"),
+    ("aus_kundenstamm", "ZUGFERD_EN16931", "ok"),  # alter Schlüssel gilt als ZUGFeRD
+    ("QUATSCH", "ZUGFERD_EN16931", "pruefen"),
 ])
 def test_ausgabeformat_im_profil(fmt, erwartet, status):
     k = lade_konfig(BEISPIELE / "konfiguration.yaml")
-    kopf = _kopf()
+    kopf = _kopf(**{"BT-44": "Stadtverwaltung Musterhausen"})
     kopf["kundennummer"] = ("K-1002", H)
-    r = rechnung_bauen(kopf, POS, {"_basis": BEISPIELE, "mappings": STEUER, "ausgabe": {"format": fmt},
-                                   "kundenstamm": {"datei": "kundenstamm.csv"}}, k, "t")
+    r = rechnung_bauen(kopf, POS, {"_basis": BEISPIELE, "mappings": STEUER, "ausgabe": {"format": fmt}}, k, "t")
     assert r.ausgabeformat == erwartet and r.status == status, r.hinweise
 
 
-def test_zugferd_fest_im_profil_schlaegt_kundenstamm():
+def test_zugferd_fest_leitweg_aus_der_liste():
     k = lade_konfig(BEISPIELE / "konfiguration.yaml")
-    kopf = _kopf()
+    kopf = _kopf(**{"BT-44": "Stadtverwaltung Musterhausen"})
     kopf["kundennummer"] = ("K-1002", H)
-    r = rechnung_bauen(kopf, POS, {"_basis": BEISPIELE, "mappings": STEUER, "ausgabe": {"format": "ZUGFERD_EN16931"},
-                                   "kundenstamm": {"datei": "kundenstamm.csv"}}, k, "t")
+    r = rechnung_bauen(kopf, POS, {"_basis": BEISPIELE, "mappings": STEUER, "ausgabe": {"format": "ZUGFERD_EN16931"}}, k, "t")
     assert r.ausgabeformat == "ZUGFERD_EN16931"
     assert isinstance(r.kaeufer, Partei) and r.leitweg_id == "04011000-12345-03"

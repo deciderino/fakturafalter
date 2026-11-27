@@ -72,7 +72,7 @@ def test_gesamt_ust_ist_summe_ust_nicht_positionsbetrag():
     assert z["BT-109"] == "Gesamt Netto"
     assert z["BT-110"] == "Gesamt USt"
     assert z["BT-112"] == "Gesamt Brutto"
-    assert "gesamt_kontrolle" not in z
+    assert "gesamtpreis_position" not in z
 
 
 def test_hotel_profil_passt_weiter_auf_hoteldei():

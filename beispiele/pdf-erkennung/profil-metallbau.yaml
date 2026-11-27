@@ -1,6 +1,7 @@
 # Metallbau Kessler GmbH (erfunden) – Windows-1252, Semikolon, Dezimalkomma, Datum TT.MM.JJ,
-# Käufer über die Kundennummer aus kundenstamm-metallbau.csv
+# Käufername und Anschrift stehen in der CSV (KdName, Strasse, PLZ, Ort)
 profil: metallbau
+version: 2
 datei: {muster: "metallbau_*.csv", trennzeichen: ";"}
 zahlen: {dezimal: ",", tausender: "."}
 datum: {format: "%d.%m.%y"}
@@ -11,7 +12,12 @@ felder:
     BT-1:  {spalte: ReNr}
     BT-2:  {spalte: ReDatum, typ: datum}
     BT-72: {spalte: LiefDatum, typ: datum}
-    kundennummer: {spalte: KdNr}
+    kundennummer: {spalte: KdNr, optional: true}
+    BT-44:  {spalte: KdName}
+    BT-50:  {spalte: Strasse, optional: true}
+    BT-53:  {spalte: PLZ, optional: true}
+    BT-52:  {spalte: Ort, optional: true}
+    BT-55:  {fest: DE, optional: true}
   position:
     BT-155: {spalte: ArtNr}
     BT-153: {spalte: Text}
@@ -24,7 +30,6 @@ mappings:
   einheiten: {kg: KGM, m: MTR, Stk: C62, unbekannt: pruefen}
   steuer: {"19": {BT-151: S, BT-152: 19}, unbekannt: pruefen}
 
-kundenstamm: {datei: kundenstamm-metallbau.csv}
 
 verkaeufer:
   name: Metallbau Kessler GmbH

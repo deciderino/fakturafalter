@@ -1,6 +1,6 @@
 # CSV-Zuordnungsprofil – Blöcke mit eigener Kopfzeile (fiktive Daten, ab 0.9.8)
 profil: bloecke-hotel
-version: 1
+version: 2
 beschreibung: "CSV in Blöcken: Positionen (Kopffelder dürfen wiederholt werden) und Zahlung/Skonto"
 
 datei:

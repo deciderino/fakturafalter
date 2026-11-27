@@ -163,7 +163,7 @@ def main() -> int:
         b = BASIS / v
         (b / "cfg").mkdir(parents=True)
         for f in BSP.iterdir():
-            if f.suffix in (".yaml", ".json") or f.name == "kundenstamm.csv":
+            if f.suffix in (".yaml", ".json"):
                 shutil.copy(f, b / "cfg")
         d = yaml.safe_load((b / "cfg" / "konfiguration.yaml").read_text(encoding="utf-8"))
         if v in MODUS:

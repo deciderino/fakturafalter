@@ -1,7 +1,7 @@
 # Layout-Vorlage (Layouteditor, Fakturafalter 0.7.0) – alle Daten fiktiv.
 # Einsetzen als Block „layout:“ in konfiguration.yaml; Pfade relativ zur Konfiguration.
 layout:
-  version: 1
+  version: 2
   raster: 5.0
   raster_an: true
   logo: layout/logo.png

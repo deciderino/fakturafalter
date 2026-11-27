@@ -1,5 +1,6 @@
 # Pixelwerk Software GmbH (erfunden) – UTF-8 mit BOM, senkrechter Strich, Dezimalkomma, ISO-Datum
 profil: pixelwerk
+version: 2
 datei: {muster: "pixelwerk_*.csv", trennzeichen: "|"}
 zahlen: {dezimal: ",", tausender: "."}
 datum: {format: "%Y-%m-%d"}

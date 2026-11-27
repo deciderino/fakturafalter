@@ -1,5 +1,5 @@
 profil: beispiel-bloecke-marker
-version: 1
+version: 2
 beschreibung: 'Beispiel C: Erkennung über Marker #Kopf, #Positionen, #Summen (fiktiv).'
 datei:
   muster: beispiel-bloecke-*.csv

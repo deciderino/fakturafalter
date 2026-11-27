@@ -1,5 +1,5 @@
 profil: beispiel-bloecke-klassisch
-version: 1
+version: 2
 beschreibung: 'Beispiel A: Kopf, Positionen, Zahlung, ohne Marker (fiktiv).'
 datei:
   muster: beispiel-bloecke-*.csv

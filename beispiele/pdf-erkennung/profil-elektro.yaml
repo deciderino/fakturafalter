@@ -1,5 +1,6 @@
 # Elektro Funke e.K. (erfunden) – Windows-1252, Komma als Trennzeichen, Dezimalpunkt
 profil: elektro
+version: 2
 datei: {muster: "elektro_*.csv", trennzeichen: ","}
 zahlen: {dezimal: ".", tausender: ""}
 datum: {format: "%d.%m.%Y"}

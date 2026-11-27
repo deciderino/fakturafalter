@@ -16,7 +16,7 @@ import pdfplumber
 from pdfminer import psparser as _psparser
 
 from .aufbau import Roh, rechnung_bauen
-from .konfig import Konfig, kundenstamm_fuer
+from .konfig import Konfig
 from .modell import Herkunft, Rechnung
 from .werte import WertFehler, datum, ohne_steuerzeichen, zahl
 
@@ -183,7 +183,24 @@ def wert_rechts(woerter: list[dict], anker: str, max_abstand: float = 150) -> st
     return " ".join(w["text"] for w in teile)
 
 
-def bereich_text(seite: Seite, b: dict, ignorieren: list[str] = ()) -> str:
+def _anschrift_in_roh(roh: Roh, text: str, herk: Herkunft) -> None:
+    """Bereichstext der Anschrift in BT-44 / Straße / PLZ / Ort zerlegen."""
+    zeilen = [z.strip() for z in text.splitlines() if z.strip()]
+    if not zeilen:
+        return
+    roh["BT-44"] = (zeilen[0], herk)
+    if len(zeilen) >= 2:
+        roh.setdefault("BT-50", (zeilen[1], herk))
+    if len(zeilen) >= 3:
+        m = re.match(r"^(\d{4,5})\s+(.+)$", zeilen[-1])
+        if m:
+            roh.setdefault("BT-53", (m.group(1), herk))
+            roh.setdefault("BT-52", (m.group(2), herk))
+        else:
+            roh.setdefault("BT-52", (zeilen[-1], herk))
+    # Ohne explizites Land (wie bisher typisch DE in den Beispielen) nicht raten.
+
+
     ws = [
         w
         for w in seite.woerter
@@ -272,7 +289,12 @@ def _kopf(teil: Teil, vorlage: dict, pfad: Path, fehler: list[str], hinweise: li
                 b = d["bereich"]
                 if b.get("seite", 1) - 1 == s.nr - teil.seiten[0].nr:
                     v = bereich_text(s, b, d.get("zeilen_ignorieren", []))
-                    if v:
+                    if v and d.get("als_anschrift"):
+                        _anschrift_in_roh(
+                            roh, v, Herkunft(f"pdf:{pfad.name} S.{s.nr + 1} Bereich", S_BEREICH)
+                        )
+                        gefunden = roh.get("BT-44")
+                    elif v:
                         gefunden = (v, Herkunft(f"pdf:{pfad.name} S.{s.nr + 1} Bereich", S_BEREICH))
             if gefunden:
                 if d.get("alle_seiten_gleich") and feld in roh and roh[feld][0] != gefunden[0]:
@@ -395,7 +417,7 @@ def lesen(
                     nummern.append((int(m.group("seite")), int(m.group("von"))))
             if nummern and [n for n, _ in nummern] != list(range(1, nummern[0][1] + 1)):
                 r.hinweis("pruefen", f"Seitenfolge unvollständig: {nummern}", "Seiten")
-        # Anschrift gegen Kundenstamm
+        # Anschrift gegen erkannten Kundennamen
         for feld, d in vorlage.get("felder", {}).items():
             if d.get("zweck") == "pruefung" and "bereich" in d and r.kaeufer.name:
                 b = d["bereich"]
@@ -405,7 +427,7 @@ def lesen(
                 if erste.lower() not in t.lower():
                     r.hinweis(
                         "warnung",
-                        f"Anschrift im Druck passt nicht zum Kundenstamm ({r.kaeufer.name})",
+                        f"Anschrift im Druck passt nicht zum erkannten Kundennamen ({r.kaeufer.name})",
                         feld,
                     )
         rechnungen.append(r)
@@ -419,4 +441,4 @@ def vorlage_finden(seiten: list[Seite], vorlagen: list[dict]) -> dict | None:
     return None
 
 
-__all__ = ["lesen", "seiten_lesen", "vorlage_finden", "Decimal", "kundenstamm_fuer"]
+__all__ = ["lesen", "seiten_lesen", "vorlage_finden", "Decimal"]

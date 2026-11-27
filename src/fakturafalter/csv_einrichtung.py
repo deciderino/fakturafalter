@@ -23,39 +23,39 @@ from .werte import csv_lesen, dekodieren, trennzeichen_erkennen
 FELDER: list[tuple[str, str, str, str, bool]] = [
     ("BT-1", "Rechnungsnummer", "kopf", "text", True),
     ("BT-2", "Rechnungsdatum", "kopf", "datum", True),
-    ("BT-72", "Leistungsdatum", "kopf", "datum", False),
+    ("BT-72", "Leistungs- oder Lieferdatum", "kopf", "datum", False),
     ("kundennummer", "Kundennummer", "kopf", "text", False),
-    ("BT-44", "Kunde – Name (Zeile 1)", "kopf", "text", False),
-    ("kaeufer_name_2", "Kunde – Name (Zeile 2)", "kopf", "text", False),
-    ("kaeufer_name_3", "Kunde – Name (Zeile 3)", "kopf", "text", False),
+    ("BT-44", "Kundenname (Zeile 1)", "kopf", "text", True),
+    ("kunden_name_2", "Kundenname (Zeile 2)", "kopf", "text", False),
+    ("kunden_name_3", "Kundenname (Zeile 3)", "kopf", "text", False),
     ("BT-50", "Kunde – Straße", "kopf", "text", False),
     ("BT-51", "Kunde – Adresszusatz", "kopf", "text", False),
     ("BT-53", "Kunde – PLZ", "kopf", "text", False),
     ("BT-52", "Kunde – Ort", "kopf", "text", False),
     ("BT-55", "Kunde – Land", "kopf", "text", False),
     ("BT-48", "Kunde – USt-IdNr.", "kopf", "text", False),
-    ("BT-49", "Kunde – E-Rechnungsadresse", "kopf", "text", False),
+    ("BT-49", "E-Rechnungsadresse des Kunden", "kopf", "text", False),
     ("BT-10", "Leitweg-ID / Käuferreferenz", "kopf", "text", False),
     ("BT-13", "Bestellnummer", "kopf", "text", False),
-    ("BT-112", "Summe brutto (Kontrolle)", "kopf", "zahl", False),
-    ("BT-109", "Summe netto (Kontrolle)", "kopf", "zahl", False),
-    ("BT-110", "Summe USt (Kontrolle)", "kopf", "zahl", False),
+    ("BT-112", "Rechnungsbetrag brutto (nur Kontrolle)", "kopf", "zahl", False),
+    ("BT-109", "Rechnungsbetrag netto (nur Kontrolle)", "kopf", "zahl", False),
+    ("BT-110", "Summe USt der Rechnung (nur Kontrolle)", "kopf", "zahl", False),
     ("skonto_satz", "Skonto", "kopf", "prozent", False),
-    ("skonto_tage", "Zahlungsziel mit Skonto", "kopf", "tage", False),
+    ("skonto_tage", "Skontofrist (Tage)", "kopf", "tage", False),
     ("skonto_basisbetrag", "Skonto-Basisbetrag", "kopf", "zahl", False),
     ("skonto_satz_2", "Skonto 2", "kopf", "prozent", False),
-    ("skonto_tage_2", "Zahlungsziel mit Skonto 2", "kopf", "tage", False),
+    ("skonto_tage_2", "Skontofrist 2 (Tage)", "kopf", "tage", False),
     ("skonto_basisbetrag_2", "Skonto-Basisbetrag 2", "kopf", "zahl", False),
-    ("zahlungsziel_tage", "Zahlungsziel ohne Abzug", "kopf", "tage", False),
+    ("zahlungsziel_tage", "Zahlungsziel (netto, ohne Skonto)", "kopf", "tage", False),
     ("BT-126", "Positionsnummer", "position", "text", False),
     ("BT-155", "Artikelnummer", "position", "text", False),
-    ("BT-153", "Bezeichnung", "position", "text", True),
+    ("BT-153", "Bezeichnung der Position", "position", "text", True),
     ("BT-129", "Menge", "position", "zahl", True),
     ("BT-130", "Einheit", "position", "text", False),
-    ("BT-146", "Einzelpreis netto", "position", "zahl", True),
-    ("BT-149", "Preiseinheit (pro 100 …)", "position", "zahl", False),
-    ("gesamt_kontrolle", "Positionsbetrag netto (Kontrolle)", "position", "zahl", False),
-    ("steuer", "Steuer (Satz oder Schlüssel)", "position", "text", True),
+    ("BT-146", "Einzelpreis (netto)", "position", "zahl", True),
+    ("BT-149", "Preiseinheit / Preisbasis", "position", "zahl", False),
+    ("gesamtpreis_position", "Gesamtpreis der Position (nur Kontrolle)", "position", "zahl", False),
+    ("steuer", "Steuersatz oder Steuerschlüssel", "position", "text", True),
     # freiwillig (EN 16931 vollständig, ab 0.6.0)
     ("belegart", "Belegart (Rechnung/Gutschrift/Korrektur)", "kopf", "text", False),
     ("BT-25", "Bezug: ursprüngliche Rechnungsnummer", "kopf", "text", False),
@@ -67,7 +67,7 @@ FELDER: list[tuple[str, str, str, str, bool]] = [
     ("BT-136", "Rabatt Betrag (Position)", "position", "zahl", False),
     ("BT-139", "Rabattgrund (Position)", "position", "text", False),
     ("BT-141", "Zuschlag Betrag (Position)", "position", "zahl", False),
-    ("BT-148", "Bruttopreis vor Preisnachlass", "position", "zahl", False),
+    ("BT-148", "Listenpreis der Position (brutto vor Nachlass)", "position", "zahl", False),
     ("BT-147", "Preisnachlass je Einheit", "position", "zahl", False),
     ("BT-94", "Rabatt % (ganze Rechnung)", "kopf", "prozent", False),
     ("BT-92", "Rabatt Betrag (ganze Rechnung)", "kopf", "zahl", False),
@@ -118,24 +118,172 @@ FELDER: list[tuple[str, str, str, str, bool]] = [
     # ab 0.9.7: Steuer-Sonderfälle und Fremdwährung
     ("BT-47", "Kunde – Handelsregister / Registernummer", "kopf", "text", False),
     ("steuerhinweis", "Steuerhinweis (z. B. Reverse Charge)", "kopf", "text", False),
-    ("BT-5", "Währung (z. B. EUR, USD)", "kopf", "text", False),
+    ("BT-5", "Währung", "kopf", "text", False),
     ("kurs", "Umrechnungskurs (1 EUR = … Fremdwährung)", "kopf", "zahl", False),
     ("kursdatum", "Kursdatum", "kopf", "datum", False),
     ("BT-111", "Umsatzsteuer in EUR", "kopf", "zahl", False),
 ]
 FELD = {f[0]: f for f in FELDER}
+
+# Gruppen der Feldliste im Assistenten (rc1).
+GRUPPE_REIHENFOLGE = (
+    "position",
+    "beleg",
+    "kunde",
+    "summen",
+    "nachlass",
+    "zahlung",
+    "lieferung",
+    "referenz",
+)
+GRUPPE_TITEL = {
+    "position": "Position",
+    "beleg": "Beleg",
+    "kunde": "Kunde / Käufer",
+    "summen": "Summen (nur Kontrolle)",
+    "nachlass": "Nachlässe und Zuschläge der Rechnung",
+    "zahlung": "Zahlung und Skonto",
+    "lieferung": "Lieferung",
+    "referenz": "Weitere Referenzen",
+}
+_FELD_GRUPPE_IDS = {
+    "position": (
+        "BT-153", "BT-129", "BT-146", "steuer", "BT-126", "BT-155", "BT-130", "BT-149",
+        "gesamtpreis_position", "BT-148", "BT-147", "BT-138", "BT-136", "BT-139",
+        "BT-141", "BT-143", "BT-144", "zeilenart", "BT-154", "BT-127", "BT-156",
+        "BT-157", "BT-158", "BT-159", "BT-160", "BT-161", "zeichnungsnummer", "index",
+        "BT-132", "BT-133", "BT-128", "BT-134", "BT-135",
+    ),
+    "beleg": (
+        "BT-1", "BT-2", "BT-72", "BT-73", "BT-74", "belegart", "BT-5", "kurs",
+        "kursdatum", "BT-25", "BT-26", "BT-22", "steuerhinweis",
+    ),
+    "kunde": (
+        "kundennummer", "BT-44", "kunden_name_2", "kunden_name_3", "BT-50", "BT-51",
+        "BT-53", "BT-52", "BT-55", "BT-48", "BT-49", "BT-47",
+    ),
+    "summen": ("BT-109", "BT-110", "BT-112", "BT-113", "BT-111"),
+    "nachlass": ("BT-94", "BT-92", "BT-97", "BT-99", "BT-101", "BT-104"),
+    "zahlung": (
+        "zahlungsart", "zahlungsziel_tage", "skonto_satz", "skonto_tage",
+        "skonto_basisbetrag", "skonto_satz_2", "skonto_tage_2", "skonto_basisbetrag_2",
+        "BT-89", "BT-91", "BT-90", "BT-83", "BT-59",
+    ),
+    "lieferung": ("BT-70", "BT-75", "BT-78", "BT-77", "BT-80", "BT-16", "BT-15"),
+    "referenz": ("BT-13", "BT-14", "BT-11", "BT-12", "BT-17", "BT-18", "BT-19", "BT-10", "BT-124"),
+}
+FELD_GRUPPE = {fid: g for g, ids in _FELD_GRUPPE_IDS.items() for fid in ids}
+
+FELD_TOOLTIP = {
+    "gesamtpreis_position": (
+        "Wird nicht in die Rechnung übernommen. Fakturafalter rechnet selbst, z. B. "
+        "10 Stück × 1,00 € ÷ Preiseinheit 1 = 10,00 €. Weicht die Spalte ab, erscheint "
+        "ein Prüffall. In Exporten oft „Gesamtpreis“."
+    ),
+    "BT-146": "Nettopreis je Preiseinheit, nicht die Zeilensumme. Beispiel: 1,00 € je Stück.",
+    "BT-149": (
+        "Auf wie viele Einheiten sich der Einzelpreis bezieht, oft 1. Beispiel: "
+        "500 Stück zu 4,80 € je 100 Stück = 24,00 €. Leer zählt als 1. In Exporten oft „Preisbasis“."
+    ),
+    "BT-112": (
+        "Summe der ganzen Rechnung laut Warenwirtschaft, nur zum Abgleich – nicht der "
+        "Gesamtpreis einer Position."
+    ),
+    "BT-109": "Nettosumme der ganzen Rechnung, nur zum Abgleich.",
+    "BT-110": "Umsatzsteuer der ganzen Rechnung, nur zum Abgleich.",
+    "steuer": (
+        "Zum Beispiel 19, 19 %, 7 oder ein Schlüssel aus der Warenwirtschaft "
+        "(wird später zugeordnet). Nicht die Summe USt. In Exporten oft „USt-Satz“."
+    ),
+    "BT-44": (
+        "Name oder Firma in der Anschrift, erste Zeile. In Exporten oft Kunde1 oder "
+        "Kundenbezeichnung 1."
+    ),
+    "kunden_name_2": "Weitere Namenszeile, z. B. Abteilung oder z. Hd. Nicht die Straße.",
+    "kunden_name_3": "Dritte Namenszeile. Nicht die Straße.",
+    "BT-1": (
+        "Eindeutige Nummer des Belegs. In manchen Exporten „Belegname“, „Belegnummer“ oder „Belegnr“."
+    ),
+    "BT-2": "Ausstellungsdatum der Rechnung. In Exporten oft „Belegdatum“.",
+    "BT-72": (
+        "Tag der Leistung oder Lieferung. Alternative: Leistungszeitraum von/bis. "
+        "Nicht das Rechnungsdatum."
+    ),
+    "BT-153": (
+        "Artikel- oder Leistungstext der Zeile. In Kommentarzeilen (Menge und Preis leer) "
+        "steht hier der Text."
+    ),
+    "BT-148": (
+        "Listenpreis vor einem Nachlass je Einheit. Nicht der Rechnungsbetrag und nicht der "
+        "Gesamtpreis der Position."
+    ),
+    "BT-5": "Zum Beispiel EUR, EURO, € oder USD – wird zu einem ISO-Code (EUR).",
+    "BT-49": (
+        "Elektronische Adresse für den Rechnungseingang, oft eine E-Mail, aber nicht "
+        "automatisch jede Kontakt-Mail."
+    ),
+    "zahlungsziel_tage": "Frist in Tagen bis zur Zahlung ohne Abzug.",
+    "skonto_satz": "Skontosatz in Prozent, z. B. 2 für 2 %. Die Frist steht in „Skontofrist (Tage)“.",
+    "skonto_tage": "Anzahl der Tage, binnen derer Skonto gilt.",
+    "skonto_tage_2": "Frist der zweiten Skontostufe.",
+    "skonto_satz_2": "Satz der zweiten Skontostufe, z. B. 1 für 1 %.",
+    "BT-129": "Abgerechnete Menge der Zeile, z. B. 4 oder 4,00.",
+    "BT-130": "Mengeneinheit, z. B. Stück oder Stunde. Kann später einem Code zugeordnet werden.",
+    "kundennummer": "Nummer des Kunden in der Warenwirtschaft (Käuferkennung, BT-46). Optional.",
+    "BT-155": "Eure Artikel- oder Leistungsnummer, z. B. ART-1042.",
+}
+
+
+def felder_in_gruppe(gruppe: str, *, wiederholend: bool) -> list[str]:
+    """Feld-IDs einer Gruppe, Pflichtfelder zuerst. Positionsfelder nur im wiederholenden Block."""
+    ids = [f for f in _FELD_GRUPPE_IDS.get(gruppe, ()) if f in FELD]
+    if not wiederholend:
+        ids = [f for f in ids if FELD[f][2] != "position"]
+    reihe = list(ids)
+    ids.sort(key=lambda f: (0 if FELD[f][4] else 1, reihe.index(f)))
+    return ids
+
+
+def suche_felder(frage: str, *, wiederholend: bool) -> list[str]:
+    """Feld-IDs, deren Label, Tooltip oder Synonym zur Frage passen (Reihenfolge der Gruppen)."""
+    q = _norm(frage or "")
+    treffer: list[str] = []
+    for g in GRUPPE_REIHENFOLGE:
+        if g == "position" and not wiederholend:
+            continue
+        for fid in felder_in_gruppe(g, wiederholend=wiederholend):
+            if not q:
+                treffer.append(fid)
+                continue
+            label = _norm(FELD[fid][1])
+            tip = _norm(FELD_TOOLTIP.get(fid, ""))
+            syn = _norm(_SYNONYME.get(fid, ""))
+            if q in label or q in tip or q in syn or label.startswith(q) or q in fid.lower().replace("-", ""):
+                treffer.append(fid)
+    return treffer
+
+
+def anzeige_feld(fid: str) -> str:
+    """Sichtbare Zeile in der Auswahlliste: Label, Pflichtstern, amtliche BT-Nummer."""
+    if fid not in FELD:
+        return fid
+    _i, label, _teil, _typ, pflicht = FELD[fid]
+    stern = " *" if pflicht else ""
+    bt = f" ({fid})" if fid.startswith("BT-") else ""
+    return f"{label}{stern}{bt}"
+
 # Freiwillige Felder ab 0.6.0 nur bei genauem Spaltennamen vorschlagen (kein Wortanfang: „Versanddatum“ ≠ Fracht)
 NUR_GENAU = frozenset(f[0] for f in FELDER[FELDER.index(FELD["belegart"]) :])
 
 _SYNONYME = {
-    "BT-1": "rechnungsnummer rechnungsnr renr rgnr belegnr belegnummer invoicenumber invoiceno invoice rechnung beleg nr nummer",
+    "BT-1": "rechnungsnummer rechnungsnr renr rgnr belegnr belegnummer belegname invoicenumber invoiceno invoice rechnung beleg nr nummer",
     "BT-2": "rechnungsdatum belegdatum rgdatum redatum datum invoicedate issuedate date",
     "BT-72": "leistungsdatum lieferdatum deliverydate leistung",
     "kundennummer": "kundennummer kundennr kdnr kdnummer kundenid customerid customerno debitor debitornr",
     "BT-44": "kundenbezeichnung1 kundenbezeichnung kundename1 name1 "
     "kundenname kunde name firma empfaenger empfänger customername customer",
-    "kaeufer_name_2": "kundenbezeichnung2 kundename2 kunde2 name2 firma2",
-    "kaeufer_name_3": "kundenbezeichnung3 kundename3 kunde3 name3 firma3",
+    "kunden_name_2": "kundenbezeichnung2 kundename2 kunde2 name2 firma2",
+    "kunden_name_3": "kundenbezeichnung3 kundename3 kunde3 name3 firma3",
     "BT-50": "strasse straße street anschrift adresse",
     "BT-51": "adresszusatz zusatz adresszeile2",
     "BT-53": "plz postleitzahl zip postcode",
@@ -162,7 +310,7 @@ _SYNONYME = {
     "BT-130": "einheit me mengeneinheit unit",
     "BT-146": "einzelpreisnetto einzelpreis epnetto ep nettopreis preis unitprice price",
     "BT-149": "preiseinheit pe preisbasis",
-    "gesamt_kontrolle": "gesamtnetto gpnetto gp positionsbetrag nettobetrag betrag",
+    "gesamtpreis_position": "gesamtpreis positionsgesamtpreis positionsgesamt zeilenbetrag zeilensumme lineamount posgesamt gpnetto gp positionsbetrag nettobetrag betrag",
     "steuer": "steuersatz steuerschluessel steuerschlüssel stschl mwst mwstsatz ust ustsatz steuer vat tax",
     "belegart": "belegart belegtyp dokumentart rechnungsart doctype documenttype",
     "BT-25": "bezugauf bezugsrechnungsnummer ursprungsrechnung bezugsrechnung originalrechnung rechnungsbezug korrekturzu",
@@ -170,7 +318,7 @@ _SYNONYME = {
     "BT-73": "zeitraumvon leistungvon abrechnungvon",
     "BT-74": "zeitraumbis leistungbis abrechnungbis",
     "zeilenart": "zeilenart positionsart postyp linetype",
-    "BT-138": "rabattprozent rabatt rabattsatz nachlassprozent discountpercent",
+    "BT-138": "rabattprozent rabattsatz rabatt% nachlassprozent discountpercent",
     "BT-136": "rabattbetrag nachlassbetrag nachlass discountamount",
     "BT-139": "rabattgrund nachlassgrund",
     "BT-141": "zuschlagbetrag zuschlag",
@@ -356,10 +504,7 @@ def _spalten_nach_namen(kopf: list[str]) -> dict[str, str]:
 
 
 def fehlende_pflicht(zuordnung: dict[str, str]) -> list[str]:
-    fehlt = [FELD[f][1] for f, *_r, pflicht in FELDER if pflicht and not zuordnung.get(f)]
-    if not (zuordnung.get("kundennummer") or zuordnung.get("BT-44")):
-        fehlt.append("Kundennummer oder Kunde – Name")
-    return fehlt
+    return [FELD[f][1] for f, *_r, pflicht in FELDER if pflicht and not zuordnung.get(f)]
 
 
 def _zahl(w: str) -> Decimal | None:
@@ -413,7 +558,6 @@ def profil_bauen(
     zuordnung: dict[str, str],
     steuer: dict[str, str],
     einheiten: dict[str, str],
-    kundenstamm: str | None,
     textzeile: dict | None = None,
     sicht: dict | None = None,
     einheit_fehlt_stueck: bool = False,
@@ -427,7 +571,7 @@ def profil_bauen(
         d: dict = {"spalte": sp}
         if typ != "text":
             d["typ"] = typ
-        if f == "BT-112":
+        if f in ("BT-112", "BT-109", "BT-110", "gesamtpreis_position"):
             d["zweck"] = "pruefung"
         if f == "BT-130":
             d["mapping"] = "einheiten"
@@ -442,10 +586,10 @@ def profil_bauen(
     st["unbekannt"] = "satz" if steuer_ist_satz(list(steuer)) else "pruefen"
     eh: dict = {w: c for w, c in einheiten.items() if c}
     eh["unbekannt"] = "allgemein"
-    gleich = [zuordnung[f] for f in ("BT-2", "kundennummer") if zuordnung.get(f)]
+    gleich = [zuordnung[f] for f in ("BT-2", "BT-44", "kundennummer") if zuordnung.get(f)]
     p = {
         "profil": name,
-        "version": 1,
+        "version": 2,
         "beschreibung": f"Eingerichtet mit dem Assistenten aus {Path(datei).name}: {fmt.zusammenfassung}",
         "datei": {
             "muster": f"*{Path(datei).suffix.lower() or '.csv'}",
@@ -464,8 +608,6 @@ def profil_bauen(
         "felder": {"kopf": kopf, "position": pos},
         "mappings": {"einheiten": eh, "steuer": st},
     }
-    if kundenstamm and zuordnung.get("kundennummer"):
-        p["kundenstamm"] = {"datei": kundenstamm, "schluessel": "kundennummer", "fehlt": "pruefen"}
     if textzeile:
         p["aufbau"]["textzeile"] = textzeile
     if einheit_fehlt_stueck:
@@ -558,19 +700,6 @@ def speichern(profil: dict, ziel: Path) -> Path:
     return ziel
 
 
-def kundenstamm_vorschlag(k) -> str | None:
-    """Vorhandenen Kundenstamm der anderen Profile weiterverwenden (relativ zum Profilordner, wenn möglich)."""
-    for prof in k.csv_profile:
-        d = (prof.get("kundenstamm") or {}).get("datei")
-        if d:
-            p = Path(d) if Path(d).is_absolute() else Path(prof["_basis"]) / d
-            if p.exists():
-                try:
-                    return str(p.resolve().relative_to(Path(k.basis).resolve()))
-                except ValueError:
-                    return str(p.resolve())
-    p = Path(k.basis) / "kundenstamm.csv"
-    return p.name if p.exists() else None
 
 
 @dataclass
@@ -1219,7 +1348,6 @@ def profil_bauen_bloecke(
     steuer: dict[str, str],
     einheiten: dict[str, str],
     textzeile: dict,
-    kundenstamm: str | None,
     satzart_spalte=None,
 ) -> dict:
     """Profil art=bloecke aus dem Assistenten."""
@@ -1315,7 +1443,7 @@ def profil_bauen_bloecke(
             felder.setdefault("BT-5", {"fest": "EUR"})
     p = {
         "profil": name,
-        "version": 1,
+        "version": 2,
         "beschreibung": f"Blöcke, eingerichtet mit dem Assistenten aus {Path(datei).name}: {fmt.zusammenfassung}",
         "datei": {
             "muster": f"*{Path(datei).suffix.lower() or '.csv'}",
@@ -1344,6 +1472,4 @@ def profil_bauen_bloecke(
                     break
     if sa not in (None, ""):
         p["aufbau"]["satzart_spalte"] = sa
-    if kundenstamm:
-        p["kundenstamm"] = {"datei": kundenstamm, "schluessel": "kundennummer", "fehlt": "pruefen"}
     return p

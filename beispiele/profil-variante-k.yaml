@@ -3,7 +3,7 @@
 # Positionen (Art.-Nr., Ihre Art.-Nr., Zeichnungs-Nr. mit Index, GTIN, Langtext, Ursprungsland, Bestellposition,
 # Kostenstelle, Leistungszeitraum, Hinweis, Rabatt) und eine Gutschrift mit eigenem Nummernkreis.
 profil: kundenbezeichnung-unterzeilen
-version: 1
+version: 2
 beschreibung: "Eine Zeile je Position, UTF-8, Semikolon, Dezimalkomma; Kundenbezeichnung 1–3, Zeichnung/Index"
 
 datei:
@@ -30,8 +30,8 @@ felder:
     BT-25:           {spalte: "Bezug auf", optional: true}        # Rechnungsbezug der Gutschrift (BG-3)
     kundennummer:    {spalte: Kundennummer, optional: true}
     BT-44:           {spalte: "Kundenbezeichnung 1"}              # Pflicht: Zeile 1 des Käufernamens
-    kaeufer_name_2:  {spalte: "Kundenbezeichnung 2", optional: true}
-    kaeufer_name_3:  {spalte: "Kundenbezeichnung 3", optional: true}
+    kunden_name_2:  {spalte: "Kundenbezeichnung 2", optional: true}
+    kunden_name_3:  {spalte: "Kundenbezeichnung 3", optional: true}
     BT-50:           {spalte: Strasse}
     BT-53:           {spalte: PLZ}
     BT-52:           {spalte: Ort}

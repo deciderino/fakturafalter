@@ -1,6 +1,6 @@
 # CSV-Zuordnungsprofil – feste Spaltenbreiten, passt zu variante-c_festbreite_cp1252.txt
 profil: festbreite-kp
-version: 1
+version: 2
 datei: {muster: "*.txt", kodierung: cp1252, zeilenende: auto}
 aufbau:
   art: feste_breite
@@ -12,10 +12,19 @@ saetze:
   K:
     BT-1:         {von: 2,  bis: 13, trim: true}
     BT-2:         {von: 14, bis: 21, typ: datum, format: "%d%m%Y"}
-    kundennummer: {von: 22, bis: 29, trim: true}
+    kundennummer: {von: 22, bis: 29, trim: true, optional: true}
     BT-72:        {von: 30, bis: 37, typ: datum, format: "%d%m%Y", optional: true}
     BT-13:        {von: 38, bis: 57, trim: true, optional: true}
     BT-112:       {von: 58, bis: 68, typ: zahl, implizite_nachkommastellen: 2, zweck: pruefung}
+    BT-44:        {von: 69, bis: 98, trim: true}
+    BT-50:        {von: 99, bis: 128, trim: true, optional: true}
+    BT-53:        {von: 129, bis: 133, trim: true, optional: true}
+    BT-52:        {von: 134, bis: 163, trim: true, optional: true}
+    BT-55:        {von: 164, bis: 165, trim: true, optional: true}
+    BT-48:        {von: 166, bis: 179, trim: true, optional: true}
+    BT-49:        {von: 180, bis: 219, trim: true, optional: true}
+    BT-10:        {von: 220, bis: 239, trim: true, optional: true}
+    zahlungsziel_tage: {von: 240, bis: 242, trim: true, typ: tage, optional: true}
   P:
     BT-1:         {von: 2,  bis: 13, trim: true}
     BT-126:       {von: 14, bis: 16, typ: ganzzahl}
@@ -29,4 +38,4 @@ fest: {BT-3: "380", BT-5: EUR}
 mappings:
   einheiten: {Stk: C62, Std: HUR, m: MTR, pausch: LS, unbekannt: pruefen}
   steuer: {"1": {BT-151: S, BT-152: 19}, "2": {BT-151: S, BT-152: 7}, unbekannt: pruefen}
-kundenstamm: {datei: kundenstamm.csv, schluessel: kundennummer, fehlt: pruefen}
+

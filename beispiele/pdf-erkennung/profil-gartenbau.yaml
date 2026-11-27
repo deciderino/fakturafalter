@@ -1,5 +1,6 @@
 # Gartenbau Lindgrün GmbH (erfunden) – UTF-8, Tabulator, Dezimalkomma, ISO-Datum, Leistungsmonat
 profil: gartenbau
+version: 2
 datei: {muster: "gartenbau_*.csv", trennzeichen: "\t"}
 zahlen: {dezimal: ",", tausender: "."}
 datum: {format: "%Y-%m-%d"}

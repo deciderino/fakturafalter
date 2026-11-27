@@ -1,5 +1,5 @@
 profil: beispiel-satzart-bloecke-koepfe
-version: 1
+version: 2
 beschreibung: 'Blöcke mit Satzart und eigener Kopfzeile je Block (fiktiv, ab 0.9.10).'
 datei:
   muster: beispiel-satzart-bloecke-koepfe.csv

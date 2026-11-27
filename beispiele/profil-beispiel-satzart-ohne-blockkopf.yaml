@@ -1,5 +1,5 @@
 profil: beispiel-satzart-ohne-blockkopf
-version: 1
+version: 2
 beschreibung: 'Nur Satzart-Werte K/P/S, ohne Block-Kopfzeile (fiktiv, ab 0.9.10).'
 datei:
   muster: beispiel-satzart-ohne-blockkopf.csv

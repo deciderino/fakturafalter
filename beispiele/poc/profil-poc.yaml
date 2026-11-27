@@ -7,7 +7,7 @@
 #     (Blöcke „verkaeufer“, „zahlung“, „bemerkungen“). Sie haben Vorrang vor der Konfiguration.
 #   - Das Ausgabeformat ist fest ZUGFeRD, Profil EN 16931.
 profil: poc-tischlerei
-version: 1
+version: 2
 beschreibung: "PoC: WaWi-Export Tischlerei, eine Zeile je Position, UTF-8, Semikolon, Dezimalkomma"
 
 datei:
@@ -89,4 +89,4 @@ bemerkungen:
   - {text: "Tischlerei Muster GmbH · Geschäftsführung: Max Beispiel · Amtsgericht Musterstadt HRB 00000", code: REG}
 
 ausgabe:
-  format: ZUGFERD_EN16931    # fest; sonst aus_kundenstamm | XRECHNUNG_CII
+  format: ZUGFERD_EN16931    # fest; sonst XRECHNUNG_CII

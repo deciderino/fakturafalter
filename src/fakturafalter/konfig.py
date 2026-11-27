@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: Apache-2.0
 # Copyright 2026 Fakturafalter-Mitwirkende
-"""Konfiguration (Absender, Ordner, Profile) und Kundenstamm laden."""
+"""Konfiguration (Absender, Ordner, Profile) laden."""
 
 from __future__ import annotations
 
@@ -129,8 +129,55 @@ def bemerkungen_aus(liste: list) -> list[tuple[str, str]]:
     return [(b["text"], b.get("code", "")) for b in liste]
 
 
+
+@dataclass
+class XRechnungEintrag:
+    """Ein Eintrag der einfachen XRechnung-Liste (Name und/oder Nummer, optionale Leitweg-ID)."""
+
+    name: str = ""
+    nummer: str = ""
+    leitweg_id: str = ""
+
+    def leer(self) -> bool:
+        return not (self.name.strip() or self.nummer.strip() or self.leitweg_id.strip())
+
+
+def _norm_vgl(s: str) -> str:
+    return " ".join((s or "").strip().casefold().split())
+
+
+def xrechnung_liste_aus(opt: dict) -> list[XRechnungEintrag]:
+    aus: list[XRechnungEintrag] = []
+    for roh in opt.get("xrechnung_liste") or []:
+        if not isinstance(roh, dict):
+            continue
+        e = XRechnungEintrag(
+            name=str(roh.get("name") or roh.get("kundenname") or "").strip(),
+            nummer=str(roh.get("nummer") or roh.get("kundennummer") or "").strip(),
+            leitweg_id=str(roh.get("leitweg_id") or roh.get("leitweg_id_bt10") or "").strip(),
+        )
+        if not e.leer():
+            aus.append(e)
+    return aus
+
+
+def xrechnung_treffer(k: "Konfig", *, name: str = "", nummer: str = "") -> XRechnungEintrag | None:
+    """Erster Listen-Treffer über Kundenname oder Kundennummer (Groß/Klein und Leerzeichen egal)."""
+    if not getattr(k, "xrechnung_zusatz", False):
+        return None
+    n, nr = _norm_vgl(name), _norm_vgl(nummer)
+    for e in k.xrechnung_liste or []:
+        en, enr = _norm_vgl(e.name), _norm_vgl(e.nummer)
+        if en and n and en == n:
+            return e
+        if enr and nr and enr == nr:
+            return e
+    return None
+
+
 @dataclass
 class Konfig:
+
     basis: Path
     absender: Partei
     zahlung: Zahlung
@@ -149,7 +196,10 @@ class Konfig:
     )
     pdf_vorlagen: list[dict] = field(default_factory=list)
     sichtteil: str = "original"  # original | neu
-    xrechnung_zusatz: bool = True  # zusätzlich XRechnung-CII-XML, wenn Kunde es verlangt
+    xrechnung_zusatz: bool = False  # zusätzlich XRechnung-CII, wenn die Liste trifft
+    xrechnung_liste: list = field(default_factory=list)  # list[XRechnungEintrag]
+    abgelehnte_profile: list = field(default_factory=list)  # [(Pfad, Meldung), ...]
+    konfig_hinweise: list = field(default_factory=list)  # klare Hinweise zu geänderten Einstellungen
     stabil_sekunden: float = 2.0
     paarung_sekunden: float = 5.0
     gegenstueck_minuten: float = (
@@ -352,14 +402,27 @@ def _profile_laden(k: "Konfig", d: dict, liste, *, art: str) -> tuple[list[dict]
             if not rel:
                 raise ValueError("kein Dateiname")
             prof = _profil_laden(k, d, p)
-        except (OSError, ValueError, TypeError, KeyError, yaml.YAMLError) as e:
-            log.warning(
-                "Profil %s „%s“ nicht geladen (%s) – Eintrag wird ignoriert",
-                art,
-                rel or p,
-                e,
-            )
-            continue
+            if art == "csv":
+                from .profilformat import pruefen
+
+                pruefen(prof, datei=rel)
+        except Exception as e:
+            from .profilformat import ProfilVeraltet
+
+            if isinstance(e, ProfilVeraltet):
+                log.warning("Profil %s „%s“ abgelehnt: %s", art, rel or p, e.titel())
+                k.abgelehnte_profile.append((str(rel or p), e.meldung(), e.titel()))
+                behalten.append(p)  # Eintrag in der Konfiguration behalten, Datei unangetastet
+                continue
+            if isinstance(e, (OSError, ValueError, TypeError, KeyError, yaml.YAMLError)):
+                log.warning(
+                    "Profil %s „%s“ nicht geladen (%s) – Eintrag wird ignoriert",
+                    art,
+                    rel or p,
+                    e,
+                )
+                continue
+            raise
         geladen.append(prof)
         behalten.append(p)
     return geladen, behalten
@@ -411,11 +474,22 @@ def lade_konfig(pfad: str | Path) -> Konfig:
         d["pdf_vorlagen"] = vorlagen_ein
     opt = d.get("optionen", {})
     k.sichtteil = opt.get("sichtteil", k.sichtteil)
-    k.xrechnung_zusatz = opt.get("xrechnung_zusatz", k.xrechnung_zusatz)
+    k.xrechnung_liste = xrechnung_liste_aus(opt)
+    if "xrechnung_zusatz" in opt:
+        k.xrechnung_zusatz = bool(opt.get("xrechnung_zusatz"))
+    else:
+        k.xrechnung_zusatz = bool(k.xrechnung_liste)
     ablage = str(opt.get("xrechnung_ablage") or "ausgang")
     if ablage == "keine":
         k.xrechnung_zusatz = False
     k.xrechnung_ablage = ablage if ablage in ("ausgang", "unterordner") else "ausgang"
+    # Früher: XRechnung, wenn der Kundenstamm es verlangte. Jetzt gilt die Liste.
+    if opt.get("xrechnung_zusatz") and not k.xrechnung_liste and ablage != "keine":
+        k.konfig_hinweise.append(
+            "Es gibt keinen Kundenstamm mehr. Trage in der XRechnung-Liste ein, für welche Kunden "
+            "zusätzlich eine XRechnung erzeugt werden soll. Bisherige Profile werden nicht "
+            "automatisch übernommen."
+        )
     k.updatepruefung = bool(opt.get("updatepruefung", k.updatepruefung))
     k.updates_vorab = bool(opt.get("updates_vorab", k.updates_vorab))
     k.stabil_sekunden = float(opt.get("stabil_sekunden", k.stabil_sekunden))
@@ -429,57 +503,3 @@ def lade_konfig(pfad: str | Path) -> Konfig:
 
     k.nummernkreise = aus_optionen(opt)
     return k
-
-
-class Kundenstamm:
-    def __init__(self, pfad: Path | None):
-        self.pfad = pfad
-        self.daten: dict[str, dict] = {}
-        if pfad and Path(pfad).exists():
-            text, _ = dekodieren(Path(pfad).read_bytes())
-            trenn = trennzeichen_erkennen(text)
-            for row in csv.DictReader(text.splitlines(), delimiter=trenn):
-                self.daten[(row.get("kundennummer") or "").strip()] = {
-                    k: (v or "").strip() for k, v in row.items()
-                }
-
-    def get(self, nr: str) -> dict | None:
-        return self.daten.get((nr or "").strip())
-
-    def partei(self, nr: str) -> Partei | None:
-        r = self.get(nr)
-        if not r:
-            return None
-        return Partei(
-            name=r.get("name", ""),
-            anschrift=Anschrift(
-                r.get("strasse", ""),
-                r.get("plz", ""),
-                r.get("ort", ""),
-                r.get("land", "DE") or "DE",
-                r.get("zusatz", ""),
-            ),
-            ust_id=r.get("ust_id", ""),
-            register=r.get("register", ""),  # ab 0.9.7: BT-47 (Reverse Charge ohne USt-IdNr.)
-            elektronische_adresse=r.get("elektr_adresse_bt49", ""),
-            kontakt_email=r.get("kontakt_email", ""),
-            kennung=nr,
-        )
-
-
-_cache: dict[str, Kundenstamm] = {}
-
-
-def kundenstamm_fuer(definition: dict | None, basis: Path) -> Kundenstamm:
-    if not definition or not definition.get("datei"):
-        return Kundenstamm(None)
-    p = Path(definition["datei"])
-    p = p if p.is_absolute() else (basis / p)
-    key = str(p.resolve())
-    mtime = p.stat().st_mtime if p.exists() else 0
-    ks = _cache.get(key)
-    if ks is None or getattr(ks, "_mtime", None) != mtime:
-        ks = Kundenstamm(p)
-        ks._mtime = mtime
-        _cache[key] = ks
-    return ks

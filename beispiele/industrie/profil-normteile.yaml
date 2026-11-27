@@ -1,6 +1,7 @@
 # Normteile Brückner GmbH (erfunden) – schlanker CSV-Export: UTF-8, Semikolon, Dezimalkomma, TT.MM.JJJJ.
 # Nur die Mindestspalten aus docs/csv-format.md plus „Preiseinheit“ (Preis pro 100 Stk).
 profil: normteile
+version: 2
 datei: {muster: "normteile_*.csv", trennzeichen: ";"}
 zahlen: {dezimal: ",", tausender: "."}
 datum: {format: "%d.%m.%Y"}

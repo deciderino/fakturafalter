@@ -1,5 +1,5 @@
 # Konfiguration für die Beispiele zur PDF-Erkennung (ALLE Daten erfunden).
-# Verkäufer und Bank stehen jeweils im Profil; Käufer in der CSV (Metallbau: im Kundenstamm).
+# Verkäufer und Bank stehen jeweils im Profil; Käufer in der CSV (Name und Anschrift in der Datei).
 # Angelernte Vorlagen landen in ./angelernt/ (wird beim ersten Paar PDF + CSV angelegt).
 
 ordner:                     # relativ zu dieser Datei

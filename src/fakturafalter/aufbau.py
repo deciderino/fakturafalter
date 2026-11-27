@@ -12,7 +12,7 @@ from decimal import Decimal
 from pathlib import Path
 
 from . import sicht, steuerfaelle, zahlungsziel
-from .konfig import Konfig, bemerkungen_aus, kundenstamm_fuer, partei_aus, zahlung_aus
+from .konfig import Konfig, bemerkungen_aus, partei_aus, xrechnung_treffer, zahlung_aus
 from .modell import (
     Anhang,
     Herkunft,
@@ -30,7 +30,7 @@ from .modell import (
 # Rohfeld: (wert, Herkunft) – wert bereits typisiert (str/Decimal/date)
 Roh = dict[str, tuple[object, Herkunft]]
 
-# Käuferfelder, die ein Profil direkt aus der Quelle liefern darf (Vorrang vor dem Kundenstamm).
+# Käuferfelder, die ein Profil direkt aus der Quelle liefern darf.
 # Schlüssel = Feldname im Profil, Wert = Attributpfad in Partei.
 KAEUFER_FELDER = {
     "BT-44": "name",
@@ -406,7 +406,7 @@ def rechnung_bauen(
                 pos.preiseinheit = Decimal(str(pe))
             except ArithmeticError:
                 r.hinweis("pruefen", f"Preiseinheit „{pe}“ ist keine Zahl", f"Pos {pos.nr} BT-149")
-        pos.kontrolle_gesamt = g("gesamt_kontrolle")
+        pos.kontrolle_gesamt = g("gesamtpreis_position")
         eh = g("BT-130", "")
         if eh and str(eh).strip():
             code, ok = _map(
@@ -446,21 +446,10 @@ def rechnung_bauen(
         r.positionen.append(pos)
     _vorzeichen(r)
 
-    # --- Stammdaten -----------------------------------------------------------
+    # --- Stammdaten (Absender aus Profil/Konfig, Käufer aus der Quelle) --------
     r.verkaeufer, r.zahlung, r.bemerkungen, aus_profil = stamm
     r.herkunft["verkaeufer"] = Herkunft("profil" if aus_profil else "konfig", 1.0)
-    basis = Path(definition.get("_basis", konfig.basis))
-    ks = kundenstamm_fuer(definition.get("kundenstamm"), basis)
-    eintrag = ks.get(r.kundennummer)
-    if eintrag:
-        r.kaeufer = ks.partei(r.kundennummer)
-        r.herkunft["kaeufer"] = Herkunft(f"kundenstamm:{r.kundennummer}", 1.0)
-        r.leitweg_id = eintrag.get("leitweg_id_bt10", "")
-        if eintrag.get("zahlungsziel_tage"):
-            r.zahlung.ziel_tage = int(eintrag["zahlungsziel_tage"])
-        if eintrag.get("format"):
-            r.ausgabeformat = eintrag["format"]
-    # Käuferdaten direkt aus der Quelle (z. B. CSV-Spalten) haben Vorrang vor dem Kundenstamm
+    r.herkunft["kaeufer"] = Herkunft("quelle", 1.0)
     aus_quelle = [f for f in KAEUFER_FELDER if wert(f) is not None]
     for f in aus_quelle:
         _setzen(r.kaeufer, KAEUFER_FELDER[f], str(wert(f)).strip())
@@ -516,37 +505,26 @@ def rechnung_bauen(
             "skonto_basisbetrag_2",
         )
     )
-    stufen = _skonto_stufen(wert, eintrag or {}, r.zahlung.skonto, aus_csv=csv_skonto)
+    stufen = _skonto_stufen(wert, r.zahlung.skonto, aus_csv=csv_skonto)
     if csv_skonto or (stufen and "BT-20" not in kopf):
         r.zahlung.skonto = stufen
         r.zahlung.bedingungen = zahlungsziel.aus_stufen(r.datum, stufen, r.zahlung.ziel_tage)
         if csv_skonto:
             r.herkunft["BT-20"] = Herkunft("csv:skonto", 1.0)
-        elif eintrag and (
-            eintrag.get("skonto_satz") or eintrag.get("skonto") or eintrag.get("skonto_tage")
-        ):
-            r.herkunft["BT-20"] = Herkunft(f"kundenstamm:{r.kundennummer}", 1.0)
         else:
             r.herkunft["BT-20"] = Herkunft("profil", 1.0)
-    bt44_offen = any(h.feld == "BT-44" for h in r.hinweise)  # z. B. Kundenbezeichnung 1 fehlt
-    if bt44_offen:
-        pass
-    elif not eintrag and not r.kaeufer.name:
-        r.hinweis(
-            definition.get("kundenstamm", {}).get("fehlt", "pruefen")
-            if definition.get("kundenstamm")
-            else "pruefen",
-            f"Kunde „{r.kundennummer}“ nicht im Kundenstamm",
-            "BT-44",
-        )
-    elif not r.kaeufer.name:
+    bt44_offen = any(h.feld == "BT-44" for h in r.hinweise)  # z. B. Kundenname Zeile 1 fehlt
+    if not bt44_offen and not r.kaeufer.name:
         r.hinweis("pruefen", "Name des Käufers fehlt", "BT-44")
-    # Ausgabeformat fest im Profil? (sonst aus dem Kundenstamm, Standard ZUGFERD_EN16931)
-    fmt = str((definition.get("ausgabe") or {}).get("format") or "aus_kundenstamm")
+    # Ausgabeformat fest im Profil? Standard ZUGFeRD EN 16931. Alter Schlüssel „aus_kundenstamm“ gilt als dieser Standard.
+    fmt = str((definition.get("ausgabe") or {}).get("format") or "ZUGFERD_EN16931")
+    if fmt == "aus_kundenstamm":
+        fmt = "ZUGFERD_EN16931"
     if fmt in AUSGABEFORMATE:
         r.ausgabeformat = fmt
-    elif fmt != "aus_kundenstamm":
+    elif fmt:
         r.hinweis("pruefen", f"Ausgabeformat „{fmt}“ im Profil unbekannt", "ausgabe.format")
+    _xrechnung_aus_liste(r, konfig)
 
     if faellig_druck:
         r.zahlung.faellig = faellig_druck
@@ -563,7 +541,7 @@ def rechnung_bauen(
         r.zahlung.kontoinhaber = r.verkaeufer.name
     if r_bemerkung:
         r.bemerkungen = [*r.bemerkungen, (r_bemerkung, "")]
-    _zahlung_aus_quelle(r, wert, mappings, eintrag or {})
+    _zahlung_aus_quelle(r, wert, mappings)
 
     # --- Pflichtfelder / Sicherheit -------------------------------------------
     pflicht = {"BT-1": r.nummer, "BT-2": r.datum}
@@ -684,18 +662,18 @@ def _zelle(v) -> str:
 
 
 def _namenszeilen(r: Rechnung, wert) -> None:
-    """Kundenbezeichnung 1–3 (ab 0.9.5): BT-44 ist Zeile 1 (auch die bisherige Einzelspalte „Kunde“),
-    ``kaeufer_name_2``/``_3`` sind optional. In der XML steht in BT-44 alles mit je einem Leerzeichen verbunden,
+    """Kundenname 1–3: BT-44 ist Zeile 1 (auch die bisherige Einzelspalte „Kunde“),
+    ``kunden_name_2``/``_3`` sind optional. In der XML steht in BT-44 alles mit je einem Leerzeichen verbunden,
     die Sichtseite zeigt jede belegte Zeile einzeln. Ohne Zeile 2/3 bleibt alles wie bisher.
     Zeile 2/3 ohne Zeile 1 rückt nicht nach oben: Hinweis „prüfen“ (BT-44)."""
-    z2, z3 = _zelle(wert("kaeufer_name_2")), _zelle(wert("kaeufer_name_3"))
+    z2, z3 = _zelle(wert("kunden_name_2")), _zelle(wert("kunden_name_3"))
     if not (z2 or z3):
         return
     z1 = _zelle(wert("BT-44"))
     if not z1:
         r.hinweis(
             "pruefen",
-            "Kundenbezeichnung 1 fehlt, obwohl Kundenbezeichnung 2 oder 3 belegt ist "
+            "Kundenname (Zeile 1) fehlt, obwohl Zeile 2 oder 3 belegt ist "
             "(Zeile 1 ist Pflicht; Zeile 2/3 rückt nicht nach oben)",
             "BT-44",
         )
@@ -766,7 +744,7 @@ def _zeile_als_zu_abschlag(r: Rechnung, g, art: str, mappings: dict, nr: int) ->
     """Rabatt- oder Zuschlagszeile (eigene Satzart/Zeilenart) -> Nachlass/Zuschlag auf Belegebene.
     Betrag: Positionsbetrag, sonst Menge × Preis, sonst Preis; das Vorzeichen in der Quelle zählt nicht."""
     text = str(g("BT-153", "") or "")
-    betrag = _dez(g("gesamt_kontrolle"))
+    betrag = _dez(g("gesamtpreis_position"))
     if betrag is None and _dez(g("BT-146")) is not None:
         betrag = _dez(g("BT-146")) * (_dez(g("BT-129")) or Decimal(1))
     proz = _dez(g("BT-138")) if betrag is None else None
@@ -841,21 +819,24 @@ def _vorzeichen(r: Rechnung) -> None:
             )
 
 
-def _skonto_feld(wert, eintrag: dict, *namen):
-    v = None
+
+def _xrechnung_aus_liste(r: Rechnung, konfig: Konfig) -> None:
+    """Leitweg-ID aus der XRechnung-Liste ergänzen, wenn die Quelle keine mitbringt."""
+    treffer = xrechnung_treffer(konfig, name=r.kaeufer.name, nummer=r.kundennummer or r.kaeufer.kennung)
+    if treffer and treffer.leitweg_id and not r.leitweg_id:
+        r.leitweg_id = treffer.leitweg_id
+        r.herkunft["BT-10"] = Herkunft("xrechnung_liste", 1.0)
+
+def _skonto_feld(wert, *namen):
     for n in namen:
         v = wert(n)
         if v is not None:
             return v
-    for n in namen:
-        roh = eintrag.get(n)
-        if roh not in (None, ""):
-            return roh
     return None
 
 
-def _skonto_stufen(wert, eintrag: dict, profil_stufen: list, aus_csv: bool) -> list:
-    """Stufen aus CSV (Vorrang), Kundenstamm und Profil-Standard, höchstens zwei."""
+def _skonto_stufen(wert, profil_stufen: list, aus_csv: bool) -> list:
+    """Stufen aus CSV (Vorrang) und Profil-Standard, höchstens zwei."""
     profil = list(profil_stufen or [])
     stufen = []
     paare = (
@@ -863,9 +844,9 @@ def _skonto_stufen(wert, eintrag: dict, profil_stufen: list, aus_csv: bool) -> l
         (("skonto_satz_2", "skonto_2"), ("skonto_tage_2",), ("skonto_basisbetrag_2",), 1),
     )
     for satz_n, tage_n, basis_n, i in paare:
-        satz = _skonto_feld(wert, eintrag, *satz_n)
-        tage = _skonto_feld(wert, eintrag, *tage_n)
-        basis = _skonto_feld(wert, eintrag, *basis_n)
+        satz = _skonto_feld(wert, *satz_n)
+        tage = _skonto_feld(wert, *tage_n)
+        basis = _skonto_feld(wert, *basis_n)
         if satz is None and i < len(profil):
             satz = profil[i].satz
         if tage is None and i < len(profil):
@@ -878,9 +859,9 @@ def _skonto_stufen(wert, eintrag: dict, profil_stufen: list, aus_csv: bool) -> l
     return stufen
 
 
-def _zahlung_aus_quelle(r: Rechnung, wert, mappings: dict, eintrag: dict) -> None:
+def _zahlung_aus_quelle(r: Rechnung, wert, mappings: dict) -> None:
     """Zahlungsart, SEPA-Lastschrift (Mandat BT-89, Gläubiger-ID BT-90, IBAN des Zahlers BT-91), Verwendungszweck.
-    Kundenstamm: Spalten ``mandat_bt89`` und ``iban_bt91``. Gläubiger-ID sonst aus dem Absenderprofil."""
+    Gläubiger-ID sonst aus dem Absenderprofil."""
     z = r.zahlung
     if wert("zahlungsart") is not None:
         z.art = (
@@ -894,7 +875,7 @@ def _zahlung_aus_quelle(r: Rechnung, wert, mappings: dict, eintrag: dict) -> Non
             )
             or z.art
         )
-    mandat = str(wert("BT-89", "") or eintrag.get("mandat_bt89") or "").strip()
+    mandat = str(wert("BT-89", "") or "").strip()
     if mandat:
         z.mandat = mandat
         if wert("zahlungsart") is None and not z.lastschrift:
@@ -902,7 +883,7 @@ def _zahlung_aus_quelle(r: Rechnung, wert, mappings: dict, eintrag: dict) -> Non
             r.hinweis(
                 "info", "Mandatsreferenz angegeben: Zahlungsart SEPA-Lastschrift (59)", "BT-81"
             )
-    iban = str(wert("BT-91", "") or eintrag.get("iban_bt91") or "").replace(" ", "").upper()
+    iban = str(wert("BT-91", "") or "").replace(" ", "").upper()
     if iban:
         z.lastschrift_iban = iban
     if wert("BT-90") is not None:

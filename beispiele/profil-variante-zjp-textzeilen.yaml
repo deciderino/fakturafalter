@@ -1,7 +1,7 @@
 # CSV-Zuordnungsprofil – passt zu variante-zjp_textzeilen.csv (fiktiv, ab 0.9.8.1)
 # Standardaufbau „eine Zeile je Position“ mit Kommentar- und Leerzeilen über/unter der Position.
 profil: zjp-textzeilen
-version: 1
+version: 2
 beschreibung: "Eine Zeile je Position, UTF-8, Semikolon, Dezimalkomma; Text- und Leerzeilen ohne Menge/Preis"
 
 datei:
@@ -34,8 +34,8 @@ felder:
     BT-2:           {spalte: Belegdatum, typ: datum}
     BT-72:          {spalte: Leistungsdatum, typ: datum, optional: true}
     BT-44:          {spalte: Kunde1}
-    kaeufer_name_2: {spalte: Kunde2, optional: true}
-    kaeufer_name_3: {spalte: Kunde3, optional: true}
+    kunden_name_2: {spalte: Kunde2, optional: true}
+    kunden_name_3: {spalte: Kunde3, optional: true}
     BT-50:          {spalte: Strasse}
     BT-53:          {spalte: PLZ}
     BT-52:          {spalte: Ort}
@@ -49,7 +49,7 @@ felder:
     BT-130:           {spalte: Einheit, mapping: einheiten, optional: true}
     BT-146:           {spalte: Einzelpreis, typ: zahl}
     BT-149:           {spalte: Preisbasis, typ: zahl, optional: true}
-    gesamt_kontrolle: {spalte: Gesamtpreis, typ: zahl, optional: true, zweck: pruefung}
+    gesamtpreis_position: {spalte: Gesamtpreis, typ: zahl, optional: true, zweck: pruefung}
     steuer:           {spalte: Ust-Satz, mapping: steuer}
 
 mappings:

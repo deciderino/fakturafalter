@@ -255,7 +255,7 @@ Spalte gilt als Zeile 1.
 | Feld im Profil | Spalte (Beispiel) | Wirkung |
 |---|---|---|
 | `BT-44` | `Kundenbezeichnung 1` | Pflicht (sofern kein Kundenstamm den Namen liefert) |
-| `kaeufer_name_2`, `kaeufer_name_3` | `Kundenbezeichnung 2`, `Kundenbezeichnung 3` | optional; leer = keine Zeile |
+| `kunden_name_2`, `kunden_name_3` | `Kundenbezeichnung 2`, `Kundenbezeichnung 3` | optional; leer = keine Zeile |
 | `zeichnungsnummer`, `index` | `Zeichnungsnummer`, `Index` | optional; im XML Artikelmerkmal (BT-160/BT-161) „Zeichnungsnummer“ bzw. „Index“ |
 
 - **Im PDF** steht jede gefüllte Kundenbezeichnung in einer eigenen Zeile des Adressblocks, leere Zeilen
