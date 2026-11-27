@@ -564,12 +564,11 @@ Nur die neun Pflichtspalten, zwei Rechnungen, eine Kommentarzeile. Datei:
 (fiktiv, UTF-8 mit BOM).
 
 ```csv
-Rechnungsnummer;Rechnungsdatum;Leistungsdatum;Kundennummer;Bezeichnung;Menge;Einheit;Einzelpreis;Steuersatz
-RE-2026-1001;02.11.2026;31.10.2026;K-1001;Bürostuhl Modell Münster;2;Stück;149,00;19 %
-RE-2026-1001;02.11.2026;31.10.2026;K-1001;Lieferung frei Haus;;;;
-RE-2026-1001;02.11.2026;31.10.2026;K-1001;Montage vor Ort;1;Stunde;65,00;19 %
-RE-2026-1002;03.11.2026;03.11.2026;K-1001;Beratung Einrichtung;3;Stunde;90,00;19 %
-RE-2026-1002;03.11.2026;03.11.2026;K-1001;Dokumentation;1;Stück;120,00;19 %
+Rechnungsnummer;Rechnungsdatum;Leistungsdatum;Kundenname;Bezeichnung;Menge;Einheit;Einzelpreis;Steuersatz
+RE-2026-1001;02.11.2026;31.10.2026;Beispiel Handel GmbH;Bürostuhl Modell Münster;2;Stück;149,00;19 %
+RE-2026-1001;02.11.2026;31.10.2026;Beispiel Handel GmbH;Lieferung frei Haus;;;;
+RE-2026-1001;02.11.2026;31.10.2026;Beispiel Handel GmbH;Montage vor Ort;1;Stunde;65,00;19 %
+RE-2026-1002;03.11.2026;03.11.2026;Beispiel Handel GmbH;Beratung Einrichtung;3;Stunde;90,00;19 %
 ```
 
 Voraussetzung: Absender in den Einstellungen; der Kundenname steht in der CSV.

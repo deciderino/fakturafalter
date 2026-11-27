@@ -362,3 +362,20 @@ def test_wizard_blockformat_euro_und_sub(konfig, tmp_path):
     assert e.dateien, e.hinweise
     pdfs = [p for p in e.dateien if p.suffix.lower() == ".pdf"]
     assert pdfs and pdfs[0].stat().st_size > 1000
+
+
+@pytest.mark.parametrize("welche", ["minimal", "voll"])
+def test_standardvorlagen_tragen_kundennamen(konfig, tmp_path, welche):
+    """rc1: Kundenname ist Pflicht – die Vorlagen und Beispieldateien müssen ihn in jeder Rechnung haben."""
+    from fakturafalter import adapter_csv, csv_standard, rechnen
+
+    f = tmp_path / f"{welche}.csv"
+    f.write_bytes(getattr(csv_standard, f"vorlage_{welche}")())
+    assert f.read_bytes() == (BEISPIELE / f"fakturafalter-standard-{welche}.csv").read_bytes()
+    std = next(p for p in konfig.csv_profile if csv_standard.ist_standard(p))
+    rs = adapter_csv.lesen(f, std, konfig)
+    assert [r.nummer for r in rs] == ["RE-2026-1001", "RE-2026-1002"]
+    for r in rs:
+        rechnen.berechnen(r)
+        assert r.kaeufer.name == "Beispiel Handel GmbH", r.kaeufer.name
+        assert not [h for h in r.hinweise if "BT-44" in str(h)], r.hinweise
