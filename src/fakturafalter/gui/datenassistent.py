@@ -917,6 +917,9 @@ class CsvAssistent(_Assistent):
         self.b_block_weg = knopf(_("Entfernen"), klick=self._block_entfernen)
         self.b_block_name = knopf(_("Umbenennen"), klick=self._block_umbenennen)
         self.b_wdh = QPushButton(_("Kommt mehrmals vor: aus"))
+        self.b_wdh.setToolTip(
+            _("Dieser Abschnitt kommt in der Datei mehrmals vor. Typisch der Positionsblock, jedes Mal nach #Pos. Bei Kunde oder Beleg aus.")
+        )
         self.b_wdh.setCheckable(True)
         self.b_wdh.toggled.connect(self._block_wdh_geklickt)
         leiste.addWidget(self.b_block_neu)
@@ -1501,8 +1504,10 @@ class CsvAssistent(_Assistent):
             )
         )
         self.c_kommentare = QCheckBox(_("Es gibt Zeilen nur mit Text, ohne Menge und Preis"))
+        self.c_kommentare.setToolTip(_("Beispiel: eine Zeile „Lieferung KW 48“ unter der Position."))
         self.c_kommentare.setChecked(True)
         self.c_leerzeilen = QCheckBox(_("Es gibt absichtliche Leerzeilen auf der Rechnung"))
+        self.c_leerzeilen.setToolTip(_("Abstand zwischen zwei Positionen, nicht nur eine leere Zeile am Dateiende."))
         self.c_leerzeilen.setChecked(True)
         v.addWidget(self.c_kommentare)
         v.addWidget(self.c_leerzeilen)
@@ -1531,6 +1536,9 @@ class CsvAssistent(_Assistent):
             ),
             "pruefen",
             _("Preis vorhanden, Menge leer oder 0"),
+        )
+        self.f_preis_ohne.setToolTip(
+            _("Pauschale ohne Menge: entweder Menge 1 annehmen oder die Rechnung zur Prüfung legen.")
         )
         v.addWidget(lbl(_("Wenn ein Preis steht, die Menge aber leer oder 0 ist")))
         v.addWidget(self.f_preis_ohne)
@@ -1682,6 +1690,7 @@ class CsvAssistent(_Assistent):
         self.c_posnr.setChecked(True)
         v.addWidget(self.c_posnr)
         self.c_menge_exakt = QCheckBox(_("Nachkommastellen der Menge so lassen wie in der Datei (z. B. 40,00)"))
+        self.c_menge_exakt.setToolTip(_("In der Datei 40,00 → auf der Sichtseite 40,00, nicht 40. Die XML bleibt unverändert."))
         self.c_menge_exakt.setChecked(True)
         v.addWidget(self.c_menge_exakt)
         self.f_einheit_sicht = _auswahl(
@@ -1692,6 +1701,7 @@ class CsvAssistent(_Assistent):
         v.addWidget(lbl(_("Einheit auf der Sichtseite")))
         v.addWidget(self.f_einheit_sicht)
         self.c_einheit_fehlt_stueck = QCheckBox(_("Wenn die Einheit fehlt, Stück eintragen"))
+        self.c_einheit_fehlt_stueck.setToolTip(_("Spalte Einheit leer, Menge 2, „Beratung“ → Stück. Hinweis im Protokoll, kein Prüffall."))
         self.c_einheit_fehlt_stueck.setChecked(False)
         v.addWidget(self.c_einheit_fehlt_stueck)
         v.addWidget(
@@ -1706,6 +1716,7 @@ class CsvAssistent(_Assistent):
             )
         )
         self.c_kommentar_ohne = QCheckBox(_("Bei reinen Textzeilen die Spaltenüberschriften auf der Sichtseite ausblenden"))
+        self.c_kommentar_ohne.setToolTip(_("Die Zeile „Lieferung KW 48“ ohne die Wörter Menge und Einzelpreis daneben."))
         self.c_kommentar_ohne.setChecked(False)
         v.addWidget(self.c_kommentar_ohne)
         v.addWidget(
