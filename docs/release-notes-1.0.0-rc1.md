@@ -46,10 +46,30 @@ stabile Linie, bis 1.0 erscheint).
   *Nicht unterstützt:* XRechnung UBL als zusätzliche Datei (ein altes
   `XRECHNUNG_UBL` erzeugt CII und einen Hinweis).
 
-- **Feld suchen.** Im Block-Assistenten (Spalten je Block) steht über der
-  gruppierten Liste das Feld „Feld suchen …“. Die neuen Optionsnamen
-  (Kommentar-/Leerzeilen, Preis ohne Menge, Einheit fehlt, Kommentar-Bezeichnungen,
-  Menge-Nachkommastellen, „Kommt mehrmals vor“) gehören zu rc1.
+- **Feld suchen.** In beiden Assistentenwegen (Spalten je Block und eine Zeile
+  je Position) steht über der gruppierten Liste das Feld „Feld suchen …“. Es
+  filtert beim Tippen nach Label, Tooltip und typischen Spaltennamen
+  („gesamtpreis“, „ustsatz“, „belegname“). Enter wählt den ersten Treffer,
+  Escape leert die Suche. Gruppenköpfe sind nicht wählbar, Pflichtfelder tragen
+  einen Stern, amtliche Felder ihre BT-Nummer. Jedes der 98 Felder hat einen
+  Tooltip mit kurzem Beispiel.
+
+- **Neue Bezeichnungen.** Zum Beispiel „Gesamtpreis der Position (nur
+  Kontrolle)“, „Preiseinheit / Preisbasis“, „Steuersatz oder Steuerschlüssel“,
+  „Leistungs- oder Lieferdatum“, „Kundenname (Zeile 1–3)“. Die Pflichtkarte
+  nutzt dieselben Wörter. Die Schalter heißen jetzt z. B. „Wenn die Einheit
+  fehlt, Stück eintragen“ und „Es gibt Zeilen nur mit Text, ohne Menge und
+  Preis“ und zeigen ein Beispiel als Hinweis.
+
+- **Automatik.** „Gesamtpreis“ im Positionsblock wird der Gesamtpreis der
+  Position, nicht der Rechnungsbetrag. „Gesamtnetto“ im Positionsblock ebenso,
+  sonst der Rechnungsbetrag netto. „Rabatt“ allein wird nicht mehr automatisch
+  als Prozentsatz zugeordnet (dafür „Rabatt%“ oder „Rabattsatz“).
+
+- **Wo die Ablehnung erscheint.** Beim Start (Dialog mit „Assistent öffnen“ und
+  „Schließen“), an der Profilkarte in den Einstellungen („Warum?“), bei
+  „Profil übernehmen…“ (es wird nichts kopiert), bei „Profil testen…“ und im
+  Eingang (Fehlermeldung nennt das abgelehnte Profil).
 
 - **Standard-CSV.** Die Pflichtnamen des eingebauten Formats enthalten
   `Kundenname` statt `Kundennummer`. `Kundennummer` bleibt eine optionale
