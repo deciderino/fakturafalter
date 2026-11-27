@@ -323,7 +323,7 @@ Linux (Beispiel zu 1):
   profil-beispiel-satzart-bloecke-koepfe.yaml in die Konfiguration übernehmen.)
 
 
-Test 20: Satzart-Wert in der Datenzeile, Kunde und Beleg getrennt (neu in 0.9.11.1)
+Test 20: Satzart-Wert in der Datenzeile, Kunde und Beleg getrennt (neu in 0.9.11)
 --------------------------------------------------------------------------------
 Nur fiktive Daten. Datei: beispiele/beispiel-satzart-marker-in-spalte.csv
 (`#Kopf;Testkunde;Muster GmbH;…` und `#Beleg;784395789;10.10.26;9.10.26` – der
@@ -344,6 +344,9 @@ Kopfzeile; Datumsangaben TT.MM.JJ).
    Erwartet: Rechnung 784395789, Käufer Testkunde / Muster GmbH,
    Belegdatum 10.10.2026, Leistungsdatum 9.10.2026, 2 Positionen,
    Summe 185,50 / 35,25 / 220,75.
+   Ab 0.9.11.1 liefern Probe-Liste und Eingang dieselben Spaltenwerte wie die
+   Sichtseiten-Vorschau (keine Meldung „Spalte … fehlt“, wenn die Zuordnung
+   im Assistenten gesetzt ist).
 
 Linux (wenn das Profil in der Testdaten-Konfiguration liegt):
   ./Fakturafalter-0.9.11.1-x86_64.AppImage -c beispiele/konfiguration.yaml \
