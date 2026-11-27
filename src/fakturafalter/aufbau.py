@@ -584,8 +584,14 @@ def rechnung_bauen(
 
 
 def waehrung_code(v) -> str:
-    """„EUR“, „usd“, „$“, „US$“ -> ISO-4217-Code; Unbekanntes bleibt (Pflichtprüfung meldet es)."""
+    """„EUR“, „EURO“, „Euro“, „€“, „usd“, „$“, „US$“ -> ISO-4217-Code; Unbekanntes bleibt.
+
+    Die Schreibweisen EURO, Euro, € und EUR werden einheitlich zu EUR (dokumentiert ab 0.9.11.2).
+    """
     t = " ".join(str(v or "").split())
+    n = t.replace(" ", "").casefold().replace("€", "eur").replace("euro", "eur")
+    if n == "eur":
+        return "EUR"
     if re.fullmatch(r"[A-Za-z]{3}", t):
         return t.upper()
     gef = steuerfaelle.waehrungen_im_text(t)

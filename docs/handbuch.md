@@ -154,7 +154,9 @@ kopieren und mit **Profil übernehmen…** wieder einspielen.
 
 Ab 0.9.11.1 liest der Eingang die Spalten jedes Blocks gegen die Kopfzeile
 dieses Blocks (wie die Sichtseiten-Vorschau im Assistenten). Ein in 0.9.11
-eingerichtetes Blockprofil musst du nicht neu anlegen.
+eingerichtetes Blockprofil musst du nicht neu anlegen. Ab 0.9.11.2 werden
+EURO, Euro, € und EUR einheitlich als EUR gelesen; eine kurze Restzeile oder
+eine Textzeile im Positionsblock erzeugt nicht mehr die Meldung „Spalte fehlt“.
 
 ### Skonto (ab 0.9.9)
 

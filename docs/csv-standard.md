@@ -1,6 +1,6 @@
 # CSV-Exportspezifikation für Fakturafalter
 
-**Spezifikation 1.5** · Stand 27.11.2026 (Europe/Berlin) · Grundlage App **0.9.11.1**
+**Spezifikation 1.5** · Stand 27.11.2026 (Europe/Berlin) · Grundlage App **0.9.11.2**
 
 Diese Beschreibung richtet sich an Systemadmins und Entwickler einer
 **Warenwirtschaft (ERP)**. Sie legt fest, wie ein Rechnungs-CSV aussehen soll,
@@ -618,4 +618,4 @@ Spezifikation erhöhen und die Änderung in der Liste unten eintragen.
 | 1.2 | 26.11.2026 | Eingebautes Standardprofil und strukturiertes Skonto (`#SKONTO#` in BT-20, inkl. Basisbetrag und Stufe 2) sowie Verzug nur als Klartext in `Bemerkung`: *verfügbar ab 0.9.9*. Vollvorlage um die neuen Skonto-Spalten ergänzt. Diese Datei liegt jetzt im Repository.
 | 1.3 | 26.11.2026 | Optionaler Block-Eingang (freie Felder je Block, optionale Marker, Textzeilen einschließlich `zwischen` und `0` / `0,00`) als *verfügbar ab 0.9.9* beschrieben. Der Export-Standard bleibt eine Zeile je Position.
 | 1.4 | 26.11.2026 | Satzart als Anfangsregel im optionalen Block-Eingang, Spalten je Block (Name und Position) und farbiger Assistent: *verfügbar ab 0.9.10*. Der Export-Standard bleibt eine Zeile je Position.
-| 1.5 | 26.11.2026 | Optionaler Block-Eingang: Blöcke frei anlegen und benennen, Blockart (normal / sich wiederholend) manuell, Satzart-Wert auch in einer Datenzeile (z. B. `#Kopf`, `#Beleg`), mehrere normale Blöcke (Kunde und Beleg) ohne Kollision, Pflichtfelder inkl. Käufername oder Kundennummer vor dem Weiter im Spalten-Schritt: *verfügbar ab 0.9.11*. Ab 0.9.11.1 liest der Eingang die Blockspalten gegen die jeweilige Block-Kopfzeile (wie die Vorschau); der Export-Standard bleibt eine Zeile je Position.
+| 1.5 | 26.11.2026 | Optionaler Block-Eingang: Blöcke frei anlegen und benennen, Blockart (normal / sich wiederholend) manuell, Satzart-Wert auch in einer Datenzeile (z. B. `#Kopf`, `#Beleg`), mehrere normale Blöcke (Kunde und Beleg) ohne Kollision, Pflichtfelder inkl. Käufername oder Kundennummer vor dem Weiter im Spalten-Schritt: *verfügbar ab 0.9.11*. Ab 0.9.11.1 liest der Eingang die Blockspalten gegen die jeweilige Block-Kopfzeile (wie die Vorschau); der Export-Standard bleibt eine Zeile je Position. Ab 0.9.11.2 gelten EURO/Euro/€/EUR als EUR; Text- und Restzeilen im Positionsblock lösen keine falsche Meldung „Spalte fehlt“ aus.

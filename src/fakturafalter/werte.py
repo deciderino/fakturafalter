@@ -92,8 +92,22 @@ def datum(text: str, fmt: str = "%d.%m.%Y") -> date:
 
 
 def dekodieren(raw: bytes, kodierung: str = "auto") -> tuple[str, str]:
-    """Bytes -> Text. ``auto``: BOM/UTF-8 strikt, sonst Windows-1252."""
-    if kodierung and kodierung != "auto":
+    """Bytes -> Text. ``auto``: BOM/UTF-8 strikt, sonst Windows-1252.
+
+    Ist im Profil Windows-1252 oder Latin-1 fest eingetragen, die Datei aber gültiges
+    UTF-8 mit Nicht-ASCII, wird UTF-8 verwendet (sonst zerfällt z. B. „Währung“).
+    """
+    gewollt = (kodierung or "auto").lower().replace("_", "-")
+    if gewollt not in ("", "auto"):
+        latin = gewollt in {"cp1252", "windows-1252", "latin-1", "latin1", "iso-8859-1"}
+        if latin:
+            try:
+                text = raw.decode("utf-8")
+            except UnicodeDecodeError:
+                return raw.decode(kodierung), kodierung
+            if any(ord(c) > 127 for c in text):
+                return text, "utf-8"
+            return text, kodierung
         return raw.decode(kodierung), kodierung
     if raw.startswith(b"\xef\xbb\xbf"):
         return raw[3:].decode("utf-8"), "utf-8-sig"

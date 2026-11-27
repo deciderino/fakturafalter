@@ -174,7 +174,7 @@ Ab 0.9.10 außerdem `beispiele/beispiel-satzart-bloecke-koepfe.csv` (Satzart und
 `beispiele/beispiel-satzart-gleiche-positionen.csv` (gleiche Spaltenposition, andere Bedeutung) und
 `beispiele/beispiel-satzart-ohne-blockkopf.csv` (nur Satzart K/P/S) mit den zugehörigen
 `profil-beispiel-satzart-*.yaml`.
-Ab 0.9.11 außerdem `beispiele/beispiel-satzart-marker-in-spalte.csv` (fiktiv: `#Kopf` und `#Beleg` als Satzart-Wert in der Datenzeile, kurze Datumsangaben TT.MM.JJ, getrennte Blöcke Kunde und Beleg). Ab 0.9.11.1 wertet der Eingang (und die Probe-Liste) dieselben Block-Felder gegen die jeweilige Block-Kopfzeile aus wie die Sichtseiten-Vorschau.
+Ab 0.9.11 außerdem `beispiele/beispiel-satzart-marker-in-spalte.csv` (fiktiv: `#Kopf` und `#Beleg` als Satzart-Wert in der Datenzeile, kurze Datumsangaben TT.MM.JJ, getrennte Blöcke Kunde und Beleg). Ab 0.9.11.1 wertet der Eingang (und die Probe-Liste) dieselben Block-Felder gegen die jeweilige Block-Kopfzeile aus wie die Sichtseiten-Vorschau. Ab 0.9.11.2 außerdem `beispiele/beispiel-satzart-pos-kopf-und-restzeile.csv` (fiktiv: `#Kunde`/`#Beleg`/`#Pos`, Kopfzeile vor den Positionszeilen, Währung `EURO` → EUR, Textzeilen und eine Restzeile am Ende ohne falsches „Spalte fehlt“).
 Standardaufbau: `beispiele/variante-zjp_textzeilen.csv` (fiktiv, RE-2026-0818:
 Kommentar und Leerzeile über der Position, Kommentar darunter; netto 394,40 /
 USt 74,94 / brutto 469,34). Profil: `beispiele/profil-variante-zjp-textzeilen.yaml`.

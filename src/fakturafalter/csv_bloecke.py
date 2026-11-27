@@ -35,7 +35,7 @@ def name_norm(s: str) -> str:
 
 
 def waehrung_norm(wert) -> str:
-    """ISO-Code zum Vergleich: € / Euro / eur → EUR, sonst getrimmt und groß."""
+    """ISO-Code: EURO / Euro / € / EUR → EUR, sonst getrimmt und groß."""
     t = str(wert or "").strip()
     if not t:
         return ""
@@ -557,6 +557,17 @@ def schneiden_profil(zeilen: list[list[str]], start: int, profil: dict) -> list[
                 gemeinsame_kopf = [c.strip() for c in row]
                 kopf_fuer_satzart = gemeinsame_kopf
                 continue
+            # dieselbe Kopfzeile eines wiederholenden Blocks gilt für alle folgenden Instanzen
+            if (
+                aktuell is not None
+                and typ
+                and typ == str(aktuell.get("typ") or "")
+                and typ == wieder
+            ):
+                aktuell["kopf"] = [c.strip() for c in row]
+                aktuell["ohne_kopfzeile"] = False
+                kopf_fuer_satzart = aktuell["kopf"]
+                continue
             aktuell = {
                 "kopf": [c.strip() for c in row],
                 "start": nr,
@@ -657,7 +668,21 @@ def _ist_kopffeld(name: str) -> bool:
     return True if not meta else meta[2] == "kopf"
 
 
-def feldsatz(row: dict, defs: dict, zeile: int, fehler: list, profil: dict, pfad: Path) -> dict:
+
+def _spalte_fehlt(label, profil: dict | None, block: str = "") -> str:
+    """Hinweistext: Block (und Profilname, wenn vorhanden), dann die fehlende Spalte."""
+    teile: list[str] = []
+    name = str((profil or {}).get("name") or "").strip()
+    if name:
+        teile.append(f"Profil „{name}“")
+    blk = str(block or "").strip()
+    if blk:
+        teile.append(f"Block „{blk}“")
+    prefix = (", ".join(teile) + ": ") if teile else ""
+    return f"{prefix}Spalte „{label}“ fehlt"
+
+
+def feldsatz(row: dict, defs: dict, zeile: int, fehler: list, profil: dict, pfad: Path, block: str = "") -> dict:
     roh: dict = {}
     for feld, d in defs.items():
         schl, val = _feld_aus_zeile(row, d)
@@ -672,7 +697,7 @@ def feldsatz(row: dict, defs: dict, zeile: int, fehler: list, profil: dict, pfad
                 roh[feld] = (str(d["fest"]), Herkunft("profil:fest", 1.0))
                 continue
             if not d.get("optional"):
-                fehler.append(f"Spalte „{label}“ fehlt")
+                fehler.append(_spalte_fehlt(label, profil, block))
             continue
         try:
             from . import adapter_csv as ac
@@ -695,6 +720,8 @@ def kopf_mergen(ziel: dict, neu: dict, zeile: int, fehler: list, typ: str = "") 
             continue
         alt = ziel.get(k)
         if alt is None or alt[0] in (None, ""):
+            if k == "BT-5" and waehrung_norm(wert) == "EUR":
+                wert = "EUR"
             ziel[k] = (wert, herkunft)
             if typ:
                 ziel[f"_typ_{k}"] = typ
@@ -888,7 +915,7 @@ def lesen(text_zeilen: list[list[str]], profil: dict, pfad: Path, start: int) ->
                 felder = {**felder, **(pdef.get("felder") or {})}
             for zeile, werte in bl["daten"]:
                 row = zeile_zu_row(werte, bl["kopf"])
-                roh = feldsatz(row, felder, zeile, fehler, profil, pfad)
+                roh = feldsatz(row, felder, zeile, fehler, profil, pfad, block=name)
                 kopf_mergen(kopf, roh, zeile, fehler, typ=name)
                 if "BT-1" in roh and roh["BT-1"][0] not in (None, ""):
                     nummern.add(str(roh["BT-1"][0]).strip())
@@ -943,27 +970,51 @@ def _positionsblock(
         felder = {**felder, "text": {"spalte": tz["text_spalte"], "optional": True}}
 
     typ = name or block_anzeige(bl, str(bl.get("typ") or "positionen"))
+    from . import csv_zeilen
+
     for zeile, werte in bl["daten"]:
         row = zeile_zu_row(werte, bl["kopf"])
         if _leer_zeile(werte):
             continue
-        roh_pos = feldsatz(row, pos_felder, zeile, fehler, profil, pfad)
-        roh_kopf = feldsatz(row, kopf_felder, zeile, fehler, profil, pfad)
-        kopf_mergen(kopf, roh_kopf, zeile, fehler, typ=typ)
-        if roh_kopf.get("BT-1") and roh_kopf["BT-1"][0] not in (None, ""):
-            nummern.add(str(roh_kopf["BT-1"][0]).strip())
 
-        from . import csv_zeilen
-
+        # Text-/Leer-/Skip-Zeilen vor der Spaltenpflicht erkennen (sonst „Spalte fehlt“
+        # an einer kurzen Restzeile nach den Positionen).
         art = csv_zeilen.erkennen(row, pos_felder, kopf_felder, tz)
         if art and art[0] == "preis_ohne_menge":
             pom = str(tz.get("preis_ohne_menge") or "pruefen")
             if pom == "kommentar":
                 art = ("text", art[1])
             else:
-                if pom == "eins":
-                    roh_pos["_menge_eins"] = True
-                art = None
+                art = ("_menge_eins", art[1]) if pom == "eins" else None
+        if art is not None and art[0] != "_menge_eins":
+            kind, text = art
+            if kind == "skip":
+                continue
+            leerzeile = kind == "leer"
+            zwischen = str(tz.get("zwischen") or "vorher")
+            if not positionen:
+                if verwaist == "pruefen":
+                    fehler.append(_pruefen(f"Zeile {zeile}: Textzeile ohne Position"))
+                elif verwaist == "naechste" or zwischen == "nachher":
+                    bl.setdefault("_zeilen_davor", []).append("" if leerzeile else text)
+                else:
+                    notiz_teile.append("" if leerzeile else text)
+                continue
+            if zwischen == "nachher":
+                bl.setdefault("_zeilen_davor", []).append("" if leerzeile else text)
+                continue
+            last = positionen[-1]
+            text_an_roh(last, text, leerzeile, tz, zeile, pfad)
+            continue
+
+        roh_pos = feldsatz(row, pos_felder, zeile, fehler, profil, pfad, block=typ)
+        roh_kopf = feldsatz(row, kopf_felder, zeile, fehler, profil, pfad, block=typ)
+        if art and art[0] == "_menge_eins":
+            roh_pos["_menge_eins"] = True
+        kopf_mergen(kopf, roh_kopf, zeile, fehler, typ=typ)
+        if roh_kopf.get("BT-1") and roh_kopf["BT-1"][0] not in (None, ""):
+            nummern.add(str(roh_kopf["BT-1"][0]).strip())
+        art = None
         if art is None:
             wartend = bl.setdefault("_zeilen_davor", [])
             if wartend:
@@ -979,25 +1030,6 @@ def _positionsblock(
                 wartend.clear()
             positionen.append(roh_pos)
             continue
-
-        kind, text = art
-        if kind == "skip":
-            continue
-        leerzeile = kind == "leer"
-        zwischen = str(tz.get("zwischen") or "vorher")
-        if not positionen:
-            if verwaist == "pruefen":
-                fehler.append(_pruefen(f"Zeile {zeile}: Textzeile ohne Position"))
-            elif verwaist == "naechste" or zwischen == "nachher":
-                bl.setdefault("_zeilen_davor", []).append("" if leerzeile else text)
-            else:
-                notiz_teile.append("" if leerzeile else text)
-            continue
-        if zwischen == "nachher":
-            bl.setdefault("_zeilen_davor", []).append("" if leerzeile else text)
-            continue
-        last = positionen[-1]
-        text_an_roh(last, text, leerzeile, tz, zeile, pfad)
 
     # Rest nach der letzten Position (zwischen=nachher)
     rest = bl.get("_zeilen_davor") or []
