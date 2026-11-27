@@ -147,6 +147,10 @@ def css(c: dict[str, str]) -> str:
     QMenu::item:selected {{ background: {c["sel"]}; }}
     QMenu::item:disabled {{ color: {c["dis_fg"]}; }}
     QToolTip {{ background: {c["card"]}; color: {c["fg"]}; border: 1px solid {c["card_b"]}; }}
+    QAbstractItemView {{ background: {c["base"]}; color: {c["fg"]}; alternate-background-color: {c["card"]};
+                   selection-background-color: {c["sel"]}; selection-color: {c["fg"]}; }}
+    QTableView {{ gridline-color: {c["btn_b"]}; }}
+    QHeaderView::section {{ background: {c["btn"]}; color: {c["fg"]}; border: 1px solid {c["btn_b"]}; padding: 4px 6px; }}
     """
 
 

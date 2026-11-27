@@ -152,3 +152,27 @@ def test_eine_zeile_je_position_hat_suche_und_gruppen(fenster, qapp):
     # die frühere Spalte mit BT-1 ist frei geworden (jedes Feld nur einmal)
     assert [x.currentData() for x in d.spalten].count("BT-1") == 1
     d.close()
+
+
+def _kontrast(a: str, b: str) -> float:
+    def lum(h):
+        h = h.lstrip("#")
+        rgb = [int(h[i : i + 2], 16) / 255 for i in (0, 2, 4)]
+        lin = [c / 12.92 if c <= 0.03928 else ((c + 0.055) / 1.055) ** 2.4 for c in rgb]
+        return 0.2126 * lin[0] + 0.7152 * lin[1] + 0.0722 * lin[2]
+
+    la, lb = sorted((lum(a), lum(b)), reverse=True)
+    return (la + 0.05) / (lb + 0.05)
+
+
+@pytest.mark.parametrize("hell", [True, False])
+def test_listen_und_tabellen_wcag_aa(hell):
+    """rc1: Listen/Tabellen (Feldsuche, XRechnung-Liste, Spaltenzuordnung) haben im Stylesheet eigene
+    Farben – auch im dunklen Thema bei hellem System – und erreichen WCAG AA (4,5:1)."""
+    from fakturafalter.gui import thema
+
+    c = thema.farben(hell)
+    css = thema.css(c)
+    assert "QAbstractItemView" in css and "QHeaderView::section" in css
+    for vg, hg in (("fg", "base"), ("fg", "sel"), ("fg", "btn"), ("fg", "card"), ("sub", "base")):
+        assert _kontrast(c[vg], c[hg]) >= 4.5, (hell, vg, hg, round(_kontrast(c[vg], c[hg]), 2))
