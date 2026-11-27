@@ -12,6 +12,17 @@ from .. import csv_einrichtung as ce
 from .texte import _
 
 
+class _SuchZeile(QLineEdit):
+    """Escape leert die Suche (statt den Dialog zu schließen), solange etwas drinsteht."""
+
+    def keyPressEvent(self, ev) -> None:  # noqa: N802 (Qt)
+        if ev.key() == Qt.Key.Key_Escape and self.text():
+            self.clear()
+            ev.accept()
+            return
+        super().keyPressEvent(ev)
+
+
 class FeldSuche(QWidget):
     """Suchfeld plus gruppierte Liste. Keine freie Eingabe neuer Schlüssel."""
 
@@ -28,7 +39,7 @@ class FeldSuche(QWidget):
         self.l_beispiel.setObjectName("hinweis")
         self.l_beispiel.setWordWrap(True)
         v.addWidget(self.l_beispiel)
-        self.suche = QLineEdit()
+        self.suche = _SuchZeile()
         self.suche.setPlaceholderText(_("Feld suchen …"))
         self.suche.setClearButtonEnabled(True)
         self.suche.setMinimumHeight(48)
@@ -79,9 +90,11 @@ class FeldSuche(QWidget):
     def _enter(self) -> None:
         for i in range(self.liste.count()):
             it = self.liste.item(i)
-            if it and it.flags() & Qt.ItemFlag.ItemIsSelectable and it.data(Qt.ItemDataRole.UserRole) is not None:
-                self.liste.setCurrentItem(it)
-                self._wahl(it, None)
+            if it and it.flags() & Qt.ItemFlag.ItemIsSelectable and it.data(Qt.ItemDataRole.UserRole):
+                if self.liste.currentItem() is it:
+                    self._wahl(it, None)  # schon markiert: trotzdem bestätigen
+                else:
+                    self.liste.setCurrentItem(it)  # löst _wahl über das Signal aus
                 return
 
     def _markieren(self, fid: str, *, suche_leeren: bool = False) -> None:

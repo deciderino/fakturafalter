@@ -92,6 +92,28 @@ def _auswahl(werte, jetzt=None, name: str = "") -> QComboBox:
     return b
 
 
+def _feldliste_gruppiert(b: QComboBox, wiederholend: bool = True) -> None:
+    """Felder gruppiert wie in der Feldsuche; Gruppenköpfe sind nicht wählbar."""
+    from PySide6.QtGui import QFont
+
+    gesehen: set[str] = set()
+    for fid in ce.suche_felder("", wiederholend=wiederholend):
+        g = ce.FELD_GRUPPE.get(fid)
+        if g and g not in gesehen:
+            gesehen.add(g)
+            b.addItem(_(ce.GRUPPE_TITEL.get(g, g)))
+            it = b.model().item(b.count() - 1)
+            if it is not None:
+                it.setEnabled(False)
+                f = QFont(b.font())
+                f.setBold(True)
+                it.setFont(f)
+        b.addItem(ce.anzeige_feld(fid), fid)
+        tip = ce.FELD_TOOLTIP.get(fid)
+        if tip:
+            b.setItemData(b.count() - 1, _(tip), Qt.ItemDataRole.ToolTipRole)
+
+
 class _Assistent(QDialog):
     """Gerüst: Kopf mit Schritten, Seitenstapel, Fuß mit Zurück/Weiter (wie die Ersteinrichtung)."""
 
@@ -571,7 +593,26 @@ class CsvAssistent(_Assistent):
         self.t_map.setEditTriggers(QTableWidget.EditTrigger.NoEditTriggers)
         self.t_map.setMinimumHeight(300)
         self.t_map.verticalHeader().setVisible(False)
-        v.addWidget(self.t_map, 1)
+        self.t_map.currentCellChanged.connect(lambda _r, c, *_a: self._map_spalte_waehlen(c))
+        self.t_map.horizontalHeader().sectionClicked.connect(self._map_spalte_waehlen)
+        hm = QHBoxLayout()
+        hm.addWidget(self.t_map, 1)
+        # Suchbare, gruppierte Feldliste für die gewählte Spalte (wie im Blockweg)
+        from .feldsuche import FeldSuche
+
+        self.box_feldsuche = QWidget()
+        self.box_feldsuche.setMinimumWidth(320)
+        self.box_feldsuche.setMaximumWidth(420)
+        fs = QVBoxLayout(self.box_feldsuche)
+        fs.setContentsMargins(0, 0, 0, 0)
+        self.l_map_spalte = lbl(_("Spalte anklicken, dann Feld wählen"), "titel", umbruch=True)
+        fs.addWidget(self.l_map_spalte)
+        self.map_suche = FeldSuche(wiederholend=True)
+        self.map_suche.geaendert.connect(self._map_suche_gewaehlt)
+        fs.addWidget(self.map_suche, 1)
+        hm.addWidget(self.box_feldsuche)
+        v.addLayout(hm, 1)
+        self._map_spalte = -1
         self.l_fehlt = lbl("", "warn", umbruch=True)
         v.addWidget(self.l_fehlt)
         self.k_steuer, kv = karte()
@@ -758,10 +799,10 @@ class CsvAssistent(_Assistent):
             b.setMinimumHeight(48)
             b.setAccessibleName(_("Spalte {s}").format(s=sp))
             b.addItem(_(NICHT), "")
-            for f, anz, *_r in ce.FELDER:
-                b.addItem(_(anz), f)
+            _feldliste_gruppiert(b)
             b.setCurrentIndex(max(0, b.findData(je_spalte.get(sp, ""))))
             b.currentIndexChanged.connect(lambda _i, s=j: self._zuordnung_geaendert(s))
+            b.currentIndexChanged.connect(lambda _i, s=j: self._map_spalte_waehlen(s))
             t.setCellWidget(0, j, b)
             self.spalten.append(b)
         for i, z in enumerate(zeilen[:n]):
@@ -771,6 +812,34 @@ class CsvAssistent(_Assistent):
         for j in range(len(kopf)):
             t.setColumnWidth(j, max(t.columnWidth(j), 200))
         self._zuordnung_geaendert(None)
+
+    def _map_spalte_waehlen(self, spalte: int) -> None:
+        """Gewählte CSV-Spalte in der Feldsuche rechts zeigen."""
+        if not getattr(self, "map_suche", None) or spalte is None:
+            return
+        if spalte < 0 or spalte >= len(self.spalten):
+            return
+        self._map_spalte = spalte
+        kopf = getattr(self, "_map_kopf", None) or []
+        name = kopf[spalte] if spalte < len(kopf) and kopf[spalte] else _("Spalte {n}").format(n=spalte + 1)
+        self.l_map_spalte.setText(_("Feld für Spalte „{s}“").format(s=name))
+        beispiel = ""
+        for r in range(1, self.t_map.rowCount()):
+            it = self.t_map.item(r, spalte)
+            if it and it.text().strip():
+                beispiel = it.text().strip()
+                break
+        self.map_suche.set_beispiel(beispiel)
+        self.map_suche.set_feld(self.spalten[spalte].currentData() or "")
+
+    def _map_suche_gewaehlt(self, fid: str) -> None:
+        j = getattr(self, "_map_spalte", -1)
+        if j is None or j < 0 or j >= len(self.spalten):
+            return
+        b = self.spalten[j]
+        i = b.findData(fid or "")
+        if i >= 0 and i != b.currentIndex():
+            b.setCurrentIndex(i)
 
     def zuordnung(self) -> dict[str, str]:
         kopf = getattr(self, "_map_kopf", None) or (self.fmt.kopf if self.fmt else [])
