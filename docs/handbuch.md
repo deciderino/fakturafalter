@@ -141,6 +141,21 @@ Testdaten-ZIP und lassen sich mit **Profil übernehmen…** in deine Konfigurati
 holen; eine frische Installation startet ohne diese Beispiele, das Standardprofil
 ist trotzdem vorhanden.
 
+Die Profildateien (`profil-….yaml`) liegen im **Profilordner** neben der
+Konfiguration. Unter **Einstellungen → Eingang & Vorlagen → Profilordner öffnen**
+(am Ende des CSV-Assistenten ebenfalls) öffnest du diesen Ordner: bei der
+portablen App das Verzeichnis `daten/` neben der AppImage oder der
+Windows-Anwendung, sofern es beschreibbar ist; sonst unter Linux
+`~/.config/fakturafalter/` (bzw. `$XDG_CONFIG_HOME/fakturafalter`), unter
+Windows `%LOCALAPPDATA%\Fakturafalter` (liegt noch eine Konfiguration unter
+`%APPDATA%\Fakturafalter`, gilt der weiter). Ein eigenes Menü „Profil
+exportieren“ gibt es nicht – die YAML-Datei kannst du aus diesem Ordner
+kopieren und mit **Profil übernehmen…** wieder einspielen.
+
+Ab 0.9.11.1 liest der Eingang die Spalten jedes Blocks gegen die Kopfzeile
+dieses Blocks (wie die Sichtseiten-Vorschau im Assistenten). Ein in 0.9.11
+eingerichtetes Blockprofil musst du nicht neu anlegen.
+
 ### Skonto (ab 0.9.9)
 
 In der CSV, im Kundenstamm oder als Profil-Vorgabe kannst du bis zu zwei

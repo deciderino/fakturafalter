@@ -1280,9 +1280,8 @@ def profil_bauen_bloecke(
             if not pflicht or typ != "positionen" or teil == "kopf":
                 d["optional"] = True
             felder[f] = d
-        if typ in ("kopf", "positionen", "beleg", "kunde") or bool(b.get("wiederholend")):
-            felder.setdefault("BT-3", {"fest": "380"})
-            felder.setdefault("BT-5", {"fest": "EUR"})
+        # BT-3/BT-5 fest nur einmal, nach dem Schleifendurchlauf, und nur wenn
+        # keine Spalte das Feld liefert – sonst kollidieren fest EUR und „€“.
         if tz.get("text_spalte") and typ == "positionen":
             pass
         ein: dict = {
@@ -1300,6 +1299,20 @@ def profil_bauen_bloecke(
         if b.get("anfang"):
             ein["anfang"] = [dict(r) for r in b["anfang"] if isinstance(r, dict)]
         aus_bloecke.append(ein)
+    def _hat_spalte(feld: str) -> bool:
+        for b in aus_bloecke:
+            d = (b.get("felder") or {}).get(feld) or {}
+            if isinstance(d, dict) and (d.get("spalte") or d.get("position")):
+                return True
+        return False
+
+    # Ein festes Fallback (nicht in jeden Block kopieren)
+    ziel = next((b for b in aus_bloecke if not b.get("wiederholend")), None)
+    if ziel is not None:
+        felder = ziel.setdefault("felder", {})
+        felder.setdefault("BT-3", {"fest": "380"})
+        if not _hat_spalte("BT-5"):
+            felder.setdefault("BT-5", {"fest": "EUR"})
     p = {
         "profil": name,
         "version": 1,

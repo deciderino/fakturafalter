@@ -34,6 +34,42 @@ def name_norm(s: str) -> str:
     return re.sub(r"[^a-z0-9]+", "", t)
 
 
+def waehrung_norm(wert) -> str:
+    """ISO-Code zum Vergleich: € / Euro / eur → EUR, sonst getrimmt und groß."""
+    t = str(wert or "").strip()
+    if not t:
+        return ""
+    n = t.replace(" ", "").casefold()
+    n = n.replace("€", "eur").replace("euro", "eur")
+    if n == "eur":
+        return "EUR"
+    return t.strip().upper()
+
+
+def werte_gleich(feld: str, alt, neu) -> bool:
+    """Gleiche Kopfwerte, Währung (€/EUR) normalisiert."""
+    a, b = str(alt).strip(), str(neu).strip()
+    if a == b:
+        return True
+    if feld == "BT-5":
+        na, nb = waehrung_norm(a), waehrung_norm(b)
+        return bool(na) and na == nb
+    return False
+
+
+def block_anzeige(b: dict | None, fallback: str = "") -> str:
+    """Freier Name, sonst id, sonst typ – nicht zweimal nur typ „kopf“."""
+    b = b or {}
+    name = str(b.get("name") or "").strip()
+    bid = str(b.get("id") or "").strip()
+    typ = str(b.get("typ") or fallback or "").strip()
+    if name and name != typ:
+        return name
+    if bid:
+        return bid
+    return name or typ or fallback or "?"
+
+
 def _pruefen(text: str):
     from . import adapter_csv as ac
 
@@ -179,31 +215,44 @@ def profil_block_fuer_satzart(wert: str, profil: dict) -> dict | None:
 
 
 def profil_block_zu(bl: dict, profil: dict) -> dict:
-    """Passenden Profilblock finden: zuerst id, dann eindeutiger typ, dann Kopfzeile."""
+    """Passenden Profilblock finden: eindeutige id, eindeutiger typ, sonst Kopfzeile.
+
+    Ist typ oder id mehrfach vergeben (früher beide normalen Blöcke typ „kopf“),
+    entscheidet die Kopfzeile – niemals der erste typ-Treffer für alle.
+    """
     bid = str(bl.get("id") or "").strip()
     typ = str(bl.get("typ") or "").strip()
     liste = list(profil.get("bloecke") or [])
-    if bid:
-        for b in liste:
-            if str(b.get("id") or "").strip() == bid:
+    kopf = [name_norm(x) for x in (bl.get("kopf") or [])]
+
+    def nach_kopf(kandidaten: list[dict]) -> dict | None:
+        if not kopf:
+            return None
+        for b in kandidaten:
+            soll = [name_norm(x) for x in (b.get("kopfzeile") or [])]
+            if soll and kopf == soll:
                 return b
+        return None
+
+    if bid:
+        mit_id = [b for b in liste if str(b.get("id") or "").strip() == bid]
+        if len(mit_id) == 1:
+            return mit_id[0]
+        getroffen = nach_kopf(mit_id) or nach_kopf(liste)
+        if getroffen:
+            return getroffen
         for b in liste:
             if str(b.get("typ") or "").strip() == bid:
-                # nur wenn typ in diesem Profil eindeutig ist
                 if sum(1 for x in liste if str(x.get("typ") or "") == bid) == 1:
                     return b
     if typ:
         treffer = [b for b in liste if str(b.get("typ") or "").strip() == typ]
         if len(treffer) == 1:
             return treffer[0]
-        kopf = [name_norm(x) for x in (bl.get("kopf") or [])]
-        for b in treffer:
-            soll = [name_norm(x) for x in (b.get("kopfzeile") or [])]
-            if kopf and soll and kopf == soll:
-                return b
-        if treffer:
-            return treffer[0]
-    return {}
+        getroffen = nach_kopf(treffer) or nach_kopf(liste)
+        if getroffen:
+            return getroffen
+    return nach_kopf(liste) or {}
 
 
 def profil_block_id(b: dict, index: int = 0) -> str:
@@ -466,7 +515,11 @@ def schneiden_profil(zeilen: list[list[str]], start: int, profil: dict) -> list[
                 else:
                     pass
             gesehen_satzart_typ.add(typ_sa)
-            kopf = list(gemeinsame_kopf or kopfzeile_des_typs(profil, typ_sa) or [])
+            gespeichert = list((pb_sa or {}).get("kopfzeile") or []) or kopfzeile_des_typs(
+                profil, typ_sa
+            )
+            # nicht die gemeinsame (erste) Kopfzeile für spätere Blöcke übernehmen
+            kopf = list(gespeichert or gemeinsame_kopf or [])
             bl = _neuer_block(
                 nr,
                 typ_sa,
@@ -610,10 +663,14 @@ def feldsatz(row: dict, defs: dict, zeile: int, fehler: list, profil: dict, pfad
         schl, val = _feld_aus_zeile(row, d)
         label = d.get("spalte") if d.get("spalte") not in (None, "") else d.get("position", "fest")
         h = Herkunft(f"csv:{pfad.name} Zeile {zeile} Spalte {label}", 1.0)
-        if "fest" in d:
+        spaltenwert = val is not None and schl is not None and str(val).strip() != ""
+        if "fest" in d and not spaltenwert:
             roh[feld] = (str(d["fest"]), Herkunft("profil:fest", 1.0))
             continue
         if val is None or schl is None:
+            if "fest" in d:
+                roh[feld] = (str(d["fest"]), Herkunft("profil:fest", 1.0))
+                continue
             if not d.get("optional"):
                 fehler.append(f"Spalte „{label}“ fehlt")
             continue
@@ -641,7 +698,12 @@ def kopf_mergen(ziel: dict, neu: dict, zeile: int, fehler: list, typ: str = "") 
             ziel[k] = (wert, herkunft)
             if typ:
                 ziel[f"_typ_{k}"] = typ
-        elif str(alt[0]).strip() != str(wert).strip():
+        elif werte_gleich(k, alt[0], wert):
+            # z. B. € und EUR: vorhandenen ISO-Code behalten, Herkunft nicht überschreiben
+            if k == "BT-5" and waehrung_norm(alt[0]) == "EUR" and str(alt[0]).strip() != "EUR":
+                ziel[k] = ("EUR", herkunft or alt[1])
+            continue
+        else:
             anzeige = feld_anzeige(k)
             alt_typ = ziel.get(f"_typ_{k}") or ""
             if typ and alt_typ:
@@ -749,19 +811,29 @@ def lesen(text_zeilen: list[list[str]], profil: dict, pfad: Path, start: int) ->
         felder = dict(b.get("felder") or {})
         ist_pos = block_wiederholend(b) or typ == "positionen" or typ == wieder
         if ist_pos and art == "kopf":
-            # Kopffelder aller normalen Blöcke (Kunde und Beleg nicht über typ kollidieren)
+            # Nur Spalten, die im Positionsblock selbst vorkommen dürfen, optional
+            # und ohne Index (Name muss in dieser Kopfzeile stehen). Keine fest-Werte
+            # anderer Blöcke – die würden mit einer Spalte (z. B. Währung) kollidieren.
             for pb in profil.get("bloecke") or []:
                 if block_wiederholend(pb) or str(pb.get("typ") or "") == "positionen":
                     continue
                 for k, d in (pb.get("felder") or {}).items():
-                    if k not in felder and isinstance(d, dict):
-                        d2 = dict(d)
-                        d2["optional"] = True
-                        d2.pop("position", None)
-                        felder[k] = d2
-        global_f = (profil.get("felder") or {}).get("kopf" if art == "kopf" else "position") or {}
-        for k, d in global_f.items():
-            felder.setdefault(k, d)
+                    if k in felder or not isinstance(d, dict):
+                        continue
+                    if not (d.get("spalte") or d.get("position")):
+                        continue
+                    d2 = dict(d)
+                    d2["optional"] = True
+                    d2.pop("position", None)
+                    d2.pop("fest", None)
+                    felder[k] = d2
+        # Top-Level-felder nur, wenn dieser Block keine eigenen Felder hat (ältere Profile)
+        if not b.get("felder"):
+            global_f = (profil.get("felder") or {}).get(
+                "kopf" if art == "kopf" else "position"
+            ) or {}
+            for k, d in global_f.items():
+                felder.setdefault(k, d)
         if art == "kopf":
             return {k: v for k, v in felder.items() if _ist_kopffeld(k)}
         return {k: v for k, v in felder.items() if not _ist_kopffeld(k)}
@@ -771,6 +843,7 @@ def lesen(text_zeilen: list[list[str]], profil: dict, pfad: Path, start: int) ->
         pdef = profil_block_zu(bl, profil)
         if pdef.get("typ") and not typ:
             typ = str(pdef.get("typ") or "")
+        name = block_anzeige(pdef or bl, typ)
         if bl.get("ohne_anfang"):
             fehler.append(
                 _pruefen(
@@ -806,6 +879,7 @@ def lesen(text_zeilen: list[list[str]], profil: dict, pfad: Path, start: int) ->
                 trenner,
                 verwaist,
                 nummern,
+                name,
             )
         else:
             felder = defs_fuer(pdef, typ, "kopf")
@@ -815,7 +889,7 @@ def lesen(text_zeilen: list[list[str]], profil: dict, pfad: Path, start: int) ->
             for zeile, werte in bl["daten"]:
                 row = zeile_zu_row(werte, bl["kopf"])
                 roh = feldsatz(row, felder, zeile, fehler, profil, pfad)
-                kopf_mergen(kopf, roh, zeile, fehler, typ=typ)
+                kopf_mergen(kopf, roh, zeile, fehler, typ=name)
                 if "BT-1" in roh and roh["BT-1"][0] not in (None, ""):
                     nummern.add(str(roh["BT-1"][0]).strip())
 
@@ -861,13 +935,14 @@ def _positionsblock(
     trenner,
     verwaist,
     nummern,
+    name="",
 ):
     felder = {**kopf_felder, **pos_felder}
     # text_spalte ins Textfeld hängen
     if tz.get("text_spalte") and "text" not in felder:
         felder = {**felder, "text": {"spalte": tz["text_spalte"], "optional": True}}
 
-    typ = str(bl.get("typ") or "positionen")
+    typ = name or block_anzeige(bl, str(bl.get("typ") or "positionen"))
     for zeile, werte in bl["daten"]:
         row = zeile_zu_row(werte, bl["kopf"])
         if _leer_zeile(werte):
